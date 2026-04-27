@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SF — Erased</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f8f8f8; }
+    #map { width: 100vw; height: 100vh; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 100;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.15; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.1); border-radius: 0;
+      font-size: 14px; color: #aaa; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: rgba(0,0,0,0.08); }
+    #ctrl .s { height: 5px; }
+  </style>
+</head>
+<body>
+<div id="ctrl">
+  <button id="zi">+</button><button id="zo">−</button>
+  <div class="s"></div>
+  <button id="tl">⊹</button><button id="nr">↑</button>
+</div>
+<div id="map"></div>
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 13, pitch: 52, bearing: -18,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 800 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 52, duration: 800 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f8f8f8'); continue; }
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        // Water is the only deep tone — deep charcoal ink
+        if (type === 'fill') map.setPaintProperty(id, 'fill-color', '#1a1a1a');
+        if (type === 'line') map.setPaintProperty(id, 'line-color', '#111');
+        continue;
+      }
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub/.test(id)) {
+        if (type === 'fill') map.setPaintProperty(id, 'fill-color', '#f4f4f4');
+        continue;
+      }
+      if (/road|street|highway|motorway|path|footway|rail|transit/.test(id)) {
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#f0f0f0'); map.setPaintProperty(id, 'fill-opacity', 1); continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f8'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  // Buildings almost white — barely visible, ghost structures
+  // The water / negative space IS the map
+  map.addLayer({
+    id: 'buildings-3d',
+    type: 'fill-extrusion',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 13,
+    paint: {
+      'fill-extrusion-height': [
+        'interpolate', ['linear'], ['zoom'], 13, 0, 14,
+        ['coalesce', ['get', 'render_height'], ['*', ['coalesce', ['get', 'building_levels'], 2], 3.5]]
+      ],
+      'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
+      // Almost invisible — barely lighter than background, taller = slightly more visible
+      'fill-extrusion-color': [
+        'interpolate', ['linear'],
+        ['coalesce', ['get', 'render_height'], 6],
+        0,   '#f0f0f0',
+        10,  '#e8e8e8',
+        25,  '#dcdcdc',
+        60,  '#d0d0d0',
+        120, '#c4c4c4',
+        250, '#b8b8b8'
+      ],
+      'fill-extrusion-opacity': 0.9,
+      'fill-extrusion-ambient-occlusion-intensity': 0.3,
+      'fill-extrusion-ambient-occlusion-radius': 3,
+    }
+  });
+});
+</script>
+</body>
+</html>

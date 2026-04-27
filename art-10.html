@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f0f0f0; }
+    #map { width: 100vw; height: 100vh; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.12; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(255,255,255,0.9);
+      border: 1px solid #d8d8d8; border-radius: 0; font-size: 14px;
+      color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+  </style>
+</head>
+<body>
+<div id="ctrl">
+  <button id="zi">+</button><button id="zo">−</button>
+  <div class="s"></div>
+  <button id="tl">⊹</button><button id="nr">↑</button>
+</div>
+<div id="map"></div>
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5, pitch: 48, bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 48, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      // Everything — same flat paper. No water colour, no land distinction. Total silence.
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f0f0f0'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+      if (id === 'background') map.setPaintProperty(id, 'background-color', '#f0f0f0');
+    } catch(_) {}
+  }
+
+  // Minor contours — only visible above ~30m elevation, fade out on flat land
+  // Low elevation = near-invisible; steep terrain = they appear
+  map.addLayer({
+    id: 'contour-minor',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'contour',
+    filter: ['all',
+      ['!=', ['%', ['get', 'ele'], 100], 0],
+      ['>', ['get', 'ele'], 25],
+    ],
+    paint: {
+      // Opacity tied to elevation — flat areas dissolve, hills emerge
+      'line-color': '#c0c0c0',
+      'line-width': ['interpolate',['linear'],['zoom'], 11,0.2, 14,0.45, 17,0.6],
+      'line-opacity': [
+        'interpolate', ['linear'], ['get', 'ele'],
+        25,  0,
+        50,  0.2,
+        100, 0.45,
+        200, 0.6,
+        300, 0.7,
+      ],
+    }
+  });
+
+  // Major 100m contours — the structural lines, bold only where hills are high
+  map.addLayer({
+    id: 'contour-major',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'contour',
+    filter: ['==', ['%', ['get', 'ele'], 100], 0],
+    paint: {
+      // Darker as you go higher — flat 100m lines barely show, Twin Peaks rings go dark
+      'line-color': ['interpolate',['linear'],['get','ele'],
+        0,   '#d8d8d8',
+        100, '#b0b0b0',
+        200, '#787878',
+        300, '#444444',
+      ],
+      'line-width': ['interpolate',['linear'],['zoom'], 11,0.7, 13,1.4, 15,2.0, 17,2.6],
+      // Also fade by elevation — low ground barely registers
+      'line-opacity': [
+        'interpolate', ['linear'], ['get', 'ele'],
+        0,   0.1,
+        100, 0.55,
+        200, 0.8,
+        300, 0.95,
+      ],
+    }
+  });
+
+  // Water — just barely darker than the paper, a whisper of tone
+  // Placed after contours so it sits on top and softly erases contours in the bay
+  map.addLayer({
+    id: 'water-veil',
+    type: 'fill',
+    source: 'openmaptiles',
+    'source-layer': 'water',
+    paint: {
+      'fill-color': '#e8e8e8',
+      'fill-opacity': 0.7,
+    }
+  });
+});
+</script>
+</body>
+</html>

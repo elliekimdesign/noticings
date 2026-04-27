@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco — Mission</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f8f8f6; }
+    #map { width: 100vw; height: 100vh; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.12; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(255,255,255,0.9);
+      border: 1px solid #ccc; border-radius: 0; font-size: 14px;
+      color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+  </style>
+</head>
+<body>
+<div id="ctrl">
+  <button id="zi">+</button><button id="zo">−</button>
+  <div class="s"></div>
+  <button id="tl">⊹</button><button id="nr">↑</button>
+</div>
+<div id="map"></div>
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5, pitch: 48, bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 48, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f8f8f6'); continue; }
+
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#ffffff'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') { map.setPaintProperty(id, 'line-color', '#bbb'); map.setPaintProperty(id, 'line-width', 0.4); }
+        continue;
+      }
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+
+      if (/motorway|trunk/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.5);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.5, 12,0.8, 14,1.2, 17,2]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/primary|secondary/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.45);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.4, 12,0.6, 14,0.9, 17,1.5]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/road|street|tertiary|minor|service/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.55);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 12,0.15, 14,0.35, 17,0.8]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/path|footway|cycleway|pedestrian|rail|transit/.test(id)) {
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#f8f8f6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+        map.setPaintProperty(id, 'fill-outline-color', '#ddd');
+        continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  // ── Mission color field — added BEFORE contour lines so contours read on top ──
+  // A rough polygon following the Mission's edges (Division → Cesar Chavez, Guerrero → Potrero)
+  map.addSource('mission', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[
+            [-122.4290, 37.7700],  // NW corner near Duboce
+            [-122.4290, 37.7855],  // up Guerrero / Hayes Valley edge
+            [-122.4080, 37.7855],  // east toward Potrero/SOMA edge
+            [-122.4015, 37.7705],  // down to Cesar Chavez east
+            [-122.4060, 37.7470],  // SE — Bernal edge
+            [-122.4230, 37.7470],  // SW — Noe Valley edge
+            [-122.4290, 37.7560],  // back up west side
+            [-122.4290, 37.7700],
+          ]],
+        },
+        properties: {},
+      }],
+    },
+  });
+
+  // SUN YELLOW core — radial-style soft glow at the heart of the Mission (24th & Mission)
+  // We fake the radial with concentric circles of decreasing opacity
+  map.addSource('mission-glow-1', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Point', coordinates: [-122.4180, 37.7600] }, properties: {} },
+  });
+  map.addLayer({
+    id: 'mission-glow-yellow',
+    type: 'circle',
+    source: 'mission-glow-1',
+    paint: {
+      'circle-color': '#f5c542',  // sun yellow
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 80, 14, 280, 17, 1100],
+      'circle-blur': 1,
+      'circle-opacity': 0.35,
+    },
+  });
+
+  // WARM TERRACOTTA RED — larger, softer base across the whole Mission
+  map.addLayer({
+    id: 'mission-base-red',
+    type: 'fill',
+    source: 'mission',
+    paint: {
+      'fill-color': '#c84a3a',  // warm mural red / terracotta
+      'fill-opacity': 0.20,
+    },
+  });
+
+  // DEEP TEAL pocket — the southern Mission near Bernal edge
+  map.addSource('mission-glow-teal', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Point', coordinates: [-122.4140, 37.7510] }, properties: {} },
+  });
+  map.addLayer({
+    id: 'mission-glow-teal',
+    type: 'circle',
+    source: 'mission-glow-teal',
+    paint: {
+      'circle-color': '#2a6e6e',  // deep teal
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 50, 14, 180, 17, 700],
+      'circle-blur': 1,
+      'circle-opacity': 0.30,
+    },
+  });
+
+  // MURAL BLUE accent — the northern Mission near Hayes Valley edge
+  map.addSource('mission-glow-blue', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Point', coordinates: [-122.4220, 37.7700] }, properties: {} },
+  });
+  map.addLayer({
+    id: 'mission-glow-blue',
+    type: 'circle',
+    source: 'mission-glow-blue',
+    paint: {
+      'circle-color': '#3a5a9e',  // mural blue
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 45, 14, 160, 17, 600],
+      'circle-blur': 1,
+      'circle-opacity': 0.28,
+    },
+  });
+
+  // Mural-paint "splatter" dots — small, scattered, varied colors
+  // These give a sense of murals without literally drawing them
+  const mural_dots = [
+    { lng: -122.4143, lat: 37.7574, color: '#c84a3a', r: 6 },  // 24th & Mission area
+    { lng: -122.4127, lat: 37.7607, color: '#f5c542', r: 4 },  // Mission near 22nd
+    { lng: -122.4159, lat: 37.7637, color: '#2a6e6e', r: 5 },  // Valencia
+    { lng: -122.4218, lat: 37.7592, color: '#c84a3a', r: 4 },  // Guerrero & 22nd
+    { lng: -122.4112, lat: 37.7547, color: '#3a5a9e', r: 5 },  // Mission & 26th
+    { lng: -122.4196, lat: 37.7672, color: '#f5c542', r: 4 },  // Valencia & 18th
+    { lng: -122.4128, lat: 37.7666, color: '#2a6e6e', r: 4 },  // Mission & 19th
+    { lng: -122.4180, lat: 37.7530, color: '#c84a3a', r: 5 },  // Cesar Chavez area
+    { lng: -122.4210, lat: 37.7625, color: '#3a5a9e', r: 3.5 }, // Lexington
+    { lng: -122.4145, lat: 37.7700, color: '#f5c542', r: 4 },  // Mission near 16th
+  ];
+  map.addSource('mural-dots', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: mural_dots.map(d => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [d.lng, d.lat] },
+        properties: { color: d.color, r: d.r },
+      })),
+    },
+  });
+  map.addLayer({
+    id: 'mural-dots',
+    type: 'circle',
+    source: 'mural-dots',
+    paint: {
+      'circle-color': ['get', 'color'],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, ['*', ['get', 'r'], 0.5], 14, ['get', 'r'], 17, ['*', ['get', 'r'], 1.6]],
+      'circle-opacity': 0.85,
+      'circle-stroke-color': '#f8f8f6',
+      'circle-stroke-width': 0.5,
+    },
+  });
+
+  // ── Contour lines — placed AFTER color so they read on top of the Mission glow ──
+  try {
+    map.addLayer({
+      id: 'contour-minor',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['!=', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': '#ccc',
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.3, 14,0.55],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.5, 14,0.85, 16,0.25],
+      }
+    });
+    map.addLayer({
+      id: 'contour-major',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['==', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': ['interpolate',['linear'],['get','ele'], 0,'#bbb', 100,'#999', 200,'#777', 300,'#555'],
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.8, 13,1.4, 15,1.8],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.7, 13,0.9, 16,0.35],
+      }
+    });
+  } catch(_) {}
+
+  map.addLayer({
+    id: 'building-ink',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 14,
+    paint: { 'line-color': '#bbb', 'line-width': 0.35, 'line-opacity': 0.7 }
+  });
+
+  // Mission label — warm, hand-set feel
+  map.addSource('mission-label', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Point', coordinates: [-122.4170, 37.7600] }, properties: { name: 'MISSION' } },
+  });
+  map.addLayer({
+    id: 'mission-label',
+    type: 'symbol',
+    source: 'mission-label',
+    layout: {
+      'text-field': ['get', 'name'],
+      'text-font': ['Noto Sans Regular'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 11, 11, 13, 14, 16, 18],
+      'text-letter-spacing': 0.32,
+    },
+    paint: {
+      'text-color': '#7a2418',     // deep terracotta
+      'text-halo-color': '#f8f8f6',
+      'text-halo-width': 1.6,
+      'text-halo-blur': 0.4,
+      'text-opacity': 0.95,
+    },
+  });
+});
+</script>
+</body>
+</html>

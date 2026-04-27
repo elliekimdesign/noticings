@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SF — Watercolor</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f5f2ec; }
+    #map { width: 100vw; height: 100vh; }
+    /* Slight blur + warm tint — simulates wet paper pigment bleed */
+    .maplibregl-canvas { filter: blur(0.4px) sepia(0.08) contrast(0.96); }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.12; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(255,255,255,0.9);
+      border: 1px solid #ccc; border-radius: 0; font-size: 14px;
+      color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+  </style>
+</head>
+<body>
+<div id="ctrl">
+  <button id="zi">+</button><button id="zo">−</button>
+  <div class="s"></div>
+  <button id="tl">⊹</button><button id="nr">↑</button>
+</div>
+<div id="map"></div>
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5, pitch: 48, bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 48, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f5f2ec'); continue; }
+
+      // Water — a wash of dusty blue-grey, like diluted indigo ink pooling
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#d8dde4'); map.setPaintProperty(id, 'fill-opacity', 0.85); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      // Parks — a very faint sage wash, like diluted viridian
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#e8ece6'); map.setPaintProperty(id, 'fill-opacity', 0.9); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (/landuse|landcover|land-|earth|sand|beach/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f5f2ec'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      // Roads — all hidden, contours carry the structure
+      if (/motorway|trunk|primary|secondary|road|street|tertiary|minor|service|path|footway|cycleway|pedestrian|rail|transit/.test(id)) {
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      // Buildings — very faint warm tint, like paper absorbing ink unevenly
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#ede9e0');
+        map.setPaintProperty(id, 'fill-opacity', 0.7);
+        map.setPaintProperty(id, 'fill-outline-color', 'transparent');
+        continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f5f2ec'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  // Contours — drawn as if in warm sepia ink, hills rise in tone
+  map.addLayer({
+    id: 'contour-minor',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'contour',
+    filter: ['!=', ['%', ['get', 'ele'], 100], 0],
+    paint: {
+      'line-color': '#c8bfb0',
+      'line-width': ['interpolate',['linear'],['zoom'], 11,0.2, 14,0.45],
+      'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.35, 14,0.6, 16,0.2],
+    }
+  });
+  map.addLayer({
+    id: 'contour-major',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'contour',
+    filter: ['==', ['%', ['get', 'ele'], 100], 0],
+    paint: {
+      'line-color': ['interpolate',['linear'],['get','ele'], 0,'#b8b0a4', 100,'#9a9080', 200,'#7a6e60', 300,'#5a5048'],
+      'line-width': ['interpolate',['linear'],['zoom'], 11,0.7, 13,1.2, 15,1.6],
+      'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.55, 13,0.8, 16,0.3],
+    }
+  });
+});
+</script>
+</body>
+</html>

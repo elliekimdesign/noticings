@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco — Mission, Composition № 01</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100vw; height: 100vh; overflow: hidden;
+      background: #f8f8f6;
+      font-family: 'Helvetica Neue', 'Inter', sans-serif;
+    }
+    body { display: flex; }
+
+    /* ── Map: left 75% ── */
+    #map-pane { width: 75vw; height: 100vh; position: relative; }
+    #map { width: 100%; height: 100%; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: absolute; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.12; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(255,255,255,0.9);
+      border: 1px solid #ccc; border-radius: 0; font-size: 14px;
+      color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+
+    /* ── Right strip: full vertical, single piece ── */
+    #panel {
+      width: 25vw; height: 100vh;
+      position: relative;
+      border-left: 0.5px solid rgba(40,20,10,0.08);
+      background: #f1ede4;
+      overflow: hidden;
+    }
+
+    /* The composition fills the strip */
+    #composition {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+    }
+
+    /* Subtle vignette */
+    #panel::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(60,30,15,0.14) 100%);
+      z-index: 8;
+    }
+
+    /* Animated film grain */
+    #grain {
+      position: absolute; inset: -4%; pointer-events: none; z-index: 9;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      opacity: 0.10; mix-blend-mode: multiply;
+      animation: grain-shift 1.6s steps(8) infinite;
+    }
+    @keyframes grain-shift {
+      0%   { transform: translate(0,0); }
+      25%  { transform: translate(-2%,2%); }
+      50%  { transform: translate(2%,-2%); }
+      75%  { transform: translate(-1%,-1%); }
+      100% { transform: translate(0,0); }
+    }
+
+    /* Typography — minimal */
+    .panel-mark {
+      position: absolute; top: 22px; left: 22px; z-index: 50;
+      font-size: 8px; letter-spacing: 0.34em;
+      color: rgba(30,15,8,0.55);
+      font-weight: 500;
+    }
+    .panel-index {
+      position: absolute; top: 22px; right: 22px; z-index: 50;
+      font-size: 8px; letter-spacing: 0.22em;
+      color: rgba(30,15,8,0.45);
+    }
+    .panel-meta {
+      position: absolute; bottom: 22px; left: 22px; right: 22px; z-index: 50;
+    }
+    .panel-meta .name {
+      font-size: 13px; letter-spacing: 0.36em;
+      color: #1a0a04; font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .panel-meta .sub {
+      font-size: 8px; letter-spacing: 0.22em;
+      color: rgba(30,15,8,0.45);
+    }
+
+    /* Each animated square — Albers-style nested rectangles */
+    .sq {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .sq.s1 { animation: rot1 60s linear infinite; }
+    .sq.s2 { animation: rot2 84s linear infinite reverse; }
+    .sq.s3 { animation: rot3 110s linear infinite; }
+    .sq.s4 { animation: rot4 140s linear infinite reverse; }
+
+    @keyframes rot1 { from { transform: rotate(0deg); }   to { transform: rotate(360deg); } }
+    @keyframes rot2 { from { transform: rotate(0deg); }   to { transform: rotate(360deg); } }
+    @keyframes rot3 { from { transform: rotate(0deg); }   to { transform: rotate(360deg); } }
+    @keyframes rot4 { from { transform: rotate(0deg); }   to { transform: rotate(360deg); } }
+
+    /* The color-swap layer — a long fade cycle reassigns colors between squares */
+    .swap {
+      animation: colorcycle 32s ease-in-out infinite;
+    }
+    @keyframes colorcycle {
+      0%, 100% { opacity: 1; }
+      48%, 52% { opacity: 0; }
+    }
+    .swap-alt {
+      opacity: 0;
+      animation: colorcycle-alt 32s ease-in-out infinite;
+    }
+    @keyframes colorcycle-alt {
+      0%, 100% { opacity: 0; }
+      48%, 52% { opacity: 1; }
+    }
+
+    /* The dot — a small isolated circle that drifts independently */
+    .drift-dot { animation: drift 28s ease-in-out infinite; }
+    @keyframes drift {
+      0%   { transform: translate(0, 0); }
+      33%  { transform: translate(40px, -60px); }
+      66%  { transform: translate(-30px, 40px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* The vertical strip — a thin colored bar that breathes */
+    .breathe-bar { animation: breathe 18s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+    @keyframes breathe {
+      0%, 100% { transform: scaleY(1); opacity: 0.85; }
+      50%      { transform: scaleY(1.15); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─────────── LEFT: SF MAP ─────────── -->
+<div id="map-pane">
+  <div id="ctrl">
+    <button id="zi">+</button><button id="zo">−</button>
+    <div class="s"></div>
+    <button id="tl">⊹</button><button id="nr">↑</button>
+  </div>
+  <div id="map"></div>
+</div>
+
+<!-- ─────────── RIGHT: COMPOSITION ─────────── -->
+<div id="panel">
+
+  <!-- The geometric color composition — viewBox is portrait to match strip -->
+  <svg id="composition" preserveAspectRatio="xMidYMid slice" viewBox="0 0 400 1000">
+
+    <!-- Warm cream backdrop, slightly different from page bg -->
+    <rect width="400" height="1000" fill="#f1ede4"/>
+
+    <!-- ── PRIMARY BLOCK: Albers-style nested squares centered upper area ── -->
+    <!-- Outer square: terracotta -->
+    <g class="sq s1">
+      <rect x="40" y="180" width="320" height="320" fill="#c84a3a"/>
+    </g>
+    <!-- Sun yellow band -->
+    <g class="sq s2">
+      <rect x="80" y="220" width="240" height="240" fill="#f5c542"/>
+    </g>
+    <!-- Mural blue band -->
+    <g class="sq s3">
+      <rect x="120" y="260" width="160" height="160" fill="#3a5a9e"/>
+    </g>
+    <!-- Innermost: deep teal core -->
+    <g class="sq s4">
+      <rect x="160" y="300" width="80" height="80" fill="#2a6e6e"/>
+    </g>
+
+    <!-- ── COUNTERPOINT BAR — vertical mural-blue stripe, Bauhaus diagonal anchor ── -->
+    <g class="breathe-bar">
+      <rect x="44" y="60" width="14" height="100" fill="#3a5a9e"/>
+    </g>
+
+    <!-- ── HORIZONTAL ACCENT — sun-yellow rectangle near top ── -->
+    <rect x="220" y="80" width="140" height="34" fill="#f5c542"/>
+
+    <!-- ── TERRACOTTA STRIP — full-width near bottom ── -->
+    <rect x="0" y="820" width="400" height="36" fill="#c84a3a"/>
+
+    <!-- ── TEAL DIAMOND — tilted square, lower mid ── -->
+    <g transform="translate(120, 640) rotate(45) translate(-30, -30)">
+      <rect width="60" height="60" fill="#2a6e6e"/>
+    </g>
+
+    <!-- ── DRIFTING DOT — sun-yellow circle that moves slowly ── -->
+    <g class="drift-dot">
+      <circle cx="320" cy="700" r="18" fill="#f5c542"/>
+    </g>
+
+    <!-- ── COLOR-SWAP OVERLAY ──
+         A second layer of the same Albers stack, but with colors permuted.
+         The two layers cross-fade every 32s so the composition reassigns. -->
+    <g class="swap-alt">
+      <g class="sq s1">
+        <rect x="40" y="180" width="320" height="320" fill="#3a5a9e"/>
+      </g>
+      <g class="sq s2">
+        <rect x="80" y="220" width="240" height="240" fill="#2a6e6e"/>
+      </g>
+      <g class="sq s3">
+        <rect x="120" y="260" width="160" height="160" fill="#c84a3a"/>
+      </g>
+      <g class="sq s4">
+        <rect x="160" y="300" width="80" height="80" fill="#f5c542"/>
+      </g>
+    </g>
+
+    <!-- ── THIN HAIRLINE GRID — the only "ink" element, ties to the map's grey lines ── -->
+    <g stroke="#1a0a04" stroke-opacity="0.18" stroke-width="0.4" fill="none">
+      <!-- Top hairline -->
+      <line x1="22" y1="56" x2="378" y2="56"/>
+      <!-- Bottom hairline above the terracotta strip -->
+      <line x1="22" y1="794" x2="378" y2="794"/>
+      <!-- A vertical hairline anchoring the right side -->
+      <line x1="378" y1="56" x2="378" y2="944"/>
+      <!-- Left hairline -->
+      <line x1="22" y1="56" x2="22" y2="944"/>
+      <!-- Bottom-most hairline -->
+      <line x1="22" y1="944" x2="378" y2="944"/>
+    </g>
+
+    <!-- Tiny crosshair marks — like museum registration ticks -->
+    <g stroke="#1a0a04" stroke-opacity="0.4" stroke-width="0.5">
+      <line x1="22" y1="56" x2="32" y2="56"/>
+      <line x1="22" y1="56" x2="22" y2="66"/>
+      <line x1="378" y1="56" x2="368" y2="56"/>
+      <line x1="378" y1="56" x2="378" y2="66"/>
+      <line x1="22" y1="944" x2="32" y2="944"/>
+      <line x1="22" y1="944" x2="22" y2="934"/>
+      <line x1="378" y1="944" x2="368" y2="944"/>
+      <line x1="378" y1="944" x2="378" y2="934"/>
+    </g>
+  </svg>
+
+  <div id="grain"></div>
+
+  <div class="panel-mark">COMPOSITION</div>
+  <div class="panel-index">№ 01 / SF</div>
+
+  <div class="panel-meta">
+    <div class="name">MISSION</div>
+    <div class="sub">SUN · TERRACOTTA · TEAL · MURAL</div>
+  </div>
+</div>
+
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5, pitch: 48, bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 48, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f8f8f6'); continue; }
+
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#ffffff'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') { map.setPaintProperty(id, 'line-color', '#bbb'); map.setPaintProperty(id, 'line-width', 0.4); }
+        continue;
+      }
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (/motorway|trunk/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.5);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.5, 12,0.8, 14,1.2, 17,2]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/primary|secondary/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.45);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.4, 12,0.6, 14,0.9, 17,1.5]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/road|street|tertiary|minor|service/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.55);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 12,0.15, 14,0.35, 17,0.8]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/path|footway|cycleway|pedestrian|rail|transit/.test(id)) {
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#f8f8f6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+        map.setPaintProperty(id, 'fill-outline-color', '#ddd');
+        continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  try {
+    map.addLayer({
+      id: 'contour-minor',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['!=', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': '#ccc',
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.3, 14,0.55],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.5, 14,0.85, 16,0.25],
+      }
+    });
+    map.addLayer({
+      id: 'contour-major',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['==', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': ['interpolate',['linear'],['get','ele'], 0,'#bbb', 100,'#999', 200,'#777', 300,'#555'],
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.8, 13,1.4, 15,1.8],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.7, 13,0.9, 16,0.35],
+      }
+    });
+  } catch(_) {}
+
+  map.addLayer({
+    id: 'building-ink',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 14,
+    paint: { 'line-color': '#bbb', 'line-width': 0.35, 'line-opacity': 0.7 }
+  });
+});
+</script>
+</body>
+</html>

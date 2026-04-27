@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f8f8f6; }
+    #map { width: 100vw; height: 100vh; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.12; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(255,255,255,0.9);
+      border: 1px solid #ccc; border-radius: 0; font-size: 14px;
+      color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+  </style>
+</head>
+<body>
+<div id="ctrl">
+  <button id="zi">+</button><button id="zo">−</button>
+  <div class="s"></div>
+  <button id="tl">⊹</button><button id="nr">↑</button>
+</div>
+<div id="map"></div>
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5, pitch: 48, bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 48, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f8f8f6'); continue; }
+
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#ffffff'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') { map.setPaintProperty(id, 'line-color', '#bbb'); map.setPaintProperty(id, 'line-width', 0.4); }
+        continue;
+      }
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+
+      if (/motorway|trunk/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.5);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.5, 12,0.8, 14,1.2, 17,2]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/primary|secondary/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.45);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.4, 12,0.6, 14,0.9, 17,1.5]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/road|street|tertiary|minor|service/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.55);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 12,0.15, 14,0.35, 17,0.8]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/path|footway|cycleway|pedestrian|rail|transit/.test(id)) {
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#f8f8f6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+        map.setPaintProperty(id, 'fill-outline-color', '#ddd');
+        continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  try {
+    map.addLayer({
+      id: 'contour-minor',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['!=', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': '#ccc',
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.3, 14,0.55],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.5, 14,0.85, 16,0.25],
+      }
+    });
+    map.addLayer({
+      id: 'contour-major',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['==', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': ['interpolate',['linear'],['get','ele'], 0,'#bbb', 100,'#999', 200,'#777', 300,'#555'],
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.8, 13,1.4, 15,1.8],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.7, 13,0.9, 16,0.35],
+      }
+    });
+  } catch(_) {}
+
+  map.addLayer({
+    id: 'building-ink',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 14,
+    paint: { 'line-color': '#bbb', 'line-width': 0.35, 'line-opacity': 0.7 }
+  });
+
+  // ── Neighborhood labels — quiet, all-caps, light grey ──
+  const neighborhoods = [
+    { name: 'MARINA',          lng: -122.4380, lat: 37.8030 },
+    { name: 'PRESIDIO',        lng: -122.4660, lat: 37.7980 },
+    { name: 'PACIFIC HEIGHTS', lng: -122.4360, lat: 37.7920 },
+    { name: 'COW HOLLOW',      lng: -122.4360, lat: 37.7975 },
+    { name: 'RUSSIAN HILL',    lng: -122.4180, lat: 37.8010 },
+    { name: 'NORTH BEACH',     lng: -122.4100, lat: 37.8000 },
+    { name: 'TELEGRAPH HILL',  lng: -122.4060, lat: 37.8030 },
+    { name: 'FISHERMAN\'S WHARF', lng: -122.4170, lat: 37.8080 },
+    { name: 'CHINATOWN',       lng: -122.4070, lat: 37.7940 },
+    { name: 'NOB HILL',        lng: -122.4140, lat: 37.7930 },
+    { name: 'FINANCIAL DISTRICT', lng: -122.4000, lat: 37.7945 },
+    { name: 'SOMA',            lng: -122.4030, lat: 37.7780 },
+    { name: 'MISSION BAY',     lng: -122.3920, lat: 37.7700 },
+    { name: 'POTRERO HILL',    lng: -122.4000, lat: 37.7600 },
+    { name: 'DOGPATCH',        lng: -122.3895, lat: 37.7585 },
+    { name: 'BAYVIEW',         lng: -122.3890, lat: 37.7300 },
+    { name: 'HUNTERS POINT',   lng: -122.3700, lat: 37.7300 },
+    { name: 'EXCELSIOR',       lng: -122.4280, lat: 37.7240 },
+    { name: 'BERNAL HEIGHTS',  lng: -122.4160, lat: 37.7400 },
+    { name: 'NOE VALLEY',      lng: -122.4330, lat: 37.7510 },
+    { name: 'MISSION',         lng: -122.4180, lat: 37.7600 },
+    { name: 'THE CASTRO',      lng: -122.4350, lat: 37.7625 },
+    { name: 'HAYES VALLEY',    lng: -122.4250, lat: 37.7760 },
+    { name: 'TENDERLOIN',      lng: -122.4150, lat: 37.7840 },
+    { name: 'CIVIC CENTER',    lng: -122.4180, lat: 37.7790 },
+    { name: 'WESTERN ADDITION',lng: -122.4360, lat: 37.7805 },
+    { name: 'JAPANTOWN',       lng: -122.4290, lat: 37.7855 },
+    { name: 'HAIGHT-ASHBURY',  lng: -122.4480, lat: 37.7700 },
+    { name: 'COLE VALLEY',     lng: -122.4500, lat: 37.7660 },
+    { name: 'TWIN PEAKS',      lng: -122.4470, lat: 37.7540 },
+    { name: 'GLEN PARK',       lng: -122.4340, lat: 37.7340 },
+    { name: 'INGLESIDE',       lng: -122.4570, lat: 37.7220 },
+    { name: 'WEST PORTAL',     lng: -122.4660, lat: 37.7400 },
+    { name: 'FOREST HILL',     lng: -122.4630, lat: 37.7470 },
+    { name: 'INNER SUNSET',    lng: -122.4660, lat: 37.7620 },
+    { name: 'OUTER SUNSET',    lng: -122.4940, lat: 37.7530 },
+    { name: 'PARKSIDE',        lng: -122.4860, lat: 37.7430 },
+    { name: 'LAKE MERCED',     lng: -122.4920, lat: 37.7220 },
+    { name: 'INNER RICHMOND',  lng: -122.4660, lat: 37.7800 },
+    { name: 'OUTER RICHMOND',  lng: -122.4940, lat: 37.7780 },
+    { name: 'SEA CLIFF',       lng: -122.4940, lat: 37.7860 },
+    { name: 'LAUREL HEIGHTS',  lng: -122.4500, lat: 37.7860 },
+    { name: 'GOLDEN GATE PARK',lng: -122.4860, lat: 37.7700 },
+    { name: 'TREASURE ISLAND', lng: -122.3700, lat: 37.8230 },
+  ];
+
+  map.addSource('hoods', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: neighborhoods.map(n => ({
+        type: 'Feature',
+        properties: { name: n.name },
+        geometry: { type: 'Point', coordinates: [n.lng, n.lat] },
+      })),
+    },
+  });
+
+  map.addLayer({
+    id: 'hood-labels',
+    type: 'symbol',
+    source: 'hoods',
+    layout: {
+      'text-field': ['get', 'name'],
+      'text-font': ['Noto Sans Regular'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 11, 8.5, 13, 10, 16, 12],
+      'text-letter-spacing': 0.18,
+      'text-max-width': 8,
+      'text-allow-overlap': false,
+      'text-ignore-placement': false,
+    },
+    paint: {
+      'text-color': '#888',
+      'text-halo-color': '#f8f8f6',
+      'text-halo-width': 1.4,
+      'text-halo-blur': 0.4,
+      'text-opacity': ['interpolate', ['linear'], ['zoom'], 11, 0.6, 13, 0.85, 17, 0.7],
+    },
+  });
+});
+</script>
+</body>
+</html>

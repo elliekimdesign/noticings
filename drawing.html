@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f8f8f6; }
+    #map { width: 100vw; height: 100vh; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+
+    #ctrl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.15; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,0.9); border: 1px solid #ccc;
+      border-radius: 0; font-size: 14px; color: #555; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+
+    .maplibregl-popup-content {
+      padding: 0 !important; border-radius: 0 !important;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.1) !important;
+      border: 0.8px solid #222 !important;
+      background: #fff !important;
+    }
+    .maplibregl-popup-close-button { color: #999 !important; font-size: 15px !important; padding: 5px 9px !important; }
+    .maplibregl-popup-tip { border-top-color: #fff !important; }
+    .pop { font-family: 'Helvetica Neue', sans-serif; padding: 14px 16px 12px; min-width: 170px; max-width: 210px; }
+    .pop .name { font-size: 12px; font-weight: 500; color: #111; margin-bottom: 6px; letter-spacing: 0.01em; }
+    .pop .note { font-size: 11px; font-weight: 400; color: #666; line-height: 1.6; }
+  </style>
+</head>
+<body>
+<div id="ctrl">
+  <button id="zi">+</button><button id="zo">−</button>
+  <div class="s"></div>
+  <button id="tl">⊹</button><button id="nr">↑</button>
+</div>
+<div id="map"></div>
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5,
+  pitch: 48,
+  bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 48, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+
+  for (const { id, type } of layers) {
+    try {
+      // Remove all text/icons and 3D buildings
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+
+      // Pure white background
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f8f8f6'); continue; }
+
+      // Water — very light grey wash, barely tinted
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') {
+          map.setPaintProperty(id, 'fill-color', '#eaeae8');
+          map.setPaintProperty(id, 'fill-opacity', 1);
+        }
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#bbb');
+          map.setPaintProperty(id, 'line-width', 0.4);
+        }
+        continue;
+      }
+
+      // All land — pure white
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach/.test(id)) {
+        if (type === 'fill') {
+          map.setPaintProperty(id, 'fill-color', '#f8f8f6');
+          map.setPaintProperty(id, 'fill-opacity', 1);
+        }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+
+      // Roads — black ink lines, weight by hierarchy
+      if (/motorway|trunk/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#111');
+          map.setPaintProperty(id, 'line-opacity', 1);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 11,1.2, 14,2.5, 17,4]); } catch(_) {}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/primary|secondary/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#222');
+          map.setPaintProperty(id, 'line-opacity', 1);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 11,0.6, 14,1.2, 17,2.5]); } catch(_) {}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/road|street|tertiary|minor|service/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#444');
+          map.setPaintProperty(id, 'line-opacity', 1);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 12,0.2, 14,0.5, 17,1.2]); } catch(_) {}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/path|footway|cycleway|pedestrian/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#888');
+          map.setPaintProperty(id, 'line-opacity', 0.6);
+          try { map.setPaintProperty(id, 'line-width', 0.3); } catch(_) {}
+        }
+        continue;
+      }
+      if (/rail|transit/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.7);
+          try { map.setPaintProperty(id, 'line-width', 0.8); } catch(_) {}
+          try { map.setPaintProperty(id, 'line-dasharray', [3, 3]); } catch(_) {}
+        }
+        continue;
+      }
+
+      // Building outlines — hair-thin ink
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#f8f8f6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+        map.setPaintProperty(id, 'fill-outline-color', '#bbb');
+        continue;
+      }
+
+      // Everything else — white out
+      if (type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#f8f8f6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+      }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  // ── Contour lines — the hills as ink drawing ──
+  // SF has dramatic topography; we fake contours using hillshade-style building density
+  // Real contour lines from OpenFreeMap's vector tiles (contour source-layer)
+  map.addLayer({
+    id: 'contour-lines',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'contour',
+    paint: {
+      'line-color': [
+        'interpolate', ['linear'], ['get', 'ele'],
+        0,  '#ccc',
+        100, '#aaa',
+        200, '#888',
+        300, '#666',
+      ],
+      'line-width': [
+        'interpolate', ['linear'], ['zoom'],
+        11, ['case', ['==', ['%', ['get', 'ele'], 100], 0], 0.7, 0.3],
+        15, ['case', ['==', ['%', ['get', 'ele'], 100], 0], 1.2, 0.5],
+      ],
+      'line-opacity': [
+        'interpolate', ['linear'], ['zoom'],
+        11, 0.5,
+        13, 0.8,
+        15, 0.4,
+      ],
+    }
+  }, 'buildings-3d-placeholder');
+
+  // Insert contour below road layers — find first road layer
+  const firstRoad = map.getStyle().layers.find(l =>
+    l.id !== 'contour-lines' && /road|street|motorway/.test(l.id)
+  );
+
+  // ── Thin building outlines at high zoom ──
+  map.addLayer({
+    id: 'building-ink',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 14,
+    paint: {
+      'line-color': '#999',
+      'line-width': 0.4,
+      'line-opacity': 0.7,
+    }
+  });
+
+  // ── Red dots — landmarks ──
+  const landmarks = [
+    { name: 'Golden Gate Bridge', lng: -122.4783, lat: 37.8199, note: 'Opens in 1937. Still the most photographed thing in the city.' },
+    { name: 'Alcatraz Island',    lng: -122.4230, lat: 37.8267, note: 'A mile and a half from shore. Felt like the edge of the world if you were inside.' },
+    { name: 'Twin Peaks',         lng: -122.4477, lat: 37.7525, note: 'On clear days you can see everything. On foggy days, you can see the fog eating everything.' },
+    { name: 'Coit Tower',         lng: -122.4058, lat: 37.8024, note: 'Built in 1933. The murals inside are the real reason to go up.' },
+    { name: 'Dolores Park',       lng: -122.4269, lat: 37.7596, note: 'Every sunny day in SF happens here, simultaneously, with a burrito.' },
+    { name: 'The Castro',         lng: -122.4350, lat: 37.7609, note: 'A neighborhood that fought hard to exist and never stopped being itself.' },
+    { name: 'Haight–Ashbury',     lng: -122.4481, lat: 37.7692, note: 'Summer of Love was 1967. The vintage shops never closed.' },
+    { name: 'SoMa',               lng: -122.4056, lat: 37.7785, note: 'Warehouses became startups became restaurants became expensive.' },
+    { name: "Fisherman's Wharf",  lng: -122.4169, lat: 37.8080, note: 'The sourdough bread bowl is not a joke. Get one.' },
+    { name: 'Chinatown',          lng: -122.4063, lat: 37.7941, note: 'Oldest Chinatown in North America. The bakeries open early.' },
+    { name: 'Painted Ladies',     lng: -122.4334, lat: 37.7762, note: 'Six Victorian houses on a hill. Alamo Square is always full.' },
+    { name: 'Sutro Tower',        lng: -122.4528, lat: 37.7552, note: 'Haunts the fog like a ghost antenna.' },
+  ];
+
+  landmarks.forEach(d => {
+    const el = document.createElement('div');
+    el.style.cssText = 'width:12px;height:12px;cursor:pointer;';
+    el.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12">
+      <circle cx="6" cy="6" r="5.5" fill="#e8302a" fill-opacity="0.92"/>
+    </svg>`;
+
+    new maplibregl.Marker({ element: el, anchor: 'center' })
+      .setLngLat([d.lng, d.lat])
+      .setPopup(new maplibregl.Popup({ offset: 10, closeButton: true, maxWidth: '230px' })
+        .setHTML(`<div class="pop"><div class="name">${d.name}</div><div class="note">${d.note}</div></div>`))
+      .addTo(map);
+  });
+});
+</script>
+</body>
+</html>

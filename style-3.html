@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SF — Isometric Grid</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f2f2f2; }
+    #map { width: 100vw; height: 100vh; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.12; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(255,255,255,0.9);
+      border: 1px solid #ddd; border-radius: 0; font-size: 14px;
+      color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+  </style>
+</head>
+<body>
+<div id="ctrl">
+  <button id="zi">+</button><button id="zo">−</button>
+  <div class="s"></div>
+  <button id="tl">⊹</button><button id="nr">↑</button>
+</div>
+<div id="map"></div>
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 13, pitch: 60, bearing: 30,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 60, bearing: map.getPitch() > 10 ? 0 : 30, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f2f2f2'); continue; }
+
+      // Water — one step darker, defines the bay shape
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#e4e4e4'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f2f2f2'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  // Streets — only major ones, very faint, just enough to suggest the grid
+  map.addLayer({
+    id: 'street-grid',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'transportation',
+    filter: ['in', ['get', 'class'], ['literal', ['primary', 'secondary', 'tertiary', 'street']]],
+    paint: {
+      'line-color': '#f2f2f2',
+      'line-width': ['interpolate',['linear'],['zoom'], 12,0.5, 15,1.2],
+      'line-opacity': 0.9,
+    }
+  });
+
+  // 3D buildings — three grey faces giving isometric feel
+  map.addLayer({
+    id: 'buildings-3d',
+    type: 'fill-extrusion',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 12,
+    paint: {
+      'fill-extrusion-height': [
+        'interpolate', ['linear'], ['zoom'],
+        12, 0,
+        13, ['coalesce', ['get', 'render_height'], ['*', ['coalesce', ['get', 'building_levels'], 2], 3.5]]
+      ],
+      'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
+      // Lighter tops, darker sides — classic isometric three-tone
+      'fill-extrusion-color': [
+        'interpolate', ['linear'],
+        ['coalesce', ['get', 'render_height'], 6],
+        0,   '#e8e8e8',
+        10,  '#dedede',
+        25,  '#d2d2d2',
+        60,  '#c4c4c4',
+        120, '#b6b6b6',
+        250, '#a8a8a8',
+      ],
+      'fill-extrusion-opacity': 1,
+      'fill-extrusion-ambient-occlusion-intensity': 0.7,
+      'fill-extrusion-ambient-occlusion-radius': 6,
+    }
+  });
+});
+</script>
+</body>
+</html>

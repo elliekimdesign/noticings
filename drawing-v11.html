@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco — Mission Panel</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100vw; height: 100vh; overflow: hidden;
+      background: #f8f8f6;
+      font-family: 'Helvetica Neue', 'Inter', sans-serif;
+    }
+    body { display: flex; }
+
+    /* ── Map: left 75% ── */
+    #map-pane {
+      width: 75vw; height: 100vh;
+      position: relative;
+    }
+    #map { width: 100%; height: 100%; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: absolute; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.12; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(255,255,255,0.9);
+      border: 1px solid #ccc; border-radius: 0; font-size: 14px;
+      color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+
+    /* ── Right strip: 25% ── */
+    #panel {
+      width: 25vw; height: 100vh;
+      display: flex; flex-direction: column;
+      border-left: 0.5px solid rgba(40,20,10,0.08);
+      background: #f8f8f6;
+    }
+    #panel .half {
+      flex: 1; position: relative; overflow: hidden;
+    }
+    #panel .half-divider {
+      height: 0.5px;
+      background: rgba(40,20,10,0.08);
+    }
+
+    /* ── Top half: liquid pigment ── */
+    #pigment {
+      position: absolute; inset: 0;
+      background: #f4f1ea;
+    }
+    #pigment-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #pigment::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(60,30,15,0.18) 100%);
+      z-index: 5;
+    }
+    .pigment-label {
+      position: absolute; top: 18px; left: 20px; z-index: 10;
+      font-size: 8px; letter-spacing: 0.34em;
+      color: rgba(30,15,8,0.55);
+      font-weight: 500;
+    }
+    .pigment-name {
+      position: absolute; bottom: 18px; left: 20px; right: 20px; z-index: 10;
+    }
+    .pigment-name .title {
+      font-size: 14px; letter-spacing: 0.36em;
+      color: #1a0a04; font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .pigment-name .palette {
+      display: flex; gap: 6px;
+    }
+    .pigment-name .palette i {
+      display: block; width: 8px; height: 8px; border-radius: 50%;
+    }
+
+    /* Animated film grain */
+    #grain-top {
+      position: absolute; inset: -4%; pointer-events: none; z-index: 6;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      opacity: 0.12; mix-blend-mode: multiply;
+      animation: grain-shift 1.6s steps(8) infinite;
+    }
+    @keyframes grain-shift {
+      0%   { transform: translate(0,0); }
+      25%  { transform: translate(-2%,2%); }
+      50%  { transform: translate(2%,-2%); }
+      75%  { transform: translate(-1%,-1%); }
+      100% { transform: translate(0,0); }
+    }
+
+    /* ── Bottom half: ink drawing of Mission textures ── */
+    #ink {
+      position: absolute; inset: 0;
+      background: #f8f8f6;
+    }
+    #ink-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .ink-label {
+      position: absolute; top: 18px; left: 20px; z-index: 10;
+      font-size: 8px; letter-spacing: 0.34em;
+      color: rgba(40,20,10,0.55);
+      font-weight: 500;
+    }
+    .ink-caption {
+      position: absolute; bottom: 18px; left: 20px; right: 20px; z-index: 10;
+      font-size: 9px; letter-spacing: 0.16em; line-height: 1.6;
+      color: rgba(40,20,10,0.6);
+    }
+    .ink-caption .title {
+      font-size: 11px; letter-spacing: 0.3em; color: rgba(30,15,8,0.85);
+      margin-bottom: 4px; font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─────────── LEFT: SF MAP (drawing-v4) ─────────── -->
+<div id="map-pane">
+  <div id="ctrl">
+    <button id="zi">+</button><button id="zo">−</button>
+    <div class="s"></div>
+    <button id="tl">⊹</button><button id="nr">↑</button>
+  </div>
+  <div id="map"></div>
+</div>
+
+<!-- ─────────── RIGHT: SPLIT PANEL ─────────── -->
+<div id="panel">
+
+  <!-- TOP: Liquid pigment piece -->
+  <div class="half">
+    <div id="pigment">
+      <svg id="pigment-svg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 400 400">
+        <defs>
+          <filter id="liq-1" x="-30%" y="-30%" width="160%" height="160%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.018 0.024" numOctaves="3" seed="2">
+              <animate attributeName="baseFrequency" dur="38s" repeatCount="indefinite"
+                       values="0.018 0.024; 0.024 0.018; 0.020 0.026; 0.018 0.024"/>
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="60"/>
+            <feGaussianBlur stdDeviation="4"/>
+          </filter>
+          <filter id="liq-2" x="-30%" y="-30%" width="160%" height="160%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.014 0.020" numOctaves="3" seed="7">
+              <animate attributeName="baseFrequency" dur="46s" repeatCount="indefinite"
+                       values="0.014 0.020; 0.020 0.014; 0.016 0.022; 0.014 0.020"/>
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="70"/>
+            <feGaussianBlur stdDeviation="5"/>
+          </filter>
+          <filter id="liq-3" x="-30%" y="-30%" width="160%" height="160%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.020 0.016" numOctaves="3" seed="13">
+              <animate attributeName="baseFrequency" dur="34s" repeatCount="indefinite"
+                       values="0.020 0.016; 0.016 0.020; 0.022 0.018; 0.020 0.016"/>
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="55"/>
+            <feGaussianBlur stdDeviation="4"/>
+          </filter>
+          <filter id="liq-4" x="-30%" y="-30%" width="160%" height="160%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.019 0.019" numOctaves="3" seed="21">
+              <animate attributeName="baseFrequency" dur="42s" repeatCount="indefinite"
+                       values="0.019 0.019; 0.015 0.022; 0.021 0.017; 0.019 0.019"/>
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="60"/>
+            <feGaussianBlur stdDeviation="5"/>
+          </filter>
+          <radialGradient id="g-sun" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#f5c542" stop-opacity="0.95"/>
+            <stop offset="55%" stop-color="#f5c542" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#f5c542" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="g-red" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#c84a3a" stop-opacity="0.95"/>
+            <stop offset="55%" stop-color="#c84a3a" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#c84a3a" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="g-teal" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#2a6e6e" stop-opacity="0.9"/>
+            <stop offset="55%" stop-color="#2a6e6e" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#2a6e6e" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="g-blue" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#3a5a9e" stop-opacity="0.9"/>
+            <stop offset="55%" stop-color="#3a5a9e" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#3a5a9e" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <g style="mix-blend-mode: multiply;">
+          <circle r="130" fill="url(#g-sun)" filter="url(#liq-1)">
+            <animate attributeName="cx" dur="44s" repeatCount="indefinite"
+                     values="140;200;130;160;140" calcMode="spline"
+                     keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"/>
+            <animate attributeName="cy" dur="44s" repeatCount="indefinite"
+                     values="150;120;180;140;150" calcMode="spline"
+                     keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"/>
+            <animate attributeName="r" dur="32s" repeatCount="indefinite"
+                     values="130;150;120;140;130"/>
+          </circle>
+          <circle r="150" fill="url(#g-red)" filter="url(#liq-2)">
+            <animate attributeName="cx" dur="50s" repeatCount="indefinite"
+                     values="240;200;270;220;240" calcMode="spline"
+                     keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"/>
+            <animate attributeName="cy" dur="50s" repeatCount="indefinite"
+                     values="200;160;220;240;200" calcMode="spline"
+                     keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"/>
+            <animate attributeName="r" dur="40s" repeatCount="indefinite"
+                     values="150;170;140;160;150"/>
+          </circle>
+          <circle r="110" fill="url(#g-teal)" filter="url(#liq-3)">
+            <animate attributeName="cx" dur="46s" repeatCount="indefinite"
+                     values="100;140;90;120;100" calcMode="spline"
+                     keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"/>
+            <animate attributeName="cy" dur="46s" repeatCount="indefinite"
+                     values="290;260;310;280;290" calcMode="spline"
+                     keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"/>
+            <animate attributeName="r" dur="36s" repeatCount="indefinite"
+                     values="110;130;100;120;110"/>
+          </circle>
+          <circle r="100" fill="url(#g-blue)" filter="url(#liq-4)">
+            <animate attributeName="cx" dur="42s" repeatCount="indefinite"
+                     values="320;280;340;300;320" calcMode="spline"
+                     keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"/>
+            <animate attributeName="cy" dur="42s" repeatCount="indefinite"
+                     values="320;360;290;340;320" calcMode="spline"
+                     keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"/>
+            <animate attributeName="r" dur="34s" repeatCount="indefinite"
+                     values="100;120;90;110;100"/>
+          </circle>
+        </g>
+      </svg>
+      <div id="grain-top"></div>
+      <div class="pigment-label">PIGMENT</div>
+      <div class="pigment-name">
+        <div class="title">MISSION</div>
+        <div class="palette">
+          <i style="background:#f5c542"></i>
+          <i style="background:#c84a3a"></i>
+          <i style="background:#2a6e6e"></i>
+          <i style="background:#3a5a9e"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="half-divider"></div>
+
+  <!-- BOTTOM: Ink drawing of Mission textures (wall + tile + poster + shadow) -->
+  <div class="half">
+    <div id="ink">
+      <svg id="ink-svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 400 400">
+        <!-- ── Wall corner: simple perspective lines ── -->
+        <!-- Floor line -->
+        <line x1="0" y1="320" x2="400" y2="320" stroke="#999" stroke-width="0.6"/>
+        <!-- Receding floor depth lines -->
+        <line x1="60" y1="320" x2="180" y2="380" stroke="#bbb" stroke-width="0.4"/>
+        <line x1="160" y1="320" x2="280" y2="380" stroke="#bbb" stroke-width="0.4"/>
+        <line x1="260" y1="320" x2="380" y2="380" stroke="#bbb" stroke-width="0.4"/>
+
+        <!-- Wall edge (the corner where two walls meet) -->
+        <line x1="220" y1="60" x2="220" y2="320" stroke="#888" stroke-width="0.7"/>
+
+        <!-- ── Tile pattern: rows of small squares on the left wall ── -->
+        <g stroke="#aaa" stroke-width="0.5" fill="none">
+          <!-- 6 columns × 8 rows of 24px tiles, with subtle perspective skew -->
+          <g transform="translate(20, 60)">
+            <!-- Tile grid: drawn as horizontal + vertical lines -->
+            <line x1="0" y1="0"   x2="200" y2="0"/>
+            <line x1="0" y1="32"  x2="200" y2="32"/>
+            <line x1="0" y1="64"  x2="200" y2="64"/>
+            <line x1="0" y1="96"  x2="200" y2="96"/>
+            <line x1="0" y1="128" x2="200" y2="128"/>
+            <line x1="0" y1="160" x2="200" y2="160"/>
+            <line x1="0" y1="192" x2="200" y2="192"/>
+            <line x1="0" y1="224" x2="200" y2="224"/>
+            <line x1="0" y1="256" x2="200" y2="256"/>
+
+            <line x1="0"   y1="0" x2="0"   y2="256"/>
+            <line x1="40"  y1="0" x2="40"  y2="256"/>
+            <line x1="80"  y1="0" x2="80"  y2="256"/>
+            <line x1="120" y1="0" x2="120" y2="256"/>
+            <line x1="160" y1="0" x2="160" y2="256"/>
+            <line x1="200" y1="0" x2="200" y2="256"/>
+          </g>
+        </g>
+        <!-- Tile decorative dots — tiny diamond marks at each intersection, very faint -->
+        <g fill="#bbb">
+          <circle cx="40"  cy="92"  r="0.7"/>
+          <circle cx="80"  cy="92"  r="0.7"/>
+          <circle cx="120" cy="92"  r="0.7"/>
+          <circle cx="160" cy="92"  r="0.7"/>
+          <circle cx="200" cy="92"  r="0.7"/>
+          <circle cx="40"  cy="156" r="0.7"/>
+          <circle cx="80"  cy="156" r="0.7"/>
+          <circle cx="120" cy="156" r="0.7"/>
+          <circle cx="160" cy="156" r="0.7"/>
+          <circle cx="200" cy="156" r="0.7"/>
+          <circle cx="40"  cy="220" r="0.7"/>
+          <circle cx="80"  cy="220" r="0.7"/>
+          <circle cx="120" cy="220" r="0.7"/>
+          <circle cx="160" cy="220" r="0.7"/>
+          <circle cx="200" cy="220" r="0.7"/>
+        </g>
+
+        <!-- ── Torn poster pasted on the wall ── -->
+        <g transform="translate(252, 110) rotate(-3)">
+          <!-- Irregular torn-paper outline -->
+          <path d="M 0 4 L 95 0 L 100 8 L 110 4 L 112 38 L 108 70 L 112 100 L 105 124 L 92 122 L 6 126 L 2 110 L 5 80 L 0 50 L 4 22 Z"
+                stroke="#888" stroke-width="0.6" fill="#f8f8f6"/>
+          <!-- Tape strips on top corners -->
+          <path d="M -4 -2 L 22 -6 L 24 6 L -2 10 Z" stroke="#aaa" stroke-width="0.4" fill="none"/>
+          <path d="M 86 -4 L 116 -2 L 114 8 L 88 8 Z" stroke="#aaa" stroke-width="0.4" fill="none"/>
+
+          <!-- Poster text — hand-set caps -->
+          <text x="56" y="34" text-anchor="middle"
+                font-family="Helvetica, sans-serif" font-size="10" font-weight="600"
+                letter-spacing="2.5" fill="#777">VIVA</text>
+          <text x="56" y="54" text-anchor="middle"
+                font-family="Helvetica, sans-serif" font-size="10" font-weight="600"
+                letter-spacing="2.5" fill="#777">LA</text>
+          <text x="56" y="74" text-anchor="middle"
+                font-family="Helvetica, sans-serif" font-size="10" font-weight="600"
+                letter-spacing="2.5" fill="#777">MISIÓN</text>
+          <!-- Decorative rule -->
+          <line x1="20" y1="86" x2="92" y2="86" stroke="#999" stroke-width="0.4"/>
+          <text x="56" y="100" text-anchor="middle"
+                font-family="Helvetica, sans-serif" font-size="6" font-weight="500"
+                letter-spacing="1.4" fill="#999">EST · 1776</text>
+        </g>
+
+        <!-- A second smaller torn poster, lower right -->
+        <g transform="translate(280, 250) rotate(5)">
+          <path d="M 0 2 L 70 0 L 74 4 L 78 32 L 76 56 L 70 76 L 6 78 L 2 60 L 0 32 Z"
+                stroke="#999" stroke-width="0.5" fill="#f8f8f6"/>
+          <text x="40" y="22" text-anchor="middle"
+                font-family="Helvetica, sans-serif" font-size="7" font-weight="600"
+                letter-spacing="1.8" fill="#888">CARNAVAL</text>
+          <line x1="14" y1="32" x2="64" y2="32" stroke="#aaa" stroke-width="0.3"/>
+          <text x="40" y="48" text-anchor="middle"
+                font-family="Helvetica, sans-serif" font-size="5" font-weight="500"
+                letter-spacing="1" fill="#aaa">24TH · MISSION</text>
+        </g>
+
+        <!-- ── Long diagonal street shadow raking across ── -->
+        <g opacity="0.6">
+          <line x1="40"  y1="50"  x2="180" y2="380" stroke="#bbb" stroke-width="0.5"/>
+          <line x1="48"  y1="50"  x2="188" y2="380" stroke="#ccc" stroke-width="0.4"/>
+          <line x1="58"  y1="50"  x2="198" y2="380" stroke="#d4d4d4" stroke-width="0.3"/>
+          <line x1="70"  y1="50"  x2="210" y2="380" stroke="#dadada" stroke-width="0.25"/>
+        </g>
+
+        <!-- Ground texture marks: tiny dashes and dots near the floor, like cobblestones -->
+        <g stroke="#bbb" stroke-width="0.4">
+          <line x1="20"  y1="350" x2="28"  y2="350"/>
+          <line x1="60"  y1="358" x2="68"  y2="358"/>
+          <line x1="105" y1="346" x2="112" y2="346"/>
+          <line x1="148" y1="362" x2="156" y2="362"/>
+          <line x1="200" y1="352" x2="208" y2="352"/>
+          <line x1="245" y1="358" x2="252" y2="358"/>
+          <line x1="290" y1="346" x2="298" y2="346"/>
+          <line x1="332" y1="360" x2="340" y2="360"/>
+          <line x1="372" y1="350" x2="380" y2="350"/>
+        </g>
+      </svg>
+      <div class="ink-label">TEXTURE</div>
+      <div class="ink-caption">
+        <div class="title">A WALL</div>
+        tile · poster · shadow
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5, pitch: 48, bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 48, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f8f8f6'); continue; }
+
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#ffffff'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') { map.setPaintProperty(id, 'line-color', '#bbb'); map.setPaintProperty(id, 'line-width', 0.4); }
+        continue;
+      }
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (/motorway|trunk/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.5);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.5, 12,0.8, 14,1.2, 17,2]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/primary|secondary/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.45);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.4, 12,0.6, 14,0.9, 17,1.5]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/road|street|tertiary|minor|service/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.55);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 12,0.15, 14,0.35, 17,0.8]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/path|footway|cycleway|pedestrian|rail|transit/.test(id)) {
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#f8f8f6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+        map.setPaintProperty(id, 'fill-outline-color', '#ddd');
+        continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  try {
+    map.addLayer({
+      id: 'contour-minor',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['!=', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': '#ccc',
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.3, 14,0.55],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.5, 14,0.85, 16,0.25],
+      }
+    });
+    map.addLayer({
+      id: 'contour-major',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['==', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': ['interpolate',['linear'],['get','ele'], 0,'#bbb', 100,'#999', 200,'#777', 300,'#555'],
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.8, 13,1.4, 15,1.8],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.7, 13,0.9, 16,0.35],
+      }
+    });
+  } catch(_) {}
+
+  map.addLayer({
+    id: 'building-ink',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 14,
+    paint: { 'line-color': '#bbb', 'line-width': 0.35, 'line-opacity': 0.7 }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100vw; height: 100vh; overflow: hidden; background: #edecea; }
+    #map { width: 100vw; height: 100vh; }
+    .maplibregl-ctrl-logo,
+    .maplibregl-ctrl-attrib,
+    .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 100;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.15; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,0.9); border: 1px solid #d8d8d8;
+      border-radius: 0; font-size: 14px; color: #555; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+  </style>
+</head>
+<body>
+<div id="ctrl">
+  <button id="zi">+</button>
+  <button id="zo">−</button>
+  <div class="s"></div>
+  <button id="tl">⊹</button>
+  <button id="nr">↑</button>
+</div>
+<div id="map"></div>
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 13,
+  pitch: 52,
+  bearing: -18,
+  maxBounds: [[-122.562, 37.639], [-122.327, 37.930]],
+  minZoom: 11,
+  maxZoom: 20,
+  attributionControl: false,
+});
+
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 800 });
+document.getElementById('tl').onclick = () =>
+  map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 52, duration: 800 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+
+  for (const layer of layers) {
+    const { id, type } = layer;
+    try {
+
+      // ── Remove ALL symbol layers (text + icons) ──
+      if (type === 'symbol') {
+        map.removeLayer(id);
+        continue;
+      }
+
+      // ── Remove existing 3D building layers — we add our own ──
+      if (type === 'fill-extrusion') {
+        map.removeLayer(id);
+        continue;
+      }
+
+      // ── Background ──
+      if (id === 'background') {
+        map.setPaintProperty(id, 'background-color', '#edecea');
+        continue;
+      }
+
+      // ── Water ──
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') map.setPaintProperty(id, 'fill-color', '#c2cdd6');
+        if (type === 'line') map.setPaintProperty(id, 'line-color', '#aabbc8');
+        continue;
+      }
+
+      // ── Parks / nature ──
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|farmland/.test(id)) {
+        if (type === 'fill') map.setPaintProperty(id, 'fill-color', '#e2e0db');
+        continue;
+      }
+
+      // ── All roads — make invisible ──
+      if (/road|street|highway|motorway|trunk|path|footway|cycleway|transit|rail/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-opacity', 0);
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+
+      // ── Building footprints ──
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#dedad6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+        continue;
+      }
+
+      // ── Everything else — neutralise to land tone ──
+      if (type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#edecea');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+      }
+      if (type === 'line') {
+        map.setPaintProperty(id, 'line-opacity', 0);
+      }
+
+    } catch(_) {}
+  }
+
+  // ── 3D buildings ──
+  map.addLayer({
+    id: 'buildings-3d',
+    type: 'fill-extrusion',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 13,
+    paint: {
+      'fill-extrusion-height': [
+        'interpolate', ['linear'], ['zoom'],
+        13, 0,
+        14, ['coalesce',
+          ['get', 'render_height'],
+          ['*', ['coalesce', ['get', 'building_levels'], 2], 3.5]
+        ]
+      ],
+      'fill-extrusion-base': ['coalesce', ['get', 'render_min_height'], 0],
+      'fill-extrusion-color': [
+        'interpolate', ['linear'],
+        ['coalesce', ['get', 'render_height'], 6],
+        0,   '#e8e6e2',
+        8,   '#e0deda',
+        20,  '#d4d2cc',
+        45,  '#c6c4be',
+        90,  '#b8b6ae',
+        160, '#aaa8a0',
+        300, '#9c9a92'
+      ],
+      'fill-extrusion-opacity': 0.97,
+      'fill-extrusion-ambient-occlusion-intensity': 0.55,
+      'fill-extrusion-ambient-occlusion-radius': 4,
+    }
+  });
+});
+</script>
+</body>
+</html>

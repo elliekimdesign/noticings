@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soft Map — San Francisco</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100vw; height: 100vh; overflow: hidden;
+      background: #f8f8f6;
+      font-family: 'Archivo', 'Helvetica Neue', sans-serif;
+    }
+
+    /* ── Top masthead ── */
+    #masthead {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 44px; z-index: 1000;
+      background: #ffffff;
+      border-bottom: 1px solid rgba(40,20,10,0.25);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+    }
+    #masthead .title {
+      font-size: 11px; letter-spacing: 0.18em;
+      color: #1a0a04; font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+    }
+    #masthead .title .divider {
+      color: rgba(30,15,8,0.3);
+      font-weight: 300;
+    }
+    #masthead .title .city {
+      font-size: 8.5px; letter-spacing: 0.18em;
+      color: rgba(30,15,8,0.5);
+      font-weight: 500;
+    }
+    #masthead .help {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(30,15,8,0.4);
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 500;
+      color: rgba(30,15,8,0.65);
+      cursor: pointer;
+      letter-spacing: 0;
+      padding: 0;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    #masthead .help:hover {
+      background: #1a0a04;
+      color: #ffffff;
+      border-color: #1a0a04;
+    }
+    /* About modal */
+    #about-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: none;
+      align-items: center; justify-content: center;
+      background: rgba(20, 10, 5, 0.45);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    #about-modal.open { display: flex; }
+    #about-modal .panel {
+      background: #ffffff;
+      width: 480px;
+      max-width: calc(100vw - 48px);
+      padding: 36px 40px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(20,10,5,0.18);
+    }
+    #about-modal .panel h2 {
+      font-size: 11px; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin: 0 0 18px 0;
+      color: #1a0a04; font-weight: 500;
+    }
+    #about-modal .panel p {
+      font-size: 13px; line-height: 1.6;
+      color: #1a0a04;
+      margin: 0 0 12px 0;
+    }
+    #about-modal .panel p:last-child { margin-bottom: 0; }
+    #about-modal .close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 24px; height: 24px;
+      border: none; background: transparent;
+      cursor: pointer;
+      font-size: 16px; line-height: 1;
+      color: rgba(30,15,8,0.5);
+      padding: 0;
+    }
+    #about-modal .close:hover { color: #1a0a04; }
+    /* ── Fixed bottom-right question banner + add button ── */
+    #q-banner-fixed {
+      position: fixed;
+      right: 24px;
+      bottom: 52px;  /* footer 36px + 16px gap */
+      z-index: 1500;
+      display: flex; align-items: center; gap: 14px;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    body.sheet-open #q-banner-fixed {
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+    }
+    /* Black pill banner that holds the rotating question */
+    .q-banner {
+      background: #1a0a04;
+      color: #ffffff;
+      padding: 12px 22px;
+      width: 360px;
+      overflow: hidden;
+      position: relative;
+      height: 64px;  /* fits up to 2 lines of question text */
+    }
+    /* The viewport — exactly the banner content area, clipped */
+    .q-banner .q-window {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 22px; right: 48px;  /* leave room on the right for the next-arrow */
+      overflow: hidden;
+    }
+    /* Hand-drawn-style next arrow inside the pill, on the right edge */
+    .q-banner .q-next {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px; height: 26px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      opacity: 0.65;
+    }
+    .q-banner .q-next:hover {
+      opacity: 1;
+      transform: translateY(-50%) translateX(2px);
+    }
+    .q-banner .q-next svg {
+      width: 18px; height: 18px;
+      display: block;
+    }
+    .q-banner .q-track {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .q-banner .q-line {
+      height: 64px;
+      display: flex; align-items: center;
+      font-size: 10px;
+      line-height: 1.5;
+      letter-spacing: 0.22em;
+      font-weight: 500;
+      text-transform: uppercase;
+      white-space: normal;
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+    /* Bare + button — no box, no border. Ochre accent. */
+    .add-btn {
+      width: 36px; height: 36px;
+      border: none;
+      background: transparent;
+      color: #c89a3e;
+      font-size: 32px; font-weight: 300;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+      padding: 0;
+      transition: transform 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+    .add-btn:hover { transform: rotate(90deg); color: #a87e2c; }
+    .add-btn.active { transform: rotate(45deg); color: #c89a3e; }
+
+    /* Hint banner — appears when answer mode is active */
+    #hint {
+      position: fixed; top: 56px; left: 50%; transform: translateX(-50%);
+      z-index: 1100;
+      background: #1a0a04; color: #ffffff;
+      padding: 8px 18px;
+      font-size: 9px; letter-spacing: 0.28em;
+      pointer-events: none;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    #hint.show { opacity: 1; }
+
+    /* Pending pin while user is choosing a location — ochre accent */
+    .pending-pin {
+      width: 16px; height: 16px;
+      pointer-events: none;
+    }
+    .pending-pin .ring {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 1.5px dashed #c89a3e;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50%      { transform: scale(1.2); opacity: 0.5; }
+    }
+
+    /* ── Bottom answer sheet — minimal, frosted ── */
+    #sheet {
+      position: fixed; left: 0; right: 0; bottom: 36px;  /* above the footer */
+      height: 160px;
+      background: rgba(250, 250, 248, 0.05);
+      backdrop-filter: blur(4px) saturate(1.05);
+      -webkit-backdrop-filter: blur(4px) saturate(1.05);
+      border-top: 0.5px solid rgba(30,15,8,0.12);
+      box-shadow: 0 -8px 30px rgba(20,10,5,0.05);
+      z-index: 1300;
+      transform: translateY(100%);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; flex-direction: column;
+    }
+    #sheet.show { transform: translateY(0); }
+    #sheet .sheet-head {
+      padding: 18px 40px 0;
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: 4px;
+    }
+    #sheet .sheet-q {
+      font-size: 8.5px; letter-spacing: 0.32em;
+      color: rgba(30,15,8,0.4);
+      margin-bottom: 6px;
+    }
+    #sheet .sheet-q-text {
+      font-family: 'Bricolage Grotesque', 'Helvetica Neue', sans-serif;
+      font-size: 28px; letter-spacing: -0.012em; line-height: 1.18;
+      color: #1a0a04; font-weight: 500;
+      max-width: 720px;
+      font-optical-sizing: auto;
+    }
+    /* Variant B: muted single status line, no YOUR PLACE label */
+    #sheet .sheet-loc {
+      font-size: 12px; letter-spacing: 0.04em;
+      color: rgba(30,15,8,0.45);
+      font-style: italic;
+      font-weight: 300;
+    }
+    #sheet .sheet-loc .strong {
+      color: #1a0a04; font-weight: 400;
+      font-style: normal;
+      letter-spacing: 0.04em;
+    }
+    #sheet .sheet-body {
+      flex: 1;
+      padding: 8px 40px 18px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    #sheet input.answer-field {
+      flex: 1;
+      border: none; outline: none;
+      font-family: 'Archivo', sans-serif;
+      font-size: 17px; letter-spacing: 0.01em; font-weight: 400;
+      color: #1a0a04;
+      padding: 10px 0;
+      background: transparent;
+    }
+    #sheet input.answer-field::placeholder {
+      color: rgba(30,15,8,0.3);
+      font-weight: 300;
+    }
+    /* Submit button — uppercase pill */
+    #sheet .submit-arrow {
+      flex-shrink: 0;
+      border: 1px solid rgba(30,15,8,0.4);
+      background: transparent;
+      color: #1a0a04;
+      cursor: pointer;
+      padding: 10px 22px;
+      font-family: 'Archivo', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    #sheet .submit-arrow:hover {
+      background: #1a0a04;
+      color: #ffffff;
+      border-color: #1a0a04;
+    }
+    #sheet .submit-arrow:disabled {
+      opacity: 0.3; cursor: not-allowed;
+    }
+    #sheet .submit-arrow:disabled:hover {
+      background: transparent; color: #1a0a04;
+      border-color: rgba(30,15,8,0.4);
+    }
+
+    /* When sheet is open, raise the body padding so map doesn't hide behind it */
+
+    /* Map dimming — vivid blue wash covering the full map */
+    #red-wash {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: rgba(30, 80, 255, 0.75);
+      mix-blend-mode: multiply;
+      opacity: 0;
+      transition: opacity 0.7s ease;
+      z-index: 5;
+    }
+    body.spotlight-on #red-wash {
+      opacity: 1;
+    }
+    /* Lift map markers above the wash so the matching answer pops in front */
+    .maplibregl-marker { z-index: 10; }
+
+    /* User-placed answer pin — hand-drawn knot, like a tied thread */
+    .answer-marker {
+      width: 24px; height: 24px;
+      cursor: pointer;
+      position: relative;
+      transition: opacity 0.7s ease;
+    }
+    .answer-marker.dim { opacity: 0; pointer-events: none; }
+    .answer-marker .crosshair {
+      position: absolute;
+      top: 0; left: 0;
+      width: 24px; height: 24px;
+      stroke: #1a0a04;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.95;
+    }
+    /* Floating answer note next to pin — styled like the bottom question banner */
+    .answer-note {
+      position: absolute;
+      left: 28px; top: 0;
+      background: #1a0a04;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 10px;
+      line-height: 1.5;
+      letter-spacing: 0.22em;
+      font-weight: 500;
+      text-transform: uppercase;
+      white-space: nowrap;
+      max-width: 280px; overflow: hidden; text-overflow: ellipsis;
+      pointer-events: none;
+    }
+    .answer-note .q { display: none; }
+    /* Answer mode: change cursor on map */
+    body.answer-mode #map-pane { cursor: crosshair; }
+
+    body {
+      padding-top: 44px;
+      padding-bottom: 36px;
+    }
+
+    /* ── Map: full width, between masthead and footer ── */
+    #map-pane { width: 100vw; height: calc(100vh - 80px); position: relative; }
+
+    /* ── Bottom static label bar — always on top ── */
+    #footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 36px; z-index: 1400;
+      background: #ffffff;
+      border-top: 1px solid rgba(40,20,10,0.25);
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 24px;
+    }
+    #footer .label {
+      font-size: 9px; letter-spacing: 0.32em;
+      color: rgba(30,15,8,0.55);
+      font-weight: 400;
+      text-align: center;
+    }
+    #footer .label .sep {
+      display: inline-block;
+      margin: 0 14px;
+      color: rgba(30,15,8,0.25);
+    }
+    #footer .label .strong {
+      color: rgba(30,15,8,0.85);
+      font-weight: 500;
+    }
+
+    /* ── Swiss-graphic pin ── */
+    .ink-marker {
+      width: 26px; height: 56px;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+    .ink-marker:hover { transform: translateY(-3px); }
+    .ink-marker svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+    /* Popup card — quiet museum label */
+    .maplibregl-popup-content {
+      padding: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: 0 8px 30px rgba(20,10,5,0.10), 0 0 0 0.5px rgba(30,15,8,0.12) !important;
+      background: #ffffff !important;
+    }
+    .maplibregl-popup-tip { display: none !important; }
+    .maplibregl-popup-close-button {
+      color: rgba(30,15,8,0.4) !important;
+      font-size: 16px !important;
+      padding: 4px 8px !important;
+      font-family: 'Archivo', sans-serif !important;
+    }
+    .pop {
+      padding: 16px 18px 14px;
+      min-width: 200px; max-width: 240px;
+      font-family: 'Archivo', sans-serif;
+    }
+    .pop .label {
+      font-size: 7.5px; letter-spacing: 0.32em;
+      color: rgba(30,15,8,0.5);
+      margin-bottom: 8px;
+    }
+    .pop .name {
+      font-size: 13px; letter-spacing: 0.16em;
+      color: #1a0a04; font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .pop .divider {
+      width: 22px; height: 0.5px;
+      background: rgba(30,15,8,0.3);
+      margin-bottom: 10px;
+    }
+    .pop .desc {
+      font-size: 10px; line-height: 1.65; letter-spacing: 0.04em;
+      color: rgba(30,15,8,0.65);
+    }
+    #map { width: 100%; height: 100%; position: relative; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+    #ctrl {
+      position: absolute; bottom: 24px; right: 24px; z-index: 300;
+      display: flex; flex-direction: column; gap: 2px;
+      opacity: 0.12; transition: opacity 0.3s;
+    }
+    #ctrl:hover { opacity: 1; }
+    #ctrl button {
+      width: 28px; height: 28px; background: rgba(255,255,255,0.9);
+      border: 1px solid #ccc; border-radius: 0; font-size: 14px;
+      color: #555; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    #ctrl button:hover { background: #fff; }
+    #ctrl .s { height: 5px; }
+
+  </style>
+</head>
+<body>
+
+<!-- ─────────── TOP MASTHEAD ─────────── -->
+<div id="masthead">
+  <div class="title">
+    <span>SOFT MAP</span>
+    <span class="divider">|</span>
+    <span class="city">SAN FRANCISCO</span>
+  </div>
+  <button class="help" id="help-btn" aria-label="About Soft Map">?</button>
+</div>
+
+<div id="about-modal" role="dialog" aria-modal="true" aria-label="About Soft Map">
+  <div class="panel">
+    <button class="close" id="about-close" aria-label="Close">×</button>
+    <h2>About Soft Map</h2>
+    <p>A question-based city map of San Francisco. Each question reveals how people actually use, remember, and emotionally navigate the city.</p>
+    <p>Click the <strong>+</strong> button to answer the current question. Pick a place on the map, type a short answer, and add your mark.</p>
+    <p>Use the <strong>›</strong> arrow on the question banner to move to the next question. Pins for the current question light up against a blue spotlight.</p>
+  </div>
+</div>
+
+<!-- ─────────── FIXED BOTTOM-RIGHT QUESTION BANNER ─────────── -->
+<div id="q-banner-fixed">
+  <div class="q-banner" id="q-banner">
+    <div class="q-window">
+      <div class="q-track" id="q-track">
+        <div class="q-line" id="q-line-current">where do you take your dog for a walk?</div>
+        <div class="q-line" id="q-line-next">where do you go when you're sad?</div>
+      </div>
+    </div>
+    <button class="q-next" id="q-next" title="Next question" aria-label="Next question">
+      <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Hand-drawn style chevron — slightly broken stroke for ink feel -->
+        <path d="M 5.5 3.6 L 12 8.9 L 5.6 14.3" />
+      </svg>
+    </button>
+  </div>
+  <button class="add-btn" id="add-btn" title="Drop a pin to answer">+</button>
+</div>
+
+
+<!-- Bottom sheet for typing the answer -->
+<div id="sheet">
+  <div class="sheet-head">
+    <div>
+      <div class="sheet-q">A QUESTION</div>
+      <div class="sheet-q-text" id="sheet-q-text">where do you take your dog for a walk?</div>
+    </div>
+    <div class="sheet-loc">
+      <span class="strong" id="sheet-loc">click the map to pick a place</span>
+    </div>
+  </div>
+  <div class="sheet-body">
+    <input type="text" id="sheet-input" class="answer-field" placeholder="share your answer…" maxlength="160" />
+    <button id="sheet-submit" class="submit-arrow" title="Submit (enter) · Esc to cancel">SUBMIT</button>
+    <button id="sheet-cancel" style="display:none;"></button>
+  </div>
+</div>
+
+<!-- ─────────── SF MAP ─────────── -->
+<div id="map-pane">
+  <div id="ctrl">
+    <button id="zi">+</button><button id="zo">−</button>
+    <div class="s"></div>
+    <button id="tl">⊹</button><button id="nr">↑</button>
+  </div>
+  <div id="map"></div>
+  <div id="red-wash"></div>
+</div>
+
+<!-- ─────────── BOTTOM LABEL BAR ─────────── -->
+<div id="footer">
+  <div class="label">
+    <span class="strong">SAN FRANCISCO</span>
+    <span class="sep">·</span>
+    ESTABLISHED 1776
+    <span class="sep">·</span>
+    47 MI²
+    <span class="sep">·</span>
+    808,437 PEOPLE
+  </div>
+</div>
+
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5, pitch: 48, bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 11, maxZoom: 20, attributionControl: false,
+});
+document.getElementById('zi').onclick = () => map.zoomIn({ duration: 400 });
+document.getElementById('zo').onclick = () => map.zoomOut({ duration: 400 });
+document.getElementById('nr').onclick = () => map.easeTo({ bearing: 0, pitch: 0, duration: 700 });
+document.getElementById('tl').onclick = () => map.easeTo({ pitch: map.getPitch() > 10 ? 0 : 48, duration: 700 });
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f8f8f6'); continue; }
+
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#ffffff'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') { map.setPaintProperty(id, 'line-color', '#bbb'); map.setPaintProperty(id, 'line-width', 0.4); }
+        continue;
+      }
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (/motorway|trunk/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.5);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.5, 12,0.8, 14,1.2, 17,2]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/primary|secondary/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.45);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.4, 12,0.6, 14,0.9, 17,1.5]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/road|street|tertiary|minor|service/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.55);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 12,0.15, 14,0.35, 17,0.8]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/path|footway|cycleway|pedestrian|rail|transit/.test(id)) {
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#f8f8f6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+        map.setPaintProperty(id, 'fill-outline-color', '#ddd');
+        continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f8f8f6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  try {
+    map.addLayer({
+      id: 'contour-minor',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['!=', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': '#ccc',
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.3, 14,0.55],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.5, 14,0.85, 16,0.25],
+      }
+    });
+    map.addLayer({
+      id: 'contour-major',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['==', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': ['interpolate',['linear'],['get','ele'], 0,'#bbb', 100,'#999', 200,'#777', 300,'#555'],
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.8, 13,1.4, 15,1.8],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.7, 13,0.9, 16,0.35],
+      }
+    });
+  } catch(_) {}
+
+  map.addLayer({
+    id: 'building-ink',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 14,
+    paint: { 'line-color': '#bbb', 'line-width': 0.35, 'line-opacity': 0.7 }
+  });
+
+  // ── Render any saved answers from localStorage ──
+  loadSavedAnswers();
+});
+
+// ─────────── ROTATING QUESTIONS ───────────
+const QUESTIONS = [
+  "where do you take your dog for a walk?",
+  "where do you go when you're sad?",
+  "where did you fall in love with the city?",
+  "where do you read on a Sunday morning?",
+  "where do you go when you can't sleep?",
+  "where do you meet a friend after work?",
+  "where do you go to think?",
+  "where do you take someone visiting for the first time?",
+  "where did you cry in public?",
+  "where do you feel most at home?",
+];
+
+// Slide animation between questions: a vertical track holds the current line
+// and the next line stacked. We translate the track up by one line height,
+// then snap it back and swap text — so it looks like an endless reel.
+const qTrack = document.getElementById('q-track');
+const qLineCurrent = document.getElementById('q-line-current');
+const qLineNext = document.getElementById('q-line-next');
+let currentQuestionIndex = 0;
+
+// Mirror of questionEl.textContent so the rest of the code can read it
+const questionEl = {
+  get textContent() { return QUESTIONS[currentQuestionIndex]; },
+};
+
+function rotateQuestion() {
+  // Slide up by one full banner row (banner height = 64px, fits 1-2 lines)
+  qTrack.style.transform = 'translateY(-64px)';
+  setTimeout(() => {
+    currentQuestionIndex = (currentQuestionIndex + 1) % QUESTIONS.length;
+    qLineCurrent.textContent = QUESTIONS[currentQuestionIndex];
+    qLineNext.textContent = QUESTIONS[(currentQuestionIndex + 1) % QUESTIONS.length];
+    qTrack.style.transition = 'none';
+    qTrack.style.transform = 'translateY(0)';
+    void qTrack.offsetHeight;
+    qTrack.style.transition = '';
+    if (typeof applySpotlight === 'function') applySpotlight();
+  }, 600);
+}
+
+// Auto-rotation removed — user advances manually via the next-arrow button.
+// Keep no-op functions so existing open/closeSheet calls stay valid.
+function startRotation() {}
+function stopRotation() {}
+
+// User clicks the chevron inside the banner → advance to next question
+const qNextBtn = document.getElementById('q-next');
+qNextBtn.addEventListener('click', () => {
+  rotateQuestion();
+});
+
+// ─────────── ABOUT MODAL ───────────
+const helpBtn = document.getElementById('help-btn');
+const aboutModal = document.getElementById('about-modal');
+const aboutClose = document.getElementById('about-close');
+helpBtn.addEventListener('click', () => aboutModal.classList.add('open'));
+aboutClose.addEventListener('click', () => aboutModal.classList.remove('open'));
+aboutModal.addEventListener('click', (e) => {
+  if (e.target === aboutModal) aboutModal.classList.remove('open');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && aboutModal.classList.contains('open')) {
+    aboutModal.classList.remove('open');
+  }
+});
+
+// ─────────── ANSWER MODE ───────────
+const addBtn = document.getElementById('add-btn');
+const hint = { classList: { toggle() {} } }; // no-op: hint banner removed
+const sheet = document.getElementById('sheet');
+const sheetInput = document.getElementById('sheet-input');
+const sheetQText = document.getElementById('sheet-q-text');
+const sheetLoc = document.getElementById('sheet-loc');
+const sheetCancel = document.getElementById('sheet-cancel');
+const sheetSubmit = document.getElementById('sheet-submit');
+
+let answerMode = false;       // true after + clicked, before map clicked
+let pendingLngLat = null;
+let pendingQuestion = null;
+let pendingMarker = null;
+
+function setAnswerMode(on) {
+  answerMode = on;
+  document.body.classList.toggle('answer-mode', on);
+  addBtn.classList.toggle('active', on);
+  hint.classList.toggle('show', on);
+}
+
+function openSheet() {
+  sheet.classList.add('show');
+  document.body.classList.add('sheet-open');
+  stopRotation(); // freeze the question while the user is answering
+  setTimeout(() => sheetInput.focus(), 350);
+}
+function closeSheet() {
+  sheet.classList.remove('show');
+  document.body.classList.remove('sheet-open');
+  if (pendingMarker) { pendingMarker.remove(); pendingMarker = null; }
+  pendingLngLat = null;
+  pendingQuestion = null;
+  sheetInput.value = '';
+  sheetLoc.textContent = 'click the map to pick a place';
+  startRotation(); // resume rotation when the sheet closes
+}
+
+addBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (sheet.classList.contains('show')) {
+    closeSheet();
+    setAnswerMode(false);
+    return;
+  }
+  // Open the sheet immediately, lock in the current question
+  pendingQuestion = questionEl.textContent;
+  sheetQText.textContent = pendingQuestion;
+  sheetLoc.textContent = 'click the map to pick a place';
+  pendingLngLat = null;
+  // Activate "pick a place" mode — user can click map while sheet is open
+  setAnswerMode(true);
+  openSheet();
+});
+
+map.on('click', (e) => {
+  if (!answerMode) return;
+  pendingLngLat = [e.lngLat.lng, e.lngLat.lat];
+
+  // Drop / move the temporary pending pin
+  if (pendingMarker) pendingMarker.remove();
+  const pendingEl = document.createElement('div');
+  pendingEl.className = 'pending-pin';
+  pendingEl.innerHTML = '<div class="ring"></div>';
+  pendingMarker = new maplibregl.Marker({ element: pendingEl, anchor: 'center' })
+    .setLngLat(pendingLngLat)
+    .addTo(map);
+
+  // Update sheet location text
+  sheetLoc.textContent = `${pendingLngLat[1].toFixed(4)}° N, ${Math.abs(pendingLngLat[0]).toFixed(4)}° W`;
+});
+
+function submitAnswer() {
+  const text = sheetInput.value.trim();
+  if (!text) {
+    sheetInput.focus();
+    return;
+  }
+  if (!pendingLngLat) {
+    // Flash a hint that they need to click the map
+    sheetLoc.textContent = '← click the map first';
+    sheetLoc.style.color = '#1a0a04';
+    setTimeout(() => { sheetLoc.style.color = ''; }, 1800);
+    return;
+  }
+  saveAnswer({ lngLat: pendingLngLat, question: pendingQuestion, text });
+  placeAnswerMarker({ lngLat: pendingLngLat, question: pendingQuestion, text });
+  closeSheet();
+  setAnswerMode(false);
+}
+
+sheetSubmit.addEventListener('click', submitAnswer);
+sheetCancel.addEventListener('click', closeSheet);
+sheetInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') submitAnswer();
+  else if (e.key === 'Escape') closeSheet();
+});
+
+// ─────────── STORAGE ───────────
+const STORAGE_KEY = 'sf-mood-answers';
+function saveAnswer(entry) {
+  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  all.push({ ...entry, timestamp: Date.now() });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
+function loadSavedAnswers() {
+  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  all.forEach(placeAnswerMarker);
+}
+
+// ─────────── MARKER ───────────
+// Track every answer marker element + its question, so we can highlight/dim them as the question rotates
+const answerMarkers = [];
+function placeAnswerMarker({ lngLat, question, text }) {
+  const wrap = document.createElement('div');
+  wrap.className = 'answer-marker';
+  wrap.dataset.question = question;
+  wrap.innerHTML = `
+    <svg class="crosshair" viewBox="0 0 24 24">
+      <path d="M 8 16
+               C 4 14, 6 6, 12 8
+               C 18 10, 20 18, 14 18
+               C 8 18, 6 10, 12 8
+               C 18 6, 20 14, 16 16
+               C 12 18, 6 16, 8 10
+               C 10 4, 18 6, 16 12 Z" />
+    </svg>
+    <div class="answer-note">
+      <div class="q">${escapeHtml(question)}</div>
+      <div>${escapeHtml(text)}</div>
+    </div>
+  `;
+  new maplibregl.Marker({ element: wrap, anchor: 'top-left' })
+    .setLngLat(lngLat)
+    .addTo(map);
+  answerMarkers.push({ el: wrap, question });
+  applySpotlight();
+}
+
+// Apply the spotlight effect: dim the map, fade out markers that don't match current question
+function applySpotlight() {
+  const currentQ = QUESTIONS[currentQuestionIndex];
+  const hasMatches = answerMarkers.some(m => m.question === currentQ);
+  document.body.classList.toggle('spotlight-on', hasMatches);
+  answerMarkers.forEach(m => {
+    m.el.classList.toggle('dim', m.question !== currentQ);
+  });
+}
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
