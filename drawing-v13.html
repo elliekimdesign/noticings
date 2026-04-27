@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Soft Map — San Francisco</title>
+  <title>Pinned — San Francisco</title>
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Gilda+Display&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -22,32 +22,28 @@
       position: fixed; top: 0; left: 0; right: 0;
       height: 44px; z-index: 1000;
       background: #ffffff;
-      border-bottom: 1px solid rgba(30,30,30,0.25);
+      border-bottom: 1.5px solid rgba(30,30,30,0.55);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 24px;
     }
     #masthead .title {
-      font-size: 11px; letter-spacing: 0.18em;
-      color: #1a1a1a; font-weight: 500;
-      display: flex; align-items: center; gap: 10px;
+      font-family: 'Geist', 'Inter', 'Helvetica Neue', sans-serif;
+      font-size: 15px; letter-spacing: 0.05em;
+      color: #1a1a1a; font-weight: 600;
+      display: flex; align-items: center;
+      text-transform: uppercase;
     }
-    #masthead .logo {
-      width: 22px; height: 22px;
-      stroke: #1a1a1a;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex-shrink: 0;
-    }
-    #masthead .title .divider {
-      color: rgba(26,26,26,0.3);
-      font-weight: 300;
-    }
-    #masthead .title .city {
-      font-size: 8.5px; letter-spacing: 0.18em;
-      color: rgba(26,26,26,0.5);
+    #masthead .city-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Geist', 'Inter', 'Helvetica Neue', sans-serif;
+      font-size: 14px;
       font-weight: 500;
+      color: #1a1a1a;
+      letter-spacing: 0.02em;
+      pointer-events: none;
     }
     /* ── Fixed right-side question banner ── */
     #q-banner-fixed {
@@ -124,15 +120,63 @@
       border: none;
       background: transparent;
       color: #1a1a1a;
-      font-size: 24px;
-      font-weight: 300;
-      line-height: 1;
       cursor: pointer;
       padding: 0;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: transform 0.2s ease, color 0.2s ease;
     }
+    .add-btn svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      stroke: currentColor;
+      stroke-width: 1;
+      stroke-linecap: round;
+      fill: none;
+      transition: stroke 0.2s ease;
+    }
     .add-btn:hover { transform: rotate(90deg); }
-    .add-btn.active { transform: rotate(45deg); color: #c89a3e; }
+    .add-btn.active { transform: rotate(45deg); color: #1a1a1a; }
+
+    /* Victorian eye toggle — floats below the masthead, right side */
+    .eye-toggle {
+      position: fixed;
+      top: 56px;
+      right: 22px;
+      width: 36px;
+      height: 28px;
+      z-index: 1000;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      padding: 0;
+      opacity: 0.55;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+    .eye-toggle:hover { opacity: 0.85; transform: scale(1.05); }
+    .eye-toggle.active { opacity: 0.95; }
+    .eye-toggle svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    /* Spotlight overlay — dims the map when revealed */
+    body.spotlight-on::after {
+      content: '';
+      position: fixed;
+      top: 44px; bottom: 36px; left: 0; right: 0;
+      background: rgba(26,26,26,0.30);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Idle: all answer pins hidden by default. Revealed rules sit further down with the marker styles. */
 
     /* Hint banner — appears when answer mode is active */
     #hint {
@@ -146,20 +190,22 @@
     }
     #hint.show { opacity: 1; }
 
-    /* Pending pin while user is choosing a location — ochre accent */
+    /* Pending pin — Victorian-style pointing hand (manicule) */
     .pending-pin {
-      width: 16px; height: 16px;
+      width: 48px;
+      height: 48px;
       pointer-events: none;
     }
-    .pending-pin .ring {
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      border: 1.5px dashed #c89a3e;
-      animation: pulse 1.4s ease-in-out infinite;
+    .pending-pin svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+      animation: handBob 1.6s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.85; }
-      50%      { transform: scale(1.2); opacity: 0.5; }
+    @keyframes handBob {
+      0%, 100% { transform: translate(0, 0); }
+      50%      { transform: translate(0, -3px); }
     }
 
     /* ── Bottom answer sheet — minimal, frosted ── */
@@ -167,13 +213,32 @@
       width: 360px;
       box-sizing: border-box;
       background: #ffffff;
-      border: 1px solid rgba(26,26,26,0.18);
+      border: 1.5px solid rgba(26,26,26,0.45);
       max-height: 0;
       opacity: 0;
       overflow: hidden;
       pointer-events: none;
       transition: max-height 0.4s ease, opacity 0.3s ease;
       display: flex; flex-direction: column;
+      position: relative;
+    }
+    /* Medieval initial T — large accent in bottom-right, above PIN IT */
+    #sheet .sheet-stamp {
+      position: absolute;
+      bottom: 66px;
+      right: 16px;
+      width: 150px;
+      height: 125px;
+      pointer-events: none;
+      opacity: 0.45;
+      mix-blend-mode: multiply;
+      z-index: 0;
+    }
+    #sheet .sheet-stamp img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
     #sheet.show {
       max-height: 300px;
@@ -220,17 +285,25 @@
       padding: 8px 20px 16px;
       display: flex; align-items: flex-start;
     }
-    #sheet input.answer-field {
+    #sheet textarea.answer-field {
       flex: 1;
       min-width: 0;
+      width: 100%;
       border: none; outline: none;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 24px; letter-spacing: -0.005em; font-weight: 600;
+      line-height: 1.25;
       color: #1a1a1a;
       padding: 8px 0;
       background: transparent;
+      resize: none;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      overflow-y: auto;
+      position: relative;
+      z-index: 1;
     }
-    #sheet input.answer-field::placeholder {
+    #sheet textarea.answer-field::placeholder {
       color: rgba(26,26,26,0.3);
       font-weight: 300;
     }
@@ -239,15 +312,15 @@
       flex-shrink: 0;
       width: 100%;
       border: none;
-      border-top: 1px solid rgba(26,26,26,0.18);
+      border-top: 1px solid rgba(26,26,26,0.45);
       background: transparent;
       color: #1a1a1a;
       cursor: pointer;
       padding: 16px 20px;
-      font-family: 'Archivo', sans-serif;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.28em;
+      font-family: 'Geist', 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       transition: background 0.2s ease, color 0.2s ease;
     }
@@ -273,10 +346,14 @@
     .answer-marker {
       cursor: pointer;
       position: relative;
-      transition: opacity 0.7s ease;
+      transition: opacity 0.5s ease;
       display: inline-flex;
       align-items: stretch;
+      opacity: 0;
+      pointer-events: none;
     }
+    /* Revealed: show only matching pins (markers with .dim stay hidden) */
+    body.spotlight-on .answer-marker:not(.dim) { opacity: 1; pointer-events: auto; }
     .answer-marker.dim { opacity: 0; pointer-events: none; }
     .answer-marker .corner {
       width: 12px;
@@ -327,25 +404,41 @@
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 36px; z-index: 1400;
       background: #ffffff;
-      border-top: 1px solid rgba(30,30,30,0.25);
-      display: flex; align-items: center; justify-content: center;
+      border-top: 1.5px solid rgba(30,30,30,0.55);
+      display: flex; align-items: center; justify-content: flex-start;
       padding: 0 24px;
     }
     #footer .label {
       font-size: 9px; letter-spacing: 0.32em;
       color: rgba(26,26,26,0.55);
       font-weight: 400;
-      text-align: center;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     #footer .label .sep {
-      display: inline-block;
-      margin: 0 14px;
       color: rgba(26,26,26,0.25);
     }
     #footer .label .strong {
       color: rgba(26,26,26,0.85);
       font-weight: 500;
     }
+    #footer .volume {
+      margin-left: auto;
+      width: 50%;
+      font-family: 'Jacques Francois', 'Times New Roman', serif;
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(26,26,26,0.65);
+      letter-spacing: 0.15em;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+    }
+    #footer .volume > span:not(.sep):nth-of-type(1) { grid-column: 3; }
+    #footer .volume > span:not(.sep):nth-of-type(2) { grid-column: 4; }
+    #footer .volume .sep { display: none; }
 
     /* ── Swiss-graphic pin ── */
     .ink-marker {
@@ -404,21 +497,28 @@
 <!-- ─────────── TOP MASTHEAD ─────────── -->
 <div id="masthead">
   <div class="title">
-    <svg class="logo" viewBox="0 0 24 24">
-      <path d="M 8 16
-               C 4 14, 6 6, 12 8
-               C 18 10, 20 18, 14 18
-               C 8 18, 6 10, 12 8
-               C 18 6, 20 14, 16 16
-               C 12 18, 6 16, 8 10
-               C 10 4, 18 6, 16 12 Z" />
-    </svg>
-    <span>SOFT MAP</span>
-    <span class="divider">|</span>
-    <span class="city">SAN FRANCISCO</span>
+    <span>Pinned</span>
   </div>
-  <button class="add-btn" id="add-btn" title="Drop a pin to answer" aria-label="Add an answer">+</button>
+  <div class="city-center">San Francisco</div>
+  <button class="add-btn" id="add-btn" title="Drop a pin to answer" aria-label="Add an answer">
+    <svg viewBox="0 0 22 22">
+      <line x1="11" y1="2" x2="11" y2="20" />
+      <line x1="2" y1="11" x2="20" y2="11" />
+    </svg>
+  </button>
 </div>
+
+<!-- ─────────── EYE TOGGLE — reveal answers ─────────── -->
+<button class="eye-toggle" id="eye-toggle" title="Reveal answers" aria-label="Toggle answers visibility">
+  <svg viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Top lid — slightly imperfect curve -->
+    <path d="M 3 11 Q 9 3 16 2.5 Q 23 3 29 10"/>
+    <!-- Bottom lid — slightly imperfect curve -->
+    <path d="M 3 11 Q 9 17 16 17.5 Q 23 17 29 10"/>
+    <!-- Pupil — solid dot, hand-stamped feel -->
+    <circle cx="16" cy="10" r="2.2" fill="#1a1a1a" stroke="none"/>
+  </svg>
+</button>
 
 <!-- ─────────── FIXED RIGHT-SIDE QUESTION BANNER + ANSWER SHEET ─────────── -->
 <div id="q-banner-fixed">
@@ -436,6 +536,9 @@
     </button>
   </div>
   <div id="sheet">
+    <div class="sheet-stamp" aria-hidden="true">
+      <img src="assets/medieval-initial-t.jpg" alt="" />
+    </div>
     <div class="sheet-head">
       <div class="sheet-loc">
         <div class="loc-name" id="sheet-loc">click the map to pick a place</div>
@@ -443,7 +546,7 @@
       </div>
     </div>
     <div class="sheet-body">
-      <input type="text" id="sheet-input" class="answer-field" placeholder="share your answer…" maxlength="160" />
+      <textarea id="sheet-input" class="answer-field" placeholder="share your answer…" maxlength="160" rows="3"></textarea>
     </div>
     <button id="sheet-submit" class="submit-arrow" title="Pin it (enter) · Esc to cancel">PIN IT</button>
     <button id="sheet-cancel" style="display:none;"></button>
@@ -460,13 +563,18 @@
 <!-- ─────────── BOTTOM LABEL BAR ─────────── -->
 <div id="footer">
   <div class="label">
-    <span class="strong">SAN FRANCISCO</span>
-    <span class="sep">·</span>
-    ESTABLISHED 1776
+    <span class="strong">ESTABLISHED 1776</span>
     <span class="sep">·</span>
     47 MI²
     <span class="sep">·</span>
     808,437 PEOPLE
+    <span class="sep">·</span>
+    <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
+  </div>
+  <div class="volume">
+    <span>Volume&nbsp;I</span>
+    <span class="sep">·</span>
+    <span>May, 2026</span>
   </div>
 </div>
 
@@ -533,12 +641,12 @@ map.on('style.load', () => {
         continue;
       }
       if (/building/.test(id) && type === 'fill') {
-        map.setPaintProperty(id, 'fill-color', '#f4f4f5');
+        map.setPaintProperty(id, 'fill-color', '#d4d4d6');
         map.setPaintProperty(id, 'fill-opacity', 1);
-        map.setPaintProperty(id, 'fill-outline-color', '#ddd');
+        map.setPaintProperty(id, 'fill-outline-color', '#bbb');
         continue;
       }
-      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f4f4f5'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#d4d4d6'); map.setPaintProperty(id, 'fill-opacity', 1); }
       if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
     } catch(_) {}
   }
@@ -753,8 +861,48 @@ map.on('click', (e) => {
   if (pendingMarker) pendingMarker.remove();
   const pendingEl = document.createElement('div');
   pendingEl.className = 'pending-pin';
-  pendingEl.innerHTML = '<div class="ring"></div>';
-  pendingMarker = new maplibregl.Marker({ element: pendingEl, anchor: 'center' })
+  // Victorian-style pointing hand — fingertip is at SVG (10, 38), which is the marker's anchor point
+  pendingEl.innerHTML = `
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <g fill="#fff" stroke="#1a1a1a" stroke-width="1" stroke-linejoin="round" stroke-linecap="round">
+        <!-- Cuff (sleeve, top-right) -->
+        <path d="M 30 4 L 46 8 L 46 16 L 30 12 Z" />
+        <line x1="32" y1="6" x2="46" y2="9.5" stroke-width="0.6" />
+        <line x1="32" y1="11" x2="46" y2="14.5" stroke-width="0.6" />
+        <!-- Cuff button -->
+        <circle cx="42" cy="11" r="1" fill="#1a1a1a" stroke="none" />
+        <!-- Back of hand -->
+        <path d="M 30 4 L 30 12 L 26 13 Q 22 14 20 17 L 18 21 Q 18 24 22 25 L 28 25 L 32 25 L 36 25 Q 40 24 40 20 L 40 10 Q 40 6 36 5 Z" />
+        <!-- Index finger pointing down-left toward (10, 38) -->
+        <path d="M 26 13 Q 22 16 18 22 L 14 30 Q 12 34 10 38 L 13 38 Q 16 35 20 30 L 24 24 Q 27 20 27 16 Q 27 13 26 13 Z" />
+        <!-- Fingernail at fingertip (10, 38) -->
+        <path d="M 10.5 36.5 Q 12 36.8 13 37 L 12.5 38 Q 11 38.2 10 38 Z" fill="#1a1a1a" stroke-width="0.5" />
+        <!-- Curled middle finger -->
+        <path d="M 27 16 Q 31 17 32 21 Q 32 24 30 25 Q 27 25 26 23" stroke-width="0.9" />
+        <!-- Curled ring finger -->
+        <path d="M 30 18 Q 34 19 35 22 Q 35 24 32 25 Q 30 25 29 24" stroke-width="0.9" />
+        <!-- Curled pinky -->
+        <path d="M 33 20 Q 36 21 36 23 Q 36 25 34 25 Q 32 25 32 24" stroke-width="0.9" />
+        <!-- Thumb tucked at base -->
+        <path d="M 24 24 Q 26 26 30 26 Q 28 28 24 27 Z" stroke-width="0.8" />
+        <!-- Knuckle shading lines -->
+        <path d="M 22 17 Q 21 19 20 21" fill="none" stroke-width="0.4" />
+        <path d="M 25 19 Q 23 21 22 23" fill="none" stroke-width="0.4" />
+        <!-- Finger crease -->
+        <path d="M 18 24 Q 19 25 21 25" fill="none" stroke-width="0.4" />
+      </g>
+    </svg>
+  `;
+  // Anchor the SVG at the fingertip — viewBox is 48x48, fingertip is at (10, 38),
+  // so as a fraction: x=10/48, y=38/48. MapLibre's offset is in pixels from the
+  // anchor 'center' point, so we shift the element so that (10, 38) lands on the click.
+  // Element is 48px tall × 48px wide; center is (24, 24). Fingertip offset from center
+  // is (10-24, 38-24) = (-14, +14). To place fingertip on click, shift element by -(-14, +14) = (+14, -14).
+  pendingMarker = new maplibregl.Marker({
+    element: pendingEl,
+    anchor: 'center',
+    offset: [14, -14]
+  })
     .setLngLat(pendingLngLat)
     .addTo(map);
 
@@ -786,8 +934,10 @@ function submitAnswer() {
 sheetSubmit.addEventListener('click', submitAnswer);
 sheetCancel.addEventListener('click', closeSheet);
 sheetInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') submitAnswer();
-  else if (e.key === 'Escape') closeSheet();
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    submitAnswer();
+  } else if (e.key === 'Escape') closeSheet();
 });
 
 // ─────────── STORAGE ───────────
@@ -796,10 +946,17 @@ function saveAnswer(entry) {
   const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   all.push({ ...entry, timestamp: Date.now() });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+  updatePinCount();
 }
 function loadSavedAnswers() {
   const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   all.forEach(placeAnswerMarker);
+  updatePinCount();
+}
+function updatePinCount() {
+  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const el = document.getElementById('footer-pins');
+  if (el) el.textContent = all.length.toLocaleString();
 }
 
 // ─────────── MARKER ───────────
@@ -822,11 +979,21 @@ function placeAnswerMarker({ lngLat, question, text }) {
   applySpotlight();
 }
 
-// Apply the spotlight effect: dim the map, fade out markers that don't match current question
+// ─────────── REVEAL TOGGLE ───────────
+const eyeToggle = document.getElementById('eye-toggle');
+let revealed = false; // start in idle: pins hidden, map clear
+function setRevealed(on) {
+  revealed = on;
+  document.body.classList.toggle('spotlight-on', on);
+  eyeToggle.classList.toggle('active', on);
+  applySpotlight();
+}
+eyeToggle.addEventListener('click', () => setRevealed(!revealed));
+
+// Apply the spotlight effect: only when revealed; otherwise pins stay hidden via CSS
 function applySpotlight() {
+  if (!revealed) return;
   const currentQ = QUESTIONS[currentQuestionIndex];
-  const hasMatches = answerMarkers.some(m => m.question === currentQ);
-  document.body.classList.toggle('spotlight-on', hasMatches);
   answerMarkers.forEach(m => {
     m.el.classList.toggle('dim', m.question !== currentQ);
   });
