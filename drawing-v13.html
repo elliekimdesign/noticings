@@ -58,6 +58,9 @@
     body.sheet-open #q-banner-fixed {
       transform: translateY(-190px);  /* half of stack (64 + 16 + 300) / 2 */
     }
+    body.dropdown-open #q-banner-fixed {
+      transform: translateY(-242px);  /* half of stack (64 + 420) / 2 */
+    }
     /* Black pill banner that holds the rotating question */
     .q-banner {
       background: #1a1a1a;
@@ -92,11 +95,54 @@
     }
     .q-banner .q-next:hover {
       opacity: 1;
-      transform: translateY(-50%) translateX(2px);
+      transform: translateY(-50%) translateY(2px);
     }
     .q-banner .q-next svg {
       width: 18px; height: 18px;
       display: block;
+      transition: transform 0.3s ease;
+    }
+    .q-banner.dropdown-open .q-next svg { transform: rotate(180deg); }
+
+    /* Dropdown — opens below the banner with the same animation as the answer sheet */
+    .q-dropdown {
+      background: #1a1a1a;
+      color: #ffffff;
+      width: 360px;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      margin-top: -16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .q-dropdown.show {
+      max-height: 420px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .q-dropdown .q-dropdown-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 14px 22px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .q-dropdown .q-dropdown-item:last-child { border-bottom: none; }
+    .q-dropdown .q-dropdown-item:hover { background: rgba(255,255,255,0.06); }
+    .q-dropdown .q-dropdown-item.active {
+      background: rgba(255,255,255,0.1);
+      font-weight: 600;
     }
     .q-banner .q-track {
       position: absolute;
@@ -142,6 +188,79 @@
     .add-btn:hover { transform: rotate(90deg); }
     .add-btn.active { transform: rotate(45deg); color: #1a1a1a; }
 
+    /* Landmark recall button — Romanesque carved capital from Vézelay cloister */
+    .landmark-btn {
+      position: fixed;
+      bottom: 48px;
+      right: 24px;
+      width: 80px;
+      height: 80px;
+      z-index: 1050;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      opacity: 0.65;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .landmark-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      mix-blend-mode: multiply;
+    }
+    .landmark-btn:hover {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+    body.spotlight-on .landmark-btn { display: none; }
+
+    /* Landmark "museum vitrine" card — fades in centered when a landmark is shown */
+    .landmark-card {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      z-index: 1600;
+      background: #ffffff;
+      border: 1.5px solid rgba(26,26,26,0.45);
+      padding: 24px 28px 20px;
+      width: 320px;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+      font-family: 'Geist', sans-serif;
+    }
+    .landmark-card.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+    .landmark-card-image {
+      width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      margin-bottom: 14px;
+      mix-blend-mode: multiply;
+    }
+    .landmark-card-name {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+    .landmark-card-date {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 11px;
+      color: rgba(26,26,26,0.55);
+      font-weight: 400;
+    }
+
     /* Victorian eye toggle — floats below the masthead, right side */
     .eye-toggle {
       position: fixed;
@@ -175,6 +294,13 @@
       pointer-events: none;
       z-index: 5;
     }
+    /* Eye mode: hide chrome and the flat dim — the map's spotlight mask handles dimming */
+    body.spotlight-on #masthead,
+    body.spotlight-on #footer { display: none !important; }
+    body.spotlight-on::after { display: none !important; }
+    /* Eye mode: let the map fill the full viewport (no 80px reservation for chrome) */
+    body.spotlight-on #map-pane { height: 100vh !important; }
+    body.spotlight-on { padding-top: 0 !important; padding-bottom: 0 !important; }
 
     /* Idle: all answer pins hidden by default. Revealed rules sit further down with the marker styles. */
 
@@ -358,7 +484,7 @@
     .answer-marker .corner {
       width: 12px;
       flex-shrink: 0;
-      stroke: #2959FF;
+      stroke: #1a1a1a;
       fill: none;
       stroke-width: 2;
       stroke-linecap: square;
@@ -529,12 +655,13 @@
         <div class="q-line" id="q-line-next">where do you go when you're sad?</div>
       </div>
     </div>
-    <button class="q-next" id="q-next" title="Next question" aria-label="Next question">
+    <button class="q-next" id="q-next" title="Pick a question" aria-label="Pick a question">
       <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M 5.5 3.6 L 12 8.9 L 5.6 14.3" />
+        <path d="M 3.6 5.5 L 8.9 12 L 14.3 5.6" />
       </svg>
     </button>
   </div>
+  <div class="q-dropdown" id="q-dropdown"></div>
   <div id="sheet">
     <div class="sheet-stamp" aria-hidden="true">
       <img src="assets/medieval-initial-t.jpg" alt="" />
@@ -578,6 +705,18 @@
   </div>
 </div>
 
+<!-- Landmark recall button — Romanesque carved capital -->
+<button class="landmark-btn" id="landmark-btn" title="Remember a place" aria-label="Remember a place">
+  <img src="assets/capital-cloister-vezelay.jpg" alt="">
+</button>
+
+<!-- Landmark "museum vitrine" card — populated when a landmark is shown -->
+<div class="landmark-card" id="landmark-card" aria-hidden="true">
+  <img class="landmark-card-image" id="landmark-card-image" src="" alt="">
+  <div class="landmark-card-name" id="landmark-card-name"></div>
+  <div class="landmark-card-date" id="landmark-card-date"></div>
+</div>
+
 <script>
 const map = new maplibregl.Map({
   container: 'map',
@@ -585,7 +724,7 @@ const map = new maplibregl.Map({
   center: [-122.4194, 37.7749],
   zoom: 12.5, pitch: 48, bearing: -16,
   maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
-  minZoom: 11, maxZoom: 20, attributionControl: false,
+  minZoom: 10, maxZoom: 20, attributionControl: false,
 });
 
 map.on('style.load', () => {
@@ -601,8 +740,12 @@ map.on('style.load', () => {
         if (type === 'line') { map.setPaintProperty(id, 'line-color', '#bbb'); map.setPaintProperty(id, 'line-width', 0.4); }
         continue;
       }
-      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach/.test(id)) {
-        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#f4f4f5'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach|wetland/.test(id)) {
+        if (type === 'fill') {
+          try { map.setPaintProperty(id, 'fill-pattern', null); } catch(_) {}
+          map.setPaintProperty(id, 'fill-color', '#f4f4f5');
+          map.setPaintProperty(id, 'fill-opacity', 1);
+        }
         if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
         continue;
       }
@@ -687,6 +830,27 @@ map.on('style.load', () => {
     paint: { 'line-color': '#bbb', 'line-width': 0.35, 'line-opacity': 0.7 }
   });
 
+  // ── SF spotlight mask: a "donut" polygon that darkens everything outside SF ──
+  fetch('assets/sf-boundary.geojson')
+    .then(r => r.json())
+    .then(sf => {
+      const outerRing = [[-180,-85],[180,-85],[180,85],[-180,85],[-180,-85]];
+      const sfRings = sf.features[0].geometry.coordinates.flatMap(poly => poly);
+      const donut = {
+        type: 'Feature',
+        properties: {},
+        geometry: { type: 'Polygon', coordinates: [outerRing, ...sfRings] }
+      };
+      map.addSource('sf-mask', { type: 'geojson', data: donut });
+      map.addLayer({
+        id: 'sf-spotlight-mask',
+        type: 'fill',
+        source: 'sf-mask',
+        paint: { 'fill-color': '#000', 'fill-opacity': 0 }
+      });
+    })
+    .catch(_ => {});
+
   // ── Render any saved answers from localStorage ──
   loadSavedAnswers();
 });
@@ -738,10 +902,64 @@ function rotateQuestion() {
 function startRotation() {}
 function stopRotation() {}
 
-// User clicks the chevron inside the banner → advance to next question
+// User clicks the chevron inside the banner → in normal mode opens dropdown,
+// in eye mode advances to next question (one-by-one rotation).
 const qNextBtn = document.getElementById('q-next');
-qNextBtn.addEventListener('click', () => {
-  rotateQuestion();
+const qDropdown = document.getElementById('q-dropdown');
+const qBanner = document.getElementById('q-banner');
+
+function buildDropdown() {
+  qDropdown.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-dropdown-item';
+    btn.dataset.idx = i;
+    btn.textContent = q;
+    if (i === currentQuestionIndex) btn.classList.add('active');
+    btn.addEventListener('click', () => selectQuestion(i));
+    qDropdown.appendChild(btn);
+  });
+}
+buildDropdown();
+
+function openDropdown() {
+  if (typeof closeSheet === 'function' && typeof sheet !== 'undefined' && sheet.classList.contains('show')) closeSheet();
+  qDropdown.classList.add('show');
+  qBanner.classList.add('dropdown-open');
+  document.body.classList.add('dropdown-open');
+}
+function closeDropdown() {
+  qDropdown.classList.remove('show');
+  qBanner.classList.remove('dropdown-open');
+  document.body.classList.remove('dropdown-open');
+}
+function toggleDropdown() {
+  if (qDropdown.classList.contains('show')) closeDropdown();
+  else openDropdown();
+}
+function selectQuestion(idx) {
+  currentQuestionIndex = idx;
+  qLineCurrent.textContent = QUESTIONS[idx];
+  qLineNext.textContent = QUESTIONS[(idx + 1) % QUESTIONS.length];
+  qDropdown.querySelectorAll('.q-dropdown-item').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+  closeDropdown();
+  if (typeof applySpotlight === 'function') applySpotlight();
+}
+
+qNextBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (typeof revealed !== 'undefined' && revealed) {
+    rotateQuestion();
+  } else {
+    toggleDropdown();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!qDropdown.classList.contains('show')) return;
+  if (!e.target.closest('#q-banner-fixed')) closeDropdown();
 });
 
 // ─────────── SF NEIGHBORHOODS — for friendly location labels ───────────
@@ -820,6 +1038,7 @@ function setAnswerMode(on) {
 function openSheet() {
   sheet.classList.add('show');
   document.body.classList.add('sheet-open');
+  if (typeof closeDropdown === 'function') closeDropdown();
   stopRotation(); // freeze the question while the user is answering
   setTimeout(() => sheetInput.focus(), 350);
 }
@@ -979,13 +1198,61 @@ function placeAnswerMarker({ lngLat, question, text }) {
   applySpotlight();
 }
 
+// ─────────── LANDMARK RECALL ───────────
+const LANDMARKS = [
+  {
+    name: 'Cliff House',
+    date: '1863 — engraving from 1876',
+    lng: -122.5135,
+    lat: 37.7783,
+    image: 'assets/cliff-house-1876.jpg',
+    flyZoom: 14.5,
+  },
+];
+const landmarkBtn = document.getElementById('landmark-btn');
+const landmarkCard = document.getElementById('landmark-card');
+const landmarkCardImage = document.getElementById('landmark-card-image');
+const landmarkCardName = document.getElementById('landmark-card-name');
+const landmarkCardDate = document.getElementById('landmark-card-date');
+let landmarkCardTimer = null;
+
+function showLandmark(idx) {
+  const lm = LANDMARKS[idx];
+  if (!lm) return;
+  landmarkCardImage.src = lm.image;
+  landmarkCardName.textContent = lm.name;
+  landmarkCardDate.textContent = lm.date;
+  landmarkCard.classList.add('show');
+  landmarkCard.setAttribute('aria-hidden', 'false');
+  if (landmarkCardTimer) clearTimeout(landmarkCardTimer);
+  landmarkCardTimer = setTimeout(closeLandmark, 6000);
+}
+function closeLandmark() {
+  landmarkCard.classList.remove('show');
+  landmarkCard.setAttribute('aria-hidden', 'true');
+  if (landmarkCardTimer) { clearTimeout(landmarkCardTimer); landmarkCardTimer = null; }
+}
+landmarkBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  showLandmark(0);
+});
+document.addEventListener('click', (e) => {
+  if (!landmarkCard.classList.contains('show')) return;
+  if (!e.target.closest('#landmark-card') && !e.target.closest('#landmark-btn')) closeLandmark();
+});
+
 // ─────────── REVEAL TOGGLE ───────────
 const eyeToggle = document.getElementById('eye-toggle');
 let revealed = false; // start in idle: pins hidden, map clear
+const DEFAULT_VIEW = { center: [-122.4194, 37.7749], zoom: 12.5, pitch: 48, bearing: -16 };
+const EYE_VIEW     = { center: [-122.4394, 37.7720], zoom: 11.4, pitch: 0,  bearing: 0 };
 function setRevealed(on) {
   revealed = on;
   document.body.classList.toggle('spotlight-on', on);
   eyeToggle.classList.toggle('active', on);
+  if (on && typeof closeDropdown === 'function') closeDropdown();
+  requestAnimationFrame(() => map.resize());
+  map.flyTo({ ...(on ? EYE_VIEW : DEFAULT_VIEW), duration: 1200, essential: true });
   applySpotlight();
 }
 eyeToggle.addEventListener('click', () => setRevealed(!revealed));
