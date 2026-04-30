@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Pinned</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&family=Inter:wght@800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent-orange: #FF8000;
+      --ink: #1a1a1a;
+      --ink-muted: rgba(26,26,26,0.55);
+      --ink-faint: rgba(26,26,26,0.30);
+      --paper: #f7f3ea;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100vw;
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body {
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Back link (top-left) ── */
+    .back-link {
+      position: fixed;
+      top: 24px;
+      left: 32px;
+      z-index: 100;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.15s ease;
+    }
+    .back-link:hover { opacity: 0.5; }
+
+    /* ── Body text — wall of justified uppercase mono ── */
+    .body-text {
+      padding: 80px 32px 0;
+      max-width: 100%;
+    }
+    .body-text p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-align: justify;
+      text-justify: inter-character;
+      margin-bottom: 18px;
+      font-weight: 400;
+    }
+    .body-text p:last-child { margin-bottom: 0; }
+    .body-text em {
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* ── Quiet bottom info-row (three columns) ── */
+    .info-row {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      padding: 0 32px;
+      align-items: end;
+      z-index: 30;
+    }
+    .info-block {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+    .info-block.center { text-align: center; }
+    .info-block.right  { text-align: right; }
+    .info-block .index-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px;
+      transition: opacity 0.15s ease;
+    }
+    .info-block .index-link:hover { opacity: 0.5; }
+
+    /* Staggered Pinned wordmark for the bottom-left info block — same letter
+       pattern as the drawing-v13 masthead, scaled down to footer size. */
+    .info-block .logo { display: inline-flex; align-items: baseline; }
+    .info-block .logo span { display: inline-block; }
+    .info-block .logo .l-p,
+    .info-block .logo .l-i,
+    .info-block .logo .l-n1,
+    .info-block .logo .l-d { transform: translateY(0); }
+    .info-block .logo .l-n2,
+    .info-block .logo .l-e { transform: translateY(-2px); }
+
+    /* ── Page padding so content stays within the corner anchors ── */
+    main {
+      padding-top: 56px;
+      padding-bottom: 0;
+    }
+
+    /* Shared anchor for the two big blocks.
+       Both blocks start at the SAME top, so each line of the left block
+       sits at the SAME Y as the corresponding line of the right block.
+       The LTLYM block has 7 lines — to keep its middle roughly between
+       the body text and the bottom info-row, we anchor the *first line*
+       at the body-text-bottom + a small gap. */
+    .ltlym-block,
+    .signature-block {
+      position: fixed;
+      top: calc(50vh - 90px);  /* first line Y — both blocks share this */
+      font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 800;
+      font-size: clamp(24px, 3.4vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      z-index: 20;
+      transition: opacity 0.4s ease;
+    }
+    /* Both blocks live in the SAME position on the right.
+       Signature is shown by default; LTLYM hidden.
+       On hover, they swap: signature hides, LTLYM appears. */
+    .ltlym-block,
+    .signature-block { right: 32px; text-align: right; left: auto; }
+
+    /* Shared base for the line pills */
+    .ltlym-block .line,
+    .signature-block .line {
+      display: block;
+      width: fit-content;
+      margin-left: auto;
+      background: var(--accent-orange);
+      color: #ffffff;
+      padding: 0.04em 0.12em;
+    }
+
+    /* The hover-swap container — wraps both blocks so we can react to its hover */
+    .reveal-stack {
+      position: fixed;
+      right: 32px;
+      top: calc(50vh - 90px);
+      z-index: 20;
+      cursor: default;
+    }
+    .reveal-stack .ltlym-block,
+    .reveal-stack .signature-block {
+      position: static;
+      top: auto;
+      right: auto;
+    }
+    /* Stack the two blocks on top of each other */
+    .reveal-stack .ltlym-block {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .reveal-stack .signature-block,
+    .reveal-stack .ltlym-block {
+      transition: opacity 0.4s ease;
+    }
+    /* DEFAULT: signature visible, LTLYM hidden */
+    .reveal-stack .signature-block { opacity: 1; }
+    .reveal-stack .ltlym-block     { opacity: 0; pointer-events: none; }
+    /* HOVER: swap them */
+    .reveal-stack:hover .signature-block { opacity: 0; }
+    .reveal-stack:hover .ltlym-block     { opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body>
+
+<a class="back-link" href="drawing-v13.html">← BACK TO MAP</a>
+
+<main>
+  <div class="body-text">
+    <p>
+      A small private sentence pinned to a real place. <em>Pinned</em> is an ongoing,
+      slowly-growing portrait of San Francisco told through small private answers
+      to a single question. Every two weeks a new question is posted, and people
+      answer with one sentence, pinned to a real place in the city.
+    </p>
+    <p>
+      Over time the map fills with strangers' Sunday mornings, sleepless walks,
+      first kisses, and quiet places. It becomes a city remembered through its
+      emotional geography rather than its landmarks. You can read every answer
+      ever pinned. You can only add your own — never edit, reply to, or react
+      to someone else's. The silence between strangers is part of the project.
+    </p>
+    <p>
+      The "assignment" format is borrowed lovingly from <em>Learning to Love
+      You More</em>, a project by Harrell Fletcher and Miranda July (2002–2009),
+      acquired in 2010 by the San Francisco Museum of Modern Art. Their seventy
+      assignments asked strangers to make small, specific, often tender things —
+      and trusted the strangers to make them. <em>Pinned</em> takes that same
+      trust and points it at one city.
+    </p>
+  </div>
+
+  <div class="reveal-stack">
+    <div class="signature-block" aria-hidden="true">
+      <span class="line">Where</span>
+      <span class="line">We Were</span>
+      <span class="line">Kimkenny</span>
+      <span class="line">May</span>
+    </div>
+
+    <div class="ltlym-block" aria-hidden="true">
+      <span class="line">Learning</span>
+      <span class="line">To Love</span>
+      <span class="line">You More</span>
+      <span class="line">Harrell</span>
+      <span class="line">Fletcher &amp;</span>
+      <span class="line">Miranda</span>
+      <span class="line">July</span>
+    </div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-block">
+      <span class="logo"><span class="l-p">P</span><span class="l-i">I</span><span class="l-n1">N</span><span class="l-n2">N</span><span class="l-e">E</span><span class="l-d">D</span></span><br>
+      SAN FRANCISCO
+    </div>
+    <div class="info-block center">
+      <a class="index-link" href="drawing-v13.html">VIEW MAP →</a>
+    </div>
+    <div class="info-block right">
+      37.7749° N<br>
+      122.4194° W
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

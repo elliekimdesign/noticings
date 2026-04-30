@@ -8,30 +8,57 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Gilda+Display&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw; height: 100vh; overflow: hidden;
-      background: #f4f4f5;
+      background: #f7f3ea;
       font-family: 'Archivo', 'Helvetica Neue', sans-serif;
     }
 
-    /* ── Top masthead ── */
+    /* ── Top masthead — split by the spine line at x=220px ── */
     #masthead {
       position: fixed; top: 0; left: 0; right: 0;
       height: 44px; z-index: 1000;
-      background: #ffffff;
+      background: #f7f3ea;
       border-bottom: 1.5px solid rgba(30,30,30,0.55);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px;
+      display: flex; align-items: center;
+      padding: 0;
     }
     #masthead .title {
       font-family: 'Geist', 'Inter', 'Helvetica Neue', sans-serif;
-      font-size: 15px; letter-spacing: 0.05em;
-      color: #1a1a1a; font-weight: 600;
-      display: flex; align-items: center;
+      font-size: 15px; letter-spacing: 0.04em;
+      color: #1a1a1a; font-weight: 700;
+      display: flex; align-items: center; justify-content: flex-start;
       text-transform: uppercase;
+      width: 320px;
+      flex-shrink: 0;
+      height: 100%;
+      padding-left: 24px;
+      box-sizing: border-box;
+      line-height: 1;
+    }
+    #masthead .title .logo {
+      display: inline-flex;
+      align-items: baseline;
+    }
+    #masthead .title .logo span {
+      display: inline-block;
+    }
+    /* P I N D sit on the baseline; second N jumps up a little; E jumps up more */
+    #masthead .title .logo .l-p,
+    #masthead .title .logo .l-i,
+    #masthead .title .logo .l-n1,
+    #masthead .title .logo .l-d { transform: translateY(0); }
+    #masthead .title .logo .l-n2,
+    #masthead .title .logo .l-e { transform: translateY(-3px); }
+    #masthead .right-cell {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      display: flex; align-items: center;
+      padding: 0 24px;
     }
     #masthead .city-center {
       position: absolute;
@@ -40,126 +67,166 @@
       transform: translate(-50%, -50%);
       font-family: 'Geist', 'Inter', 'Helvetica Neue', sans-serif;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 700;
       color: #1a1a1a;
       letter-spacing: 0.02em;
+      text-transform: uppercase;
       pointer-events: none;
     }
-    /* ── Fixed right-side question banner ── */
-    #q-banner-fixed {
+    #masthead .add-btn-wrap {
+      margin-left: auto;
+    }
+    /* ── Left archive rail — full-height column ── */
+    #archive-rail {
       position: fixed;
-      right: 24px;
-      top: 50%;
-      transform: translateY(-32px);  /* half of banner alone (64/2) */
-      z-index: 1500;
-      display: flex; flex-direction: column; align-items: stretch; gap: 16px;
-      transition: transform 0.4s ease, opacity 0.3s ease;
-    }
-    body.sheet-open #q-banner-fixed {
-      transform: translateY(-190px);  /* half of stack (64 + 16 + 300) / 2 */
-    }
-    body.dropdown-open #q-banner-fixed {
-      transform: translateY(-242px);  /* half of stack (64 + 420) / 2 */
-    }
-    /* Black pill banner that holds the rotating question */
-    .q-banner {
-      background: #1a1a1a;
-      color: #ffffff;
-      padding: 12px 22px;
-      width: 360px;
-      overflow: hidden;
-      position: relative;
-      height: 64px;  /* fits up to 2 lines of question text */
-    }
-    /* The viewport — exactly the banner content area, clipped */
-    .q-banner .q-window {
-      position: absolute;
-      top: 0; bottom: 0;
-      left: 22px; right: 48px;  /* leave room on the right for the next-arrow */
-      overflow: hidden;
-    }
-    /* Hand-drawn-style next arrow inside the pill, on the right edge */
-    .q-banner .q-next {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 26px; height: 26px;
-      border: none;
-      background: transparent;
-      cursor: pointer;
+      top: 44px;
+      left: 0;
+      bottom: 36px;
+      width: 320px;
+      z-index: 900;
+      background: #f7f3ea;
       padding: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-      opacity: 0.65;
+      overflow-y: auto;
+      box-sizing: border-box;
     }
-    .q-banner .q-next:hover {
-      opacity: 1;
-      transform: translateY(-50%) translateY(2px);
-    }
-    .q-banner .q-next svg {
-      width: 18px; height: 18px;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-    .q-banner.dropdown-open .q-next svg { transform: rotate(180deg); }
-
-    /* Dropdown — opens below the banner with the same animation as the answer sheet */
-    .q-dropdown {
-      background: #1a1a1a;
-      color: #ffffff;
-      width: 360px;
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
+    /* The vertical spine line — runs the entire viewport height */
+    #archive-spine {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 320px;
+      width: 1px;
+      background: rgba(30,30,30,0.55);
+      z-index: 1100;
       pointer-events: none;
-      transition: max-height 0.4s ease, opacity 0.3s ease;
-      margin-top: -16px;
-      border-top: 1px solid rgba(255,255,255,0.1);
     }
-    .q-dropdown.show {
-      max-height: 420px;
-      opacity: 1;
-      pointer-events: auto;
+    /* Stack of assignment cards — the top one is large/full, the rest are compact */
+    #archive-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
-    .q-dropdown .q-dropdown-item {
+    #archive-list .archive-item {
       display: block;
       width: 100%;
       text-align: left;
       background: transparent;
       border: none;
-      color: #ffffff;
-      font-family: inherit;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 20px 24px;
+      cursor: pointer;
+      font-family: 'Geist', 'Inter', sans-serif;
+      box-sizing: border-box;
+      transition: background 0.15s ease;
+    }
+    #archive-list .archive-item:first-child { border-top: 1px solid #1a1a1a; }
+    /* Top (current) card — full sentence, big */
+    #archive-list .archive-item.is-current {
+      padding: 26px 24px 30px;
+    }
+    #archive-list .archive-item .label {
       font-size: 10px;
+      font-weight: 600;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      padding: 14px 22px;
-      cursor: pointer;
-      transition: background 0.15s ease;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: #1a1a1a;
+      margin-bottom: 14px;
     }
-    .q-dropdown .q-dropdown-item:last-child { border-bottom: none; }
-    .q-dropdown .q-dropdown-item:hover { background: rgba(255,255,255,0.06); }
-    .q-dropdown .q-dropdown-item.active {
-      background: rgba(255,255,255,0.1);
+    #archive-list .archive-item.is-current .question {
+      font-family: 'Geist', 'Inter', sans-serif;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.005em;
+      color: #1a1a1a;
+      word-break: normal;
+      overflow-wrap: break-word;
+    }
+    /* Past cards — compact, single line */
+    #archive-list .archive-item.is-past {
+      padding: 14px 24px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    #archive-list .archive-item.is-past .label {
+      margin-bottom: 0;
+      flex-shrink: 0;
       font-weight: 600;
+      color: #1a1a1a;
     }
-    .q-banner .q-track {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    #archive-list .archive-item.is-past .question {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.65);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      transition: color 0.15s ease;
     }
-    .q-banner .q-line {
+    #archive-list .archive-item.is-past:hover { background: rgba(26,26,26,0.03); }
+    #archive-list .archive-item.is-past:hover .question { color: #1a1a1a; }
+    #archive-list .archive-item.is-past.active .question { color: #1a1a1a; font-weight: 600; }
+
+    /* ── Answer sheet positioning — vertically centered on the right ── */
+    #sheet-wrap {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1500;
+    }
+
+    /* ── Eye-mode question pill — only visible when body.spotlight-on ── */
+    #eye-q-banner {
+      display: none;
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1500;
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 12px 22px;
+      width: 360px;
       height: 64px;
-      display: flex; align-items: center;
+      box-sizing: border-box;
+      align-items: center;
+    }
+    body.spotlight-on #eye-q-banner { display: flex; }
+    #eye-q-banner .q-text {
+      flex: 1;
       font-size: 10px;
       line-height: 1.5;
       letter-spacing: 0.22em;
       font-weight: 500;
       text-transform: uppercase;
-      white-space: normal;
-      word-break: normal;
-      overflow-wrap: anywhere;
+      padding-right: 12px;
+      overflow: hidden;
+    }
+    #eye-q-banner .q-next {
+      width: 26px;
+      height: 26px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      opacity: 0.65;
+    }
+    #eye-q-banner .q-next:hover {
+      opacity: 1;
+      transform: translateY(2px);
+    }
+    #eye-q-banner .q-next svg {
+      width: 18px;
+      height: 18px;
+      display: block;
     }
     /* + button in the masthead — plain inline icon, no box */
     .add-btn {
@@ -289,18 +356,20 @@
     body.spotlight-on::after {
       content: '';
       position: fixed;
-      top: 44px; bottom: 36px; left: 0; right: 0;
+      top: 44px; bottom: 36px; left: 320px; right: 0;
       background: rgba(26,26,26,0.30);
       pointer-events: none;
       z-index: 5;
     }
     /* Eye mode: hide chrome and the flat dim — the map's spotlight mask handles dimming */
     body.spotlight-on #masthead,
-    body.spotlight-on #footer { display: none !important; }
+    body.spotlight-on #footer,
+    body.spotlight-on #archive-rail,
+    body.spotlight-on #archive-spine { display: none !important; }
     body.spotlight-on::after { display: none !important; }
-    /* Eye mode: let the map fill the full viewport (no 80px reservation for chrome) */
-    body.spotlight-on #map-pane { height: 100vh !important; }
-    body.spotlight-on { padding-top: 0 !important; padding-bottom: 0 !important; }
+    /* Eye mode: let the map fill the full viewport */
+    body.spotlight-on #map-pane { width: 100vw !important; height: 100vh !important; }
+    body.spotlight-on { padding-top: 0 !important; padding-bottom: 0 !important; padding-left: 0 !important; }
 
     /* Idle: all answer pins hidden by default. Revealed rules sit further down with the marker styles. */
 
@@ -334,214 +403,254 @@
       50%      { transform: translate(0, -3px); }
     }
 
-    /* ── Bottom answer sheet — minimal, frosted ── */
+    /* ── Answer sheet — minimal white note ── */
     #sheet {
       width: 360px;
       box-sizing: border-box;
-      background: #ffffff;
-      border: 1.5px solid rgba(26,26,26,0.45);
       max-height: 0;
       opacity: 0;
       overflow: hidden;
       pointer-events: none;
       transition: max-height 0.4s ease, opacity 0.3s ease;
       display: flex; flex-direction: column;
+      gap: 14px;
       position: relative;
-    }
-    /* Medieval initial T — large accent in bottom-right, above PIN IT */
-    #sheet .sheet-stamp {
-      position: absolute;
-      bottom: 66px;
-      right: 16px;
-      width: 150px;
-      height: 125px;
-      pointer-events: none;
-      opacity: 0.45;
-      mix-blend-mode: multiply;
-      z-index: 0;
-    }
-    #sheet .sheet-stamp img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
+      background: #ffffff;
+      border: 1px solid #1a1a1a;
+      padding: 18px 20px;
     }
     #sheet.show {
-      max-height: 300px;
-      height: 300px;
+      max-height: 280px;
       opacity: 1;
       pointer-events: auto;
     }
+    #sheet .sheet-bg { display: none; }
+    #sheet .sheet-q { display: none; }
+    #sheet .sheet-q-text { display: none; }
+
+    /* Header — coordinates on the left, neighborhood on the right */
     #sheet .sheet-head {
-      padding: 14px 20px 0;
-      display: flex; flex-direction: column; align-items: flex-start;
-      gap: 4px;
+      padding: 0;
+      margin: 0;
     }
-    #sheet .sheet-q {
-      font-size: 8.5px; letter-spacing: 0.32em;
-      color: rgba(26,26,26,0.4);
-      margin-bottom: 6px;
-    }
-    #sheet .sheet-q-text {
-      font-family: 'Bricolage Grotesque', 'Helvetica Neue', sans-serif;
-      font-size: 16px; letter-spacing: -0.005em; line-height: 1.25;
-      color: #1a1a1a; font-weight: 500;
-      font-optical-sizing: auto;
-    }
-    /* Inline location row — neighborhood (dark) + coords (grey) on the same line */
     #sheet .sheet-loc {
-      display: flex; flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 8px;
-    }
-    #sheet .loc-name {
-      font-size: 14px;
-      font-weight: 400;
-      color: #1a1a1a;
-      letter-spacing: 0.01em;
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      background: transparent;
+      padding: 0;
     }
     #sheet .loc-coords {
+      order: 1;
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 11px;
-      font-weight: 300;
-      color: rgba(26,26,26,0.45);
-      letter-spacing: 0.04em;
+      font-weight: 400;
+      color: rgba(26, 26, 26, 0.55);
+      letter-spacing: 0.02em;
+      text-transform: none;
       font-feature-settings: "tnum";
-    }
-    #sheet .loc-coords:empty { display: none; }
-    #sheet .sheet-body {
-      flex: 1;
-      padding: 8px 20px 16px;
-      display: flex; align-items: flex-start;
-    }
-    #sheet textarea.answer-field {
-      flex: 1;
-      min-width: 0;
-      width: 100%;
-      border: none; outline: none;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 24px; letter-spacing: -0.005em; font-weight: 600;
-      line-height: 1.25;
-      color: #1a1a1a;
-      padding: 8px 0;
       background: transparent;
+      padding: 0;
+    }
+    #sheet .loc-coords:empty::before {
+      content: '— — — · — — —';
+      color: rgba(26, 26, 26, 0.30);
+    }
+    #sheet .loc-name {
+      order: 2;
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(26, 26, 26, 0.85);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: transparent;
+      padding: 0;
+      text-align: right;
+    }
+    #sheet .loc-name.is-prompt {
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      color: rgba(26, 26, 26, 0.40);
+    }
+
+    /* Body — plain textarea, no ruled lines */
+    #sheet .sheet-body { padding: 0; width: 100%; }
+    #sheet textarea.answer-field {
+      width: 100%;
+      min-height: 72px;
+      border: none;
+      outline: none;
       resize: none;
+      font-family: 'Geist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 20px;
+      line-height: 1.35;
+      font-weight: 400;
+      letter-spacing: -0.005em;
+      color: #1a1a1a;
+      padding: 0;
+      background: transparent;
       overflow-wrap: break-word;
       word-break: break-word;
       overflow-y: auto;
-      position: relative;
-      z-index: 1;
     }
     #sheet textarea.answer-field::placeholder {
-      color: rgba(26,26,26,0.3);
-      font-weight: 300;
+      color: rgba(26, 26, 26, 0.35);
+      font-style: normal;
     }
-    /* Submit button — full-width bar at the bottom of the sheet */
-    #sheet .submit-arrow {
-      flex-shrink: 0;
+
+    /* Footer row — character counter (left) + pin it link (right) */
+    #sheet .sheet-foot {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
       width: 100%;
+      gap: 12px;
+    }
+    #sheet .char-count {
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(26, 26, 26, 0.40);
+      letter-spacing: 0.02em;
+      font-feature-settings: "tnum";
+      transition: color 0.15s ease;
+    }
+    #sheet .char-count.is-near-limit {
+      color: rgba(26, 26, 26, 0.85);
+    }
+
+    /* Submit — small text link */
+    #sheet .submit-arrow {
       border: none;
-      border-top: 1px solid rgba(26,26,26,0.45);
       background: transparent;
       color: #1a1a1a;
       cursor: pointer;
-      padding: 16px 20px;
-      font-family: 'Geist', 'Inter', sans-serif;
+      padding: 0;
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      transition: background 0.2s ease, color 0.2s ease;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      transition: opacity 0.15s ease;
     }
-    #sheet .submit-arrow:hover {
-      background: #1a1a1a;
-      color: #ffffff;
-      border-color: #1a1a1a;
-    }
-    #sheet .submit-arrow:disabled {
-      opacity: 0.3; cursor: not-allowed;
-    }
-    #sheet .submit-arrow:disabled:hover {
-      background: transparent; color: #1a1a1a;
-      border-color: rgba(26,26,26,0.4);
-    }
+    #sheet .submit-arrow:hover { opacity: 0.55; }
+    #sheet .submit-arrow:disabled { opacity: 0.25; cursor: not-allowed; }
+    #sheet .submit-arrow:disabled:hover { opacity: 0.25; }
 
     /* When sheet is open, raise the body padding so map doesn't hide behind it */
 
     /* Lift map markers above map content */
     .maplibregl-marker { z-index: 10; }
 
-    /* User-placed answer pin — top-left ┌ and bottom-right ┘ corners embracing the answer note */
+    /* User-placed answer pin — collapsed = thin orange bookmark; expanded (on click) = horizontal bar with the answer text inside */
     .answer-marker {
       cursor: pointer;
       position: relative;
       transition: opacity 0.5s ease;
       display: inline-flex;
-      align-items: stretch;
-      opacity: 0;
-      pointer-events: none;
+      align-items: center;
+      opacity: 1;
+      pointer-events: auto;
     }
-    /* Revealed: show only matching pins (markers with .dim stay hidden) */
-    body.spotlight-on .answer-marker:not(.dim) { opacity: 1; pointer-events: auto; }
+    /* Spotlight (eye) mode still hides non-matching pins via .dim */
     .answer-marker.dim { opacity: 0; pointer-events: none; }
-    .answer-marker .corner {
-      width: 12px;
-      flex-shrink: 0;
-      stroke: #1a1a1a;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-    }
-    .answer-marker .corner-tl {
-      align-self: flex-start;
-      margin-right: -2px;
-    }
-    .answer-marker .corner-br {
-      align-self: flex-end;
-      margin-left: -2px;
-    }
-    /* Floating answer note next to pin — styled like the bottom question banner */
+
+    /* The bookmark / bar itself — collapsed is a tall thin rectangle, expanded stretches horizontally */
     .answer-note {
       position: relative;
-      background: #1a1a1a;
+      background: #FF8000;
       color: #ffffff;
-      padding: 8px 14px;
-      font-size: 10px;
-      line-height: 1.5;
-      letter-spacing: 0.22em;
+      font-family: 'Geist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11px;
+      line-height: 1.4;
       font-weight: 500;
-      text-transform: uppercase;
-      white-space: nowrap;
-      max-width: 280px; overflow: hidden; text-overflow: ellipsis;
+      letter-spacing: 0.01em;
+      text-transform: none;
       pointer-events: none;
+      box-sizing: border-box;
+      /* Collapsed (default): small solid orange square, no text visible */
+      width: 14px;
+      height: 14px;
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 0;
+      transition: width 0.28s ease, height 0.28s ease, padding 0.28s ease, font-size 0.18s ease;
+    }
+    /* Expanded (on click): bar extends horizontally, shows the answer text inside */
+    .answer-marker.is-open .answer-note {
+      width: auto;
+      max-width: 280px;
+      height: auto;
+      min-height: 20px;
+      padding: 6px 12px;
+      white-space: normal;
+      font-size: 11px;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
     .answer-note .q { display: none; }
     /* Answer mode: change cursor on map */
-    body.answer-mode #map-pane { cursor: crosshair; }
+    #map-pane { cursor: crosshair; }
 
     body {
       padding-top: 44px;
       padding-bottom: 36px;
+      padding-left: 320px;
     }
 
-    /* ── Map: full width, between masthead and footer ── */
-    #map-pane { width: 100vw; height: calc(100vh - 80px); position: relative; }
+    /* ── Map: fills the right column between masthead and footer ── */
+    #map-pane {
+      width: calc(100vw - 320px);
+      height: calc(100vh - 80px);
+      position: relative;
+    }
 
-    /* ── Bottom static label bar — always on top ── */
+    /* ── Bottom static label bar — split by the spine line ── */
     #footer {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 36px; z-index: 1400;
-      background: #ffffff;
+      background: #f7f3ea;
       border-top: 1.5px solid rgba(30,30,30,0.55);
+      display: flex; align-items: center;
+      padding: 0;
+    }
+    #footer .footer-left {
+      width: 320px;
+      flex-shrink: 0;
+      height: 100%;
       display: flex; align-items: center; justify-content: flex-start;
+      gap: 10px;
+      padding: 0 24px;
+      box-sizing: border-box;
+      font-family: 'Geist', 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.85);
+      font-weight: 500;
+    }
+    #footer .footer-left .sep { color: rgba(26,26,26,0.3); }
+    #footer .footer-right {
+      flex: 1;
+      height: 100%;
+      display: flex; align-items: center;
       padding: 0 24px;
     }
     #footer .label {
       font-size: 9px; letter-spacing: 0.32em;
       color: rgba(26,26,26,0.55);
       font-weight: 400;
-      width: 50%;
+      flex: 1;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 12px;
     }
     #footer .label .sep {
       color: rgba(26,26,26,0.25);
@@ -552,19 +661,36 @@
     }
     #footer .volume {
       margin-left: auto;
-      width: 50%;
       font-family: 'Jacques Francois', 'Times New Roman', serif;
       font-size: 11px;
       font-weight: 400;
       color: rgba(26,26,26,0.65);
       letter-spacing: 0.15em;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      display: flex;
       align-items: center;
+      gap: 10px;
     }
-    #footer .volume > span:not(.sep):nth-of-type(1) { grid-column: 3; }
-    #footer .volume > span:not(.sep):nth-of-type(2) { grid-column: 4; }
-    #footer .volume .sep { display: none; }
+    #footer .volume .sep { color: rgba(26,26,26,0.3); }
+    #footer .footer-end {
+      margin-left: auto;
+      font-family: 'Geist', 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.55);
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #footer .footer-end .footer-end-link {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      transition: color 0.15s ease;
+    }
+    #footer .footer-end .footer-end-link:hover { color: #1a1a1a; }
 
     /* ── Swiss-graphic pin ── */
     .ink-marker {
@@ -623,13 +749,29 @@
 <!-- ─────────── TOP MASTHEAD ─────────── -->
 <div id="masthead">
   <div class="title">
-    <span>Pinned</span>
+    <span class="logo">
+      <span class="l-p">P</span><span class="l-i">i</span><span class="l-n1">n</span><span class="l-n2">n</span><span class="l-e">e</span><span class="l-d">d</span>
+    </span>
   </div>
-  <div class="city-center">San Francisco</div>
-  <button class="add-btn" id="add-btn" title="Drop a pin to answer" aria-label="Add an answer">
-    <svg viewBox="0 0 22 22">
-      <line x1="11" y1="2" x2="11" y2="20" />
-      <line x1="2" y1="11" x2="20" y2="11" />
+  <div class="right-cell">
+    <div class="city-center">Where We Were</div>
+  </div>
+</div>
+
+<!-- ─────────── VERTICAL SPINE LINE ─────────── -->
+<div id="archive-spine"></div>
+
+<!-- ─────────── LEFT ARCHIVE RAIL — flat list of all questions ─────────── -->
+<aside id="archive-rail">
+  <ul id="archive-list"></ul>
+</aside>
+
+<!-- ─────────── EYE-MODE QUESTION PILL (only shown in eye mode) ─────────── -->
+<div id="eye-q-banner">
+  <div class="q-text" id="eye-q-text">where do you go when you're sad?</div>
+  <button class="q-next" id="eye-q-next" title="Next question" aria-label="Next question">
+    <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 3.6 5.5 L 8.9 12 L 14.3 5.6" />
     </svg>
   </button>
 </div>
@@ -646,36 +788,22 @@
   </svg>
 </button>
 
-<!-- ─────────── FIXED RIGHT-SIDE QUESTION BANNER + ANSWER SHEET ─────────── -->
-<div id="q-banner-fixed">
-  <div class="q-banner" id="q-banner">
-    <div class="q-window">
-      <div class="q-track" id="q-track">
-        <div class="q-line" id="q-line-current">where do you take your dog for a walk?</div>
-        <div class="q-line" id="q-line-next">where do you go when you're sad?</div>
-      </div>
-    </div>
-    <button class="q-next" id="q-next" title="Pick a question" aria-label="Pick a question">
-      <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M 3.6 5.5 L 8.9 12 L 14.3 5.6" />
-      </svg>
-    </button>
-  </div>
-  <div class="q-dropdown" id="q-dropdown"></div>
+<!-- ─────────── ANSWER SHEET (floats bottom-right of the map) ─────────── -->
+<div id="sheet-wrap">
   <div id="sheet">
-    <div class="sheet-stamp" aria-hidden="true">
-      <img src="assets/medieval-initial-t.jpg" alt="" />
-    </div>
     <div class="sheet-head">
       <div class="sheet-loc">
-        <div class="loc-name" id="sheet-loc">click the map to pick a place</div>
         <div class="loc-coords" id="sheet-coords"></div>
+        <div class="loc-name is-prompt" id="sheet-loc">(click map)</div>
       </div>
     </div>
     <div class="sheet-body">
-      <textarea id="sheet-input" class="answer-field" placeholder="share your answer…" maxlength="160" rows="3"></textarea>
+      <textarea id="sheet-input" class="answer-field" placeholder="Leave a thought" maxlength="100" rows="3"></textarea>
     </div>
-    <button id="sheet-submit" class="submit-arrow" title="Pin it (enter) · Esc to cancel">PIN IT</button>
+    <div class="sheet-foot">
+      <span id="sheet-count" class="char-count">0 / 100</span>
+      <button id="sheet-submit" class="submit-arrow" title="Pin it (enter) · Esc to cancel">pin it →</button>
+    </div>
     <button id="sheet-cancel" style="display:none;"></button>
   </div>
 </div>
@@ -689,19 +817,22 @@
 
 <!-- ─────────── BOTTOM LABEL BAR ─────────── -->
 <div id="footer">
-  <div class="label">
-    <span class="strong">ESTABLISHED 1776</span>
-    <span class="sep">·</span>
-    47 MI²
-    <span class="sep">·</span>
-    808,437 PEOPLE
-    <span class="sep">·</span>
-    <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
+  <div class="footer-left">
+    <span>San Francisco</span>
   </div>
-  <div class="volume">
-    <span>Volume&nbsp;I</span>
-    <span class="sep">·</span>
-    <span>May, 2026</span>
+  <div class="footer-right">
+    <div class="label">
+      <span>1776</span>
+      <span class="sep">·</span>
+      <span>47 MI²</span>
+      <span class="sep">·</span>
+      <span>808,437 PEOPLE</span>
+      <span class="sep">·</span>
+      <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
+    </div>
+    <div class="footer-end">
+      <a class="footer-end-link" href="about.html">Where We Were</a>
+    </div>
   </div>
 </div>
 
@@ -855,112 +986,87 @@ map.on('style.load', () => {
   loadSavedAnswers();
 });
 
-// ─────────── ROTATING QUESTIONS ───────────
-const QUESTIONS = [
-  "where do you take your dog for a walk?",
-  "where do you go when you're sad?",
-  "where did you fall in love with the city?",
-  "where do you read on a Sunday morning?",
-  "where do you go when you can't sleep?",
-  "where do you meet a friend after work?",
-  "where do you go to think?",
-  "where do you take someone visiting for the first time?",
-  "where did you cry in public?",
-  "where do you feel most at home?",
+// ─────────── ASSIGNMENTS (one question per fortnight) ───────────
+// ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
+const ASSIGNMENTS = [
+  { issueNo: 7, dates: 'Apr 15 → Apr 29', text: "where do you go when you're sad?" },
+  { issueNo: 6, dates: 'Apr 1 → Apr 14',  text: "where do you take your dog for a walk?" },
+  { issueNo: 5, dates: 'Mar 18 → Mar 31', text: "where did you fall in love with the city?" },
+  { issueNo: 4, dates: 'Mar 4 → Mar 17',  text: "where do you read on a Sunday morning?" },
+  { issueNo: 3, dates: 'Feb 19 → Mar 3',  text: "where do you go when you can't sleep?" },
+  { issueNo: 2, dates: 'Feb 5 → Feb 18',  text: "where do you meet a friend after work?" },
+  { issueNo: 1, dates: 'Jan 22 → Feb 4',  text: "where do you go to think?" },
 ];
 
-// Slide animation between questions: a vertical track holds the current line
-// and the next line stacked. We translate the track up by one line height,
-// then snap it back and swap text — so it looks like an endless reel.
-const qTrack = document.getElementById('q-track');
-const qLineCurrent = document.getElementById('q-line-current');
-const qLineNext = document.getElementById('q-line-next');
-let currentQuestionIndex = 0;
+// Flat array of question strings, used by the rest of the code (markers, spotlight, etc.)
+const QUESTIONS = ASSIGNMENTS.map(a => a.text);
 
-// Mirror of questionEl.textContent so the rest of the code can read it
+// Index 0 = current issue. viewingIndex is which assignment is shown in the rail's
+// "current" block — 0 by default, but switches when user clicks a past issue.
+let currentQuestionIndex = 0;     // which question is "active" (drives the map markers)
+let viewingIndex = 0;              // which assignment block is shown at the top of the rail
+
+// Mirror so existing code (e.g. addBtn handler) can still read the active question text
 const questionEl = {
   get textContent() { return QUESTIONS[currentQuestionIndex]; },
 };
 
-function rotateQuestion() {
-  // Slide up by one full banner row (banner height = 64px, fits 1-2 lines)
-  qTrack.style.transform = 'translateY(-64px)';
-  setTimeout(() => {
-    currentQuestionIndex = (currentQuestionIndex + 1) % QUESTIONS.length;
-    qLineCurrent.textContent = QUESTIONS[currentQuestionIndex];
-    qLineNext.textContent = QUESTIONS[(currentQuestionIndex + 1) % QUESTIONS.length];
-    qTrack.style.transition = 'none';
-    qTrack.style.transform = 'translateY(0)';
-    void qTrack.offsetHeight;
-    qTrack.style.transition = '';
-    if (typeof applySpotlight === 'function') applySpotlight();
-  }, 600);
-}
+// Issue number formatter (07, 06, 05…)
+function pad2(n) { return String(n).padStart(2, '0'); }
 
-// Auto-rotation removed — user advances manually via the next-arrow button.
-// Keep no-op functions so existing open/closeSheet calls stay valid.
-function startRotation() {}
-function stopRotation() {}
+const archiveListEl = document.getElementById('archive-list');
 
-// User clicks the chevron inside the banner → in normal mode opens dropdown,
-// in eye mode advances to next question (one-by-one rotation).
-const qNextBtn = document.getElementById('q-next');
-const qDropdown = document.getElementById('q-dropdown');
-const qBanner = document.getElementById('q-banner');
-
-function buildDropdown() {
-  qDropdown.innerHTML = '';
-  QUESTIONS.forEach((q, i) => {
+function buildArchive() {
+  archiveListEl.innerHTML = '';
+  ASSIGNMENTS.forEach((a, i) => {
+    const li = document.createElement('li');
     const btn = document.createElement('button');
-    btn.className = 'q-dropdown-item';
+    const isCurrent = i === 0;
+    btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
     btn.dataset.idx = i;
-    btn.textContent = q;
+    btn.innerHTML = `
+      <div class="label">${isCurrent ? 'Assignment ' : ''}#${pad2(a.issueNo)}</div>
+      <div class="question">${a.text}</div>
+    `;
     if (i === currentQuestionIndex) btn.classList.add('active');
     btn.addEventListener('click', () => selectQuestion(i));
-    qDropdown.appendChild(btn);
+    li.appendChild(btn);
+    archiveListEl.appendChild(li);
   });
 }
-buildDropdown();
 
-function openDropdown() {
-  if (typeof closeSheet === 'function' && typeof sheet !== 'undefined' && sheet.classList.contains('show')) closeSheet();
-  qDropdown.classList.add('show');
-  qBanner.classList.add('dropdown-open');
-  document.body.classList.add('dropdown-open');
-}
-function closeDropdown() {
-  qDropdown.classList.remove('show');
-  qBanner.classList.remove('dropdown-open');
-  document.body.classList.remove('dropdown-open');
-}
-function toggleDropdown() {
-  if (qDropdown.classList.contains('show')) closeDropdown();
-  else openDropdown();
-}
 function selectQuestion(idx) {
   currentQuestionIndex = idx;
-  qLineCurrent.textContent = QUESTIONS[idx];
-  qLineNext.textContent = QUESTIONS[(idx + 1) % QUESTIONS.length];
-  qDropdown.querySelectorAll('.q-dropdown-item').forEach((el, i) => {
-    el.classList.toggle('active', i === idx);
+  viewingIndex = idx;
+  archiveListEl.querySelectorAll('.archive-item').forEach(el => {
+    el.classList.toggle('active', Number(el.dataset.idx) === idx);
   });
-  closeDropdown();
   if (typeof applySpotlight === 'function') applySpotlight();
 }
 
-qNextBtn.addEventListener('click', (e) => {
+// ── Eye-mode question pill — shows the active question and advances on click ──
+const eyeQText = document.getElementById('eye-q-text');
+const eyeQNext = document.getElementById('eye-q-next');
+function renderEyePill() {
+  eyeQText.textContent = QUESTIONS[currentQuestionIndex];
+}
+function advanceEyeQuestion() {
+  const nextIdx = (currentQuestionIndex + 1) % QUESTIONS.length;
+  selectQuestion(nextIdx);
+  renderEyePill();
+}
+eyeQNext.addEventListener('click', (e) => {
   e.stopPropagation();
-  if (typeof revealed !== 'undefined' && revealed) {
-    rotateQuestion();
-  } else {
-    toggleDropdown();
-  }
+  advanceEyeQuestion();
 });
 
-document.addEventListener('click', (e) => {
-  if (!qDropdown.classList.contains('show')) return;
-  if (!e.target.closest('#q-banner-fixed')) closeDropdown();
-});
+// No more rotation, but keep no-op stubs in case other code references them
+function startRotation() {}
+function stopRotation() {}
+function closeDropdown() {}  // no-op — dropdown is gone
+
+buildArchive();
+renderEyePill();
 
 // ─────────── SF NEIGHBORHOODS — for friendly location labels ───────────
 const SF_NEIGHBORHOODS = [
@@ -1013,7 +1119,7 @@ function nearestNeighborhood([lng, lat]) {
 }
 
 // ─────────── ANSWER MODE ───────────
-const addBtn = document.getElementById('add-btn');
+// Map is always in answer mode — clicking anywhere drops a pin and opens the sheet.
 const hint = { classList: { toggle() {} } }; // no-op: hint banner removed
 const sheet = document.getElementById('sheet');
 const sheetInput = document.getElementById('sheet-input');
@@ -1022,18 +1128,18 @@ const sheetLoc = document.getElementById('sheet-loc');
 const sheetCoords = document.getElementById('sheet-coords');
 const sheetCancel = document.getElementById('sheet-cancel');
 const sheetSubmit = document.getElementById('sheet-submit');
+const sheetCount = document.getElementById('sheet-count');
 
-let answerMode = false;       // true after + clicked, before map clicked
+function updateCount() {
+  const len = sheetInput.value.length;
+  sheetCount.textContent = `${len} / 100`;
+  sheetCount.classList.toggle('is-near-limit', len > 85);
+}
+sheetInput.addEventListener('input', updateCount);
+
 let pendingLngLat = null;
 let pendingQuestion = null;
 let pendingMarker = null;
-
-function setAnswerMode(on) {
-  answerMode = on;
-  document.body.classList.toggle('answer-mode', on);
-  addBtn.classList.toggle('active', on);
-  hint.classList.toggle('show', on);
-}
 
 function openSheet() {
   sheet.classList.add('show');
@@ -1049,31 +1155,19 @@ function closeSheet() {
   pendingLngLat = null;
   pendingQuestion = null;
   sheetInput.value = '';
-  sheetLoc.textContent = 'click the map to pick a place';
+  updateCount();
+  sheetLoc.textContent = '(click map)';
+  sheetLoc.classList.add('is-prompt');
   sheetCoords.textContent = '';
   startRotation(); // resume rotation when the sheet closes
 }
 
-addBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  if (sheet.classList.contains('show')) {
-    closeSheet();
-    setAnswerMode(false);
-    return;
-  }
-  // Open the sheet immediately, lock in the current question
+map.on('click', (e) => {
+  // Close any expanded answer-marker when clicking the map background
+  answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+  // Lock in the current question when a click happens
   pendingQuestion = questionEl.textContent;
   if (sheetQText) sheetQText.textContent = pendingQuestion;
-  sheetLoc.textContent = 'click the map to pick a place';
-  sheetCoords.textContent = '';
-  pendingLngLat = null;
-  // Activate "pick a place" mode — user can click map while sheet is open
-  setAnswerMode(true);
-  openSheet();
-});
-
-map.on('click', (e) => {
-  if (!answerMode) return;
   pendingLngLat = [e.lngLat.lng, e.lngLat.lat];
 
   // Drop / move the temporary pending pin
@@ -1125,10 +1219,14 @@ map.on('click', (e) => {
     .setLngLat(pendingLngLat)
     .addTo(map);
 
-  // Update sheet location text — friendly neighborhood name + grey coords
+  // Update catalog-card header — coords on the left (catalog code), neighborhood on the right (subject heading)
   const name = nearestNeighborhood(pendingLngLat);
   sheetLoc.textContent = name;
-  sheetCoords.textContent = `${pendingLngLat[1].toFixed(4)}° N, ${Math.abs(pendingLngLat[0]).toFixed(4)}° W`;
+  sheetLoc.classList.remove('is-prompt');
+  sheetCoords.textContent = `${pendingLngLat[1].toFixed(4)}° N · ${Math.abs(pendingLngLat[0]).toFixed(4)}° W`;
+
+  // Open the answer sheet automatically (replaces the old + button flow)
+  if (!sheet.classList.contains('show')) openSheet();
 });
 
 function submitAnswer() {
@@ -1139,15 +1237,14 @@ function submitAnswer() {
   }
   if (!pendingLngLat) {
     // Flash a hint that they need to click the map
-    sheetLoc.textContent = '← click the map first';
-    sheetLoc.style.color = '#1a1a1a';
-    setTimeout(() => { sheetLoc.style.color = ''; }, 1800);
+    sheetCoords.textContent = '← click the map first';
+    sheetCoords.style.color = '#1a1a1a';
+    setTimeout(() => { sheetCoords.textContent = ''; sheetCoords.style.color = ''; }, 1800);
     return;
   }
   saveAnswer({ lngLat: pendingLngLat, question: pendingQuestion, text });
   placeAnswerMarker({ lngLat: pendingLngLat, question: pendingQuestion, text });
   closeSheet();
-  setAnswerMode(false);
 }
 
 sheetSubmit.addEventListener('click', submitAnswer);
@@ -1191,6 +1288,14 @@ function placeAnswerMarker({ lngLat, question, text }) {
       <div>${escapeHtml(text)}</div>
     </div>
   `;
+  // Click the bookmark to expand the bar and reveal the answer text.
+  // Only one marker open at a time — opening this one closes any other.
+  wrap.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const wasOpen = wrap.classList.contains('is-open');
+    answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+    if (!wasOpen) wrap.classList.add('is-open');
+  });
   new maplibregl.Marker({ element: wrap, anchor: 'top-left' })
     .setLngLat(lngLat)
     .addTo(map);
