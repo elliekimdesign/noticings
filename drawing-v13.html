@@ -420,7 +420,7 @@
       padding: 18px 20px;
     }
     #sheet.show {
-      max-height: 280px;
+      max-height: 320px;
       opacity: 1;
       pointer-events: auto;
     }
@@ -503,8 +503,19 @@
       font-style: normal;
     }
 
-    /* Footer row — character counter (left) + pin it link (right) */
+    /* Footer area — top mini-row (counter alone, right-aligned) + bottom row (handle left, pin it right) */
     #sheet .sheet-foot {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+    #sheet .foot-top {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+    #sheet .foot-bottom {
       display: flex;
       flex-direction: row;
       align-items: baseline;
@@ -523,6 +534,29 @@
     }
     #sheet .char-count.is-near-limit {
       color: rgba(26, 26, 26, 0.85);
+    }
+
+    /* Anonymous handle — muted grey by default, click to edit (turns black) */
+    #sheet .handle {
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(26, 26, 26, 0.40);
+      letter-spacing: 0.02em;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0;
+      cursor: pointer;
+      width: auto;
+      max-width: 60%;
+      transition: color 0.15s ease;
+    }
+    #sheet .handle:hover { color: rgba(26, 26, 26, 0.70); }
+    #sheet .handle.is-editing {
+      color: #1a1a1a;
+      cursor: text;
+      border-bottom: 1px solid #1a1a1a;
     }
 
     /* Submit — small text link */
@@ -801,8 +835,13 @@
       <textarea id="sheet-input" class="answer-field" placeholder="Leave a thought" maxlength="100" rows="3"></textarea>
     </div>
     <div class="sheet-foot">
-      <span id="sheet-count" class="char-count">0 / 100</span>
-      <button id="sheet-submit" class="submit-arrow" title="Pin it (enter) · Esc to cancel">pin it →</button>
+      <div class="foot-top">
+        <span id="sheet-count" class="char-count">0 / 100</span>
+      </div>
+      <div class="foot-bottom">
+        <input id="sheet-handle" class="handle" type="text" readonly maxlength="20" title="Click to rename" />
+        <button id="sheet-submit" class="submit-arrow" title="Pin it (enter) · Esc to cancel">pin it →</button>
+      </div>
     </div>
     <button id="sheet-cancel" style="display:none;"></button>
   </div>
@@ -1129,6 +1168,7 @@ const sheetCoords = document.getElementById('sheet-coords');
 const sheetCancel = document.getElementById('sheet-cancel');
 const sheetSubmit = document.getElementById('sheet-submit');
 const sheetCount = document.getElementById('sheet-count');
+const sheetHandle = document.getElementById('sheet-handle');
 
 function updateCount() {
   const len = sheetInput.value.length;
@@ -1136,6 +1176,49 @@ function updateCount() {
   sheetCount.classList.toggle('is-near-limit', len > 85);
 }
 sheetInput.addEventListener('input', updateCount);
+
+// ─────────── ANONYMOUS HANDLE ───────────
+// Generate a small random handle (5–6 lowercase letters + 3 digits, e.g. "sdfeg341")
+// once per browser, persist in localStorage. Click to rename; Enter saves, Esc cancels.
+const HANDLE_KEY = 'sf-mood-handle';
+function generateHandle() {
+  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  const letterCount = 5 + Math.floor(Math.random() * 2); // 5 or 6
+  let s = '';
+  for (let i = 0; i < letterCount; i++) s += letters[Math.floor(Math.random() * letters.length)];
+  for (let i = 0; i < 3; i++) s += Math.floor(Math.random() * 10);
+  return s;
+}
+function loadHandle() {
+  let h = localStorage.getItem(HANDLE_KEY);
+  if (!h) { h = generateHandle(); localStorage.setItem(HANDLE_KEY, h); }
+  return h;
+}
+function saveHandle(value) { localStorage.setItem(HANDLE_KEY, value); }
+
+let handleBeforeEdit = '';
+sheetHandle.value = loadHandle();
+
+sheetHandle.addEventListener('click', () => {
+  if (sheetHandle.readOnly) {
+    handleBeforeEdit = sheetHandle.value;
+    sheetHandle.readOnly = false;
+    sheetHandle.classList.add('is-editing');
+    sheetHandle.focus();
+    sheetHandle.select();
+  }
+});
+sheetHandle.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); sheetHandle.blur(); }
+  else if (e.key === 'Escape') { e.preventDefault(); sheetHandle.value = handleBeforeEdit; sheetHandle.blur(); }
+});
+sheetHandle.addEventListener('blur', () => {
+  const trimmed = sheetHandle.value.trim();
+  if (!trimmed) sheetHandle.value = handleBeforeEdit; // empty reverts
+  else { sheetHandle.value = trimmed; saveHandle(trimmed); }
+  sheetHandle.readOnly = true;
+  sheetHandle.classList.remove('is-editing');
+});
 
 let pendingLngLat = null;
 let pendingQuestion = null;
