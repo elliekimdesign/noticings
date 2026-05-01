@@ -13,7 +13,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw; height: 100vh; overflow: hidden;
-      background: #f9f7f1;
+      background: #ffffff;
       font-family: 'Archivo', 'Helvetica Neue', sans-serif;
     }
 
@@ -21,7 +21,7 @@
     #masthead {
       position: fixed; top: 0; left: 0; right: 0;
       height: 44px; z-index: 1000;
-      background: #f9f7f1;
+      background: #ffffff;
       border-bottom: 1.5px solid rgba(30,30,30,0.55);
       display: flex; align-items: center;
       padding: 0;
@@ -84,7 +84,7 @@
       bottom: 36px;
       width: 320px;
       z-index: 900;
-      background: #f9f7f1;
+      background: #ffffff;
       padding: 0;
       overflow-y: auto;
       box-sizing: border-box;
@@ -113,24 +113,24 @@
       background: transparent;
       border: none;
       border-bottom: 1px solid #1a1a1a;
-      padding: 20px 24px;
+      padding: 12px 24px;
       cursor: pointer;
       font-family: 'Geist', 'Inter', sans-serif;
       box-sizing: border-box;
       transition: background 0.15s ease;
     }
     #archive-list .archive-item:first-child { border-top: 1px solid #1a1a1a; }
-    /* Top (current) card — full sentence, big */
+    /* Top (current) card — full sentence, big text needs a bit more breathing room */
     #archive-list .archive-item.is-current {
-      padding: 26px 24px 30px;
+      padding: 16px 24px 18px;
     }
     #archive-list .archive-item .label {
       font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: #1a1a1a;
-      margin-bottom: 14px;
+      margin-bottom: 8px;
     }
     #archive-list .archive-item.is-current .question {
       font-family: 'Geist', 'Inter', sans-serif;
@@ -144,26 +144,31 @@
     }
     /* Past cards — compact, single line */
     #archive-list .archive-item.is-past {
-      padding: 14px 24px;
       display: flex;
       align-items: baseline;
-      gap: 12px;
+      gap: 6px;
     }
     #archive-list .archive-item.is-past .label {
       margin-bottom: 0;
       flex-shrink: 0;
       font-weight: 600;
       color: #1a1a1a;
+      letter-spacing: 0.14em;
     }
     #archive-list .archive-item.is-past .question {
       font-size: 10px;
       font-weight: 400;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(26,26,26,0.65);
+      line-height: 1.5;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       flex: 1;
       transition: color 0.15s ease;
     }
@@ -256,85 +261,13 @@
     .add-btn.active { transform: rotate(45deg); color: #1a1a1a; }
 
     /* Landmark recall button — Romanesque carved capital from Vézelay cloister */
-    .landmark-btn {
-      position: fixed;
-      bottom: 48px;
-      right: 24px;
-      width: 80px;
-      height: 80px;
-      z-index: 1050;
-      border: none;
-      background: transparent;
-      padding: 0;
-      cursor: pointer;
-      opacity: 0.65;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    .landmark-btn img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      mix-blend-mode: multiply;
-    }
-    .landmark-btn:hover {
-      opacity: 1;
-      transform: scale(1.06);
-    }
-    body.spotlight-on .landmark-btn { display: none; }
-
-    /* Landmark "museum vitrine" card — fades in centered when a landmark is shown */
-    .landmark-card {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(0.95);
-      z-index: 1600;
-      background: #ffffff;
-      border: 1.5px solid rgba(26,26,26,0.45);
-      padding: 24px 28px 20px;
-      width: 320px;
-      text-align: center;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
-      font-family: 'Geist', sans-serif;
-    }
-    .landmark-card.show {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-      pointer-events: auto;
-    }
-    .landmark-card-image {
-      width: 100%;
-      max-height: 180px;
-      object-fit: contain;
-      margin-bottom: 14px;
-      mix-blend-mode: multiply;
-    }
-    .landmark-card-name {
-      font-size: 11px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: #1a1a1a;
-      margin-bottom: 4px;
-    }
-    .landmark-card-date {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: 11px;
-      color: rgba(26,26,26,0.55);
-      font-weight: 400;
-    }
-
     /* Victorian eye toggle — floats below the masthead, right side */
     .eye-toggle {
       position: fixed;
       top: 56px;
       right: 22px;
-      width: 36px;
-      height: 28px;
+      width: 40px;
+      height: 40px;
       z-index: 1000;
       cursor: pointer;
       background: transparent;
@@ -644,13 +577,14 @@
       width: calc(100vw - 320px);
       height: calc(100vh - 80px);
       position: relative;
+      background: #f4f4f5; /* match map land color so resizes don't flash the page bg */
     }
 
     /* ── Bottom static label bar — split by the spine line ── */
     #footer {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 36px; z-index: 1400;
-      background: #f9f7f1;
+      background: #ffffff;
       border-top: 1.5px solid rgba(30,30,30,0.55);
       display: flex; align-items: center;
       padding: 0;
@@ -810,15 +744,10 @@
   </button>
 </div>
 
-<!-- ─────────── EYE TOGGLE — reveal answers ─────────── -->
+<!-- ─────────── REVEAL TOGGLE — freehand wobbly circle ─────────── -->
 <button class="eye-toggle" id="eye-toggle" title="Reveal answers" aria-label="Toggle answers visibility">
-  <svg viewBox="0 0 32 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Top lid — slightly imperfect curve -->
-    <path d="M 3 11 Q 9 3 16 2.5 Q 23 3 29 10"/>
-    <!-- Bottom lid — slightly imperfect curve -->
-    <path d="M 3 11 Q 9 17 16 17.5 Q 23 17 29 10"/>
-    <!-- Pupil — solid dot, hand-stamped feel -->
-    <circle cx="16" cy="10" r="2.2" fill="#1a1a1a" stroke="none"/>
+  <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1a1a1a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 28 16 Q 37 15 40 22 Q 42 30 37 37 Q 30 41 22 38 Q 16 33 16 25 Q 19 17 28 16"/>
   </svg>
 </button>
 
@@ -875,17 +804,6 @@
   </div>
 </div>
 
-<!-- Landmark recall button — Romanesque carved capital -->
-<button class="landmark-btn" id="landmark-btn" title="Remember a place" aria-label="Remember a place">
-  <img src="assets/capital-cloister-vezelay.jpg" alt="">
-</button>
-
-<!-- Landmark "museum vitrine" card — populated when a landmark is shown -->
-<div class="landmark-card" id="landmark-card" aria-hidden="true">
-  <img class="landmark-card-image" id="landmark-card-image" src="" alt="">
-  <div class="landmark-card-name" id="landmark-card-name"></div>
-  <div class="landmark-card-date" id="landmark-card-date"></div>
-</div>
 
 <script>
 const map = new maplibregl.Map({
@@ -1386,49 +1304,6 @@ function placeAnswerMarker({ lngLat, question, text }) {
   applySpotlight();
 }
 
-// ─────────── LANDMARK RECALL ───────────
-const LANDMARKS = [
-  {
-    name: 'Cliff House',
-    date: '1863 — engraving from 1876',
-    lng: -122.5135,
-    lat: 37.7783,
-    image: 'assets/cliff-house-1876.jpg',
-    flyZoom: 14.5,
-  },
-];
-const landmarkBtn = document.getElementById('landmark-btn');
-const landmarkCard = document.getElementById('landmark-card');
-const landmarkCardImage = document.getElementById('landmark-card-image');
-const landmarkCardName = document.getElementById('landmark-card-name');
-const landmarkCardDate = document.getElementById('landmark-card-date');
-let landmarkCardTimer = null;
-
-function showLandmark(idx) {
-  const lm = LANDMARKS[idx];
-  if (!lm) return;
-  landmarkCardImage.src = lm.image;
-  landmarkCardName.textContent = lm.name;
-  landmarkCardDate.textContent = lm.date;
-  landmarkCard.classList.add('show');
-  landmarkCard.setAttribute('aria-hidden', 'false');
-  if (landmarkCardTimer) clearTimeout(landmarkCardTimer);
-  landmarkCardTimer = setTimeout(closeLandmark, 6000);
-}
-function closeLandmark() {
-  landmarkCard.classList.remove('show');
-  landmarkCard.setAttribute('aria-hidden', 'true');
-  if (landmarkCardTimer) { clearTimeout(landmarkCardTimer); landmarkCardTimer = null; }
-}
-landmarkBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  showLandmark(0);
-});
-document.addEventListener('click', (e) => {
-  if (!landmarkCard.classList.contains('show')) return;
-  if (!e.target.closest('#landmark-card') && !e.target.closest('#landmark-btn')) closeLandmark();
-});
-
 // ─────────── REVEAL TOGGLE ───────────
 const eyeToggle = document.getElementById('eye-toggle');
 let revealed = false; // start in idle: pins hidden, map clear
@@ -1439,7 +1314,9 @@ function setRevealed(on) {
   document.body.classList.toggle('spotlight-on', on);
   eyeToggle.classList.toggle('active', on);
   if (on && typeof closeDropdown === 'function') closeDropdown();
-  requestAnimationFrame(() => map.resize());
+  // Resize synchronously — must happen *before* flyTo so the viewport size is correct
+  // when the animation starts; otherwise the new strip uncovered by the rail flashes briefly.
+  map.resize();
   map.flyTo({ ...(on ? EYE_VIEW : DEFAULT_VIEW), duration: 1200, essential: true });
   applySpotlight();
 }
