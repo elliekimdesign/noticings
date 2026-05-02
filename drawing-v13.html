@@ -8,31 +8,31 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw; height: 100vh; overflow: hidden;
-      background: #ffffff;
-      font-family: 'Archivo', 'Helvetica Neue', sans-serif;
+      background: #faf7ee;
+      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
     }
 
     /* ── Top masthead — split by the spine line at x=220px ── */
     #masthead {
       position: fixed; top: 0; left: 0; right: 0;
       height: 44px; z-index: 1000;
-      background: #ffffff;
-      border-bottom: 1.5px solid rgba(30,30,30,0.55);
+      background: #faf7ee;
+      border-bottom: 1px solid rgba(30,30,30,0.55);
       display: flex; align-items: center;
       padding: 0;
     }
     #masthead .title {
-      font-family: 'Geist', 'Inter', 'Helvetica Neue', sans-serif;
+      font-family: 'Outfit', 'Helvetica Neue', sans-serif;
       font-size: 15px; letter-spacing: 0.04em;
-      color: #1a1a1a; font-weight: 700;
+      color: #1a1a1a; font-weight: 500;
       display: flex; align-items: center; justify-content: flex-start;
       text-transform: uppercase;
-      width: 320px;
+      width: 400px;
       flex-shrink: 0;
       height: 100%;
       padding-left: 24px;
@@ -65,11 +65,12 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 14px;
+      font-family: 'Instrument Sans', 'Helvetica Neue', sans-serif;
+      font-variation-settings: 'wdth' 75;
+      font-size: 15px;
       font-weight: 500;
       color: #1a1a1a;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       pointer-events: none;
     }
@@ -82,9 +83,9 @@
       top: 44px;
       left: 0;
       bottom: 36px;
-      width: 320px;
+      width: 400px;
       z-index: 900;
-      background: #ffffff;
+      background: #faf7ee;
       padding: 0;
       overflow-y: auto;
       box-sizing: border-box;
@@ -94,7 +95,7 @@
       position: fixed;
       top: 0;
       bottom: 0;
-      left: 320px;
+      left: 400px;
       width: 1px;
       background: rgba(30,30,30,0.55);
       z-index: 1100;
@@ -112,32 +113,65 @@
       text-align: left;
       background: transparent;
       border: none;
-      border-bottom: 1px solid #1a1a1a;
+      border-bottom: 1px solid rgba(30,30,30,0.55);
       padding: 12px 24px;
       cursor: pointer;
-      font-family: 'Geist', 'Inter', sans-serif;
+      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
       box-sizing: border-box;
       transition: background 0.15s ease;
     }
-    #archive-list .archive-item:first-child { border-top: 1px solid #1a1a1a; }
+    #archive-list .archive-item:first-child { border-top: none; }
     /* Top (current) card — full sentence, big text needs a bit more breathing room */
     #archive-list .archive-item.is-current {
-      padding: 16px 24px 18px;
+      padding: 20px 24px 22px;
+      border-bottom: 1px solid rgba(30,30,30,0.55);
     }
     #archive-list .archive-item .label {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: 0.14em;
       text-transform: uppercase;
+      color: rgba(26,26,26,0.75);
+      margin-bottom: 14px;
+    }
+    #archive-list .archive-item .label .issue-no {
+      font-family: inherit;
+      font-weight: inherit;
+      font-style: normal;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      vertical-align: baseline;
+    }
+    /* Hero moment: only the current (active) card gets the big didone number */
+    #archive-list .archive-item.is-current .label .issue-no {
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', 'Didot', serif;
+      font-weight: 300;
+      font-size: 72px;
+      letter-spacing: 0;
+      line-height: 1;
+      vertical-align: -22px;
+      margin-right: 10px;
       color: #1a1a1a;
-      margin-bottom: 8px;
+    }
+    #archive-list .archive-item.is-current .label .label-word {
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', 'Didot', serif;
+      font-weight: 300;
+      font-size: 22px;
+      letter-spacing: 0;
+      line-height: 1;
+      text-transform: none;
+      color: #1a1a1a;
+      vertical-align: 4px;
     }
     #archive-list .archive-item.is-current .question {
-      font-family: 'Geist', 'Inter', sans-serif;
-      font-size: 22px;
-      font-weight: 400;
-      line-height: 1.3;
-      letter-spacing: -0.005em;
+      font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: clamp(24px, 2.4vw, 36px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
       color: #1a1a1a;
       word-break: normal;
       overflow-wrap: break-word;
@@ -146,21 +180,26 @@
     #archive-list .archive-item.is-past {
       display: flex;
       align-items: baseline;
-      gap: 6px;
+      gap: 10px;
     }
     #archive-list .archive-item.is-past .label {
       margin-bottom: 0;
       flex-shrink: 0;
-      font-weight: 600;
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', 'Didot', serif;
+      font-weight: 300;
+      font-size: 24px;
+      line-height: 1;
       color: #1a1a1a;
-      letter-spacing: 0.14em;
+      letter-spacing: 0;
+      text-transform: none;
     }
     #archive-list .archive-item.is-past .question {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
       font-weight: 400;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(26,26,26,0.65);
+      color: rgba(26,26,26,0.55);
       line-height: 1.5;
       white-space: normal;
       overflow-wrap: break-word;
@@ -173,6 +212,44 @@
       transition: color 0.15s ease;
     }
     #archive-list .archive-item.is-past:hover { background: rgba(26,26,26,0.03); }
+
+    /* ── Page-flip pagination — sits at the bottom of the archive rail, above the footer ── */
+    #archive-rail {
+      display: flex;
+      flex-direction: column;
+    }
+    #archive-list { flex: 1; }
+    .archive-pager {
+      flex-shrink: 0;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      align-items: stretch;
+      border-top: 1px solid rgba(30,30,30,0.55);
+      font-family: 'Geist', 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      color: rgba(26,26,26,0.30);
+      user-select: none;
+      min-height: 38px;
+    }
+    .archive-pager .pager-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: not-allowed;
+      color: rgba(26,26,26,0.30);
+      transition: color 0.15s ease;
+    }
+    .archive-pager .pager-btn.is-active { color: #1a1a1a; cursor: pointer; }
+    .archive-pager .pager-btn.is-active:hover { color: #FF8000; }
+    .archive-pager .pager-btn svg { width: 8px; height: 10px; display: block; }
+    .archive-pager .pager-divider {
+      width: 1px;
+      background: rgba(30,30,30,0.55);
+      align-self: stretch;
+    }
     #archive-list .archive-item.is-past:hover .question { color: #1a1a1a; }
     #archive-list .archive-item.is-past.active .question { color: #1a1a1a; font-weight: 600; }
 
@@ -196,7 +273,7 @@
       background: #1a1a1a;
       color: #ffffff;
       padding: 12px 22px;
-      width: 360px;
+      width: 400px;
       height: 64px;
       box-sizing: border-box;
       align-items: center;
@@ -263,33 +340,86 @@
     /* Landmark recall button — Romanesque carved capital from Vézelay cloister */
     /* Victorian eye toggle — floats below the masthead, right side */
     .eye-toggle {
-      position: fixed;
-      top: 56px;
-      right: 22px;
-      width: 40px;
-      height: 40px;
-      z-index: 1000;
+      pointer-events: auto;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
       background: transparent;
       border: none;
       padding: 0;
-      opacity: 0.55;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 0;
+      opacity: 1;
       transition: opacity 0.3s ease, transform 0.2s ease;
     }
-    .eye-toggle:hover { opacity: 0.85; transform: scale(1.05); }
-    .eye-toggle.active { opacity: 0.95; }
-    .eye-toggle svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      overflow: visible;
+    .eye-toggle .cell { background: transparent; }
+    .eye-toggle .cell.on { background: #1a1a1a; }
+    .eye-toggle:hover { transform: scale(1.08); }
+    .eye-toggle.active { opacity: 1; }
+    /* Active state: invert — filled cells become empty, empty cells become filled (corners stay invisible) */
+    .eye-toggle.active .cell:not(.corner) { background: #1a1a1a; }
+    .eye-toggle.active .cell.on { background: transparent; }
+    .eye-toggle .cell.corner { background: transparent !important; }
+    /* Zoom scale — horizontal ruler-style control with checkerboard, bottom-right of the map */
+    .zoom-scale {
+      position: fixed;
+      bottom: 56px;
+      right: 22px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
     }
+    .zoom-scale .zoom-btn {
+      pointer-events: auto;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: #1a1a1a;
+      line-height: 1;
+      width: 14px;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.55;
+      transition: opacity 0.2s ease;
+      user-select: none;
+    }
+    .zoom-scale .zoom-btn:hover { opacity: 1; }
+    .zoom-scale .zoom-line {
+      width: 80px;
+      height: 3px;
+      background: #1a1a1a;
+      position: relative;
+    }
+    .zoom-scale .zoom-indicator {
+      pointer-events: auto;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background: #1a1a1a;
+      transform: translate(-50%, -50%);
+      cursor: ew-resize;
+      transition: left 0.15s ease;
+    }
+    .zoom-scale .zoom-indicator.is-dragging { transition: none; }
 
     /* Spotlight overlay — dims the map when revealed */
     body.spotlight-on::after {
       content: '';
       position: fixed;
-      top: 44px; bottom: 36px; left: 320px; right: 0;
+      top: 44px; bottom: 36px; left: 400px; right: 0;
       background: rgba(26,26,26,0.30);
       pointer-events: none;
       z-index: 5;
@@ -338,7 +468,7 @@
 
     /* ── Answer sheet — minimal white note ── */
     #sheet {
-      width: 360px;
+      width: 400px;
       box-sizing: border-box;
       max-height: 0;
       opacity: 0;
@@ -348,7 +478,7 @@
       display: flex; flex-direction: column;
       gap: 14px;
       position: relative;
-      background: #ffffff;
+      background: #faf7ee;
       border: 1px solid #1a1a1a;
       padding: 18px 20px;
     }
@@ -563,18 +693,26 @@
       word-break: break-word;
     }
     .answer-note .q { display: none; }
+    .answer-note .handle {
+      display: block;
+      margin-top: 4px;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.7);
+    }
     /* Answer mode: change cursor on map */
     #map-pane { cursor: crosshair; }
 
     body {
       padding-top: 44px;
       padding-bottom: 36px;
-      padding-left: 320px;
+      padding-left: 400px;
     }
 
     /* ── Map: fills the right column between masthead and footer ── */
     #map-pane {
-      width: calc(100vw - 320px);
+      width: calc(100vw - 400px);
       height: calc(100vh - 80px);
       position: relative;
       background: #f4f4f5; /* match map land color so resizes don't flash the page bg */
@@ -584,13 +722,13 @@
     #footer {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 36px; z-index: 1400;
-      background: #ffffff;
-      border-top: 1.5px solid rgba(30,30,30,0.55);
+      background: #faf7ee;
+      border-top: 1px solid rgba(30,30,30,0.55);
       display: flex; align-items: center;
       padding: 0;
     }
     #footer .footer-left {
-      width: 320px;
+      width: 400px;
       flex-shrink: 0;
       height: 100%;
       display: flex; align-items: center; justify-content: flex-start;
@@ -599,7 +737,7 @@
       box-sizing: border-box;
       font-family: 'Geist', 'Inter', sans-serif;
       font-size: 9px;
-      letter-spacing: 0.32em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(26,26,26,0.85);
       font-weight: 500;
@@ -612,7 +750,7 @@
       padding: 0 24px;
     }
     #footer .label {
-      font-size: 9px; letter-spacing: 0.32em;
+      font-size: 9px; letter-spacing: 0.14em;
       color: rgba(26,26,26,0.55);
       font-weight: 400;
       flex: 1;
@@ -643,7 +781,7 @@
       margin-left: auto;
       font-family: 'Geist', 'Inter', sans-serif;
       font-size: 9px;
-      letter-spacing: 0.32em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(26,26,26,0.55);
       font-weight: 400;
@@ -710,6 +848,71 @@
     #map { width: 100%; height: 100%; position: relative; }
     .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
 
+    /* ── Answer panel — slides in next to the main question card on pin click ── */
+    #answer-panel {
+      position: fixed;
+      top: 44px;            /* below masthead */
+      left: 400px;          /* right of archive rail */
+      right: 0;
+      height: 0;            /* runtime-set to match main question card height */
+      background: #faf7ee;
+      border-bottom: 1px solid rgba(30,30,30,0.55);
+      z-index: 950;
+      display: none;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    #answer-panel.is-open { display: block; }
+    #answer-panel .panel-inner {
+      width: 100%;
+      height: 100%;
+      padding: 32px 56px 32px 32px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    #answer-panel .panel-text {
+      font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: clamp(24px, 2.4vw, 36px);
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: #1a1a1a;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+    #answer-panel .panel-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 22px;
+      height: 22px;
+      background: transparent;
+      border: 1px solid #1a1a1a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      color: #1a1a1a;
+    }
+    #answer-panel .panel-close:hover { background: #1a1a1a; color: #ffffff; }
+    #answer-panel .panel-close svg { width: 10px; height: 10px; display: block; }
+
+    /* Panel floats over the map without shrinking it */
+
+    /* SVG overlay that draws the connector line from pin → panel */
+    #pin-line {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 960;
+      display: none;
+    }
+    /* Connector line removed — panel stands alone */
+
   </style>
 </head>
 <body>
@@ -732,24 +935,26 @@
 <!-- ─────────── LEFT ARCHIVE RAIL — flat list of all questions ─────────── -->
 <aside id="archive-rail">
   <ul id="archive-list"></ul>
+  <div class="archive-pager" aria-label="Question pagination">
+    <button class="pager-btn" id="pager-prev" title="Previous question" aria-label="Previous question" disabled>
+      <svg viewBox="0 0 8 10" xmlns="http://www.w3.org/2000/svg"><polygon points="8,0 8,10 0,5" fill="currentColor"/></svg>
+    </button>
+    <span class="pager-divider"></span>
+    <button class="pager-btn" id="pager-next" title="Next question" aria-label="Next question" disabled>
+      <svg viewBox="0 0 8 10" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 0,10 8,5" fill="currentColor"/></svg>
+    </button>
+  </div>
 </aside>
 
 <!-- ─────────── EYE-MODE QUESTION PILL (only shown in eye mode) ─────────── -->
 <div id="eye-q-banner">
-  <div class="q-text" id="eye-q-text">where do you go when you're sad?</div>
+  <div class="q-text" id="eye-q-text">I keep coming back to...</div>
   <button class="q-next" id="eye-q-next" title="Next question" aria-label="Next question">
     <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
       <path d="M 3.6 5.5 L 8.9 12 L 14.3 5.6" />
     </svg>
   </button>
 </div>
-
-<!-- ─────────── REVEAL TOGGLE — freehand wobbly circle ─────────── -->
-<button class="eye-toggle" id="eye-toggle" title="Reveal answers" aria-label="Toggle answers visibility">
-  <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1a1a1a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M 28 16 Q 37 15 40 22 Q 42 30 37 37 Q 30 41 22 38 Q 16 33 16 25 Q 19 17 28 16"/>
-  </svg>
-</button>
 
 <!-- ─────────── ANSWER SHEET (floats bottom-right of the map) ─────────── -->
 <div id="sheet-wrap">
@@ -778,9 +983,40 @@
 
 
 <!-- Bottom sheet for typing the answer -->
+<!-- ─────────── ANSWER PANEL — opens next to main question on pin click ─────────── -->
+<div id="answer-panel" aria-hidden="true">
+  <div class="panel-inner">
+    <div class="panel-text" id="panel-text">The fog comes in slow over the hills, and by the time you notice the streetlights are on, the whole afternoon has been quietly replaced by an early kind of evening.</div>
+  </div>
+  <button class="panel-close" id="panel-close" title="Close" aria-label="Close answer panel">
+    <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/>
+    </svg>
+  </button>
+</div>
+
+<!-- SVG overlay for the connector line from clicked pin to panel -->
+<svg id="pin-line" xmlns="http://www.w3.org/2000/svg">
+  <line id="pin-line-seg" x1="0" y1="0" x2="0" y2="0" stroke="#1a1a1a" stroke-width="1"/>
+</svg>
+
 <!-- ─────────── SF MAP ─────────── -->
 <div id="map-pane">
   <div id="map"></div>
+</div>
+
+<!-- ─────────── MAP CONTROLS — horizontal: zoom slider + checkerboard reveal ─────────── -->
+<div class="zoom-scale" aria-label="Map controls">
+  <div class="zoom-line">
+    <div class="zoom-indicator" id="zoom-indicator" title="Drag to zoom"></div>
+  </div>
+  <button class="eye-toggle" id="eye-toggle" title="Reveal answers" aria-label="Toggle answers visibility">
+    <span class="cell corner"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell corner"></span>
+    <span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span>
+    <span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span>
+    <span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span>
+    <span class="cell corner"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell corner"></span>
+  </button>
 </div>
 
 <!-- ─────────── BOTTOM LABEL BAR ─────────── -->
@@ -946,13 +1182,8 @@ map.on('style.load', () => {
 // ─────────── ASSIGNMENTS (one question per fortnight) ───────────
 // ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
 const ASSIGNMENTS = [
-  { issueNo: 7, dates: 'Apr 15 → Apr 29', text: "where do you go when you're sad?" },
-  { issueNo: 6, dates: 'Apr 1 → Apr 14',  text: "where do you take your dog for a walk?" },
-  { issueNo: 5, dates: 'Mar 18 → Mar 31', text: "where did you fall in love with the city?" },
-  { issueNo: 4, dates: 'Mar 4 → Mar 17',  text: "where do you read on a Sunday morning?" },
-  { issueNo: 3, dates: 'Feb 19 → Mar 3',  text: "where do you go when you can't sleep?" },
-  { issueNo: 2, dates: 'Feb 5 → Feb 18',  text: "where do you meet a friend after work?" },
-  { issueNo: 1, dates: 'Jan 22 → Feb 4',  text: "where do you go to think?" },
+  { issueNo: 1, dates: 'Apr 15 → Apr 29', text: "I keep coming back to..." },
+  { issueNo: 1, dates: 'Apr 15 → Apr 29', text: "I keep coming back to..." },
 ];
 
 // Flat array of question strings, used by the rest of the code (markers, spotlight, etc.)
@@ -982,7 +1213,7 @@ function buildArchive() {
     btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
     btn.dataset.idx = i;
     btn.innerHTML = `
-      <div class="label">${isCurrent ? 'Assignment ' : ''}#${pad2(a.issueNo)}</div>
+      <div class="label">${isCurrent ? `<span class="issue-no">${pad2(a.issueNo)}</span> <span class="label-word">Assignment</span>` : `<span class="issue-no">#${pad2(a.issueNo)}</span>`}</div>
       <div class="question">${a.text}</div>
     `;
     if (i === currentQuestionIndex) btn.classList.add('active');
@@ -1243,8 +1474,9 @@ function submitAnswer() {
     setTimeout(() => { sheetCoords.textContent = ''; sheetCoords.style.color = ''; }, 1800);
     return;
   }
-  saveAnswer({ lngLat: pendingLngLat, question: pendingQuestion, text });
-  placeAnswerMarker({ lngLat: pendingLngLat, question: pendingQuestion, text });
+  const handle = (sheetHandle.value || '').trim();
+  saveAnswer({ lngLat: pendingLngLat, question: pendingQuestion, text, handle });
+  placeAnswerMarker({ lngLat: pendingLngLat, question: pendingQuestion, text, handle });
   closeSheet();
 }
 
@@ -1279,30 +1511,95 @@ function updatePinCount() {
 // ─────────── MARKER ───────────
 // Track every answer marker element + its question, so we can highlight/dim them as the question rotates
 const answerMarkers = [];
-function placeAnswerMarker({ lngLat, question, text }) {
+function placeAnswerMarker({ lngLat, question, text, handle }) {
   const wrap = document.createElement('div');
   wrap.className = 'answer-marker';
   wrap.dataset.question = question;
+  const handleHtml = handle ? `<div class="handle">${escapeHtml(handle)}</div>` : '';
   wrap.innerHTML = `
     <div class="answer-note">
       <div class="q">${escapeHtml(question)}</div>
       <div>${escapeHtml(text)}</div>
+      ${handleHtml}
     </div>
   `;
-  // Click the bookmark to expand the bar and reveal the answer text.
-  // Only one marker open at a time — opening this one closes any other.
+  // Click the orange pin → open the side panel with this answer's text,
+  // shrink the map, and draw a connector line from pin to panel.
   wrap.addEventListener('click', (e) => {
     e.stopPropagation();
     const wasOpen = wrap.classList.contains('is-open');
     answerMarkers.forEach(m => m.el.classList.remove('is-open'));
-    if (!wasOpen) wrap.classList.add('is-open');
+    if (wasOpen) {
+      closeAnswerPanel();
+    } else {
+      wrap.classList.add('is-open');
+      openAnswerPanel({ text, lngLat });
+    }
   });
   new maplibregl.Marker({ element: wrap, anchor: 'top-left' })
     .setLngLat(lngLat)
     .addTo(map);
-  answerMarkers.push({ el: wrap, question });
+  answerMarkers.push({ el: wrap, question, lngLat });
   applySpotlight();
 }
+
+// ─────────── ANSWER PANEL ───────────
+const answerPanel   = document.getElementById('answer-panel');
+const panelText     = document.getElementById('panel-text');
+const panelCloseBtn = document.getElementById('panel-close');
+const pinLineSvg    = document.getElementById('pin-line');
+const pinLineSeg    = document.getElementById('pin-line-seg');
+let activePinLngLat = null;
+
+function getMainQuestionHeight() {
+  const cur = document.querySelector('#archive-list .archive-item.is-current');
+  return cur ? cur.getBoundingClientRect().height : 160;
+}
+
+function openAnswerPanel({ text, lngLat }) {
+  panelText.textContent = text;
+  const h = getMainQuestionHeight();
+  document.documentElement.style.setProperty('--panel-h', h + 'px');
+  answerPanel.style.height = h + 'px';
+  answerPanel.classList.add('is-open');
+  document.body.classList.add('panel-open');
+  activePinLngLat = lngLat;
+}
+
+function closeAnswerPanel() {
+  answerPanel.classList.remove('is-open');
+  document.body.classList.remove('panel-open');
+  activePinLngLat = null;
+  answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+}
+
+function drawPinLine() {
+  if (!activePinLngLat || !map) return;
+  const pt = map.project(activePinLngLat);
+  const mapRect = document.getElementById('map-pane').getBoundingClientRect();
+  // Pin coordinates in viewport space (map.project gives map-relative coords)
+  const pinX = mapRect.left + pt.x;
+  const pinY = mapRect.top + pt.y;
+  // Panel bottom-center as the line target
+  const panelRect = answerPanel.getBoundingClientRect();
+  const targetX = panelRect.left + panelRect.width / 2;
+  const targetY = panelRect.bottom;
+  pinLineSeg.setAttribute('x1', targetX);
+  pinLineSeg.setAttribute('y1', targetY);
+  pinLineSeg.setAttribute('x2', pinX);
+  pinLineSeg.setAttribute('y2', pinY);
+}
+
+panelCloseBtn.addEventListener('click', closeAnswerPanel);
+window.addEventListener('resize', () => {
+  if (document.body.classList.contains('panel-open')) {
+    const h = getMainQuestionHeight();
+    document.documentElement.style.setProperty('--panel-h', h + 'px');
+    answerPanel.style.height = h + 'px';
+    if (map) map.resize();
+    drawPinLine();
+  }
+});
 
 // ─────────── REVEAL TOGGLE ───────────
 const eyeToggle = document.getElementById('eye-toggle');
@@ -1322,6 +1619,56 @@ function setRevealed(on) {
 }
 eyeToggle.addEventListener('click', () => setRevealed(!revealed));
 
+// Zoom scale wiring — + / − buttons step the map zoom; indicator reflects + sets zoom level
+const zoomIndicator = document.getElementById('zoom-indicator');
+const zoomLine = document.querySelector('.zoom-scale .zoom-line');
+
+function updateZoomIndicator() {
+  const minZ = map.getMinZoom();
+  const maxZ = map.getMaxZoom();
+  const z = map.getZoom();
+  const range = maxZ - minZ;
+  // Left of the line = min zoom (zoomed-out, near −), right = max zoom (zoomed-in, near +)
+  const t = range > 0 ? (z - minZ) / range : 0;
+  zoomIndicator.style.left = `${t * 100}%`;
+}
+
+map.on('zoom', updateZoomIndicator);
+map.on('load', updateZoomIndicator);
+updateZoomIndicator();
+
+// Keep the pin → panel connector line in sync with map pan/zoom
+map.on('move', () => {
+  if (document.body.classList.contains('panel-open')) drawPinLine();
+});
+
+// Drag the indicator to set zoom level directly
+let isDraggingZoom = false;
+function setZoomFromX(clientX) {
+  const rect = zoomLine.getBoundingClientRect();
+  let t = (clientX - rect.left) / rect.width;
+  t = Math.max(0, Math.min(1, t));
+  const minZ = map.getMinZoom();
+  const maxZ = map.getMaxZoom();
+  // Left = min zoom (zoomed-out), right = max zoom (zoomed-in)
+  const z = minZ + t * (maxZ - minZ);
+  map.setZoom(z);
+}
+zoomIndicator.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  isDraggingZoom = true;
+  zoomIndicator.classList.add('is-dragging');
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isDraggingZoom) return;
+  setZoomFromX(e.clientX);
+});
+window.addEventListener('mouseup', () => {
+  if (!isDraggingZoom) return;
+  isDraggingZoom = false;
+  zoomIndicator.classList.remove('is-dragging');
+});
+
 // Apply the spotlight effect: only when revealed; otherwise pins stay hidden via CSS
 function applySpotlight() {
   if (!revealed) return;
@@ -1335,6 +1682,17 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
+
+// Open the answer panel by default with placeholder text — preview mode
+window.requestAnimationFrame(() => {
+  const placeholder = panelText.textContent;
+  const h = getMainQuestionHeight();
+  document.documentElement.style.setProperty('--panel-h', h + 'px');
+  answerPanel.style.height = h + 'px';
+  answerPanel.classList.add('is-open');
+  document.body.classList.add('panel-open');
+  panelText.textContent = placeholder;
+});
 </script>
 </body>
 </html>
