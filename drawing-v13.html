@@ -22,7 +22,7 @@
       position: fixed; top: 0; left: 0; right: 0;
       height: 44px; z-index: 1000;
       background: #faf7ee;
-      border-bottom: 1px solid rgba(30,30,30,0.55);
+      border-bottom: 1.5px solid #666;
       display: flex; align-items: center;
       padding: 0;
     }
@@ -96,8 +96,8 @@
       top: 0;
       bottom: 0;
       left: 400px;
-      width: 1px;
-      background: rgba(30,30,30,0.55);
+      width: 1.5px;
+      background: #666;
       z-index: 1100;
       pointer-events: none;
     }
@@ -113,7 +113,7 @@
       text-align: left;
       background: transparent;
       border: none;
-      border-bottom: 1px solid rgba(30,30,30,0.55);
+      border-bottom: 1.5px solid #666;
       padding: 12px 24px;
       cursor: pointer;
       font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
@@ -124,7 +124,7 @@
     /* Top (current) card — full sentence, big text needs a bit more breathing room */
     #archive-list .archive-item.is-current {
       padding: 20px 24px 22px;
-      border-bottom: 1px solid rgba(30,30,30,0.55);
+      border-bottom: 1.5px solid #666;
     }
     #archive-list .archive-item .label {
       font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -222,9 +222,9 @@
     .archive-pager {
       flex-shrink: 0;
       display: grid;
-      grid-template-columns: 1fr 1px 1fr;
+      grid-template-columns: 1fr 1.5px 1fr;
       align-items: stretch;
-      border-top: 1px solid rgba(30,30,30,0.55);
+      border-top: 1.5px solid #666;
       font-family: 'Geist', 'Helvetica Neue', sans-serif;
       font-size: 11px;
       color: rgba(26,26,26,0.30);
@@ -246,8 +246,8 @@
     .archive-pager .pager-btn.is-active:hover { color: #FF8000; }
     .archive-pager .pager-btn svg { width: 8px; height: 10px; display: block; }
     .archive-pager .pager-divider {
-      width: 1px;
-      background: rgba(30,30,30,0.55);
+      width: 1.5px;
+      background: #666;
       align-self: stretch;
     }
     #archive-list .archive-item.is-past:hover .question { color: #1a1a1a; }
@@ -723,7 +723,7 @@
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 36px; z-index: 1400;
       background: #faf7ee;
-      border-top: 1px solid rgba(30,30,30,0.55);
+      border-top: 1.5px solid #666;
       display: flex; align-items: center;
       padding: 0;
     }
@@ -856,7 +856,7 @@
       right: 0;
       height: 0;            /* runtime-set to match main question card height */
       background: #faf7ee;
-      border-bottom: 1px solid rgba(30,30,30,0.55);
+      border-bottom: 1.5px solid #666;
       z-index: 950;
       display: none;
       overflow: hidden;
