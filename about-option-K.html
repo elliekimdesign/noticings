@@ -6,7 +6,7 @@
   <title>About — Pinned</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&family=Inter:wght@800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&family=Inter:wght@800;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --accent-orange: #FF8000;
@@ -47,13 +47,10 @@
     }
     .back-link:hover { opacity: 0.5; }
 
-    /* ── Body text — wall of justified uppercase mono.
-       Full width; the orange signature pills float into the right side of the
-       paragraph, so the body wraps cleanly around them. ── */
+    /* ── Body text — wall of justified uppercase mono ── */
     .body-text {
       padding: 80px 32px 0;
       max-width: 100%;
-      position: relative;
     }
     .body-text p {
       font-family: 'JetBrains Mono', monospace;
@@ -126,53 +123,9 @@
       padding-bottom: 0;
     }
 
-    /* SF SILHOUETTE — yellow + blue hand-drawn double outline. */
-    .sf-silhouette {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: min(280px, 36vw);
-      height: auto;
-      z-index: 10;
-      pointer-events: none;
-    }
-    .sf-silhouette svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-    .sf-silhouette path {
-      fill: none;
-      stroke-linejoin: round;
-      stroke-linecap: round;
-      stroke-width: 11;
-      opacity: 0.92;
-      mix-blend-mode: multiply;
-    }
-    .sf-silhouette .stroke-orange {
-      stroke: #FCB827;
-    }
-    .sf-silhouette .stroke-blue {
-      stroke: #5B8FE6;
-      transform: translate(5px, 4px) rotate(-0.6deg);
-      transform-origin: center;
-    }
-    .sf-silhouette .label {
-      display: block;
-      text-align: center;
-      margin-top: 14px;
-      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 9px;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--ink-muted);
-      font-weight: 500;
-    }
-
-    /* LEFT vertical book-spine label — small monospace, runs top-to-bottom
-       along the left edge. Like Japanese book spine signage. */
-    .spine-label {
+    /* LEFT vertical signature — quiet monospace book-spine label.
+       Reads top-to-bottom along the left edge, like museum wall signage. */
+    .signature-block {
       position: fixed;
       writing-mode: vertical-rl;
       text-orientation: mixed;
@@ -193,10 +146,12 @@
       gap: 0.6em;
       z-index: 20;
     }
-    .spine-label .word {
+    .signature-block .line {
       display: inline-block;
+      background: transparent;
+      color: var(--ink);
+      padding: 0;
     }
-
 
     /* LTLYM credit — small inline footnote, no longer a giant block */
     .ltlym-credit {
@@ -221,14 +176,6 @@
 
 <a class="back-link" href="drawing-v13.html">← BACK TO MAP</a>
 
-<div class="spine-label" aria-hidden="true">
-  <span class="word">Where</span>
-  <span class="word">We</span>
-  <span class="word">Were</span>
-  <span class="word">Kimkenny</span>
-  <span class="word">May</span>
-</div>
-
 <main>
   <div class="body-text">
     <p>
@@ -249,14 +196,15 @@
     </p>
   </div>
 
-  <div class="sf-silhouette" aria-hidden="true">
-    <svg viewBox="-8 -8 304 304" xmlns="http://www.w3.org/2000/svg">
-      <g>
-        <path class="stroke-orange" d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/>
-        <path class="stroke-blue" d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/>
-      </g>
-    </svg>
-    <span class="label">San Francisco</span>
+  <div class="reveal-stack">
+    <div class="signature-block" aria-hidden="true">
+      <span class="line">Where</span>
+      <span class="line">We</span>
+      <span class="line">Were</span>
+      <span class="line">Kimkenny</span>
+      <span class="line">May</span>
+    </div>
+
   </div>
 
   <div class="info-row">

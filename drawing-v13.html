@@ -21,9 +21,9 @@
     /* ── Top masthead — split by the spine line at x=220px ── */
     #masthead {
       position: fixed; top: 0; left: 0; right: 0;
-      height: 44px; z-index: 1000;
+      height: 36px; z-index: 1000;
       background: #f7f9f7;
-      border-bottom: 1.5px solid #666;
+      border-bottom: 1.5px solid #bbb;
       display: flex; align-items: center;
       padding: 0;
     }
@@ -40,7 +40,7 @@
     }
     #masthead .title {
       font-family: 'Outfit', 'Helvetica Neue', sans-serif;
-      font-size: 15px; letter-spacing: 0.04em;
+      font-size: 12px; letter-spacing: 0.04em;
       color: #1a1a1a; font-weight: 500;
       text-transform: uppercase;
       line-height: 1;
@@ -61,7 +61,7 @@
     #masthead .title .logo .l-e { transform: translateY(-3px); }
     #masthead .city-center {
       font-family: 'Outfit', 'Helvetica Neue', sans-serif;
-      font-size: 15px;
+      font-size: 12px;
       font-weight: 400;
       color: #1a1a1a;
       letter-spacing: 0.04em;
@@ -75,9 +75,9 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      right: 50px;
+      right: 36px;
       width: 1.5px;
-      background: #666;
+      background: #bbb;
       pointer-events: none;
       z-index: 1001;
     }
@@ -85,8 +85,8 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 50px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
       background: transparent;
       border: none;
       padding: 0;
@@ -94,7 +94,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      color: #1a1a1a;
+      color: #666;
       z-index: 1002;
       transition: background 0.15s ease, color 0.15s ease;
     }
@@ -105,8 +105,8 @@
       position: absolute;
       top: 0;
       right: 0;
-      width: 50px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
       background: transparent;
       border: none;
       padding: 0;
@@ -114,7 +114,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #1a1a1a;
+      color: #666;
       z-index: 1002;
       transition: background 0.15s ease, color 0.15s ease;
     }
@@ -124,7 +124,7 @@
     /* ── Left archive rail — full-height column ── */
     #archive-rail {
       position: fixed;
-      top: 44px;
+      top: 36px;
       left: 0;
       bottom: 36px;
       width: 360px;
@@ -137,11 +137,11 @@
     /* The vertical spine line — runs from below the masthead down to the bottom */
     #archive-spine {
       position: fixed;
-      top: 44px;
+      top: 36px;
       bottom: 0;
       left: 360px;
       width: 1.5px;
-      background: #666;
+      background: #bbb;
       z-index: 1100;
       pointer-events: none;
     }
@@ -157,7 +157,7 @@
       text-align: left;
       background: transparent;
       border: none;
-      border-bottom: 1.5px solid #666;
+      border-bottom: 1.5px solid #bbb;
       padding: 12px 24px;
       cursor: pointer;
       font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
@@ -168,7 +168,7 @@
     /* Top (current) card — full sentence, big text needs a bit more breathing room */
     #archive-list .archive-item.is-current {
       padding: 20px 24px 22px 28px;
-      border-bottom: 1.5px solid #666;
+      border-bottom: 1.5px solid #bbb;
       height: 170px;
       display: flex;
       flex-direction: column;
@@ -177,17 +177,11 @@
       position: relative;
     }
     #archive-list .archive-item.is-current::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 10px;
-      background: #067CFA;
+      display: none;
     }
     #archive-list .archive-item .label {
       font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 500;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -224,7 +218,7 @@
     #archive-list .archive-item.is-current .label .label-word {
       font-family: 'Geist', 'Inter', 'Helvetica Neue', sans-serif;
       font-weight: 400;
-      font-size: 12px;
+      font-size: 11px;
       letter-spacing: 0.04em;
       text-transform: none;
       color: #1a1a1a;
@@ -237,10 +231,10 @@
       position: absolute;
       left: 32px;
       bottom: 19px;
-      color: #1a1a1a;
+      color: #666;
       font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-weight: 700;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       line-height: 1;
@@ -259,9 +253,9 @@
     }
     #archive-list .archive-item.is-current .question {
       font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-size: clamp(22px, 2.1vw, 28px);
+      font-size: clamp(18px, 1.7vw, 22px);
       font-weight: 500;
-      line-height: clamp(34px, 3.2vw, 42px);
+      line-height: clamp(28px, 2.6vw, 34px);
       letter-spacing: 0.005em;
       color: #1a1a1a;
       word-break: normal;
@@ -281,23 +275,14 @@
       padding-left: 26px;
     }
     #archive-list .archive-item.is-past::before {
-      content: '' !important;
-      position: absolute !important;
-      top: 0 !important;
-      bottom: 0 !important;
-      left: 10px !important;
-      width: 7px !important;
-      background: #067CFA !important;
-      pointer-events: none;
-      display: block !important;
-      z-index: 5;
+      display: none !important;
     }
     #archive-list .archive-item.is-past .label {
       margin-bottom: 0;
       flex-shrink: 0;
       font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
       font-weight: 400;
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1;
       color: rgba(26,26,26,0.45);
       letter-spacing: 0.005em;
@@ -307,7 +292,7 @@
     #archive-list .archive-item.is-past .label .label-word { display: none; }
     #archive-list .archive-item.is-past .question {
       font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 400;
       letter-spacing: 0.005em;
       text-transform: none;
@@ -336,9 +321,9 @@
       display: grid;
       grid-template-columns: 1fr 1.5px 1fr;
       align-items: stretch;
-      border-top: 1.5px solid #666;
+      border-top: 1.5px solid #bbb;
       font-family: 'Geist', 'Helvetica Neue', sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       color: rgba(26,26,26,0.30);
       user-select: none;
       min-height: 38px;
@@ -359,12 +344,12 @@
     .archive-pager .pager-btn svg { width: 8px; height: 10px; display: block; }
     .archive-pager .pager-divider {
       width: 1.5px;
-      background: #666;
+      background: #bbb;
       align-self: stretch;
     }
     #archive-list .archive-item.is-past:hover .question { color: #1a1a1a; }
     #archive-list .archive-item.is-past.active .question { color: #1a1a1a; font-weight: 700; }
-    #archive-list .archive-item.is-past.active .label { color: #1a1a1a; font-weight: 700; }
+    #archive-list .archive-item.is-past.active .label { color: #666; font-weight: 700; }
 
     /* ── Answer sheet positioning — vertically centered on the right ── */
     #sheet-wrap {
@@ -394,7 +379,7 @@
     body.spotlight-on #eye-q-banner { display: flex; }
     #eye-q-banner .q-text {
       flex: 1;
-      font-size: 10px;
+      font-size: 9px;
       line-height: 1.5;
       letter-spacing: 0.22em;
       font-weight: 500;
@@ -468,11 +453,11 @@
       transition: opacity 0.3s ease, transform 0.2s ease;
     }
     .eye-toggle .cell { background: transparent; }
-    .eye-toggle .cell.on { background: #666; }
+    .eye-toggle .cell.on { background: #bbb; }
     .eye-toggle:hover { transform: scale(1.08); }
     .eye-toggle.active { opacity: 1; }
     /* Active state: invert — filled cells become empty, empty cells become filled (corners stay invisible) */
-    .eye-toggle.active .cell:not(.corner) { background: #666; }
+    .eye-toggle.active .cell:not(.corner) { background: #bbb; }
     .eye-toggle.active .cell.on { background: transparent; }
     .eye-toggle .cell.corner { background: transparent !important; }
     /* Zoom scale — horizontal line + 3 ticks + diamond, with checkerboard at the right */
@@ -512,7 +497,7 @@
       left: 0;
       width: 8px;
       height: 8px;
-      background: #666;
+      background: #bbb;
       transform: rotate(45deg);
       transform-origin: center center;
       cursor: ew-resize;
@@ -525,7 +510,7 @@
     body.spotlight-on::after {
       content: '';
       position: fixed;
-      top: 44px; bottom: 36px; left: 360px; right: 0;
+      top: 36px; bottom: 36px; left: 360px; right: 0;
       background: rgba(26,26,26,0.30);
       pointer-events: none;
       z-index: 5;
@@ -614,7 +599,7 @@
     #sheet .loc-coords {
       order: 1;
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 400;
       color: rgba(26, 26, 26, 0.55);
       letter-spacing: 0.02em;
@@ -630,7 +615,7 @@
     #sheet .loc-name {
       order: 2;
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
       color: rgba(26, 26, 26, 0.85);
       letter-spacing: 0.08em;
@@ -694,7 +679,7 @@
     }
     #sheet .char-count {
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 400;
       color: rgba(26, 26, 26, 0.40);
       letter-spacing: 0.02em;
@@ -708,7 +693,7 @@
     /* Anonymous handle — muted grey by default, click to edit (turns black) */
     #sheet .handle {
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 400;
       color: rgba(26, 26, 26, 0.40);
       letter-spacing: 0.02em;
@@ -736,7 +721,7 @@
       cursor: pointer;
       padding: 0;
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
       letter-spacing: 0.02em;
       text-transform: none;
@@ -770,7 +755,7 @@
       background: #ED3B36;
       color: #ffffff;
       font-family: 'Geist', 'Helvetica Neue', 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       line-height: 1.4;
       font-weight: 500;
       letter-spacing: 0.01em;
@@ -794,7 +779,7 @@
       min-height: 20px;
       padding: 6px 12px;
       white-space: normal;
-      font-size: 11px;
+      font-size: 10px;
       overflow-wrap: break-word;
       word-break: break-word;
     }
@@ -811,7 +796,7 @@
     #map-pane { cursor: crosshair; }
 
     body {
-      padding-top: 44px;
+      padding-top: 36px;
       padding-bottom: 36px;
       padding-left: 360px;
     }
@@ -829,7 +814,7 @@
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 36px; z-index: 1400;
       background: #f7f9f7;
-      border-top: 1.5px solid #666;
+      border-top: 1.5px solid #bbb;
       display: flex; align-items: center;
       padding: 0;
     }
@@ -842,13 +827,13 @@
       padding: 0 24px;
       box-sizing: border-box;
       font-family: 'Geist', 'Inter', sans-serif;
-      font-size: 11px;
+      font-size: 9px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #1a1a1a;
+      color: #666;
       font-weight: 400;
     }
-    #footer .footer-left .sep { color: rgba(26,26,26,0.4); }
+    #footer .footer-left .sep { color: rgba(102,102,102,0.5); }
     #footer .footer-right {
       flex: 1;
       height: 100%;
@@ -856,8 +841,8 @@
       padding: 0 24px;
     }
     #footer .label {
-      font-size: 11px; letter-spacing: 0.06em;
-      color: #1a1a1a;
+      font-size: 9px; letter-spacing: 0.06em;
+      color: #666;
       font-weight: 400;
       flex: 1;
       display: flex;
@@ -865,31 +850,31 @@
       gap: 12px;
     }
     #footer .label .sep {
-      color: rgba(26,26,26,0.4);
+      color: rgba(102,102,102,0.5);
     }
     #footer .label .strong {
-      color: #1a1a1a;
+      color: #666;
       font-weight: 500;
     }
     #footer .volume {
       margin-left: auto;
       font-family: 'Jacques Francois', 'Times New Roman', serif;
-      font-size: 11px;
+      font-size: 9px;
       font-weight: 400;
-      color: rgba(26,26,26,0.65);
+      color: #666;
       letter-spacing: 0.15em;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    #footer .volume .sep { color: rgba(26,26,26,0.3); }
+    #footer .volume .sep { color: rgba(102,102,102,0.5); }
     #footer .footer-end {
       margin-left: auto;
       font-family: 'Geist', 'Inter', sans-serif;
-      font-size: 11px;
+      font-size: 9px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #1a1a1a;
+      color: #666;
       font-weight: 400;
       display: flex;
       align-items: center;
@@ -902,7 +887,7 @@
       text-decoration-thickness: 1px;
       transition: color 0.15s ease;
     }
-    #footer .footer-end .footer-end-link:hover { color: #1a1a1a; }
+    #footer .footer-end .footer-end-link:hover { color: #1a1a1a; transition: color 0.15s ease; }
 
     /* ── Swiss-graphic pin ── */
     .ink-marker {
@@ -938,7 +923,7 @@
       margin-bottom: 8px;
     }
     .pop .name {
-      font-size: 13px; letter-spacing: 0.16em;
+      font-size: 12px; letter-spacing: 0.16em;
       color: #1a1a1a; font-weight: 500;
       margin-bottom: 8px;
     }
@@ -948,7 +933,7 @@
       margin-bottom: 10px;
     }
     .pop .desc {
-      font-size: 10px; line-height: 1.65; letter-spacing: 0.04em;
+      font-size: 9px; line-height: 1.65; letter-spacing: 0.04em;
       color: rgba(26,26,26,0.65);
     }
     #map { width: 100%; height: 100%; position: relative; }
@@ -957,12 +942,12 @@
     /* ── Answer panel — slides in next to the main question card on pin click ── */
     #answer-panel {
       position: fixed;
-      top: 44px;            /* below masthead */
+      top: 36px;            /* below masthead */
       left: 360px;          /* right of archive rail */
       right: 0;
       height: 0;            /* runtime-set to match main question card height */
       background: #f7f9f7;
-      border-bottom: 1.5px solid #666;
+      border-bottom: 1.5px solid #bbb;
       z-index: 950;
       display: none;
       overflow: hidden;
@@ -981,8 +966,8 @@
     #answer-panel .panel-text {
       font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
       font-weight: 500;
-      font-size: clamp(22px, 2.1vw, 28px);
-      line-height: clamp(34px, 3.2vw, 42px);
+      font-size: clamp(18px, 1.7vw, 22px);
+      line-height: clamp(28px, 2.6vw, 34px);
       letter-spacing: 0.005em;
       color: #1a1a1a;
       max-width: 100%;
@@ -1025,8 +1010,8 @@
       background: transparent;
       font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
       font-weight: 500;
-      font-size: clamp(22px, 2.1vw, 28px);
-      line-height: clamp(34px, 3.2vw, 42px);
+      font-size: clamp(18px, 1.7vw, 22px);
+      line-height: clamp(28px, 2.6vw, 34px);
       letter-spacing: 0.005em;
       color: #1a1a1a;
       padding: 0;
@@ -1038,7 +1023,7 @@
     }
     #answer-panel .panel-hood {
       font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       color: #1a1a1a;
       letter-spacing: 0.08em;
@@ -1063,7 +1048,7 @@
     }
     #answer-panel .panel-handle {
       font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 400;
       color: rgba(26,26,26,0.50);
       letter-spacing: 0.02em;
@@ -1136,7 +1121,7 @@
       bottom: 21px;
       right: 64px;
       font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       color: #1a1a1a;
       letter-spacing: 0.08em;
@@ -1159,7 +1144,7 @@
       height: 50px;
       right: 50px;
       width: 1.5px;
-      background: #666;
+      background: #bbb;
       pointer-events: none;
       z-index: 1;
     }
@@ -1177,7 +1162,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #1a1a1a;
+      color: #666;
       transition: background 0.15s ease, color 0.15s ease;
       z-index: 2;
     }
@@ -1199,7 +1184,7 @@
       right: 0;
       bottom: 50px;
       height: 1.5px;
-      background: #666;
+      background: #bbb;
       pointer-events: none;
       z-index: 1;
     }
@@ -1211,7 +1196,7 @@
       height: 50px;
       right: 100px;
       width: 1.5px;
-      background: #666;
+      background: #bbb;
       pointer-events: none;
       z-index: 1;
     }
@@ -1487,7 +1472,7 @@ map.on('style.load', () => {
       'source-layer': 'contour',
       filter: ['!=', ['%', ['get', 'ele'], 100], 0],
       paint: {
-        'line-color': '#ccc',
+        'line-color': '#bbb',
         'line-width': ['interpolate',['linear'],['zoom'], 11,0.3, 14,0.55],
         'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.5, 14,0.85, 16,0.25],
       }
