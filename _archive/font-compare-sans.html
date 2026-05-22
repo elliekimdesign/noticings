@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pinned — sans-serif comparison</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Archivo:wght@400;500;600;700&family=Space+Grotesque:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&family=Tenor+Sans&family=Outfit:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Onest:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f4f4f5;
+      padding: 60px 80px;
+      font-family: -apple-system, sans-serif;
+    }
+    h1 {
+      font-size: 11px; letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 40px;
+      font-weight: 500;
+    }
+    .row {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      padding: 24px 36px;
+      margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 40px;
+    }
+    .row .label {
+      font-size: 10px; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #888;
+      font-weight: 500;
+      min-width: 220px;
+      flex-shrink: 0;
+    }
+    .row .label .note {
+      display: block;
+      margin-top: 6px;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: #bbb;
+      text-transform: none;
+      font-style: italic;
+    }
+    .sample {
+      flex: 1;
+      text-align: right;
+    }
+    .sample .lower {
+      font-size: 22px;
+      color: #1a1a1a;
+      font-weight: 600;
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .sample .upper {
+      font-size: 14px;
+      letter-spacing: 0.22em;
+      color: #1a1a1a;
+      font-weight: 600;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .inter .sample { font-family: 'Inter', sans-serif; }
+    .intertight .sample { font-family: 'Inter Tight', sans-serif; }
+    .bricolage .sample { font-family: 'Bricolage Grotesque', sans-serif; font-optical-sizing: auto; }
+    .archivo .sample { font-family: 'Archivo', sans-serif; }
+    .spacegrotesk .sample { font-family: 'Space Grotesk', sans-serif; }
+    .dmsans .sample { font-family: 'DM Sans', sans-serif; }
+    .manrope .sample { font-family: 'Manrope', sans-serif; }
+    .jakarta .sample { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .worksans .sample { font-family: 'Work Sans', sans-serif; }
+    .tenor .sample { font-family: 'Tenor Sans', sans-serif; }
+    .outfit .sample { font-family: 'Outfit', sans-serif; }
+    .geist .sample { font-family: 'Geist', sans-serif; }
+    .onest .sample { font-family: 'Onest', sans-serif; }
+    .hanken .sample { font-family: 'Hanken Grotesk', sans-serif; }
+    .albert .sample { font-family: 'Albert Sans', sans-serif; }
+  </style>
+</head>
+<body>
+  <h1>Pinned — Sans-serif Options</h1>
+
+  <div class="row inter">
+    <div class="label">1. Inter <span class="note">the modern default — clean, neutral</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row intertight">
+    <div class="label">2. Inter Tight <span class="note">denser version of Inter — more confident</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row bricolage">
+    <div class="label">3. Bricolage Grotesque <span class="note">current — friendly geometric grotesque</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row geist">
+    <div class="label">4. Geist <span class="note">vercel's font — minimal, designer-y</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row onest">
+    <div class="label">5. Onest <span class="note">warm geometric, slight personality</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row spacegrotesk">
+    <div class="label">6. Space Grotesk <span class="note">techy with character</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row dmsans">
+    <div class="label">7. DM Sans <span class="note">geometric, slightly playful</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row manrope">
+    <div class="label">8. Manrope <span class="note">soft modern grotesque</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row jakarta">
+    <div class="label">9. Plus Jakarta Sans <span class="note">friendly product-focused</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row archivo">
+    <div class="label">10. Archivo <span class="note">previous default — utilitarian</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row worksans">
+    <div class="label">11. Work Sans <span class="note">friendly, slightly humanist</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row outfit">
+    <div class="label">12. Outfit <span class="note">geometric, even, fashion-y</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row hanken">
+    <div class="label">13. Hanken Grotesk <span class="note">subtle, refined, swiss</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row albert">
+    <div class="label">14. Albert Sans <span class="note">warm, slightly quirky</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+  <div class="row tenor">
+    <div class="label">15. Tenor Sans <span class="note">elegant, slightly spaced — thin</span></div>
+    <div class="sample"><div class="lower">Pinned</div><div class="upper">Pinned</div></div>
+  </div>
+
+</body>
+</html>

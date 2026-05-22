@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eye toggle — click state options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f9f7f1;
+      color: #1a1a1a;
+      font-family: 'Geist', sans-serif;
+      min-height: 100vh;
+      padding: 80px 64px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px; color: rgba(26,26,26,0.55);
+      max-width: 580px; line-height: 1.55; margin-bottom: 48px;
+    }
+    ul { list-style: none; }
+    li { border-top: 1px solid rgba(26,26,26,0.18); padding: 18px 0; }
+    li:last-child { border-bottom: 1px solid rgba(26,26,26,0.18); }
+    a { color: #1a1a1a; text-decoration: none; display: block; }
+    .row { display: flex; align-items: baseline; gap: 16px; }
+    .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+      color: #FF8000; width: 24px; flex-shrink: 0;
+    }
+    .name { font-size: 17px; font-weight: 500; }
+    .desc {
+      font-size: 12px; color: rgba(26,26,26,0.55);
+      margin-left: 40px; margin-top: 4px;
+    }
+    a:hover .name { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<h1>Click state options for the freehand circle</h1>
+<p class="lede">Same default mark (the freehand wobbly circle), four different "active" treatments. Click each to compare how the open→active transition feels.</p>
+
+<ul>
+  <li><a href="click-test-A-fill.html">
+    <div class="row"><span class="opt">A</span><span class="name">Fills with orange ink</span></div>
+    <div class="desc">Same wobbly outline; the inside fills with orange. Reads as "the mark is now alive." Visually rhymes with the orange answer pins on the map.</div>
+  </a></li>
+  <li><a href="click-test-B-double.html">
+    <div class="row"><span class="opt">B</span><span class="name">Second circle traces over it</span></div>
+    <div class="desc">A second freehand circle is drawn over the first, slightly different. Like "looking again, looking harder." Hand-drawn through and through.</div>
+  </a></li>
+  <li><a href="click-test-C-thicken.html">
+    <div class="row"><span class="opt">C</span><span class="name">Stroke thickens / presses harder</span></div>
+    <div class="desc">The stroke gets bolder, like the pen pressed harder. Most subtle. Tactile, almost feels like clicking down a pen.</div>
+  </a></li>
+  <li><a href="click-test-D-dash.html">
+    <div class="row"><span class="opt">D</span><span class="name">Small dash appears below</span></div>
+    <div class="desc">The circle stays the same. A small hand-drawn dash appears below it, like a quiet underline / selection mark.</div>
+  </a></li>
+</ul>
+
+</body>
+</html>

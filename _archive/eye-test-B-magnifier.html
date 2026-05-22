@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eye test — B · Magnifier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f9f7f1; color: #1a1a1a; font-family: 'Geist', sans-serif; min-height: 100vh; position: relative; overflow: hidden; }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+    .icon-btn { position: fixed; top: 56px; right: 22px; width: 36px; height: 36px; background: transparent; border: none; padding: 0; cursor: pointer; opacity: 0.55; transition: opacity 0.3s ease, transform 0.2s ease; }
+    .icon-btn:hover { opacity: 0.85; transform: scale(1.06); }
+    .icon-btn.active { opacity: 1; }
+    .icon-btn svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    /* B — magnifier: fills the lens with orange when active */
+    .icon-btn .lens-fill { fill: transparent; transition: fill 0.3s ease; }
+    .icon-btn.active .lens-fill { fill: #FF8000; }
+    .label-stack { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .opt { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: #FF8000; margin-bottom: 8px; }
+    .name { font-family: 'Geist', sans-serif; font-size: 28px; font-weight: 500; letter-spacing: -0.005em; color: #1a1a1a; margin-bottom: 12px; }
+    .hint { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.45); }
+  </style>
+</head>
+<body>
+
+<a class="back" href="eye-test-INDEX.html">← all options</a>
+
+<button class="icon-btn" id="icon" title="Click to toggle">
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Lens -->
+    <circle class="lens-fill" cx="13" cy="13" r="8.5"/>
+    <circle cx="13" cy="13" r="8.5"/>
+    <!-- Lens highlight (small inner crescent) -->
+    <path d="M 8 9 Q 9 7 11 6.5" stroke-width="0.9"/>
+    <!-- Handle, slightly tilted -->
+    <line x1="19.4" y1="19.4" x2="27" y2="27"/>
+    <!-- Handle grip end -->
+    <line x1="26" y1="26" x2="28.5" y2="28.5" stroke-width="2.2"/>
+  </svg>
+</button>
+
+<div class="label-stack">
+  <div class="opt">OPTION B</div>
+  <div class="name">Magnifying glass</div>
+  <div class="hint">click the icon (top right)</div>
+</div>
+
+<script>
+  document.getElementById('icon').addEventListener('click', e => e.currentTarget.classList.toggle('active'));
+</script>
+</body>
+</html>

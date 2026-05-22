@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eye toggle — icon comparison</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f9f7f1;
+      color: #1a1a1a;
+      font-family: 'Geist', 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      padding: 80px 64px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px;
+      color: rgba(26,26,26,0.55);
+      margin-bottom: 48px;
+      max-width: 540px;
+      line-height: 1.55;
+    }
+    ul { list-style: none; }
+    li {
+      border-top: 1px solid rgba(26,26,26,0.18);
+      padding: 18px 0;
+    }
+    li:last-child { border-bottom: 1px solid rgba(26,26,26,0.18); }
+    a {
+      color: #1a1a1a;
+      text-decoration: none;
+      display: block;
+      font-family: 'Geist', sans-serif;
+    }
+    .row { display: flex; align-items: baseline; gap: 16px; }
+    .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: #FF8000;
+      width: 24px;
+      flex-shrink: 0;
+    }
+    .name {
+      font-size: 17px;
+      font-weight: 500;
+    }
+    .desc {
+      font-size: 12px;
+      color: rgba(26,26,26,0.55);
+      margin-left: 40px;
+      margin-top: 4px;
+    }
+    a:hover .name { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<h1>Eye toggle — icon options</h1>
+<p class="lede">Seven directions for the spotlight-mode toggle. Each opens its own preview page — click to compare. The icon sits in the same top-right position and at the same real size as it would on the live page.</p>
+
+<ul>
+  <li><a href="eye-test-A-hand.html">
+    <div class="row"><span class="opt">A</span><span class="name">Victorian pointing hand</span></div>
+    <div class="desc">Reuses the hand-drawn hand already used for the pending pin marker. Most consistent with the project's visual language.</div>
+  </a></li>
+  <li><a href="eye-test-B-magnifier.html">
+    <div class="row"><span class="opt">B</span><span class="name">Magnifying glass</span></div>
+    <div class="desc">Hand-drawn line magnifier. Says "look closer" without the surveillance feeling of an eye.</div>
+  </a></li>
+  <li><a href="eye-test-C-shutter.html">
+    <div class="row"><span class="opt">C</span><span class="name">Shutter / slats</span></div>
+    <div class="desc">Two pairs of vertical slats. Active state: slats spread apart, like peeking through a window.</div>
+  </a></li>
+  <li><a href="eye-test-D-curtain.html">
+    <div class="row"><span class="opt">D</span><span class="name">Theatre curtain</span></div>
+    <div class="desc">Small curtain. Active state: curtains pull aside. Theatrical, fits the "small private window" idea.</div>
+  </a></li>
+  <li><a href="eye-test-E-constellation.html">
+    <div class="row"><span class="opt">E</span><span class="name">Constellation</span></div>
+    <div class="desc">Three loose dots. Active state: thin lines connect them into a constellation. Says "the dots connect now."</div>
+  </a></li>
+  <li><a href="eye-test-F-sunmoon.html">
+    <div class="row"><span class="opt">F</span><span class="name">Sun → moon</span></div>
+    <div class="desc">Small sun with rays. Active state: morphs into a crescent moon. Most universally legible.</div>
+  </a></li>
+  <li><a href="eye-test-G-binoculars.html">
+    <div class="row"><span class="opt">G</span><span class="name">Binoculars</span></div>
+    <div class="desc">Line-drawn binoculars. Charming, distinctive, says "looking from afar at strangers' lives."</div>
+  </a></li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Print test — 6 · Tarot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f9f7f1; color: #1a1a1a; font-family: 'Geist', sans-serif; min-height: 100vh; position: relative; overflow: hidden; }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+    .icon-btn { position: fixed; top: 56px; right: 22px; width: 56px; height: 56px; background: transparent; border: none; padding: 0; cursor: pointer; opacity: 0.85; transition: opacity 0.3s ease, transform 0.2s ease; }
+    .icon-btn:hover { opacity: 1; transform: scale(1.04); }
+    .icon-btn.active { opacity: 1; }
+    .icon-btn svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    /* Tarot: card flips horizontally on click — like flipping a card over */
+    .icon-btn .card { transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1); transform-origin: 28px 28px; }
+    .icon-btn.active .card { transform: rotateY(0deg) scale(1.02); }
+    /* The "rays" emanating from the eye glow on active */
+    .icon-btn .ray { opacity: 0; transition: opacity 0.4s ease; }
+    .icon-btn.active .ray { opacity: 1; }
+    .label-stack { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .opt { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: #FF8000; margin-bottom: 8px; }
+    .name { font-family: 'Geist', sans-serif; font-size: 28px; font-weight: 500; letter-spacing: -0.005em; margin-bottom: 12px; }
+    .hint { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.45); }
+  </style>
+</head>
+<body>
+
+<a class="back" href="print-test-INDEX.html">← all options</a>
+
+<button class="icon-btn" id="icon" title="Click to toggle">
+  <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+    <g class="card" fill="none" stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Card outer rectangle (slightly tall, like a tarot card) -->
+      <rect x="11" y="6" width="34" height="44" rx="1.5" stroke-width="1.6" fill="#f9f7f1"/>
+      <!-- Inner double-rule frame -->
+      <rect x="14" y="9" width="28" height="38" rx="0.6" stroke-width="0.6"/>
+      <!-- Top corner pip (small star) -->
+      <text x="17" y="15" font-family="serif" font-size="6" fill="#1a1a1a" stroke="none">✦</text>
+      <text x="39" y="15" font-family="serif" font-size="6" fill="#1a1a1a" stroke="none">✦</text>
+      <!-- Center: triangle/eye-of-providence -->
+      <path d="M 17 36 L 39 36 L 28 18 Z" stroke-width="1"/>
+      <!-- Eye inside triangle -->
+      <ellipse cx="28" cy="29" rx="6" ry="3.5" fill="#f9f7f1" stroke-width="1"/>
+      <circle cx="28" cy="29" r="2" fill="#1a1a1a" stroke="none"/>
+      <!-- Rays emanating from eye (visible when active) -->
+      <g class="ray" stroke="#FF8000" stroke-width="0.8">
+        <line x1="28" y1="22" x2="28" y2="20"/>
+        <line x1="22" y1="29" x2="20" y2="29"/>
+        <line x1="34" y1="29" x2="36" y2="29"/>
+        <line x1="24" y1="25" x2="22.5" y2="23.5"/>
+        <line x1="32" y1="25" x2="33.5" y2="23.5"/>
+      </g>
+      <!-- Bottom roman-numeral label box -->
+      <text x="28" y="44" font-family="serif" font-size="5" fill="#1a1a1a" stroke="none" text-anchor="middle">VII</text>
+    </g>
+  </svg>
+</button>
+
+<div class="label-stack">
+  <div class="opt">OPTION 6</div>
+  <div class="name">Tarot / oracle card</div>
+  <div class="hint">click the icon (top right)</div>
+</div>
+
+<script>
+  document.getElementById('icon').addEventListener('click', e => e.currentTarget.classList.toggle('active'));
+</script>
+</body>
+</html>

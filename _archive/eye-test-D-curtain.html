@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eye test — D · Curtain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f9f7f1; color: #1a1a1a; font-family: 'Geist', sans-serif; min-height: 100vh; position: relative; overflow: hidden; }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+    .icon-btn { position: fixed; top: 56px; right: 22px; width: 36px; height: 36px; background: transparent; border: none; padding: 0; cursor: pointer; opacity: 0.55; transition: opacity 0.3s ease, transform 0.2s ease; }
+    .icon-btn:hover { opacity: 0.85; transform: scale(1.06); }
+    .icon-btn.active { opacity: 1; }
+    .icon-btn svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    /* D — curtain: panels pull aside */
+    .icon-btn .panel { transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1); transform-origin: 16px 16px; }
+    .icon-btn.active .left  { transform: translateX(-5px) scaleX(0.55); }
+    .icon-btn.active .right { transform: translateX(5px)  scaleX(0.55); }
+    .label-stack { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .opt { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: #FF8000; margin-bottom: 8px; }
+    .name { font-family: 'Geist', sans-serif; font-size: 28px; font-weight: 500; letter-spacing: -0.005em; color: #1a1a1a; margin-bottom: 12px; }
+    .hint { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.45); }
+  </style>
+</head>
+<body>
+
+<a class="back" href="eye-test-INDEX.html">← all options</a>
+
+<button class="icon-btn" id="icon" title="Click to toggle">
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#1a1a1a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="#f9f7f1">
+    <!-- Curtain rod -->
+    <line x1="4" y1="6" x2="28" y2="6" stroke-width="1.6"/>
+    <!-- Left panel — wavy gathered curtain -->
+    <path class="panel left" d="M 6 7 Q 7.5 12 6.5 16 Q 8 20 6.5 24 L 12 24 Q 13 20 12 16 Q 13.5 12 12 7 Z"/>
+    <!-- Right panel — wavy gathered curtain -->
+    <path class="panel right" d="M 26 7 Q 24.5 12 25.5 16 Q 24 20 25.5 24 L 20 24 Q 19 20 20 16 Q 18.5 12 20 7 Z"/>
+  </svg>
+</button>
+
+<div class="label-stack">
+  <div class="opt">OPTION D</div>
+  <div class="name">Theatre curtain</div>
+  <div class="hint">click the icon (top right)</div>
+</div>
+
+<script>
+  document.getElementById('icon').addEventListener('click', e => e.currentTarget.classList.toggle('active'));
+</script>
+</body>
+</html>

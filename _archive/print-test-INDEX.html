@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eye toggle — print flavor comparison</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f9f7f1;
+      color: #1a1a1a;
+      font-family: 'Geist', sans-serif;
+      min-height: 100vh;
+      padding: 80px 64px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px; color: rgba(26,26,26,0.55);
+      max-width: 580px; line-height: 1.55; margin-bottom: 48px;
+    }
+    ul { list-style: none; }
+    li {
+      border-top: 1px solid rgba(26,26,26,0.18);
+      padding: 18px 0;
+    }
+    li:last-child { border-bottom: 1px solid rgba(26,26,26,0.18); }
+    a { color: #1a1a1a; text-decoration: none; display: block; }
+    .row { display: flex; align-items: baseline; gap: 16px; }
+    .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+      color: #FF8000; width: 24px; flex-shrink: 0;
+    }
+    .name { font-size: 17px; font-weight: 500; }
+    .desc {
+      font-size: 12px; color: rgba(26,26,26,0.55);
+      margin-left: 40px; margin-top: 4px;
+    }
+    a:hover .name { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<h1>Eye toggle — print flavor options</h1>
+<p class="lede">Seven directions for the spotlight-mode toggle, each rendered in a different "printed thing" aesthetic. Click each to see it at real button size in the top-right corner. The button is 56px in the previews so each flavor's character and texture actually read.</p>
+
+<ul>
+  <li><a href="print-test-1-encyclopedia.html">
+    <div class="row"><span class="opt">1</span><span class="name">Old encyclopedia / wood engraving</span></div>
+    <div class="desc">Dense crosshatched line-drawn illustration. Vibe: Diderot's Encyclopédie, vintage natural-history plates. The eye is rendered as a Victorian wood-engraved illustration.</div>
+  </a></li>
+  <li><a href="print-test-2-cartouche.html">
+    <div class="row"><span class="opt">2</span><span class="name">Map cartouche / compass rose</span></div>
+    <div class="desc">Vintage cartographic ornament. Vibe: nautical chart, 17th-c. portolan. The eye is a small compass star with decorative frame.</div>
+  </a></li>
+  <li><a href="print-test-3-zine.html">
+    <div class="row"><span class="opt">3</span><span class="name">Zine / risograph</span></div>
+    <div class="desc">Rough hand-drawn line, slight off-register orange "ink" behind black. Vibe: art-school zine, Riso print. Imperfect on purpose.</div>
+  </a></li>
+  <li><a href="print-test-4-letterpress.html">
+    <div class="row"><span class="opt">4</span><span class="name">Letterpress block / playbill ornament</span></div>
+    <div class="desc">A small ornamental block, like a fleuron or printer's mark. Vibe: Hatch Show Print, Victorian playbill. Composed not iconic.</div>
+  </a></li>
+  <li><a href="print-test-5-childrens.html">
+    <div class="row"><span class="opt">5</span><span class="name">Children's book / mid-century</span></div>
+    <div class="desc">Soft, slightly naive eye with personality. Vibe: Tomi Ungerer, Saul Steinberg, Dick Bruna. Friendly, never threatening.</div>
+  </a></li>
+  <li><a href="print-test-6-tarot.html">
+    <div class="row"><span class="opt">6</span><span class="name">Tarot / oracle card</span></div>
+    <div class="desc">An eye in a heraldic frame, like a card pip. Vibe: Rider-Waite, Marseille deck. Symbolic, archetypal.</div>
+  </a></li>
+  <li><a href="print-test-7-botanical.html">
+    <div class="row"><span class="opt">7</span><span class="name">Botanical specimen plate</span></div>
+    <div class="desc">An eye drawn as a labeled botanical specimen — petals as eyelashes, observational line. Vibe: 19th-c. botany book.</div>
+  </a></li>
+</ul>
+
+</body>
+</html>

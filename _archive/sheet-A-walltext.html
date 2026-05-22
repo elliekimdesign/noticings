@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sheet A — Wall Text</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,1,400&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f4f4f5;
+      min-height: 100vh;
+      padding: 60px;
+      font-family: 'Geist', sans-serif;
+    }
+    .label {
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: #999; font-weight: 500; margin-bottom: 30px;
+    }
+    .stage {
+      background: #fff;
+      width: 100%; max-width: 720px;
+      min-height: 480px;
+      padding: 80px 60px 60px;
+      position: relative;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    /* — The actual design — */
+    .meta-tag {
+      font-family: 'Geist', sans-serif;
+      font-size: 9px; letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.5);
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+    .meta-tag .dot {
+      display: inline-block;
+      width: 4px; height: 4px;
+      background: #c89a3e;
+      border-radius: 50%;
+      margin: 0 10px;
+      vertical-align: middle;
+    }
+    .answer-line {
+      font-family: 'Fraunces', serif;
+      font-optical-sizing: auto;
+      font-size: 56px;
+      line-height: 1.05;
+      font-weight: 300;
+      color: #1a1a1a;
+      letter-spacing: -0.02em;
+      margin-bottom: 40px;
+      min-height: 60px;
+      position: relative;
+    }
+    .answer-line .placeholder {
+      color: rgba(26,26,26,0.18);
+      font-style: italic;
+    }
+    .answer-line .cursor {
+      display: inline-block;
+      width: 2px; height: 0.85em;
+      background: #c89a3e;
+      vertical-align: -0.05em;
+      margin-left: 4px;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .pin-action {
+      font-family: 'Geist', sans-serif;
+      font-size: 11px; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #c89a3e;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 1px solid #c89a3e;
+      padding-bottom: 3px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="label">A — Wall Text · inspired by Lawrence Weiner / Jenny Holzer</div>
+  <div class="stage">
+    <div class="meta-tag">Mission Dolores <span class="dot"></span> 4:12 PM</div>
+    <div class="answer-line">
+      <span class="placeholder">a quiet bench by the palm trees<span class="cursor"></span></span>
+    </div>
+    <div class="pin-action">pin to map →</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sheet B — Color Field</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,1,400&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f4f4f5;
+      min-height: 100vh;
+      padding: 60px;
+      font-family: 'Geist', sans-serif;
+    }
+    .label {
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: #999; font-weight: 500; margin-bottom: 30px;
+    }
+    .stage {
+      width: 100%; max-width: 480px;
+      min-height: 320px;
+      position: relative;
+      background: #c89a3e;
+      padding: 36px 32px 32px;
+      display: flex; flex-direction: column;
+    }
+    /* — The actual design — */
+    .placard {
+      font-family: 'Geist', sans-serif;
+      font-size: 9px; letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+    .placard .place {
+      color: #fff;
+      font-weight: 600;
+    }
+    .answer {
+      font-family: 'Fraunces', serif;
+      font-optical-sizing: auto;
+      font-size: 32px; line-height: 1.15;
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: -0.01em;
+      flex: 1;
+      min-height: 100px;
+    }
+    .answer .placeholder {
+      color: rgba(255,255,255,0.45);
+      font-style: italic;
+    }
+    .answer .cursor {
+      display: inline-block;
+      width: 2px; height: 0.85em;
+      background: #1a1a1a;
+      vertical-align: -0.05em;
+      margin-left: 4px;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    /* Bauhaus corner block */
+    .pin-block {
+      position: absolute;
+      bottom: 0; right: 0;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 14px 22px;
+      font-family: 'Geist', sans-serif;
+      font-size: 11px; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .pin-block:hover { background: #fff; color: #1a1a1a; }
+  </style>
+</head>
+<body>
+  <div class="label">B — Color Field · inspired by Ellsworth Kelly / Rothko / Bauhaus</div>
+  <div class="stage">
+    <div class="placard"><span class="place">Mission Dolores</span> &nbsp;·&nbsp; 37.7635° N &nbsp;·&nbsp; 4:12 PM</div>
+    <div class="answer">
+      <span class="placeholder">a quiet bench by the palm trees<span class="cursor"></span></span>
+    </div>
+    <div class="pin-block">Pin it</div>
+  </div>
+</body>
+</html>

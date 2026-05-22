@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Answer Sheet — 4 Directions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,1,400&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f4f4f5;
+      min-height: 100vh;
+      padding: 60px;
+      font-family: 'Geist', sans-serif;
+      color: #1a1a1a;
+    }
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 32px; font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+    p {
+      font-size: 13px; color: #666; margin-bottom: 40px;
+      max-width: 640px; line-height: 1.5;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex; flex-direction: column;
+      min-height: 220px;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    .card .tag {
+      font-size: 9px; letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #999;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    .card h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 26px; font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .card .ref {
+      font-size: 11px; color: #888;
+      font-style: italic;
+      margin-bottom: 16px;
+      font-family: 'Fraunces', serif;
+    }
+    .card .desc {
+      font-size: 13px; line-height: 1.55;
+      color: #333;
+      flex: 1;
+    }
+    .card .arrow {
+      font-size: 11px; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #c89a3e;
+      font-weight: 500;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Four answer sheet directions</h1>
+  <p>Each link opens a static mockup of the answer sheet in a different artistic direction. Look at all four, pick your favorite — then I'll wire it into the live <code>drawing-v13.html</code>.</p>
+  <div class="grid">
+    <a class="card" href="sheet-A-walltext.html">
+      <div class="tag">Direction A</div>
+      <h2>Wall Text</h2>
+      <div class="ref">Lawrence Weiner · Jenny Holzer</div>
+      <div class="desc">No box, no border. The answer becomes oversized Fraunces text floating directly on the canvas — like a gallery wall declaration. Bold, statement-driven.</div>
+      <div class="arrow">View →</div>
+    </a>
+
+    <a class="card" href="sheet-B-colorfield.html">
+      <div class="tag">Direction B</div>
+      <h2>Color Field</h2>
+      <div class="ref">Ellsworth Kelly · Rothko · Bauhaus</div>
+      <div class="desc">The sheet IS a color — a saturated gold block with white text inside. The submit button is a contrasting dark block tucked into one corner.</div>
+      <div class="arrow">View →</div>
+    </a>
+
+    <a class="card" href="sheet-C-grid.html">
+      <div class="tag">Direction C</div>
+      <h2>Grid &amp; Silence</h2>
+      <div class="ref">Agnes Martin</div>
+      <div class="desc">A faint 3×3 gold grid divides the sheet. Each piece of content lives in its own cell — most cells stay empty on purpose. Quiet, meditative.</div>
+      <div class="arrow">View →</div>
+    </a>
+
+    <a class="card" href="sheet-D-poetry.html">
+      <div class="tag">Direction D</div>
+      <h2>Concrete Poetry</h2>
+      <div class="ref">Ed Ruscha</div>
+      <div class="desc">Asymmetric typographic composition. The location is HUGE Fraunces breaking the edge. The input sits offset like a line of verse. The button is just "pin." as final punctuation.</div>
+      <div class="arrow">View →</div>
+    </a>
+  </div>
+</body>
+</html>

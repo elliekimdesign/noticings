@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eye test — A · Victorian hand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f9f7f1;
+      color: #1a1a1a;
+      font-family: 'Geist', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    .back {
+      position: fixed; top: 24px; left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a1a1a; text-decoration: none; opacity: 0.55;
+    }
+    .back:hover { opacity: 1; }
+    .icon-btn {
+      position: fixed; top: 56px; right: 22px;
+      width: 36px; height: 36px;
+      background: transparent; border: none; padding: 0;
+      cursor: pointer; opacity: 0.55;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+    .icon-btn:hover { opacity: 0.85; transform: scale(1.06); }
+    .icon-btn.active { opacity: 1; }
+    .icon-btn svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    /* A — hand: rotates slightly when active to "wave" */
+    .icon-btn.active svg { transform: rotate(-6deg); transition: transform 0.4s ease; }
+    .label-stack {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.16em;
+      color: #FF8000; margin-bottom: 8px;
+    }
+    .name {
+      font-family: 'Geist', sans-serif;
+      font-size: 28px; font-weight: 500; letter-spacing: -0.005em;
+      color: #1a1a1a; margin-bottom: 12px;
+    }
+    .hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+    }
+  </style>
+</head>
+<body>
+
+<a class="back" href="eye-test-INDEX.html">← all options</a>
+
+<button class="icon-btn" id="icon" title="Click to toggle">
+  <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#fff" stroke="#1a1a1a" stroke-width="1" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M 30 4 L 46 8 L 46 16 L 30 12 Z" />
+      <line x1="32" y1="6" x2="46" y2="9.5" stroke-width="0.6" />
+      <line x1="32" y1="11" x2="46" y2="14.5" stroke-width="0.6" />
+      <circle cx="42" cy="11" r="1" fill="#1a1a1a" stroke="none" />
+      <path d="M 30 4 L 30 12 L 26 13 Q 22 14 20 17 L 18 21 Q 18 24 22 25 L 28 25 L 32 25 L 36 25 Q 40 24 40 20 L 40 10 Q 40 6 36 5 Z" />
+      <path d="M 26 13 Q 22 16 18 22 L 14 30 Q 12 34 10 38 L 13 38 Q 16 35 20 30 L 24 24 Q 27 20 27 16 Q 27 13 26 13 Z" />
+      <path d="M 10.5 36.5 Q 12 36.8 13 37 L 12.5 38 Q 11 38.2 10 38 Z" fill="#1a1a1a" stroke-width="0.5" />
+      <path d="M 27 16 Q 31 17 32 21 Q 32 24 30 25 Q 27 25 26 23" stroke-width="0.9" />
+      <path d="M 30 18 Q 34 19 35 22 Q 35 24 32 25 Q 30 25 29 24" stroke-width="0.9" />
+      <path d="M 33 20 Q 36 21 36 23 Q 36 25 34 25 Q 32 25 32 24" stroke-width="0.9" />
+      <path d="M 24 24 Q 26 26 30 26 Q 28 28 24 27 Z" stroke-width="0.8" />
+    </g>
+  </svg>
+</button>
+
+<div class="label-stack">
+  <div class="opt">OPTION A</div>
+  <div class="name">Victorian pointing hand</div>
+  <div class="hint">click the icon (top right)</div>
+</div>
+
+<script>
+  document.getElementById('icon').addEventListener('click', e => e.currentTarget.classList.toggle('active'));
+</script>
+</body>
+</html>

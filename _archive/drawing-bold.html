@@ -863,7 +863,7 @@
     /* ── Map: fills the right column between masthead and footer ── */
     #map-pane {
       width: calc(100vw - 320px);
-      height: calc(100vh - 72px);   /* masthead 36 + footer 36 */
+      height: calc(100vh - 80px);
       position: relative;
       background: #f4f4f5; /* match map land color so resizes don't flash the page bg */
     }
@@ -1650,53 +1650,14 @@
       padding-bottom: 48px !important;
     }
 
-    /* Active card — keep original 170px height + padding, but put
-       the issue number and question on the SAME ROW (12  question).
-       Background matches the map's water base color (#fafaf7) —
-       warm off-white / soft beige, no dot texture. */
-    #archive-list .archive-item.is-current {
-      background: #fafaf7 !important;
-    }
+    /* Active card — hide both the top header row (`01 [Assignment]`)
+       and the ASSIGNMENT tag. Card shows only the big question text,
+       cleanly framed by breathing space above and below. */
     #archive-list .archive-item.is-current .assignment-tag {
       display: none !important;
     }
-    /* Make the active card's children sit side-by-side at the top */
-    #archive-list .archive-item.is-current {
-      flex-direction: row !important;
-      align-items: baseline !important;
-      gap: 14px !important;
-    }
     #archive-list .archive-item.is-current > .label {
-      flex-shrink: 0 !important;
-      width: 32px !important;
-      margin-bottom: 0 !important;
-    }
-    #archive-list .archive-item.is-current .label .issue-no {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
-      font-weight: 500 !important;
-      font-size: 14px !important;
-      font-style: normal !important;
-      letter-spacing: 0 !important;
-      text-transform: none !important;
-      color: var(--accent, #D9531E) !important;
-      line-height: 1.3 !important;
-      margin: 0 !important;
-    }
-    #archive-list .archive-item.is-current .question {
-      font-size: clamp(17px, 1.6vw, 20px) !important;
-      line-height: clamp(26px, 2.4vw, 30px) !important;
-    }
-    #answer-panel .panel-text {
-      font-size: clamp(17px, 1.6vw, 20px) !important;
-      line-height: clamp(26px, 2.4vw, 30px) !important;
-    }
-    #answer-panel .panel-input {
-      font-size: clamp(17px, 1.6vw, 20px) !important;
-      line-height: clamp(26px, 2.4vw, 30px) !important;
-    }
-    #archive-list .archive-item.is-current .question {
-      flex: 1 !important;
-      -webkit-line-clamp: unset !important;
+      display: none !important;
     }
 
     /* ─── Circular-text logo (no background, bottom-left of map) ──────
@@ -1706,18 +1667,13 @@
        Decorative — pointer-events off; hides in eye mode. */
     #map-badge {
       position: fixed;
-      right: 16px;
+      left: calc(320px + 16px);
       bottom: calc(36px + 16px);
       width: 130px;
       height: 130px;
       pointer-events: none;
       z-index: 600;
       color: var(--accent, #D9531E);
-    }
-    /* Crumpled-paper / worn-ink effect applied to the center PINNED
-       wordmark only — leaves the ring text and bridge mark sharp. */
-    #map-badge .center-text {
-      filter: url(#pinned-crumple);
     }
     #map-badge .sf-mark { fill: none; stroke: currentColor; }
     #map-badge svg {
@@ -1748,103 +1704,210 @@
     }
     body.spotlight-on #map-badge { display: none !important; }
 
-    /* Zoom-scale moved from bottom-right → top-right of map (under masthead).
-       When the answer panel is open it drops below the panel so it doesn't
-       sit under the panel chrome. */
-    .zoom-scale {
-      top: calc(36px + 16px) !important;
-      bottom: auto !important;
-      transition: top 0.25s ease;
-    }
-    body.panel-open .zoom-scale {
-      top: calc(36px + 170px + 16px) !important;
+    /* ════════════════════════════════════════════════════════════════════
+       ░░  BOLD VARIANT — audacious typography + grid + accent  ░░
+       Pushes the page out of "quiet editorial" into "magazine cover":
+       giant display-serif active question, taller masthead with big
+       issue number, wider archive rail with recency-graded rows,
+       orange used as a surface color (not just a point).
+       Layout breaks (320 → 380, 36 → 56) cascade through fixed-position
+       elements so every reference to those numbers needs an override.
+       ════════════════════════════════════════════════════════════════════ */
+
+    :root {
+      --rail-w: 380px;
+      --bar-h: 56px;
+      --bar-h-foot: 56px;
     }
 
-    /* Lift the eye-toggle (checker button) out of the zoom-scale row and
-       pin it to the masthead's left cell, on the same row as PINNED. */
-    .zoom-scale #eye-toggle {
-      position: fixed !important;
-      top: 11px !important;
-      left: 24px !important;
-      bottom: auto !important;
-      z-index: 1100;
-      pointer-events: auto;
+    /* ─── Body padding tracks new bar/rail sizes ─── */
+    body {
+      padding-top: var(--bar-h) !important;
+      padding-bottom: var(--bar-h-foot) !important;
+      padding-left: var(--rail-w) !important;
     }
-    /* SF outline icon replaces the checker pattern. */
-    .zoom-scale #eye-toggle {
-      width: 18px !important;
-      height: 18px !important;
-      display: inline-flex !important;
-      color: var(--edge, #1a1a1a);
+
+    /* ─── Masthead: taller, bigger logo, with giant ISSUE NUMBER ─── */
+    #masthead {
+      height: var(--bar-h) !important;
+      border-bottom: 1.5px solid var(--edge, #1a1a1a) !important;
     }
-    .zoom-scale #eye-toggle .sf-outline {
-      width: 100%;
-      height: 100%;
-      display: block;
+    #masthead .masthead-center {
+      gap: 12px !important;
     }
-    /* Active state: ink flips to orange. */
-    .zoom-scale #eye-toggle.active {
+    #masthead .title .logo {
+      font-size: 14px !important;
+      letter-spacing: 0.06em !important;
+    }
+    #masthead .title .logo span {
+      font-size: inherit !important;
+    }
+    #masthead .city-center {
+      font-size: 14px !important;
+      letter-spacing: 0.06em !important;
+    }
+    #masthead .masthead-vdivider {
+      right: 56px !important;
+      background: var(--edge) !important;
+      width: 1.5px !important;
+    }
+    #masthead .masthead-close,
+    #masthead .masthead-add {
+      width: 56px !important;
+      height: var(--bar-h) !important;
+    }
+
+    /* Giant issue-number plate floating at left of masthead */
+    #masthead::before {
+      content: "№ 12";
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Instrument Serif', 'Cormorant Infant', 'Didot', serif;
+      font-style: italic;
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
       color: var(--accent, #D9531E);
-    }
-    /* Hide any leftover .cell elements (defensive). */
-    .zoom-scale #eye-toggle .cell { display: none !important; }
-
-    /* Footer text balanced with the rest of the page (9px → 12px). */
-    #footer .footer-left,
-    #footer .label,
-    #footer .footer-end {
-      font-size: 12px !important;
-      letter-spacing: 0.08em !important;
-    }
-    /* Middle: coordinates + city in monospace — small data line,
-       full charcoal, distinct from the bold uppercase chrome on the
-       sides (different shape, same ink weight = harmonized). */
-    #footer .label,
-    #footer .label span {
-      font-family: 'JetBrains Mono', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace !important;
-      font-style: normal !important;
-      font-size: 11px !important;
-      font-weight: 400 !important;
-      letter-spacing: 0.04em !important;
-      color: var(--edge, #1a1a1a) !important;
-      text-transform: uppercase !important;
-    }
-    /* Stronger weight on the bookend labels so they read as headers */
-    #footer .footer-left,
-    #footer .footer-end {
-      font-weight: 700 !important;
-      letter-spacing: 0.1em !important;
+      line-height: 1;
+      z-index: 1001;
+      pointer-events: none;
     }
 
-    /* ─── Archive row hierarchy fix ──────────────────────────────────
-       Problem: archive rows were monospace + full-black, competing with
-       the active question for visual priority. Fix:
-       1. Switch row font from JetBrains Mono → Jost so the rows live
-          in the same type family as the active question (one voice).
-       2. Mute row question text to grey — active question stays black
-          (primary), archive rows step back as secondary scan-text.
-       3. Issue number stays orange (a quiet scanning anchor on the left).
-       4. On hover the row darkens back to full ink, signaling it's
-          interactive. */
+    /* ─── Archive rail: wider, with bigger row spacing and weight grading ─── */
+    #archive-rail {
+      top: var(--bar-h) !important;
+      bottom: var(--bar-h-foot) !important;
+      width: var(--rail-w) !important;
+    }
+    #archive-spine {
+      top: var(--bar-h) !important;
+      left: var(--rail-w) !important;
+      background: var(--edge) !important;
+      width: 1.5px !important;
+    }
+    #archive-list .archive-item.is-past {
+      padding: 14px 32px !important;
+      min-height: 44px !important;
+    }
+    /* Recency grading — first past row (most recent, #11) is heaviest,
+       last (#01) is faintest. Achieved via nth-child opacity scale. */
+    #archive-list .archive-item.is-past .label,
+    #archive-list .archive-item.is-past .question {
+      transition: opacity 0.2s ease;
+    }
+    /* Row indices: is-current is row 1; is-past starts at row 2.
+       11 past rows total → opacity from 1.0 down to 0.45. */
+    #archive-list li:nth-child(2) .archive-item.is-past  { opacity: 1.00; }
+    #archive-list li:nth-child(3) .archive-item.is-past  { opacity: 0.92; }
+    #archive-list li:nth-child(4) .archive-item.is-past  { opacity: 0.84; }
+    #archive-list li:nth-child(5) .archive-item.is-past  { opacity: 0.76; }
+    #archive-list li:nth-child(6) .archive-item.is-past  { opacity: 0.68; }
+    #archive-list li:nth-child(7) .archive-item.is-past  { opacity: 0.60; }
+    #archive-list li:nth-child(8) .archive-item.is-past  { opacity: 0.54; }
+    #archive-list li:nth-child(9) .archive-item.is-past  { opacity: 0.50; }
+    #archive-list li:nth-child(10) .archive-item.is-past { opacity: 0.46; }
+    #archive-list li:nth-child(11) .archive-item.is-past { opacity: 0.42; }
+    #archive-list li:nth-child(12) .archive-item.is-past { opacity: 0.38; }
+    #archive-list .archive-item.is-past:hover { opacity: 1 !important; }
+
     #archive-list .archive-item.is-past .label {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
-      font-weight: 500 !important;
       font-size: 13px !important;
+      font-weight: 700 !important;
+      color: var(--accent) !important;
     }
     #archive-list .archive-item.is-past .question {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
-      font-size: 15px !important;
-      color: rgba(26, 26, 26, 0.55) !important;
+      font-size: 14px !important;
+      color: var(--edge) !important;
     }
-    /* Archive row spacing — small breathing room between rows */
-    #archive-list .archive-item.is-past {
-      padding-top: 9px !important;
-      padding-bottom: 9px !important;
-      min-height: 30px !important;
+
+    /* ─── Active question card: orange wash + giant display serif ─── */
+    #archive-list .archive-item.is-current {
+      background: var(--accent) !important;
+      color: #fff !important;
+      padding: 32px 32px 36px 32px !important;
+      height: auto !important;
+      min-height: 200px !important;
     }
-    #archive-list .archive-item.is-past:hover .question {
-      color: #ffffff !important;
+    #archive-list .archive-item.is-current .question {
+      font-family: 'Instrument Serif', 'Cormorant Infant', 'Didot', serif !important;
+      font-style: italic !important;
+      font-size: clamp(28px, 2.4vw, 38px) !important;
+      line-height: 1.05 !important;
+      font-weight: 400 !important;
+      letter-spacing: -0.02em !important;
+      color: #fff !important;
+      -webkit-line-clamp: 3 !important;
     }
+    /* Pager strip: align with new rail width */
+    .archive-pager {
+      border-top: 1.5px solid var(--edge) !important;
+      height: var(--bar-h-foot) !important;
+    }
+
+    /* ─── Answer panel: bigger display text, taller, follows new rail ─── */
+    #answer-panel {
+      top: var(--bar-h) !important;
+      left: var(--rail-w) !important;
+      border-bottom: 1.5px solid var(--edge) !important;
+    }
+    #answer-panel .panel-text {
+      font-family: 'Instrument Serif', 'Cormorant Infant', 'Didot', serif !important;
+      font-style: italic !important;
+      font-size: clamp(22px, 1.9vw, 32px) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.01em !important;
+      color: var(--edge) !important;
+    }
+    #answer-panel .panel-input {
+      font-family: 'Instrument Serif', 'Cormorant Infant', 'Didot', serif !important;
+      font-style: italic !important;
+      font-size: clamp(22px, 1.9vw, 32px) !important;
+      line-height: 1.15 !important;
+      letter-spacing: -0.01em !important;
+    }
+
+    /* ─── Footer: taller, bigger metadata text ─── */
+    #footer {
+      height: var(--bar-h-foot) !important;
+      border-top: 1.5px solid var(--edge) !important;
+    }
+    #footer .footer-left {
+      width: var(--rail-w) !important;
+      font-family: 'Instrument Serif', serif !important;
+      font-style: italic !important;
+      font-size: 22px !important;
+      font-weight: 400 !important;
+      letter-spacing: -0.01em !important;
+      text-transform: none !important;
+      color: var(--edge) !important;
+    }
+    #footer .label {
+      font-size: 11px !important;
+      letter-spacing: 0.1em !important;
+      gap: 16px !important;
+    }
+    #footer .footer-end .dark-toggle {
+      width: 28px !important;
+      height: 28px !important;
+    }
+
+    /* ─── Map area: respond to taller bars / wider rail ─── */
+    #map-pane {
+      width: calc(100vw - var(--rail-w)) !important;
+      height: calc(100vh - var(--bar-h) - var(--bar-h-foot)) !important;
+    }
+
+    /* ─── Spotlight overlay: tracks new chrome geometry ─── */
+    body.spotlight-on::after {
+      top: var(--bar-h) !important;
+      bottom: var(--bar-h-foot) !important;
+      left: var(--rail-w) !important;
+    }
+
+    /* ─── Hide masthead's mini PINNED logo (we have the №12 plate now) ─── */
+    /* keep — the centered Pinned title stays as the brand mark */
 
   </style>
 </head>
@@ -2000,10 +2063,11 @@
     <div class="zoom-indicator" id="zoom-indicator" title="Drag to zoom"></div>
   </div>
   <button class="eye-toggle" id="eye-toggle" title="Reveal answers" aria-label="Toggle answers visibility">
-    <svg class="sf-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M 5,4 L 16,4 L 19,9 L 19,15 L 16,20 L 9,20 L 5,16 L 4,9 Z"/>
-      <path d="M 16,4 Q 14,8 16,12 Q 18,16 16,20"/>
-    </svg>
+    <span class="cell corner"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell corner"></span>
+    <span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span>
+    <span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span>
+    <span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span>
+    <span class="cell corner"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell corner"></span>
   </button>
 </div>
 
@@ -2011,35 +2075,18 @@
 <div id="map-badge" aria-hidden="true">
   <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <!-- Symmetric arc — endpoints at ~7:30 and ~4:30 (on the radius-58
-           circle), cradling PINNED below. -->
-      <path id="badge-ring-top" d="M 34,116 A 58,58 0 1,1 90,131" fill="none"/>
-      <!-- Crumpled-paper filter — moderate strength. Subtle warp +
-           medium-size faded patches that read but don't shred letters. -->
-      <filter id="pinned-crumple" x="-25%" y="-25%" width="150%" height="150%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="3" result="warpNoise"/>
-        <feDisplacementMap in="SourceGraphic" in2="warpNoise" scale="1.6" result="warped"/>
-        <feTurbulence type="fractalNoise" baseFrequency="0.35" numOctaves="2" seed="11" result="grain"/>
-        <feColorMatrix in="grain" type="matrix"
-          values="0 0 0 0 1
-                  0 0 0 0 1
-                  0 0 0 0 1
-                  0 0 0 1.8 -0.7" result="grainAlpha"/>
-        <feComposite in="warped" in2="grainAlpha" operator="out" result="faded"/>
-        <feMerge>
-          <feMergeNode in="warped"/>
-          <feMergeNode in="faded"/>
-        </feMerge>
-      </filter>
+      <!-- Deep arc: endpoints at ~7:30 and ~4:30 (on the radius-58 circle),
+           so text curves all the way down on both sides and cradles PINNED. -->
+      <path id="badge-ring-top" d="M 34,116 A 58,58 0 1,1 116,116" fill="none"/>
     </defs>
-    <!-- Ring text centered along the arc -->
+    <!-- Ring text centered along the arc — two weights, no dot separator -->
     <text class="ring-text">
-      <textPath href="#badge-ring-top" startOffset="50%" text-anchor="middle">Interface Dynamics City Archive</textPath>
+      <textPath href="#badge-ring-top" startOffset="50%" text-anchor="middle">Interface Dynamics Archive</textPath>
     </text>
-    <!-- Center wordmark — sits up inside the arc's cradle, tilted 15° -->
-    <text class="center-text" x="75" y="78" transform="rotate(-5 75 78)">PINNED</text>
+    <!-- Center wordmark — sits up inside the arc's cradle -->
+    <text class="center-text" x="75" y="78">PINNED</text>
     <!-- Simplified Golden Gate Bridge silhouette — deck + two towers + cables -->
-    <g class="sf-mark" transform="translate(63, 118)">
+    <g class="sf-mark" transform="translate(63, 106)">
       <!-- horizontal deck -->
       <line x1="0" y1="10" x2="24" y2="10" stroke="currentColor" stroke-width="1.5"/>
       <!-- left tower (two verticals + crossbar) -->
@@ -2062,14 +2109,24 @@
 <!-- ─────────── BOTTOM LABEL BAR ─────────── -->
 <div id="footer">
   <div class="footer-left">
-    <span>Assignment</span>
+    <span>San Francisco</span>
   </div>
   <div class="footer-right">
     <div class="label">
-      <span>37.77°N&nbsp;&nbsp;122.42°W&nbsp;&nbsp;&nbsp;SAN FRANCISCO</span>
+      <span>1776</span>
+      <span class="sep">·</span>
+      <span>47 MI²</span>
+      <span class="sep">·</span>
+      <span>808,437 PEOPLE</span>
+      <span class="sep">·</span>
+      <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
     </div>
     <div class="footer-end">
-      <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
+      <button class="dark-toggle" id="dark-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </div>
   </div>
 </div>
@@ -2283,26 +2340,20 @@ const archiveListEl = document.getElementById('archive-list');
 
 function buildArchive() {
   archiveListEl.innerHTML = '';
-  // Reorder so the active assignment is rendered first; the rest keep
-  // newest-first (issueNo desc) order so the list below stays stable.
-  const ordered = [
-    ASSIGNMENTS[currentQuestionIndex],
-    ...ASSIGNMENTS.filter((_, i) => i !== currentQuestionIndex),
-  ];
-  ordered.forEach((a, displayIdx) => {
-    const originalIdx = ASSIGNMENTS.indexOf(a);
+  ASSIGNMENTS.forEach((a, i) => {
     const li = document.createElement('li');
     const btn = document.createElement('button');
-    const isCurrent = displayIdx === 0;
+    const isCurrent = i === 0;
     btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
-    btn.dataset.idx = originalIdx;
+    btn.dataset.idx = i;
     btn.innerHTML = `
-      <div class="label"><span class="issue-no">${pad2(a.issueNo)}</span>${isCurrent ? '' : '<span class="label-word">Assignment</span>'}</div>
+      ${isCurrent ? '' : `<div class="label"><span class="issue-no">${pad2(a.issueNo)}</span><span class="label-word">Assignment</span></div>`}
       <div class="question">${a.text}</div>
       ${isCurrent ? `<div class="assignment-tag">Assignment ${pad2(a.issueNo)}</div>` : ''}
     `;
-    if (originalIdx === currentQuestionIndex) btn.classList.add('active');
-    btn.addEventListener('click', () => selectQuestion(originalIdx));
+    if (i === currentQuestionIndex) btn.classList.add('active');
+    if (!isCurrent && a.issueNo === ASSIGNMENTS[0].issueNo) btn.classList.add('active');
+    btn.addEventListener('click', () => selectQuestion(i));
     li.appendChild(btn);
     archiveListEl.appendChild(li);
   });
@@ -2311,7 +2362,9 @@ function buildArchive() {
 function selectQuestion(idx) {
   currentQuestionIndex = idx;
   viewingIndex = idx;
-  buildArchive();   // re-render so the clicked question becomes the active card
+  archiveListEl.querySelectorAll('.archive-item').forEach(el => {
+    el.classList.toggle('active', Number(el.dataset.idx) === idx);
+  });
   if (typeof applySpotlight === 'function') applySpotlight();
 }
 

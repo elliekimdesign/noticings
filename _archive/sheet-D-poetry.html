@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sheet D — Concrete Poetry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,0,600;9..144,1,400&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f4f4f5;
+      min-height: 100vh;
+      padding: 60px;
+      font-family: 'Geist', sans-serif;
+    }
+    .label {
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: #999; font-weight: 500; margin-bottom: 30px;
+    }
+    .stage {
+      background: #fff;
+      width: 100%; max-width: 600px;
+      min-height: 360px;
+      padding: 36px 32px 28px;
+      position: relative;
+      border: 1px solid rgba(0,0,0,0.06);
+      overflow: visible;
+    }
+    /* — The actual design — */
+    /* Tiny meta in top-right */
+    .number {
+      position: absolute;
+      top: 18px; right: 22px;
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: rgba(26,26,26,0.5);
+      font-weight: 400;
+    }
+    /* HUGE location word breaking the edge */
+    .place {
+      font-family: 'Fraunces', serif;
+      font-optical-sizing: auto;
+      font-size: 72px;
+      font-weight: 400;
+      line-height: 0.95;
+      color: #1a1a1a;
+      letter-spacing: -0.03em;
+      margin-left: -8px;
+      margin-bottom: 6px;
+    }
+    .place-sub {
+      font-family: 'Geist', sans-serif;
+      font-size: 9px; letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+      font-weight: 500;
+      margin-bottom: 38px;
+      padding-left: 4px;
+    }
+    /* Input as line of verse — offset, not centered */
+    .verse-row {
+      display: flex;
+      align-items: baseline;
+      padding-left: 80px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .input-text {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 22px;
+      font-weight: 400;
+      color: #1a1a1a;
+      line-height: 1.4;
+      flex: 1;
+      min-width: 200px;
+    }
+    .input-text .placeholder {
+      color: rgba(26,26,26,0.3);
+    }
+    .input-text .cursor {
+      display: inline-block;
+      width: 1.5px; height: 0.8em;
+      background: #c89a3e;
+      vertical-align: -0.05em;
+      margin-left: 2px;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    /* Pin as final punctuation */
+    .pin-punct {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: #c89a3e;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .pin-punct:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="label">D — Concrete Poetry · inspired by Ed Ruscha</div>
+  <div class="stage">
+    <div class="number">Nº 47</div>
+    <div class="place">Dolores</div>
+    <div class="place-sub">Mission · 37.7635° N</div>
+    <div class="verse-row">
+      <span class="input-text"><span class="placeholder">a quiet bench by the palm trees<span class="cursor"></span></span></span>
+      <span class="pin-punct">pin.</span>
+    </div>
+  </div>
+</body>
+</html>

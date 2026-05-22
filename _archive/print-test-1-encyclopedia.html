@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Print test — 1 · Encyclopedia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f9f7f1; color: #1a1a1a; font-family: 'Geist', sans-serif; min-height: 100vh; position: relative; overflow: hidden; }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+    .icon-btn { position: fixed; top: 56px; right: 22px; width: 56px; height: 56px; background: transparent; border: none; padding: 0; cursor: pointer; opacity: 0.78; transition: opacity 0.3s ease, transform 0.2s ease; }
+    .icon-btn:hover { opacity: 1; transform: scale(1.04); }
+    .icon-btn.active { opacity: 1; }
+    .icon-btn svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    /* Encyclopedia: pupil dilates and the eye "opens" wider when active */
+    .icon-btn .pupil { transition: r 0.35s ease; }
+    .icon-btn.active .pupil { r: 4.5; }
+    .label-stack { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .opt { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; color: #FF8000; margin-bottom: 8px; }
+    .name { font-family: 'Geist', sans-serif; font-size: 28px; font-weight: 500; letter-spacing: -0.005em; margin-bottom: 12px; }
+    .hint { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.45); }
+  </style>
+</head>
+<body>
+
+<a class="back" href="print-test-INDEX.html">← all options</a>
+
+<button class="icon-btn" id="icon" title="Click to toggle">
+  <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#1a1a1a" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Almond eye outline (slightly imperfect, hand-drawn quality) -->
+    <path d="M 6 28 Q 14 14 28 13 Q 42 14 50 28 Q 42 42 28 43 Q 14 42 6 28 Z" stroke-width="1.1"/>
+    <!-- Iris circle -->
+    <circle cx="28" cy="28" r="9" stroke-width="0.9"/>
+    <!-- Pupil -->
+    <circle class="pupil" cx="28" cy="28" r="3.4" fill="#1a1a1a" stroke="none"/>
+    <!-- Catchlight -->
+    <circle cx="26" cy="26" r="0.9" fill="#f9f7f1" stroke="none"/>
+    <!-- Crosshatching on iris (radial dense lines) -->
+    <line x1="28" y1="20" x2="28" y2="22.5"/>
+    <line x1="28" y1="33.5" x2="28" y2="36"/>
+    <line x1="20" y1="28" x2="22.5" y2="28"/>
+    <line x1="33.5" y1="28" x2="36" y2="28"/>
+    <line x1="22.5" y1="22.5" x2="24.2" y2="24.2"/>
+    <line x1="31.8" y1="31.8" x2="33.5" y2="33.5"/>
+    <line x1="22.5" y1="33.5" x2="24.2" y2="31.8"/>
+    <line x1="31.8" y1="24.2" x2="33.5" y2="22.5"/>
+    <!-- Crosshatching shadow above eye (top arc) -->
+    <line x1="11" y1="22" x2="14" y2="20"/>
+    <line x1="14" y1="20" x2="17" y2="18.5"/>
+    <line x1="17" y1="18.5" x2="20" y2="17.5"/>
+    <line x1="20" y1="17.5" x2="23" y2="16.8"/>
+    <line x1="35" y1="17" x2="38" y2="17.8"/>
+    <line x1="38" y1="17.8" x2="41" y2="19"/>
+    <line x1="41" y1="19" x2="44" y2="20.5"/>
+    <line x1="44" y1="20.5" x2="46" y2="22"/>
+    <!-- Lower lid crosshatch -->
+    <line x1="13" y1="33" x2="16" y2="35"/>
+    <line x1="16" y1="35" x2="19" y2="36.5"/>
+    <line x1="37" y1="36.5" x2="40" y2="35"/>
+    <line x1="40" y1="35" x2="43" y2="33"/>
+    <!-- Top eyelash flicks (engraving-style short marks) -->
+    <line x1="14" y1="17" x2="13" y2="14" stroke-width="0.7"/>
+    <line x1="20" y1="13.5" x2="20" y2="10.5" stroke-width="0.7"/>
+    <line x1="28" y1="12" x2="28" y2="9" stroke-width="0.7"/>
+    <line x1="36" y1="13.5" x2="36" y2="10.5" stroke-width="0.7"/>
+    <line x1="42" y1="17" x2="43" y2="14" stroke-width="0.7"/>
+  </svg>
+</button>
+
+<div class="label-stack">
+  <div class="opt">OPTION 1</div>
+  <div class="name">Old encyclopedia / wood engraving</div>
+  <div class="hint">click the icon (top right)</div>
+</div>
+
+<script>
+  document.getElementById('icon').addEventListener('click', e => e.currentTarget.classList.toggle('active'));
+</script>
+</body>
+</html>

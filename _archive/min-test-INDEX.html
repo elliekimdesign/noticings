@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eye toggle — minimal hand-drawn options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f9f7f1;
+      color: #1a1a1a;
+      font-family: 'Geist', sans-serif;
+      min-height: 100vh;
+      padding: 80px 64px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px; color: rgba(26,26,26,0.55);
+      max-width: 580px; line-height: 1.55; margin-bottom: 48px;
+    }
+    ul { list-style: none; }
+    li { border-top: 1px solid rgba(26,26,26,0.18); padding: 18px 0; }
+    li:last-child { border-bottom: 1px solid rgba(26,26,26,0.18); }
+    a { color: #1a1a1a; text-decoration: none; display: block; }
+    .row { display: flex; align-items: baseline; gap: 16px; }
+    .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+      color: #FF8000; width: 24px; flex-shrink: 0;
+    }
+    .name { font-size: 17px; font-weight: 500; }
+    .desc {
+      font-size: 12px; color: rgba(26,26,26,0.55);
+      margin-left: 40px; margin-top: 4px;
+    }
+    a:hover .name { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<h1>Minimal hand-drawn options</h1>
+<p class="lede">Three minimal shapes drawn freehand — same hand-drawn-but-stripped-back character. Click each to compare the icon at real button size.</p>
+
+<ul>
+  <li><a href="min-test-1-circle.html">
+    <div class="row"><span class="opt">1</span><span class="name">Open circle (freehand)</span></div>
+    <div class="desc">A small circle drawn by hand — slightly imperfect, slightly off-round. Reads as "an aperture / a here." Active state: a small dot fills the center.</div>
+  </a></li>
+  <li><a href="min-test-2-square.html">
+    <div class="row"><span class="opt">2</span><span class="name">Hand-drawn square</span></div>
+    <div class="desc">A small square outlined by a freehand stroke. Matches the answer-pin square language but in line form. Active state: square fills with orange.</div>
+  </a></li>
+  <li><a href="min-test-3-dot.html">
+    <div class="row"><span class="opt">3</span><span class="name">Single ink dot</span></div>
+    <div class="desc">The most minimal possible — a single hand-stamped ink dot. Active state: a small ring appears around it like an echo.</div>
+  </a></li>
+</ul>
+
+</body>
+</html>

@@ -8,22 +8,44 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw; height: 100vh; overflow: hidden;
-      background: #f7f9f7;
+      background: #ffffff;
       font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
-      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23067CFA' stroke-width='2' stroke-linecap='round'><line x1='12' y1='2' x2='12' y2='9'/><line x1='12' y1='15' x2='12' y2='22'/><line x1='2' y1='12' x2='9' y2='12'/><line x1='15' y1='12' x2='22' y2='12'/></svg>") 12 12, crosshair;
+      cursor: none;
+    }
+    /* Force-hide native cursor on all elements including pointer-style ones */
+    *, *::before, *::after { cursor: none !important; }
+
+    /* FISH CURSOR — small black fish silhouette that swims toward motion direction. */
+    .rgb-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 14px;
+      height: 7px;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+    .rgb-cursor svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transform-origin: 50% 50%;
+      will-change: transform;
     }
 
     /* ── Top masthead — split by the spine line at x=220px ── */
     #masthead {
       position: fixed; top: 0; left: 0; right: 0;
       height: 36px; z-index: 1000;
-      background: #f7f9f7;
-      border-bottom: 1.5px solid #bbb;
+      background: #ffffff;
+      border-bottom: 1px solid #a3a3a3;
       display: flex; align-items: center;
       padding: 0;
     }
@@ -76,8 +98,8 @@
       top: 0;
       bottom: 0;
       right: 36px;
-      width: 1.5px;
-      background: #bbb;
+      width: 1px;
+      background: #a3a3a3;
       pointer-events: none;
       z-index: 1001;
     }
@@ -127,9 +149,9 @@
       top: 36px;
       left: 0;
       bottom: 36px;
-      width: 360px;
+      width: 320px;
       z-index: 900;
-      background: #f7f9f7;
+      background: #ffffff;
       padding: 0;
       overflow-y: auto;
       box-sizing: border-box;
@@ -139,9 +161,9 @@
       position: fixed;
       top: 36px;
       bottom: 0;
-      left: 360px;
-      width: 1.5px;
-      background: #bbb;
+      left: 320px;
+      width: 1px;
+      background: #a3a3a3;
       z-index: 1100;
       pointer-events: none;
     }
@@ -157,7 +179,6 @@
       text-align: left;
       background: transparent;
       border: none;
-      border-bottom: 1.5px solid #bbb;
       padding: 12px 24px;
       cursor: pointer;
       font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
@@ -165,10 +186,11 @@
       transition: background 0.15s ease;
     }
     #archive-list .archive-item:first-child { border-top: none; }
-    /* Top (current) card — full sentence, big text needs a bit more breathing room */
+    /* Top (current) card — 1960s Japanese book/poster mood (Kamekura / Tanaka /
+       Yokoo): paper background, monochrome typography, a single red dot ("hi-no-maru"
+       reference) as the only color accent. */
     #archive-list .archive-item.is-current {
       padding: 20px 24px 22px 28px;
-      border-bottom: 1.5px solid #bbb;
       height: 170px;
       display: flex;
       flex-direction: column;
@@ -179,13 +201,19 @@
     #archive-list .archive-item.is-current::before {
       display: none;
     }
+    /* Restore default ink colors for inner text (no longer a colored cover) */
+    #archive-list .archive-item.is-current .question      { color: #1a1a1a; }
+    #archive-list .archive-item.is-current .label .issue-no    { color: #1a1a1a; }
+    #archive-list .archive-item.is-current .label .label-word  { color: #1a1a1a; }
+    #archive-list .archive-item.is-current .label .label-word .bracket { color: #D1241A; }
+    #archive-list .archive-item.is-current .assignment-tag { color: #999; }
     #archive-list .archive-item .label {
       font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 9px;
       font-weight: 500;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(26,26,26,0.55);
+      color: rgba(26,26,26,0.70);
       margin-bottom: 28px;
     }
     #archive-list .archive-item .label .issue-no {
@@ -224,17 +252,17 @@
       color: #1a1a1a;
     }
     #archive-list .archive-item.is-current .label .label-word .bracket {
-      color: #ED3B36;
+      color: #0088FF;
       font-weight: 500;
     }
     #archive-list .archive-item.is-current .assignment-tag {
       position: absolute;
-      left: 32px;
-      bottom: 19px;
-      color: #666;
-      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-weight: 700;
+      left: 28px;
+      bottom: 20px;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 10px;
+      font-weight: 500;
+      color: rgba(26, 26, 26, 0.70);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       line-height: 1;
@@ -252,10 +280,10 @@
       vertical-align: baseline;
     }
     #archive-list .archive-item.is-current .question {
-      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-size: clamp(18px, 1.7vw, 22px);
-      font-weight: 500;
-      line-height: clamp(28px, 2.6vw, 34px);
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-size: clamp(15px, 1.4vw, 18px);
+      font-weight: 400;
+      line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.005em;
       color: #1a1a1a;
       word-break: normal;
@@ -265,50 +293,69 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    /* Past cards — compact, single line */
+    /* Past cards — outline-only stripe rows. Right-aligned text, thin top hairline
+       acts as the band divider. No fill, even when active. */
     #archive-list .archive-item.is-past {
       display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 38px;
+      align-items: baseline;
+      gap: 14px;
+      min-height: 32px;
+      margin: 0;
+      padding: 10px 28px;
+      background: transparent;
+      border: none;
       position: relative;
-      padding-left: 26px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
     }
+    /* Divider above the first past row */
     #archive-list .archive-item.is-past::before {
       display: none !important;
+    }
+    #archive-list li:has(.archive-item.is-current) + li .archive-item.is-past {
+      border-top: 1px solid #a3a3a3;
     }
     #archive-list .archive-item.is-past .label {
       margin-bottom: 0;
       flex-shrink: 0;
-      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-weight: 400;
-      font-size: 12px;
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
       line-height: 1;
-      color: rgba(26,26,26,0.45);
-      letter-spacing: 0.005em;
+      color: #D1241A;
+      letter-spacing: 0;
       text-transform: none;
-      transition: color 0.15s ease, font-weight 0.15s ease;
-    }
-    #archive-list .archive-item.is-past .label .label-word { display: none; }
-    #archive-list .archive-item.is-past .question {
-      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.005em;
-      text-transform: none;
-      color: rgba(26,26,26,0.45);
-      line-height: 1.45;
-      white-space: normal;
-      overflow-wrap: break-word;
-      word-break: normal;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      flex: 1;
+      width: 32px;
+      order: 1;
       transition: color 0.15s ease;
     }
-    #archive-list .archive-item.is-past:hover { background: rgba(26,26,26,0.03); }
+    #archive-list .archive-item.is-past .label .label-word { display: none; }
+    #archive-list .archive-item.is-past .label .issue-no::before { content: none; }
+    #archive-list .archive-item.is-past .question {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: #1a1a1a;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+      flex: 1;
+      order: 2;
+      transition: color 0.15s ease;
+    }
+    #archive-list .archive-item.is-past:hover { background: rgba(26,26,26,0.04); }
+    #archive-list .archive-item.is-past:hover .question { color: #1a1a1a; }
+    #archive-list .archive-item.is-past:hover .label { color: #D1241A; }
+
+    /* When a past row is clicked, it gets `is-current` styling (defined above)
+       and the original #12 row gets `.is-hidden` so it disappears from the rail. */
+    #archive-list .archive-item.is-hidden {
+      display: none !important;
+    }
 
     /* ── Page-flip pagination — sits at the bottom of the archive rail, above the footer ── */
     #archive-rail {
@@ -319,14 +366,16 @@
     .archive-pager {
       flex-shrink: 0;
       display: grid;
-      grid-template-columns: 1fr 1.5px 1fr;
-      align-items: stretch;
-      border-top: 1.5px solid #bbb;
-      font-family: 'Geist', 'Helvetica Neue', sans-serif;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      border-top: 1px solid #a3a3a3;
+      font-family: 'Jost', 'Geist', 'Helvetica Neue', sans-serif;
       font-size: 10px;
-      color: rgba(26,26,26,0.30);
+      color: rgba(26,26,26,0.60);
       user-select: none;
-      min-height: 38px;
+      height: 32px;
+      padding: 0 12px;
+      gap: 12px;
     }
     .archive-pager .pager-btn {
       background: transparent;
@@ -336,20 +385,26 @@
       align-items: center;
       justify-content: center;
       cursor: not-allowed;
-      color: rgba(26,26,26,0.30);
+      color: rgba(26,26,26,0.45);
       transition: color 0.15s ease;
     }
-    .archive-pager .pager-btn.is-active { color: #1a1a1a; cursor: pointer; }
-    .archive-pager .pager-btn.is-active:hover { color: #067CFA; }
+    .archive-pager .pager-btn.is-active { color: rgba(26,26,26,0.80); cursor: pointer; }
+    .archive-pager .pager-btn.is-active:hover { color: #1a1a1a; }
     .archive-pager .pager-btn svg { width: 8px; height: 10px; display: block; }
     .archive-pager .pager-divider {
-      width: 1.5px;
-      background: #bbb;
-      align-self: stretch;
+      font-family: 'Jost', 'Geist', 'Helvetica Neue', sans-serif;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.70);
+      width: auto;
+      background: transparent;
+      align-self: center;
     }
-    #archive-list .archive-item.is-past:hover .question { color: #1a1a1a; }
-    #archive-list .archive-item.is-past.active .question { color: #1a1a1a; font-weight: 700; }
-    #archive-list .archive-item.is-past.active .label { color: #666; font-weight: 700; }
+    .archive-pager .pager-divider::before { content: 'PAGE 01 / 01'; }
+    /* Active past item — only the top "current" card shows the picked question;
+       past rows stay as line-only stripes regardless of which is the source. */
 
     /* ── Answer sheet positioning — vertically centered on the right ── */
     #sheet-wrap {
@@ -453,11 +508,11 @@
       transition: opacity 0.3s ease, transform 0.2s ease;
     }
     .eye-toggle .cell { background: transparent; }
-    .eye-toggle .cell.on { background: #bbb; }
+    .eye-toggle .cell.on { background: #a3a3a3; }
     .eye-toggle:hover { transform: scale(1.08); }
     .eye-toggle.active { opacity: 1; }
     /* Active state: invert — filled cells become empty, empty cells become filled (corners stay invisible) */
-    .eye-toggle.active .cell:not(.corner) { background: #bbb; }
+    .eye-toggle.active .cell:not(.corner) { background: #a3a3a3; }
     .eye-toggle.active .cell.on { background: transparent; }
     .eye-toggle .cell.corner { background: transparent !important; }
     /* Zoom scale — horizontal line + 3 ticks + diamond, with checkerboard at the right */
@@ -481,7 +536,7 @@
     .zoom-scale .zoom-line .zoom-tick {
       position: absolute;
       top: 0;
-      width: 1.5px;
+      width: 1px;
       height: 14px;
       background: #1a1a1a;
       opacity: 0.55;
@@ -497,7 +552,7 @@
       left: 0;
       width: 8px;
       height: 8px;
-      background: #bbb;
+      background: #a3a3a3;
       transform: rotate(45deg);
       transform-origin: center center;
       cursor: ew-resize;
@@ -510,8 +565,8 @@
     body.spotlight-on::after {
       content: '';
       position: fixed;
-      top: 36px; bottom: 36px; left: 360px; right: 0;
-      background: rgba(26,26,26,0.30);
+      top: 36px; bottom: 36px; left: 320px; right: 0;
+      background: rgba(26,26,26,0.45);
       pointer-events: none;
       z-index: 5;
     }
@@ -569,7 +624,7 @@
       display: flex; flex-direction: column;
       gap: 14px;
       position: relative;
-      background: #f7f9f7;
+      background: #ffffff;
       border: 1px solid #1a1a1a;
       padding: 18px 20px;
     }
@@ -601,7 +656,7 @@
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
       font-weight: 400;
-      color: rgba(26, 26, 26, 0.55);
+      color: rgba(26, 26, 26, 0.70);
       letter-spacing: 0.02em;
       text-transform: none;
       font-feature-settings: "tnum";
@@ -610,7 +665,7 @@
     }
     #sheet .loc-coords:empty::before {
       content: '— — — · — — —';
-      color: rgba(26, 26, 26, 0.30);
+      color: rgba(26, 26, 26, 0.45);
     }
     #sheet .loc-name {
       order: 2;
@@ -629,7 +684,7 @@
       font-style: italic;
       letter-spacing: 0.02em;
       text-transform: none;
-      color: rgba(26, 26, 26, 0.40);
+      color: rgba(26, 26, 26, 0.70);
     }
 
     /* Body — plain textarea, no ruled lines */
@@ -681,7 +736,7 @@
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
       font-weight: 400;
-      color: rgba(26, 26, 26, 0.40);
+      color: rgba(26, 26, 26, 0.70);
       letter-spacing: 0.02em;
       font-feature-settings: "tnum";
       transition: color 0.15s ease;
@@ -695,7 +750,7 @@
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
       font-weight: 400;
-      color: rgba(26, 26, 26, 0.40);
+      color: rgba(26, 26, 26, 0.70);
       letter-spacing: 0.02em;
       background: transparent;
       border: none;
@@ -752,7 +807,7 @@
     /* The bookmark / bar itself — collapsed is a tall thin rectangle, expanded stretches horizontally */
     .answer-note {
       position: relative;
-      background: #ED3B36;
+      background: #0088FF;
       color: #ffffff;
       font-family: 'Geist', 'Helvetica Neue', 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
       font-size: 10px;
@@ -798,12 +853,12 @@
     body {
       padding-top: 36px;
       padding-bottom: 36px;
-      padding-left: 360px;
+      padding-left: 320px;
     }
 
     /* ── Map: fills the right column between masthead and footer ── */
     #map-pane {
-      width: calc(100vw - 360px);
+      width: calc(100vw - 320px);
       height: calc(100vh - 80px);
       position: relative;
       background: #f4f4f5; /* match map land color so resizes don't flash the page bg */
@@ -813,13 +868,13 @@
     #footer {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 36px; z-index: 1400;
-      background: #f7f9f7;
-      border-top: 1.5px solid #bbb;
+      background: #ffffff;
+      border-top: 1px solid #a3a3a3;
       display: flex; align-items: center;
       padding: 0;
     }
     #footer .footer-left {
-      width: 360px;
+      width: 320px;
       flex-shrink: 0;
       height: 100%;
       display: flex; align-items: center; justify-content: flex-start;
@@ -833,7 +888,7 @@
       color: #666;
       font-weight: 400;
     }
-    #footer .footer-left .sep { color: rgba(102,102,102,0.5); }
+    #footer .footer-left .sep { color: rgba(102,102,102,0.7); }
     #footer .footer-right {
       flex: 1;
       height: 100%;
@@ -850,7 +905,7 @@
       gap: 12px;
     }
     #footer .label .sep {
-      color: rgba(102,102,102,0.5);
+      color: rgba(102,102,102,0.7);
     }
     #footer .label .strong {
       color: #666;
@@ -867,7 +922,7 @@
       align-items: center;
       gap: 10px;
     }
-    #footer .volume .sep { color: rgba(102,102,102,0.5); }
+    #footer .volume .sep { color: rgba(102,102,102,0.7); }
     #footer .footer-end {
       margin-left: auto;
       font-family: 'Geist', 'Inter', sans-serif;
@@ -880,14 +935,29 @@
       align-items: center;
       gap: 8px;
     }
-    #footer .footer-end .footer-end-link {
-      color: inherit;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      text-decoration-thickness: 1px;
-      transition: color 0.15s ease;
+    #footer .footer-end .dark-toggle {
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      background: transparent;
+      border: 1px solid #a3a3a3;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
     }
-    #footer .footer-end .footer-end-link:hover { color: #1a1a1a; transition: color 0.15s ease; }
+    #footer .footer-end .dark-toggle svg {
+      width: 11px;
+      height: 11px;
+      display: block;
+    }
+    #footer .footer-end .dark-toggle:hover {
+      background: #1a1a1a;
+      color: #ffffff;
+      border-color: #1a1a1a;
+    }
 
     /* ── Swiss-graphic pin ── */
     .ink-marker {
@@ -934,7 +1004,7 @@
     }
     .pop .desc {
       font-size: 9px; line-height: 1.65; letter-spacing: 0.04em;
-      color: rgba(26,26,26,0.65);
+      color: rgba(26,26,26,0.80);
     }
     #map { width: 100%; height: 100%; position: relative; }
     .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
@@ -943,11 +1013,11 @@
     #answer-panel {
       position: fixed;
       top: 36px;            /* below masthead */
-      left: 360px;          /* right of archive rail */
+      left: 320px;          /* right of archive rail */
       right: 0;
       height: 0;            /* runtime-set to match main question card height */
-      background: #f7f9f7;
-      border-bottom: 1.5px solid #bbb;
+      background: #ffffff;
+      border-bottom: 1px solid #a3a3a3;
       z-index: 950;
       display: none;
       overflow: hidden;
@@ -964,10 +1034,10 @@
       overflow: hidden;
     }
     #answer-panel .panel-text {
-      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-weight: 500;
-      font-size: clamp(18px, 1.7vw, 22px);
-      line-height: clamp(28px, 2.6vw, 34px);
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-weight: 400;
+      font-size: clamp(15px, 1.4vw, 18px);
+      line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.005em;
       color: #1a1a1a;
       max-width: 100%;
@@ -990,7 +1060,7 @@
       box-sizing: border-box;
       /* top padding mirrors question card; bottom padding = divider height (50px) + 12 buffer
          so the textarea above the divider has breathing room and never overlaps it */
-      padding: 20px 56px 62px 32px;
+      padding: 20px 32px 62px 32px;
       position: relative;
     }
     #answer-panel.is-write .panel-write { display: block; }
@@ -1008,50 +1078,51 @@
       outline: none;
       resize: none;
       background: transparent;
-      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-weight: 500;
-      font-size: clamp(18px, 1.7vw, 22px);
-      line-height: clamp(28px, 2.6vw, 34px);
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-weight: 400;
+      font-size: clamp(15px, 1.4vw, 18px);
+      line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.005em;
       color: #1a1a1a;
       padding: 0;
       overflow: hidden;
     }
     #answer-panel .panel-input::placeholder {
-      color: rgba(26,26,26,0.28);
+      color: rgba(26,26,26,0.35);
       font-weight: 400;
     }
     #answer-panel .panel-hood {
-      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 10px;
-      font-weight: 700;
-      color: #1a1a1a;
-      letter-spacing: 0.08em;
+      font-weight: 500;
+      color: #666;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       line-height: 1;
     }
     #answer-panel .panel-hood-marker {
-      width: 10px;
-      height: 10px;
-      background: #ED3B36;
+      width: 8px;
+      height: 8px;
+      background: #0088FF;
       display: inline-block;
       flex-shrink: 0;
+      opacity: 0.85;
     }
     #answer-panel .panel-write-actions {
       position: absolute;
       left: 32px;
       bottom: 19px;
       display: flex;
-      gap: 18px;
+      gap: 12px;
       align-items: baseline;
       z-index: 2;
     }
     #answer-panel .panel-handle {
-      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 10px;
-      font-weight: 400;
-      color: rgba(26,26,26,0.50);
-      letter-spacing: 0.02em;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(26,26,26,0.65);
+      letter-spacing: 0.04em;
       line-height: 1;
       position: absolute;
       bottom: 21px;
@@ -1059,10 +1130,10 @@
       z-index: 2;
     }
     #answer-panel .panel-count {
-      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 18px;
       font-weight: 700;
-      color: rgba(26,26,26,0.30);
+      color: rgba(26,26,26,0.45);
       letter-spacing: 0.005em;
       line-height: 1;
       position: absolute;
@@ -1120,9 +1191,9 @@
       position: absolute;
       bottom: 21px;
       right: 64px;
-      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 600;
       color: #1a1a1a;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -1143,8 +1214,8 @@
       bottom: 0;
       height: 50px;
       right: 50px;
-      width: 1.5px;
-      background: #bbb;
+      width: 1px;
+      background: #a3a3a3;
       pointer-events: none;
       z-index: 1;
     }
@@ -1174,7 +1245,7 @@
       transition: stroke 0.15s ease;
     }
     #answer-panel .panel-submit:hover {
-      background: #067CFA;
+      background: #D1241A;
       color: #ffffff;
     }
     #answer-panel .panel-divider {
@@ -1183,8 +1254,8 @@
       left: 0;
       right: 0;
       bottom: 50px;
-      height: 1.5px;
-      background: #bbb;
+      height: 1px;
+      background: #a3a3a3;
       pointer-events: none;
       z-index: 1;
     }
@@ -1195,8 +1266,8 @@
       bottom: 0;
       height: 50px;
       right: 100px;
-      width: 1.5px;
-      background: #bbb;
+      width: 1px;
+      background: #a3a3a3;
       pointer-events: none;
       z-index: 1;
     }
@@ -1215,9 +1286,248 @@
     }
     /* Connector line removed — panel stands alone */
 
+    /* ════════════════════════════════════════════════════════════════════
+       ░░  MOSAIC EDGES OVERRIDE  ░░
+       Pushes the UI mood toward early-90s NCSA Mosaic / pre-CSS web:
+       hard 1.5px black rectangles for every chrome edge, no shadows,
+       no rounded corners, small UI text → monospace, links underlined.
+       Structural layout (positions, sizes, the map, the headings,
+       the question text) is NOT touched.
+       ════════════════════════════════════════════════════════════════════ */
+
+    :root {
+      --edge: #1a1a1a;
+      --edge-w: 1.5px;
+      --mono: 'JetBrains Mono', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+
+    /* Masthead — bold bottom edge, monospace title hint */
+    #masthead { border-bottom: var(--edge-w) solid var(--edge); }
+    #masthead .masthead-vdivider { background: var(--edge); width: var(--edge-w); }
+    #masthead .city-center {
+      font-family: var(--mono);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+    }
+    /* Square the masthead +/x hover state */
+    #masthead .masthead-add:hover,
+    #masthead .masthead-close:hover { background: var(--edge); color: #fff; }
+
+    /* Archive rail — hard right edge via the spine */
+    #archive-spine { background: var(--edge); width: var(--edge-w); }
+
+    /* Active card label + assignment tag → monospace */
+    #archive-list .archive-item.is-current .label .label-word {
+      font-family: var(--mono);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+    #archive-list .archive-item.is-current .label .label-word .bracket {
+      color: var(--edge);
+      font-weight: 700;
+    }
+    #archive-list .archive-item.is-current .assignment-tag {
+      font-family: var(--mono);
+      letter-spacing: 0.14em;
+      color: var(--edge);
+    }
+    /* Past row separators → hard black */
+    #archive-list li:has(.archive-item.is-current) + li .archive-item.is-past {
+      border-top: var(--edge-w) solid var(--edge);
+    }
+    /* Past row numbers + titles — number stays as accent, title monospace */
+    #archive-list .archive-item.is-past .label {
+      font-family: var(--mono);
+      color: var(--edge);
+      font-weight: 700;
+    }
+    #archive-list .archive-item.is-past .question {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      color: var(--edge);
+    }
+    /* Hover on past rows: invert (Mosaic menu-style selection) */
+    #archive-list .archive-item.is-past:hover {
+      background: var(--edge);
+    }
+    #archive-list .archive-item.is-past:hover .label,
+    #archive-list .archive-item.is-past:hover .question { color: #fff; }
+
+    /* Pager strip — hard top edge + monospace numerals */
+    .archive-pager {
+      border-top: var(--edge-w) solid var(--edge);
+      font-family: var(--mono);
+      color: var(--edge);
+    }
+    .archive-pager .pager-divider {
+      font-family: var(--mono);
+      color: var(--edge);
+      letter-spacing: 0.14em;
+    }
+
+    /* Footer — bold top edge, monospace metadata, hard separators */
+    #footer { border-top: var(--edge-w) solid var(--edge); }
+    #footer .footer-left,
+    #footer .label,
+    #footer .footer-end {
+      font-family: var(--mono);
+      color: var(--edge);
+      letter-spacing: 0.06em;
+    }
+    #footer .label .sep,
+    #footer .footer-left .sep { color: var(--edge); opacity: 0.55; }
+    #footer .footer-end .dark-toggle {
+      border: var(--edge-w) solid var(--edge);
+      color: var(--edge);
+    }
+    #footer .footer-end .dark-toggle:hover {
+      background: var(--edge);
+      color: #fff;
+      border-color: var(--edge);
+    }
+    /* A vertical hard divider at the spine inside the footer */
+    #footer .footer-left {
+      border-right: var(--edge-w) solid var(--edge);
+    }
+
+    /* Answer panel — hard rectangle, no shadow */
+    #answer-panel {
+      border-bottom: var(--edge-w) solid var(--edge);
+      box-shadow: none;
+    }
+    #answer-panel .panel-divider,
+    #answer-panel .panel-divider-read {
+      background: var(--edge);
+      height: var(--edge-w);
+    }
+    #answer-panel .panel-vdivider,
+    #answer-panel .panel-vdivider2 {
+      background: var(--edge);
+      width: var(--edge-w);
+    }
+    #answer-panel .panel-hood {
+      font-family: var(--mono);
+      color: var(--edge);
+      letter-spacing: 0.12em;
+    }
+    #answer-panel .panel-hood-marker {
+      background: var(--edge);
+      width: 9px;
+      height: 9px;
+      opacity: 1;
+    }
+    #answer-panel .panel-handle,
+    #answer-panel .panel-count {
+      font-family: var(--mono);
+      color: var(--edge);
+    }
+    #answer-panel .panel-count {
+      font-weight: 500;
+      font-size: 13px;
+    }
+    #answer-panel .panel-count .count-caret { color: var(--edge); opacity: 0.45; }
+    #answer-panel .panel-drop-label {
+      font-family: var(--mono);
+      color: var(--edge);
+      letter-spacing: 0.14em;
+    }
+    /* Submit button — square the hover into a black block (inverted Mosaic button) */
+    #answer-panel .panel-submit:hover {
+      background: var(--edge);
+      color: #fff;
+    }
+
+    /* Answer sheet (floating) — hard 1.5px frame, no shadow */
+    #sheet {
+      border: var(--edge-w) solid var(--edge);
+      box-shadow: none;
+    }
+    #sheet .loc-coords,
+    #sheet .loc-name,
+    #sheet .char-count,
+    #sheet .handle,
+    #sheet .submit-arrow {
+      font-family: var(--mono);
+      color: var(--edge);
+    }
+    #sheet .loc-name { letter-spacing: 0.12em; }
+    #sheet .submit-arrow {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: underline;
+    }
+    #sheet .submit-arrow:hover { opacity: 1; background: var(--edge); color: #fff; text-decoration: none; padding: 2px 6px; margin: -2px -6px; }
+    #sheet .handle.is-editing { border-bottom: var(--edge-w) solid var(--edge); }
+
+    /* Map popup — strip the soft drop-shadow, give it a hard rectangular frame */
+    .maplibregl-popup-content {
+      box-shadow: none !important;
+      border: var(--edge-w) solid var(--edge) !important;
+    }
+    .pop .label,
+    .pop .name,
+    .pop .desc {
+      font-family: var(--mono);
+    }
+    .pop .label { color: var(--edge); letter-spacing: 0.22em; }
+    .pop .divider { background: var(--edge); height: var(--edge-w); width: 28px; }
+
+    /* Hint banner — square, monospace */
+    #hint {
+      font-family: var(--mono);
+      letter-spacing: 0.18em;
+      border: var(--edge-w) solid var(--edge);
+    }
+
+    /* Eye-mode banner — hard frame */
+    #eye-q-banner {
+      border: var(--edge-w) solid var(--edge);
+    }
+    #eye-q-banner .q-text {
+      font-family: var(--mono);
+      letter-spacing: 0.16em;
+    }
+
+    /* Answer pin (collapsed dot + expanded bar) → pure black/white, monospace */
+    .answer-note {
+      background: var(--edge);
+      color: #fff;
+      font-family: var(--mono);
+      letter-spacing: 0.02em;
+    }
+    .answer-note .handle { color: rgba(255,255,255,0.65); font-family: var(--mono); }
+
+    /* Spotlight dim — slightly heavier so the map reads as a "framed" doc */
+    body.spotlight-on::after { background: rgba(26,26,26,0.55); }
+
+    /* Zoom-scale ticks: pure black */
+    .zoom-scale .zoom-line .zoom-tick { background: var(--edge); opacity: 1; }
+    .zoom-scale .zoom-indicator { background: var(--edge); }
+
+    /* Eye toggle dots → solid black */
+    .eye-toggle .cell.on { background: var(--edge); }
+    .eye-toggle.active .cell:not(.corner) { background: var(--edge); }
+
   </style>
 </head>
 <body>
+
+<!-- Fish cursor -->
+<div class="rgb-cursor" aria-hidden="true">
+  <svg viewBox="0 0 18 9" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 18 4.5
+             L 10 1.5
+             L 5 3.5
+             L 0 0
+             L 0 9
+             L 5 5.5
+             L 10 7.5
+             Z"
+          fill="#1a1a1a"/>
+  </svg>
+</div>
 
 <!-- ─────────── TOP MASTHEAD ─────────── -->
 <div id="masthead">
@@ -1378,7 +1688,11 @@
       <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
     </div>
     <div class="footer-end">
-      <a class="footer-end-link" href="about.html">Where We Were</a>
+      <button class="dark-toggle" id="dark-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </div>
   </div>
 </div>
@@ -1528,8 +1842,18 @@ map.on('style.load', () => {
 // ─────────── ASSIGNMENTS (one question per fortnight) ───────────
 // ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
 const ASSIGNMENTS = [
-  { issueNo: 1, dates: 'Apr 15 → Apr 29', text: "I keep coming back to..." },
-  { issueNo: 1, dates: 'Apr 15 → Apr 29', text: "I keep coming back to..." },
+  { issueNo: 12, dates: 'Apr 15 → Apr 29', text: "I keep coming back to..." },
+  { issueNo: 11, dates: 'Apr 01 → Apr 14', text: "Where do you go to be alone?" },
+  { issueNo: 10, dates: 'Mar 18 → Mar 31', text: "What place feels like home?" },
+  { issueNo: 9,  dates: 'Mar 04 → Mar 17', text: "Where did you last get lost?" },
+  { issueNo: 8,  dates: 'Feb 18 → Mar 03', text: "A walk you take often" },
+  { issueNo: 7,  dates: 'Feb 04 → Feb 17', text: "Somewhere you sat for a while" },
+  { issueNo: 6,  dates: 'Jan 21 → Feb 03', text: "The last good Sunday morning" },
+  { issueNo: 5,  dates: 'Jan 07 → Jan 20', text: "A place you almost forgot" },
+  { issueNo: 4,  dates: 'Dec 24 → Jan 06', text: "Where the city felt small" },
+  { issueNo: 3,  dates: 'Dec 10 → Dec 23', text: "Somewhere you wait" },
+  { issueNo: 2,  dates: 'Nov 26 → Dec 09', text: "A view you keep returning to" },
+  { issueNo: 1,  dates: 'Nov 12 → Nov 25', text: "The first place you remember" },
 ];
 
 // Flat array of question strings, used by the rest of the code (markers, spotlight, etc.)
@@ -1559,9 +1883,9 @@ function buildArchive() {
     btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
     btn.dataset.idx = i;
     btn.innerHTML = `
-      ${isCurrent ? '' : `<div class="label"><span class="issue-no">#${pad2(a.issueNo)}</span><span class="label-word">Assignment</span></div>`}
+      ${isCurrent ? '' : `<div class="label"><span class="issue-no">${pad2(a.issueNo)}</span><span class="label-word">Assignment</span></div>`}
       <div class="question">${a.text}</div>
-      ${isCurrent ? `<div class="assignment-tag">[ Assignment #${pad2(a.issueNo)} ]</div>` : ''}
+      ${isCurrent ? `<div class="assignment-tag">Assignment ${pad2(a.issueNo)}</div>` : ''}
     `;
     if (i === currentQuestionIndex) btn.classList.add('active');
     if (!isCurrent && a.issueNo === ASSIGNMENTS[0].issueNo) btn.classList.add('active');
@@ -1978,7 +2302,7 @@ document.addEventListener('DOMContentLoaded', () => {
     panelInput.addEventListener('input', () => {
       const n = panelInput.value.length;
       if (panelCountCurrent) panelCountCurrent.textContent = String(n);
-      panelCount.style.color = n >= 170 ? '#ED3B36' : (n >= 140 ? 'rgba(26,26,26,0.65)' : 'rgba(26,26,26,0.30)');
+      panelCount.style.color = n >= 170 ? '#ED3B36' : (n >= 140 ? 'rgba(26,26,26,0.80)' : 'rgba(26,26,26,0.45)');
     });
     panelInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeAnswerPanel();
@@ -2155,6 +2479,65 @@ window.requestAnimationFrame(() => {
   document.body.classList.add('panel-open');
   panelText.textContent = placeholder;
 });
+
+// Fish cursor — small fish silhouette that swims toward mouse motion direction
+(function () {
+  const cursor = document.querySelector('.rgb-cursor');
+  const svg = cursor && cursor.querySelector('svg');
+  if (!cursor || !svg) return;
+
+  let mx = window.innerWidth / 2;
+  let my = window.innerHeight / 2;
+  let vx = 0, vy = 0;
+  let lastX = mx, lastY = my;
+  let currentAngle = 0;
+  let targetAngle = 0;
+  let swayPhase = 0;
+  let lastMoveTime = performance.now();
+
+  window.addEventListener('mousemove', (e) => {
+    mx = e.clientX;
+    my = e.clientY;
+    lastMoveTime = performance.now();
+  });
+
+  function tick(now) {
+    cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+
+    const ix = mx - lastX;
+    const iy = my - lastY;
+    vx = vx * 0.78 + ix * 0.22;
+    vy = vy * 0.78 + iy * 0.22;
+    lastX = mx;
+    lastY = my;
+
+    const speed = Math.hypot(vx, vy);
+    if (speed > 0.5) {
+      targetAngle = Math.atan2(vy, vx) * 180 / Math.PI;
+    }
+
+    const idleFor = now - lastMoveTime;
+    let angleToShow = targetAngle;
+    if (idleFor > 500) {
+      swayPhase += 0.04;
+      angleToShow = targetAngle + Math.sin(swayPhase) * 6;
+    } else {
+      swayPhase = 0;
+    }
+
+    let delta = angleToShow - currentAngle;
+    while (delta > 180)  delta -= 360;
+    while (delta < -180) delta += 360;
+    currentAngle += delta * 0.18;
+
+    svg.style.transform = `rotate(${currentAngle}deg)`;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+})();
 </script>
 </body>
 </html>

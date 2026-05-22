@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>San Francisco</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.osmbuildings.org/OSMBuildings-Leaflet.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #f2efe9;
+      font-family: 'Inter', sans-serif;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #map {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Warm paper tone over tiles */
+    .leaflet-tile {
+      filter: sepia(0.3) saturate(0.45) brightness(1.05) contrast(0.88);
+    }
+
+    /* Hide Leaflet default controls — we'll place our own */
+    .leaflet-control-zoom { display: none; }
+    .leaflet-control-attribution {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 10px !important;
+      font-weight: 300 !important;
+      color: #aaa !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 8px 6px !important;
+      letter-spacing: 0.03em;
+    }
+    .leaflet-control-scale-line {
+      font-family: 'Inter', sans-serif !important;
+      font-size: 10px !important;
+      font-weight: 300 !important;
+      color: #999 !important;
+      border-color: #999 !important;
+      border-bottom-width: 1px !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      letter-spacing: 0.05em;
+    }
+
+    /* Neighborhood label tooltips */
+    .leaflet-tooltip.nhood-label {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      color: #7a7060;
+      text-transform: uppercase;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+    .leaflet-tooltip.nhood-label::before { display: none; }
+
+    /* Popup */
+    .leaflet-popup-content-wrapper {
+      background: #f7f4ee !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10) !important;
+      padding: 0 !important;
+    }
+    .leaflet-popup-content { margin: 0 !important; }
+    .leaflet-popup-tip { background: #f7f4ee !important; }
+    .leaflet-popup-close-button {
+      font-family: 'Inter', sans-serif !important;
+      font-weight: 300 !important;
+      font-size: 16px !important;
+      color: #999 !important;
+      top: 10px !important;
+      right: 12px !important;
+    }
+    .popup-inner {
+      padding: 20px 22px 18px;
+      min-width: 200px;
+      max-width: 240px;
+    }
+    .popup-inner .p-name {
+      font-size: 14px;
+      font-weight: 400;
+      color: #1a1a1a;
+      letter-spacing: 0.01em;
+      margin-bottom: 10px;
+    }
+    .popup-inner .p-note {
+      font-size: 12px;
+      font-weight: 300;
+      color: #666;
+      line-height: 1.6;
+    }
+    .popup-inner .p-coords {
+      font-size: 10px;
+      font-weight: 300;
+      color: #bbb;
+      margin-top: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Title — top left, minimal */
+    #title {
+      position: fixed;
+      top: 28px;
+      left: 28px;
+      z-index: 600;
+      pointer-events: none;
+    }
+    #title h1 {
+      font-size: 15px;
+      font-weight: 400;
+      color: #1a1a1a;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    #title p {
+      font-size: 10px;
+      font-weight: 300;
+      color: #999;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    /* Zoom buttons — custom minimal */
+    #zoom-controls {
+      position: fixed;
+      top: 28px;
+      right: 28px;
+      z-index: 600;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    #zoom-controls button {
+      width: 32px;
+      height: 32px;
+      background: #f7f4ee;
+      border: 1px solid #ddd;
+      border-radius: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: #555;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    #zoom-controls button:hover { background: #eee; }
+  </style>
+</head>
+<body>
+
+<div id="title">
+  <h1>San Francisco</h1>
+  <p>Click a marker to read a note</p>
+</div>
+
+<div id="zoom-controls">
+  <button onclick="map.zoomIn()">+</button>
+  <button onclick="map.zoomOut()">−</button>
+</div>
+
+<div id="map"></div>
+
+<script>
+// SF bounding box — restrict pan to SF peninsula only
+const SF_BOUNDS = L.latLngBounds(
+  [37.6398, -122.5620],  // SW corner
+  [37.9298, -122.3270]   // NE corner
+);
+
+const map = L.map('map', {
+  center: [37.7749, -122.4194],
+  zoom: 13,
+  minZoom: 12,
+  maxZoom: 20,
+  zoomControl: false,
+  attributionControl: true,
+  scrollWheelZoom: true,
+  maxBounds: SF_BOUNDS,
+  maxBoundsViscosity: 1.0,
+});
+
+// Real OSM tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  subdomains: 'abc',
+  maxZoom: 19,
+  maxNativeZoom: 19,
+}).addTo(map);
+
+// 2.5D buildings at zoom 15+
+new OSMBuildings(map).load();
+
+// Scale bar
+L.control.scale({ imperial: false, metric: true, position: 'bottomright' }).addTo(map);
+
+// Neighborhood boundaries — subtle dashed lines + labels
+fetch('https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/san-francisco.geojson')
+  .then(r => r.json())
+  .then(data => {
+    L.geoJSON(data, {
+      style: {
+        color: '#9a8e7a',
+        weight: 0.8,
+        opacity: 0.35,
+        fill: false,
+        dashArray: '3 8',
+      },
+      onEachFeature(feature, layer) {
+        const name = feature.properties.name;
+        if (!name) return;
+        const center = layer.getBounds().getCenter();
+        L.tooltip({
+          permanent: true,
+          direction: 'center',
+          className: 'nhood-label',
+          interactive: false,
+        })
+        .setContent(name)
+        .setLatLng(center)
+        .addTo(map);
+      }
+    }).addTo(map);
+  });
+
+// Landmarks
+const landmarks = [
+  { name: 'Golden Gate Bridge',  lat: 37.8199, lng: -122.4783, note: 'Opens in 1937. Still the most photographed thing in the city — for good reason.' },
+  { name: 'Alcatraz Island',     lat: 37.8267, lng: -122.4230, note: 'A mile and a half from shore. Felt like the edge of the world if you were inside.' },
+  { name: 'Twin Peaks',          lat: 37.7525, lng: -122.4477, note: 'On clear days you can see everything. On foggy days, you can see the fog eating everything.' },
+  { name: 'Coit Tower',          lat: 37.8024, lng: -122.4058, note: 'Built in 1933. The murals inside are the real reason to go up.' },
+  { name: 'Dolores Park',        lat: 37.7596, lng: -122.4269, note: 'Every sunny day in SF happens here, simultaneously, with a burrito.' },
+  { name: 'The Castro',          lat: 37.7609, lng: -122.4350, note: 'A neighborhood that fought hard to exist and never stopped being itself.' },
+  { name: 'Haight–Ashbury',      lat: 37.7692, lng: -122.4481, note: 'Summer of Love was 1967. The vintage shops opened shortly after and never closed.' },
+  { name: 'SoMa',                lat: 37.7785, lng: -122.4056, note: 'Warehouses became startups became restaurants became expensive.' },
+  { name: "Fisherman's Wharf",   lat: 37.8080, lng: -122.4169, note: 'The sourdough bread bowl is not a joke. Get one.' },
+  { name: 'Chinatown',           lat: 37.7941, lng: -122.4063, note: 'Oldest Chinatown in North America. The bakeries open early. Go early.' },
+  { name: 'Painted Ladies',      lat: 37.7762, lng: -122.4334, note: 'Six Victorian houses on a hill. Alamo Square Park is always full across from them.' },
+  { name: 'Sutro Tower',         lat: 37.7552, lng: -122.4528, note: 'Visible from almost anywhere in the city. Haunts the fog like a ghost antenna.' },
+];
+
+// Minimal dot marker — just a small filled circle
+function dotMarker() {
+  return L.divIcon({
+    className: '',
+    html: `<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="6" cy="6" r="4" fill="#1a1a1a" fill-opacity="0.7"/>
+    </svg>`,
+    iconSize: [12, 12],
+    iconAnchor: [6, 6],
+  });
+}
+
+landmarks.forEach(d => {
+  L.marker([d.lat, d.lng], { icon: dotMarker(), title: d.name })
+    .bindPopup(`
+      <div class="popup-inner">
+        <div class="p-name">${d.name}</div>
+        <div class="p-note">${d.note}</div>
+        <div class="p-coords">${d.lat.toFixed(4)}° N &nbsp; ${Math.abs(d.lng).toFixed(4)}° W</div>
+      </div>`, { maxWidth: 260, closeButton: true, autoPan: true })
+    .addTo(map);
+});
+</script>
+</body>
+</html>
