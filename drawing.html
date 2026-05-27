@@ -8,7 +8,7 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -70,6 +70,106 @@
     #masthead .add-btn-wrap {
       margin-left: auto;
     }
+    /* Spotlight question fills only the archive-rail column
+       (left:0 to x=320px). Black background, white text. */
+    #masthead .masthead-spot-q {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 28px;
+      transform: translateY(-50%);
+      background: transparent;
+      padding: 0;
+      font-family: 'Outfit', 'Helvetica Neue', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #555;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    body.spotlight-on #masthead .masthead-spot-q { display: none; }
+    body.spotlight-on #masthead .masthead-center { display: none; }
+
+    /* White section: neighborhood + coords of a random pin for the active question */
+    #masthead .masthead-spot-meta {
+      display: none;
+      position: absolute;
+      top: 0;
+      bottom: -1.5px;
+      left: 0;
+      right: 0;
+      align-items: center;
+      padding: 0 28px;
+      background: var(--edge, #1a1a1a);
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-size: clamp(15px, 1.4vw, 18px);
+      font-weight: 400;
+      letter-spacing: 0.005em;
+      line-height: 1;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: none;
+      box-sizing: border-box;
+    }
+    body.spotlight-on #masthead .masthead-spot-meta { display: none; }
+    /* Spotlight: hide the whole masthead, replace with one tall vertical line */
+    body.spotlight-on #masthead { display: none !important; }
+    body.spotlight-on #spot-side-line {
+      display: block;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 36px;
+      width: var(--edge-w, 1.5px);
+      background: var(--edge, #1a1a1a);
+      z-index: 1500;
+      pointer-events: none;
+    }
+    #spot-side-line { display: none; }
+
+    /* Random action button — text-only, italic serif for soft contrast. */
+    #masthead .masthead-spot-random {
+      display: none;
+      position: absolute;
+      top: 50%;
+      right: 28px;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-family: 'Instrument Serif', serif;
+      font-size: 18px;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0;
+      text-transform: none;
+      line-height: 1;
+      color: #1a1a1a;
+      white-space: nowrap;
+      transition: color 0.15s ease;
+      z-index: 1003;
+    }
+    body.spotlight-on #masthead .masthead-spot-random { display: none; }
+    #masthead .masthead-spot-random:hover {
+      background: transparent;
+      color: var(--accent, #D9531E);
+    }
+    body.spotlight-on #masthead .masthead-add,
+    body.spotlight-on #masthead .masthead-close { display: none !important; }
+    /* Hide the old vdivider in spotlight (it was anchored to the × button) */
+    body.spotlight-on #masthead .masthead-vdivider { display: none !important; }
+    /* No divider needed — orange Random box is visually distinct from black box */
+    /* Kill the white-blue hover background from the +/× shared rule, which
+       can still flash through during spotlight */
+    body.spotlight-on #masthead .masthead-close:hover,
+    body.spotlight-on #masthead .masthead-add:hover {
+      background: transparent !important;
+    }
     #masthead .masthead-vdivider {
       position: absolute;
       top: 0;
@@ -85,41 +185,53 @@
       top: 0;
       right: 0;
       width: 36px;
-      height: 36px;
+      height: calc(36px - 1.5px);
       background: transparent;
       border: none;
+      box-sizing: border-box;
       padding: 0;
       cursor: pointer;
       display: none;
       align-items: center;
       justify-content: center;
-      color: #666;
+      color: #1a1a1a;
       z-index: 1002;
       transition: background 0.15s ease, color 0.15s ease;
     }
-    body.panel-open #masthead .masthead-close { display: flex; }
+    body.panel-open #masthead .masthead-close,
+    body.panel-open #masthead .masthead-close:hover {
+      display: flex;
+      background: transparent !important;
+      color: #1a1a1a !important;
+    }
     #masthead .masthead-close:hover { background: #067CFA; color: #ffffff; }
-    #masthead .masthead-close svg { width: 12px; height: 12px; display: block; }
+    #masthead .masthead-icon {
+      font-family: 'Instrument Serif', serif;
+      font-size: 26px;
+      line-height: 1;
+      display: block;
+      font-weight: 400;
+    }
     #masthead .masthead-add {
       position: absolute;
       top: 0;
       right: 0;
       width: 36px;
-      height: 36px;
+      height: calc(36px - 1.5px);
       background: transparent;
       border: none;
+      box-sizing: border-box;
       padding: 0;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #666;
+      color: #1a1a1a;
       z-index: 1002;
       transition: background 0.15s ease, color 0.15s ease;
     }
     body.panel-open #masthead .masthead-add { display: none; }
     #masthead .masthead-add:hover { background: #067CFA; color: #ffffff; }
-    #masthead .masthead-add svg { width: 12px; height: 12px; display: block; }
     /* ── Left archive rail — full-height column ── */
     #archive-rail {
       position: fixed;
@@ -280,9 +392,9 @@
       display: flex;
       align-items: baseline;
       gap: 14px;
-      min-height: 32px;
+      min-height: 28px;
       margin: 0;
-      padding: 10px 28px;
+      padding: 8px 28px;
       background: transparent;
       border: none;
       position: relative;
@@ -412,7 +524,7 @@
       box-sizing: border-box;
       align-items: center;
     }
-    body.spotlight-on #eye-q-banner { display: flex; }
+    body.spotlight-on #eye-q-banner { display: none; }
     #eye-q-banner .q-text {
       flex: 1;
       font-size: 9px;
@@ -444,6 +556,7 @@
       height: 18px;
       display: block;
     }
+
     /* + button in the masthead — plain inline icon, no box */
     .add-btn {
       border: none;
@@ -475,8 +588,8 @@
     /* Victorian eye toggle — floats below the masthead, right side */
     .eye-toggle {
       pointer-events: auto;
-      width: 14px;
-      height: 14px;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
       background: transparent;
       border: none;
@@ -489,12 +602,10 @@
       transition: opacity 0.3s ease, transform 0.2s ease;
     }
     .eye-toggle .cell { background: transparent; }
-    .eye-toggle .cell.on { background: #a3a3a3; }
+    .eye-toggle .cell.on { background: #555; }
     .eye-toggle:hover { transform: scale(1.08); }
     .eye-toggle.active { opacity: 1; }
-    /* Active state: invert — filled cells become empty, empty cells become filled (corners stay invisible) */
-    .eye-toggle.active .cell:not(.corner) { background: #a3a3a3; }
-    .eye-toggle.active .cell.on { background: transparent; }
+    /* Active state: same check pattern, bolder orange. No invert. */
     .eye-toggle .cell.corner { background: transparent !important; }
     /* Zoom scale — horizontal line + 3 ticks + diamond, with checkerboard at the right */
     .zoom-scale {
@@ -542,24 +653,119 @@
     }
     .zoom-scale .zoom-indicator.is-dragging { transition: none; }
 
-    /* Spotlight overlay — dims the map when revealed */
-    body.spotlight-on::after {
-      content: '';
-      position: fixed;
-      top: 36px; bottom: 36px; left: 320px; right: 0;
-      background: rgba(26,26,26,0.45);
-      pointer-events: none;
-      z-index: 5;
-    }
-    /* Eye mode: hide chrome and the flat dim — the map's spotlight mask handles dimming */
-    body.spotlight-on #masthead,
-    body.spotlight-on #footer,
+    /* Eye mode: hide chrome (no map dimming). Footer stays visible but only
+       the left "Assignment" label is shown. */
     body.spotlight-on #archive-rail,
-    body.spotlight-on #archive-spine { display: none !important; }
-    body.spotlight-on::after { display: none !important; }
+    body.spotlight-on #archive-spine,
+    body.spotlight-on #answer-panel,
+    body.spotlight-on #spot-issue-float { display: none !important; }
+    /* In spotlight, hide most of the footer chrome but keep the "N PINS DROPPED"
+       label floating in its usual bottom-right position over the map. */
+    body.spotlight-on #footer {
+      background: transparent !important;
+      border-top: none !important;
+    }
+    body.spotlight-on #footer .footer-left,
+    body.spotlight-on #footer .footer-right .label { display: none !important; }
+    body.spotlight-on #footer .footer-right { background: transparent !important; }
+    body.spotlight-on #footer .footer-right .footer-end { display: block !important; }
     /* Eye mode: let the map fill the full viewport */
     body.spotlight-on #map-pane { width: 100vw !important; height: 100vh !important; }
     body.spotlight-on { padding-top: 0 !important; padding-bottom: 0 !important; padding-left: 0 !important; }
+
+    /* Spotlight floating issue number — top-left of full screen */
+    #spot-issue-float {
+      display: none;
+      position: fixed;
+      top: 32px;
+      left: 32px;
+      font-family: 'Instrument Serif', serif;
+      font-size: 38px;
+      font-weight: 400;
+      color: #D9531E;
+      letter-spacing: 0.01em;
+      z-index: 1500;
+      line-height: 1;
+    }
+    /* spot-issue-float intentionally hidden in spotlight mode — masthead is shown instead */
+
+    /* Spotlight story card — vertical rectangle, right edge, only in eye mode */
+    #spot-card {
+      display: none;
+      position: fixed;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      width: 320px;
+      max-height: calc(100vh - 32px);
+      background: #ffffff;
+      border: 1.5px solid #1a1a1a;
+      z-index: 1500;
+      box-sizing: border-box;
+      flex-direction: column;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    body.spotlight-on #spot-card { display: flex; }
+
+    .spot-card-question {
+      padding: 22px 20px;
+      font-family: 'Instrument Serif', serif;
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1.15;
+      color: #1a1a1a;
+      border-bottom: 1px solid #a3a3a3;
+    }
+    .spot-card-story {
+      padding: 18px 20px;
+      border-bottom: 1px solid #a3a3a3;
+      flex: 1 1 auto;
+      overflow-y: auto;
+    }
+    .spot-story-body {
+      background: #D9531E;
+      color: #ffffff;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .spot-card-meta {
+      padding: 12px 20px;
+      border-bottom: 1px solid #a3a3a3;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.65);
+      display: flex;
+      align-items: center;
+    }
+    .spot-meta-dot {
+      display: inline-block;
+      width: 5px; height: 5px;
+      background: #D9531E;
+      margin: 0 10px;
+    }
+    .spot-card-controls {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .spot-next {
+      background: transparent;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .spot-next:hover { color: #D9531E; }
+
 
     /* Idle: all answer pins hidden by default. Revealed rules sit further down with the marker styles. */
 
@@ -796,48 +1002,61 @@
     /* Spotlight (eye) mode still hides non-matching pins via .dim */
     .answer-marker.dim { opacity: 0; pointer-events: none; }
 
-    /* The bookmark / bar itself — collapsed is a tall thin rectangle, expanded stretches horizontally */
+    /* Pin = small filled square with the user's initials inside. Stable layout. */
     .answer-note {
       position: relative;
       background: #0088FF;
       color: #ffffff;
-      font-family: 'Geist', 'Helvetica Neue', 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
-      font-size: 10px;
-      line-height: 1.4;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-      text-transform: none;
+      font-family: 'Outfit', 'Helvetica Neue', sans-serif;
+      font-size: 0;
       pointer-events: none;
       box-sizing: border-box;
-      /* Collapsed (default): small solid orange square, no text visible */
       width: 16px;
       height: 16px;
-      padding: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      font-size: 0;
-      transition: width 0.28s ease, height 0.28s ease, padding 0.28s ease, font-size 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      letter-spacing: 0;
     }
-    /* Expanded (on click): bar extends horizontally, shows the answer text inside */
-    .answer-marker.is-open .answer-note {
-      width: auto;
-      max-width: 280px;
-      height: auto;
-      min-height: 20px;
-      padding: 6px 12px;
-      white-space: normal;
-      font-size: 10px;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    .answer-note .q { display: none; }
+    .answer-note .q,
+    .answer-note > div:not(.handle):not(.q) { display: none; }
     .answer-note .handle {
       display: block;
-      margin-top: 4px;
-      font-size: 9px;
+      margin: 0;
+      font-size: 7px;
       font-weight: 400;
-      letter-spacing: 0.04em;
-      color: rgba(255,255,255,0.7);
+      color: #ffffff;
+      line-height: 1;
+    }
+    /* Selected pin: only the handle weight changes. Box layout stays identical. */
+    .answer-marker.is-open .answer-note .handle {
+      font-weight: 700;
+    }
+    /* Spotlight mode + clicked pin: the box expands horizontally to show the
+       answer body (like a small orange unfolded note). */
+    body.spotlight-on .answer-marker.is-open .answer-note {
+      width: auto;
+      max-width: 320px;
+      height: auto;
+      min-height: 20px;
+      padding: 10px 14px;
+      font-size: 13px;
+      line-height: 1.4;
+      display: block;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+    }
+    body.spotlight-on .answer-marker.is-open .answer-note > div:not(.q):not(.handle) {
+      display: block;
+    }
+    body.spotlight-on .answer-marker.is-open .answer-note .handle {
+      display: block;
+      margin-top: 6px;
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.75);
     }
     /* Map cursor: tiny hairline square outline — matches the page's rectilinear language.
        Applied to the MapLibre canvas container too, since its own
@@ -1139,7 +1358,7 @@
       font: inherit;
       letter-spacing: inherit;
       padding: 0;
-      width: 11ch;
+      width: 8ch;
       text-align: left;
       caret-color: #D9531E;
       border-bottom: 1px solid rgba(26, 26, 26, 0.30);
@@ -1166,7 +1385,7 @@
       line-height: 1;
       position: absolute;
       bottom: 60px;
-      right: 19px;
+      right: 50px;
       z-index: 2;
       display: inline-flex;
       align-items: baseline;
@@ -1239,21 +1458,66 @@
     #answer-panel .panel-vdivider {
       display: none;
       position: absolute;
+      top: 0;
       bottom: 0;
-      height: 50px;
-      right: 50px;
+      right: 36px;
       width: 1px;
       background: #a3a3a3;
       pointer-events: none;
       z-index: 1;
     }
     #answer-panel.is-write .panel-vdivider { display: block; }
+
+    /* Read-mode vertical divider — full card height, aligned with masthead × button */
+    #answer-panel .panel-vdivider-read {
+      display: none;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 36px;
+      width: var(--edge-w, 1.5px);
+      background: var(--edge, #1a1a1a);
+      pointer-events: none;
+      z-index: 1;
+    }
+    #answer-panel:not(.is-write) .panel-vdivider-read { display: block; }
+
+    /* Read-mode shuffle button — full card height, shows a new random story */
+    #answer-panel .panel-shuffle {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 36px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      color: #1a1a1a;
+      transition: background 0.15s ease, color 0.15s ease;
+      z-index: 2;
+    }
+    #answer-panel:not(.is-write) .panel-shuffle { display: flex; }
+    #answer-panel .panel-shuffle svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+      stroke: currentColor;
+    }
+    #answer-panel .panel-shuffle:hover {
+      background: var(--accent, #D9531E);
+      color: #ffffff;
+    }
     #answer-panel .panel-submit {
       position: absolute;
       right: 0;
+      top: 0;
       bottom: 0;
-      width: 50px;
-      height: 50px;
+      width: 36px;
+      height: auto;
       background: transparent;
       border: none;
       padding: 0;
@@ -1292,7 +1556,7 @@
       display: none;
       position: absolute;
       left: 0;
-      right: 0;
+      right: 36px;
       bottom: 50px;
       height: 1px;
       background: #a3a3a3;
@@ -1342,7 +1606,7 @@
     }
 
     /* Masthead — bold bottom edge, monospace title hint */
-    #masthead { border-bottom: var(--edge-w) solid var(--edge); }
+    #masthead { border-bottom: var(--edge-w) solid #555; }
     #masthead .masthead-vdivider { background: var(--edge); width: var(--edge-w); }
     #masthead .city-center {
       font-family: var(--mono);
@@ -1459,13 +1723,16 @@
     #answer-panel .panel-handle,
     #answer-panel .panel-count {
       font-family: var(--mono);
-      color: var(--edge);
+      color: rgba(26,26,26,0.18);
+      font-weight: 400;
+      font-size: 15px;
     }
-    #answer-panel .panel-count {
-      font-weight: 500;
-      font-size: 13px;
+    #answer-panel .panel-count .count-quill {
+      width: 16px;
+      height: 16px;
+      color: rgba(26,26,26,0.22);
+      vertical-align: middle;
     }
-    #answer-panel .panel-count .count-caret { color: var(--edge); opacity: 0.45; }
     #answer-panel .panel-drop-label {
       font-family: var(--mono);
       color: var(--edge);
@@ -1545,9 +1812,8 @@
     .zoom-scale .zoom-line .zoom-tick { background: var(--edge); opacity: 1; }
     .zoom-scale .zoom-indicator { background: var(--edge); }
 
-    /* Eye toggle dots → solid black */
-    .eye-toggle .cell.on { background: var(--edge); }
-    .eye-toggle.active .cell:not(.corner) { background: var(--edge); }
+    /* Eye toggle dots → map-line gray (#555) at rest; active stays orange. */
+    .eye-toggle .cell.on { background: #555; }
 
     /* ════════════════════════════════════════════════════════════════════
        ░░  V18 — MODERN WITH 60s ORANGE HINT  ░░
@@ -1611,8 +1877,8 @@
     /* Map popup divider gets the orange hairline — quiet print mark */
     .pop .divider { background: var(--accent) !important; }
 
-    /* Count-caret blinker → orange */
-    #answer-panel .panel-count .count-caret { color: var(--accent) !important; opacity: 0.55 !important; }
+    /* Count-caret blinker — very subtle, almost invisible */
+    #answer-panel .panel-count .count-caret { color: rgba(26,26,26,0.18) !important; opacity: 1 !important; }
 
     /* ─── Pager — hidden by default, reappears as a typographic fraction
            when the archive grows past one page (toggle body.has-multi-page).
@@ -1644,10 +1910,13 @@
        just like the masthead's +/× buttons. Text and icon sizes stay
        the same — only vertical space changes. */
 
-    /* Submit button cell — matches masthead button geometry exactly */
+    /* Submit button cell — full card height, 36px wide so its left edge
+       aligns with the masthead × button's left edge. */
     #answer-panel .panel-submit {
       width: 36px !important;
-      height: 36px !important;
+      height: auto !important;
+      top: 0 !important;
+      bottom: 0 !important;
     }
 
     /* Horizontal line above the strip — moves from y=50 to y=36 */
@@ -1655,9 +1924,11 @@
       bottom: 36px !important;
     }
 
-    /* Vertical line at the submit cell's left edge */
+    /* Vertical line at the submit cell's left edge — runs full card height. */
     #answer-panel .panel-vdivider {
-      height: 36px !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      height: auto !important;
       right: 36px !important;
     }
 
@@ -1742,8 +2013,8 @@
       position: fixed;
       right: 16px;
       bottom: calc(36px + 16px);
-      width: 130px;
-      height: 130px;
+      width: 140px;
+      height: 140px;
       pointer-events: none;
       z-index: 600;
       color: var(--accent, #D9531E);
@@ -1794,25 +2065,26 @@
       top: calc(36px + 170px + 16px) !important;
     }
 
-    /* Lift the eye-toggle (checker button) out of the zoom-scale row and
-       pin it to the masthead's left cell, on the same row as PINNED. */
+    /* Pin the eye-toggle on the map, directly below the + button (top-right),
+       on the same vertical line. Stays put in spotlight mode. */
     .zoom-scale #eye-toggle {
       position: fixed !important;
-      top: 11px !important;
-      left: 24px !important;
+      top: 52px !important;
+      right: 8px !important;
+      left: auto !important;
       bottom: auto !important;
       z-index: 1100;
       pointer-events: auto;
     }
-    /* Checker spotlight toggle — restored to its original 5×5 grid look
-       and pinned to the top-right where zoom-scale lives. Active state
-       recolors the cells to orange (not the old invert pattern). */
-    .zoom-scale #eye-toggle.active .cell.on,
-    .zoom-scale #eye-toggle.active .cell:not(.corner) {
-      background: var(--accent, #D9531E) !important;
+    /* When the answer card is open, hide the toggle entirely. Card and
+       spotlight mode are alternatives, not concurrent surfaces. */
+    body.panel-open .zoom-scale #eye-toggle {
+      display: none !important;
     }
-    .zoom-scale #eye-toggle.active .cell.corner {
-      background: transparent !important;
+    /* Checker spotlight toggle — same 5×5 check shape in both states.
+       Active just deepens the orange on the same .cell.on dots. */
+    .zoom-scale #eye-toggle.active .cell.on {
+      background: var(--accent, #D9531E) !important;
     }
 
     /* Footer text balanced with the rest of the page (9px → 12px). */
@@ -1887,20 +2159,26 @@
     <div class="city-center">Where We Were</div>
   </div>
   <div class="masthead-vdivider" aria-hidden="true"></div>
+  <div class="masthead-spot-q" id="masthead-spot-q" aria-hidden="true">
+    <span class="spot-q-label" id="spot-q-label">Assignment 12</span>
+  </div>
+  <div class="masthead-spot-meta" id="masthead-spot-meta" aria-hidden="true">
+    <span class="spot-q-text" id="spot-q-text">I keep coming back to...</span>
+  </div>
   <button class="masthead-close" id="panel-close" title="Close" aria-label="Close answer panel">
-    <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
-      <line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/>
-    </svg>
+    <span class="masthead-icon">×</span>
   </button>
   <button class="masthead-add" id="masthead-add" title="Drop a pin" aria-label="Drop a pin">
-    <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
-      <line x1="5" y1="1" x2="5" y2="9"/><line x1="1" y1="5" x2="9" y2="5"/>
-    </svg>
+    <span class="masthead-icon">+</span>
   </button>
+  <button class="masthead-spot-random" id="masthead-spot-random" aria-label="Show another random spot">Random</button>
 </div>
 
 <!-- ─────────── VERTICAL SPINE LINE ─────────── -->
 <div id="archive-spine"></div>
+
+<!-- ─────────── SPOTLIGHT SIDE LINE — replaces masthead in spotlight mode ─────────── -->
+<div id="spot-side-line" aria-hidden="true"></div>
 
 <!-- ─────────── LEFT ARCHIVE RAIL — flat list of all questions ─────────── -->
 <aside id="archive-rail">
@@ -1936,7 +2214,7 @@
       </div>
     </div>
     <div class="sheet-body">
-      <textarea id="sheet-input" class="answer-field" placeholder="Leave a thought" maxlength="100" rows="3"></textarea>
+      <textarea id="sheet-input" class="answer-field" placeholder="Tell us about this spot" maxlength="100" rows="3"></textarea>
     </div>
     <div class="sheet-foot">
       <div class="foot-top">
@@ -1963,11 +2241,17 @@
       <span class="panel-hood" id="panel-hood-read">RUSSIAN HILL · 37.81 · 122.43</span>
     </div>
     <div class="panel-divider panel-divider-read"></div>
+    <div class="panel-vdivider-read"></div>
+    <button class="panel-shuffle" id="panel-shuffle" title="Show another spot" aria-label="Show another spot">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 5 16 12 9 19"/>
+      </svg>
+    </button>
   </div>
   <!-- WRITE MODE — input form for new answer (grid: input | actions row) -->
   <div class="panel-inner panel-write" id="panel-write">
     <div class="panel-write-input">
-      <textarea id="panel-input" class="panel-input" placeholder="Leave a thought" maxlength="170" rows="2"></textarea>
+      <textarea id="panel-input" class="panel-input" placeholder="Tell us about this spot" maxlength="170" rows="2"></textarea>
     </div>
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
@@ -1976,14 +2260,19 @@
     <div class="panel-divider"></div>
     <div class="panel-vdivider"></div>
     <span class="panel-count" id="panel-count">
-      <span class="count-current">0</span><span class="count-caret">|</span><span class="count-max">170</span>
-    </span>
-    <span class="panel-handle" id="panel-handle"><input type="text" id="panel-first" class="panel-name-field" maxlength="20" placeholder="" autocomplete="given-name" data-placeholder="First name"/><span class="panel-name-sep"></span><input type="text" id="panel-last" class="panel-name-field" maxlength="20" placeholder="" autocomplete="family-name" data-placeholder="Last name"/></span>
-    <button class="panel-submit" id="panel-submit" title="Drop pin" aria-label="Drop pin">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <span class="count-current">0</span>
+      <svg class="count-quill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M20 4 C 14 5, 8 11, 5 19 L 9 18 C 13 12, 16 8, 20 4 Z"/>
         <line x1="5" y1="19" x2="4" y2="20"/>
         <circle cx="1.8" cy="22.2" r="1.7" fill="currentColor" stroke="none"/>
+      </svg>
+      <span class="count-max">170</span>
+    </span>
+    <span class="panel-handle" id="panel-handle"><input type="text" id="panel-first" class="panel-name-field" maxlength="20" placeholder="" autocomplete="given-name" data-placeholder="First"/><span class="panel-name-sep"></span><input type="text" id="panel-last" class="panel-name-field" maxlength="20" placeholder="" autocomplete="family-name" data-placeholder="Last"/></span>
+    <button class="panel-submit" id="panel-submit" title="Drop pin" aria-label="Drop pin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="13 6 19 12 13 18"/>
       </svg>
     </button>
   </div>
@@ -2067,7 +2356,7 @@
 <!-- ─────────── BOTTOM LABEL BAR ─────────── -->
 <div id="footer">
   <div class="footer-left">
-    <span>Assignment</span>
+    <span>Assignment <span id="footer-assignment-num"></span></span>
   </div>
   <div class="footer-right">
     <div class="label">
@@ -2323,8 +2612,45 @@ function selectQuestion(idx) {
 // ── Eye-mode question pill — shows the active question and advances on click ──
 const eyeQText = document.getElementById('eye-q-text');
 const eyeQNext = document.getElementById('eye-q-next');
+const spotQText = document.getElementById('spot-q-text');
+const spotMetaHood = document.getElementById('spot-meta-hood');
+const spotMetaCoords = document.getElementById('spot-meta-coords');
+// Holds the currently-displayed random pin so other code (auto-open card) can read it.
+let activeRandomPin = null;
+function pickRandomPinForActiveQuestion() {
+  try {
+    const all = JSON.parse(localStorage.getItem('sf-mood-answers') || '[]');
+    const q = QUESTIONS[currentQuestionIndex];
+    const matches = all.filter(e => e.question === q);
+    if (!matches.length) return null;
+    return matches[Math.floor(Math.random() * matches.length)];
+  } catch (_) {
+    return null;
+  }
+}
 function renderEyePill() {
   eyeQText.textContent = QUESTIONS[currentQuestionIndex];
+  // Spotlight chip: small "ASSIGNMENT NN" label above the big question text
+  const spotQLabel = document.getElementById('spot-q-label');
+  if (spotQLabel && typeof ASSIGNMENTS !== 'undefined') {
+    const a = ASSIGNMENTS[currentQuestionIndex];
+    spotQLabel.textContent = a ? `Assignment ${a.issueNo}` : '';
+  }
+  if (spotQText) spotQText.textContent = QUESTIONS[currentQuestionIndex];
+  // Footer assignment is no longer used in spotlight mode (footer is hidden)
+  const footerNum = document.getElementById('footer-assignment-num');
+  if (footerNum) footerNum.textContent = '';
+  activeRandomPin = pickRandomPinForActiveQuestion();
+  // In spotlight, the bottom-right "N PINS DROPPED" reflects the active
+  // question's count (not the global total).
+  if (document.body.classList.contains('spotlight-on')) {
+    try {
+      const all = JSON.parse(localStorage.getItem('sf-mood-answers') || '[]');
+      const q = QUESTIONS[currentQuestionIndex];
+      const el = document.getElementById('footer-pins');
+      if (el) el.textContent = all.filter(e => e.question === q).length.toLocaleString();
+    } catch (_) {}
+  }
 }
 function advanceEyeQuestion() {
   const nextIdx = (currentQuestionIndex + 1) % QUESTIONS.length;
@@ -2484,6 +2810,10 @@ function closeSheet() {
 }
 
 map.on('click', (e) => {
+  // In spotlight (eye) mode, only existing answer markers are interactive;
+  // background clicks must NOT spawn the pending pin or open the write panel.
+  if (document.body.classList.contains('spotlight-on')) return;
+
   // Close any expanded answer-marker when clicking the map background
   answerMarkers.forEach(m => m.el.classList.remove('is-open'));
   // Lock in the current question when a click happens
@@ -2570,8 +2900,86 @@ function loadSavedAnswers() {
 function updatePinCount() {
   const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   const el = document.getElementById('footer-pins');
-  if (el) el.textContent = all.length.toLocaleString();
+  if (el) {
+    const inSpotlight = document.body.classList.contains('spotlight-on');
+    if (inSpotlight && typeof QUESTIONS !== 'undefined' && typeof currentQuestionIndex !== 'undefined') {
+      const q = QUESTIONS[currentQuestionIndex];
+      el.textContent = all.filter(e => e.question === q).length.toLocaleString();
+    } else {
+      el.textContent = all.length.toLocaleString();
+    }
+  }
+  if (typeof renderEyePill === 'function') renderEyePill();
 }
+
+// ─────────── SPOTLIGHT STORY CARD ───────────
+(function () {
+  const issueFloatEl = document.getElementById('spot-issue-float');
+  const questionEl   = document.getElementById('spot-question-text');
+  const storyTextEl  = document.getElementById('spot-story-text');
+  const handleEl     = document.getElementById('spot-story-handle');
+  const hoodEl       = document.getElementById('spot-story-hood');
+  const nextBtn      = document.getElementById('spot-next');
+  if (!nextBtn || !issueFloatEl) return;
+
+  let storyList = [];
+  let currentStory = null;
+
+  function buildStoryList() {
+    const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    storyList = all.slice();
+  }
+  function issueNoFor(question) {
+    if (typeof QUESTIONS !== 'undefined' && Array.isArray(QUESTIONS)) {
+      const idx = QUESTIONS.indexOf(question);
+      if (idx >= 0) return `No. ${String(QUESTIONS.length - idx).padStart(2,'0')}`;
+    }
+    return '—';
+  }
+  function pickRandom() {
+    if (!storyList.length) return null;
+    if (storyList.length === 1) return storyList[0];
+    let pick;
+    do {
+      pick = storyList[Math.floor(Math.random() * storyList.length)];
+    } while (pick === currentStory);
+    return pick;
+  }
+  function render(s) {
+    if (!s) {
+      issueFloatEl.textContent = '—';
+      questionEl.textContent = 'No stories yet';
+      storyTextEl.textContent = '';
+      handleEl.textContent = '';
+      hoodEl.textContent = '';
+      return;
+    }
+    currentStory = s;
+    issueFloatEl.textContent = issueNoFor(s.question);
+    questionEl.textContent   = s.question || '';
+    storyTextEl.textContent  = s.text || '';
+    handleEl.textContent     = deriveInitials(s.handle || '');
+    hoodEl.textContent       = (s.lngLat ? nearestNeighborhood(s.lngLat) : '');
+  }
+  function randomStory() {
+    render(pickRandom());
+  }
+
+  nextBtn.addEventListener('click', randomStory);
+  window.addEventListener('keydown', (e) => {
+    if (!document.body.classList.contains('spotlight-on')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); randomStory(); }
+  });
+
+  function onSpotlightEnter() {
+    buildStoryList();
+    render(pickRandom());
+  }
+  const observer = new MutationObserver(() => {
+    if (document.body.classList.contains('spotlight-on')) onSpotlightEnter();
+  });
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+})();
 
 // ─────────── MARKER ───────────
 // Track every answer marker element + its question, so we can highlight/dim them as the question rotates
@@ -2597,10 +3005,13 @@ function placeAnswerMarker({ lngLat, question, text, handle }) {
     const wasOpen = wrap.classList.contains('is-open');
     answerMarkers.forEach(m => m.el.classList.remove('is-open'));
     if (wasOpen) {
-      closeAnswerPanel();
+      if (!document.body.classList.contains('spotlight-on')) closeAnswerPanel();
     } else {
       wrap.classList.add('is-open');
-      openAnswerPanel({ text, lngLat, hood });
+      // In spotlight, only expand the inline note — no big side panel.
+      if (!document.body.classList.contains('spotlight-on')) {
+        openAnswerPanel({ text, lngLat, hood });
+      }
     }
   });
   new maplibregl.Marker({ element: wrap, anchor: 'top-left' })
@@ -2682,6 +3093,23 @@ function closeAnswerPanel() {
   answerMarkers.forEach(m => m.el.classList.remove('is-open'));
 }
 
+// On bfcache restore (browser back/forward), the page snapshot may still have
+// transient classes like body.panel-open or #answer-panel.is-open from before
+// navigation. Reset them so the page lands on the default view.
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) {
+    if (typeof closeAnswerPanel === 'function') closeAnswerPanel();
+    if (typeof closeSheet === 'function') closeSheet();
+    document.body.classList.remove('panel-open');
+    if (document.body.classList.contains('spotlight-on') && typeof setRevealed === 'function') {
+      setRevealed(false);
+    }
+    if (typeof map !== 'undefined' && map && typeof map.resize === 'function') {
+      map.resize();
+    }
+  }
+});
+
 // Wire up live character counter + submit for write mode
 document.addEventListener('DOMContentLoaded', () => {
   const panelInput  = document.getElementById('panel-input');
@@ -2747,6 +3175,36 @@ document.addEventListener('DOMContentLoaded', () => {
       openWritePanel({ lngLat: activePinLngLat, hood });
     });
   }
+  const panelShuffle = document.getElementById('panel-shuffle');
+  if (panelShuffle) {
+    panelShuffle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      try {
+        const all = JSON.parse(localStorage.getItem('sf-mood-answers') || '[]');
+        if (!all.length) return;
+        let pick;
+        let tries = 0;
+        do {
+          pick = all[Math.floor(Math.random() * all.length)];
+          tries++;
+        } while (all.length > 1 && pick.lngLat && activePinLngLat &&
+                 pick.lngLat[0] === activePinLngLat[0] && pick.lngLat[1] === activePinLngLat[1] &&
+                 tries < 10);
+        const hood = pick.lngLat ? nearestNeighborhood(pick.lngLat) : '';
+        openAnswerPanel({ text: pick.text || '', lngLat: pick.lngLat, hood });
+      } catch (_) {}
+    });
+  }
+  const mastheadRandom = document.getElementById('masthead-spot-random');
+  if (mastheadRandom) {
+    mastheadRandom.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (typeof autoOpenRandomPinForActiveQuestion === 'function') {
+        autoOpenRandomPinForActiveQuestion();
+      }
+      if (typeof renderEyePill === 'function') renderEyePill();
+    });
+  }
   const mastheadAdd = document.getElementById('masthead-add');
   if (mastheadAdd) {
     mastheadAdd.addEventListener('click', (e) => {
@@ -2797,11 +3255,37 @@ function setRevealed(on) {
   document.body.classList.toggle('spotlight-on', on);
   eyeToggle.classList.toggle('active', on);
   if (on && typeof closeDropdown === 'function') closeDropdown();
+  // Close any open answer panel when entering spotlight so a stray panel border
+  // doesn't linger after exiting eye mode
+  if (on && typeof closeAnswerPanel === 'function') closeAnswerPanel();
+  // Entering spotlight: reset to the newest question (index 0) and auto-open
+  // a random pin from that question's answers.
+  if (on) {
+    if (typeof selectQuestion === 'function') selectQuestion(0);
+  }
   // Resize synchronously — must happen *before* flyTo so the viewport size is correct
   // when the animation starts; otherwise the new strip uncovered by the rail flashes briefly.
   map.resize();
   map.flyTo({ ...(on ? EYE_VIEW : DEFAULT_VIEW), duration: 1200, essential: true });
   applySpotlight();
+  if (typeof renderEyePill === 'function') renderEyePill();
+  // After classes/state are set, expand a random pin's note.
+  if (on) {
+    autoOpenRandomPinForActiveQuestion();
+  } else {
+    // Exiting spotlight: collapse any opened pin so the closed view is clean.
+    answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+  }
+}
+
+function autoOpenRandomPinForActiveQuestion() {
+  if (!answerMarkers || !answerMarkers.length) return;
+  const q = QUESTIONS[currentQuestionIndex];
+  const matches = answerMarkers.filter(m => m.question === q);
+  if (!matches.length) return;
+  const pick = matches[Math.floor(Math.random() * matches.length)];
+  answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+  pick.el.classList.add('is-open');
 }
 eyeToggle.addEventListener('click', () => setRevealed(!revealed));
 
@@ -2817,11 +3301,8 @@ map.on('move', () => {
 
 // Apply the spotlight effect: only when revealed; otherwise pins stay hidden via CSS
 function applySpotlight() {
-  if (!revealed) return;
-  const currentQ = QUESTIONS[currentQuestionIndex];
-  answerMarkers.forEach(m => {
-    m.el.classList.toggle('dim', m.question !== currentQ);
-  });
+  // No dimming: all pins stay fully visible in spotlight mode.
+  answerMarkers.forEach(m => m.el.classList.remove('dim'));
 }
 function escapeHtml(str) {
   const div = document.createElement('div');
