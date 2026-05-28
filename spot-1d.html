@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>spot-1d · outline box</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Jost:wght@400;500&family=JetBrains+Mono:wght@400;500;600&family=Cormorant+Infant:wght@700&family=Outfit:wght@500;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100vw; height: 100vh; overflow: hidden; background: #f4f4f5; color: #1a1a1a; }
+  .map-bg { position: fixed; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(26,26,26,0.05) 1px, transparent 0); background-size: 4px 4px; }
+  .map-shape { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .map-shape svg { width: 70%; height: 70%; max-width: 1000px; opacity: 0.5; }
+  .pin { position: fixed; top: 42%; left: 50%; width: 16px; height: 16px; background: #D9531E; z-index: 50; }
+  .answer-box { position: fixed; top: calc(42% - 4px); left: calc(50% + 24px); background: #D9531E; color: #fff; padding: 8px 12px; font-family: 'Jost', sans-serif; font-size: 13px; z-index: 60; max-width: 260px; }
+
+  /* 1d — outlined hard-edge box (matches drawing.html's bracketed answer card) */
+  .q-outline {
+    position: fixed;
+    top: 32px; left: 32px;
+    background: #fafaf7;
+    border: 1.5px solid #1a1a1a;
+    padding: 14px 20px 16px;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 360px;
+  }
+  .q-outline .corner {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(26,26,26,0.55);
+  }
+  .q-outline .body {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    line-height: 1.15;
+    color: #1a1a1a;
+  }
+
+  #map-badge { position: fixed; right: 16px; bottom: 16px; width: 140px; height: 140px; pointer-events: none; z-index: 600; color: #D9531E; }
+  #map-badge .sf-mark { fill: none; stroke: currentColor; }
+  #map-badge svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  #map-badge .ring-text { font-family: 'Cormorant Infant', serif; font-weight: 700; font-size: 15px; letter-spacing: 0.08em; fill: currentColor; stroke: currentColor; stroke-width: 0.6; paint-order: stroke fill; }
+  #map-badge .center-text { font-family: 'Archivo', 'Outfit', sans-serif; font-weight: 900; font-size: 20px; letter-spacing: -0.02em; text-transform: uppercase; fill: currentColor; text-anchor: middle; }
+  .variant-tag { position: fixed; bottom: 16px; left: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: rgba(26,26,26,0.4); text-transform: uppercase; z-index: 999; }
+</style>
+</head>
+<body>
+<div class="map-bg"></div>
+<div class="map-shape"><svg viewBox="0 0 800 800"><g fill="none" stroke="#1a1a1a" stroke-width="0.6"><path d="M 280 120 L 540 130 L 580 200 L 600 320 L 580 500 L 540 640 L 460 690 L 360 680 L 280 600 L 240 460 L 250 280 Z"/><line x1="280" y1="120" x2="540" y2="640"/><line x1="540" y1="130" x2="280" y2="600"/><line x1="320" y1="120" x2="320" y2="680"/><line x1="380" y1="120" x2="380" y2="680"/><line x1="440" y1="120" x2="440" y2="680"/><line x1="500" y1="125" x2="500" y2="680"/><line x1="260" y1="220" x2="600" y2="220"/><line x1="250" y1="320" x2="600" y2="320"/><line x1="250" y1="420" x2="590" y2="420"/><line x1="250" y1="520" x2="570" y2="520"/><line x1="260" y1="600" x2="550" y2="600"/></g></svg></div>
+
+<div class="pin"></div>
+<div class="answer-box">sight glass coffee is the best spot</div>
+
+<div class="q-outline">
+  <div class="corner">Assignment</div>
+  <div class="body">I keep coming back to&hellip;</div>
+</div>
+
+<div id="map-badge"><svg viewBox="0 0 150 150"><defs><path id="badge-ring-top" d="M 34,116 A 58,58 0 1,1 90,131" fill="none"/></defs><text class="ring-text"><textPath href="#badge-ring-top" startOffset="50%" text-anchor="middle">Interface Dynamics City Archive</textPath></text><text class="center-text" x="75" y="78" transform="rotate(-5 75 78)">PINNED</text><g class="sf-mark" transform="translate(63, 118)"><line x1="0" y1="10" x2="24" y2="10" stroke-width="1.5"/><line x1="6" y1="2" x2="6" y2="10" stroke-width="1.8"/><line x1="8" y1="2" x2="8" y2="10" stroke-width="1.8"/><line x1="6" y1="4" x2="8" y2="4" stroke-width="1.5"/><line x1="16" y1="2" x2="16" y2="10" stroke-width="1.8"/><line x1="18" y1="2" x2="18" y2="10" stroke-width="1.8"/><line x1="16" y1="4" x2="18" y2="4" stroke-width="1.5"/><path d="M 7,2 Q 12,7 17,2" fill="none" stroke-width="1.5"/><path d="M 0,8 Q 3,3 7,2" fill="none" stroke-width="1.5"/><path d="M 17,2 Q 21,3 24,8" fill="none" stroke-width="1.5"/></g></svg></div>
+
+<div class="variant-tag">spot-1d · outline box</div>
+</body>
+</html>
+</content>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spotlight — top-left question variations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Hanken+Grotesk:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      font-family: 'Hanken Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 64px 56px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      max-width: 720px;
+      line-height: 1.55;
+      margin-bottom: 6px;
+      font-family: 'Instrument Serif', serif;
+      font-size: 18px;
+      color: rgba(26,26,26,0.7);
+    }
+    p.process {
+      font-size: 11px; color: rgba(26,26,26,0.5);
+      max-width: 720px; line-height: 1.5; margin-bottom: 48px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.06em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 28px;
+      max-width: 1600px;
+    }
+    .cell {
+      background: #ffffff;
+      border: 1.5px solid #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .cell:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 #1a1a1a;
+    }
+    .preview {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-bottom: 1px solid #1a1a1a;
+      background: #f4f4f5;
+    }
+    .preview iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 1920px;
+      height: 1200px;
+      border: 0;
+      transform: scale(0.32);
+      transform-origin: top left;
+      pointer-events: none;
+    }
+    .meta {
+      padding: 18px 22px 22px;
+    }
+    .meta .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+      color: #D9531E; margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .meta .name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 22px; font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .meta .desc {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      line-height: 1.5;
+      color: rgba(26,26,26,0.6);
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+    .meta .open-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      border-top: 1px solid rgba(26,26,26,0.15);
+      padding-top: 10px;
+      display: inline-block;
+    }
+    .footer-note {
+      margin-top: 56px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Spotlight — top-left question variations</h1>
+<p class="lede">Six treatments for the question text in the top-left corner.</p>
+<p class="process">Pin + answer box + PINNED badge stay constant. Typography, framing, and decoration change.</p>
+
+<div class="grid">
+
+  <a class="cell" href="spot-1a.html" target="_blank">
+    <div class="preview"><iframe src="spot-1a.html" scrolling="no"></iframe></div>
+    <div class="meta">
+      <div class="opt">spot · 1a</div>
+      <div class="name">Tiny mono tag</div>
+      <div class="desc">JetBrains Mono 11px uppercase. Quiet, archival, almost a chrome label.</div>
+      <div class="open-link">Open ↗</div>
+    </div>
+  </a>
+
+  <a class="cell" href="spot-1b.html" target="_blank">
+    <div class="preview"><iframe src="spot-1b.html" scrolling="no"></iframe></div>
+    <div class="meta">
+      <div class="opt">spot · 1b</div>
+      <div class="name">Big italic serif</div>
+      <div class="desc">Instrument Serif italic 36px. The question reads as the page's headline.</div>
+      <div class="open-link">Open ↗</div>
+    </div>
+  </a>
+
+  <a class="cell" href="spot-1c.html" target="_blank">
+    <div class="preview"><iframe src="spot-1c.html" scrolling="no"></iframe></div>
+    <div class="meta">
+      <div class="opt">spot · 1c</div>
+      <div class="name">Label + rule + serif</div>
+      <div class="desc">Small "Today's question" label, short orange rule, then serif body. Most editorial structure.</div>
+      <div class="open-link">Open ↗</div>
+    </div>
+  </a>
+
+  <a class="cell" href="spot-1d.html" target="_blank">
+    <div class="preview"><iframe src="spot-1d.html" scrolling="no"></iframe></div>
+    <div class="meta">
+      <div class="opt">spot · 1d</div>
+      <div class="name">Outline box</div>
+      <div class="desc">Hard 1.5px dark outline on warm off-white. Matches the bracketed answer-card chrome from drawing.html.</div>
+      <div class="open-link">Open ↗</div>
+    </div>
+  </a>
+
+  <a class="cell" href="spot-1e.html" target="_blank">
+    <div class="preview"><iframe src="spot-1e.html" scrolling="no"></iframe></div>
+    <div class="meta">
+      <div class="opt">spot · 1e</div>
+      <div class="name">Bracketed</div>
+      <div class="desc">Red [ … ] brackets framing the serif question. Reuses the site's hi-no-maru bracket motif.</div>
+      <div class="open-link">Open ↗</div>
+    </div>
+  </a>
+
+  <a class="cell" href="spot-1f.html" target="_blank">
+    <div class="preview"><iframe src="spot-1f.html" scrolling="no"></iframe></div>
+    <div class="meta">
+      <div class="opt">spot · 1f</div>
+      <div class="name">Rotated label + serif</div>
+      <div class="desc">Vertical "Question 12" label, 1px rule, then serif body. About-page spine pattern.</div>
+      <div class="open-link">Open ↗</div>
+    </div>
+  </a>
+
+</div>
+
+<p class="footer-note">Pick one to bring into drawing.html's spotlight mode.</p>
+
+</body>
+</html>
+</content>

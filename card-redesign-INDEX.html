@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Card redesign — 5 directions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@300;400;500;600&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,700&family=Gilda+Display&family=Inter:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      font-family: 'Geist', 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 80px 64px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px; color: rgba(26,26,26,0.55);
+      max-width: 640px; line-height: 1.55; margin-bottom: 56px;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
+      max-width: 1400px;
+    }
+    .cell {
+      border: 1.5px solid #666;
+      background: #faf7ee;
+      text-decoration: none;
+      color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.15s ease;
+    }
+    .cell:hover { background: rgba(26,26,26,0.03); }
+    .cell .thumb {
+      height: 220px;
+      border-bottom: 1.5px solid #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+    }
+    .cell .meta {
+      padding: 18px 22px 22px;
+    }
+    .cell .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.16em;
+      color: #FF8000; margin-bottom: 8px;
+    }
+    .cell .name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 16px; font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .cell .desc {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 12px; color: rgba(26,26,26,0.55);
+      line-height: 1.5;
+    }
+    .footer-note {
+      margin-top: 56px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+    }
+
+    /* ─── Tiny preview thumbs (each captures the typography spirit) ─── */
+    .thumb-wrap { width: 100%; max-width: 280px; }
+
+    /* A — editorial */
+    .thumb-a { display: flex; align-items: baseline; gap: 14px; }
+    .thumb-a .num { font-family: 'Cormorant Infant', serif; font-weight: 300; font-size: 110px; line-height: 0.85; }
+    .thumb-a .lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(26,26,26,0.6); writing-mode: vertical-rl; transform: rotate(180deg); }
+
+    /* B — Swiss grid */
+    .thumb-b { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; width: 100%; }
+    .thumb-b .num { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 72px; line-height: 0.9; letter-spacing: -0.04em; }
+    .thumb-b .q { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; line-height: 1.3; align-self: end; padding-bottom: 6px; }
+
+    /* C — ticket / library card */
+    .thumb-c { width: 100%; border-top: 1.5px dashed #666; border-bottom: 1.5px dashed #666; padding: 14px 4px; display: flex; flex-direction: column; gap: 8px; }
+    .thumb-c .row { display: flex; justify-content: space-between; align-items: baseline; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(26,26,26,0.6); }
+    .thumb-c .num { font-family: 'Gilda Display', serif; font-size: 36px; line-height: 1; color: #1a1a1a; }
+    .thumb-c .q { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; line-height: 1.25; }
+
+    /* D — asymmetric */
+    .thumb-d { width: 100%; height: 100%; position: relative; }
+    .thumb-d .num { position: absolute; top: -10px; right: -8px; font-family: 'Bodoni Moda', serif; font-weight: 700; font-size: 88px; line-height: 0.9; color: #1a1a1a; }
+    .thumb-d .lbl { position: absolute; bottom: 6px; left: 0; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(26,26,26,0.6); }
+    .thumb-d .q { position: absolute; bottom: 38px; left: 0; right: 50%; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; font-size: 18px; line-height: 1.05; }
+
+    /* E — quiet */
+    .thumb-e { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+    .thumb-e .lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(26,26,26,0.55); }
+    .thumb-e .q { font-family: 'Fraunces', serif; font-weight: 400; font-size: 28px; font-style: italic; line-height: 1.15; color: #1a1a1a; }
+  </style>
+</head>
+<body>
+
+<h1>Minimal — quiet typography, two flavors</h1>
+<p class="lede">Pulled back from the heavy graphic moves. Just question + tiny unobtrusive number, nothing else. Two type flavors at the same restraint level so you can compare serif vs sans.</p>
+
+<div class="grid">
+
+  <a class="cell" href="card-redesign-J-serif-minimal.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="width: 100%; padding: 10px 0;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: rgba(26,26,26,0.5); margin-bottom: 24px;">01</div>
+        <div style="font-family: 'Fraunces', serif; font-weight: 300; font-size: 24px; line-height: 1.15; letter-spacing: -0.01em; color: #1a1a1a;">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">J · serif minimal</div>
+      <div class="name">Fraunces Light — quiet literary</div>
+      <div class="desc">Tiny mono "01" tucked above. Question in Fraunces light. Generous white-space. No label, no metadata. Reads like a slim chapbook.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-K-sans-minimal.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="width: 100%; padding: 10px 0;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: rgba(26,26,26,0.5); margin-bottom: 24px;">01</div>
+        <div style="font-family: 'Geist', sans-serif; font-weight: 300; font-size: 22px; line-height: 1.15; letter-spacing: -0.025em; color: #1a1a1a;">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">K · sans minimal</div>
+      <div class="name">Geist Light — modern technical</div>
+      <div class="desc">Same composition as J. Geist light replaces the serif. Same restraint, different mood — less literary, more contemporary.</div>
+    </div>
+  </a>
+
+</div>
+
+<h1 style="margin-top: 80px;">Step out of the card — 4 different ideas</h1>
+<p class="lede">When stuck, change the room, not the furniture. Each of these rejects a different assumption baked into the previous mockups: that the active question is a card, that it's digital UI, that it needs a designed system, or that it needs chrome. Click any to see at full rail width.</p>
+
+<div class="grid">
+
+  <a class="cell" href="card-redesign-F-masthead.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="text-align: center; width: 100%;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(26,26,26,0.6); padding-bottom: 8px; border-bottom: 1px solid #1a1a1a; margin-bottom: 10px; display: flex; justify-content: space-between;"><span>Vol. 01</span><span>SF</span><span>Issue 01</span></div>
+        <div style="font-family: 'Playfair Display', serif; font-weight: 800; font-size: 26px; line-height: 0.95; letter-spacing: -0.025em; margin-bottom: 8px;">I keep coming back to…</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(26,26,26,0.6); padding-top: 6px; border-top: 3px double #1a1a1a; display: flex; justify-content: space-between;"><span>May 2026</span><span>Pinned</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">F · masthead</div>
+      <div class="name">Newspaper masthead</div>
+      <div class="desc">Reject the card-list mental model. The active question reads like a publication nameplate — Vol. 01, Issue 01. Past entries become "previous editions."</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-G-postcard.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="position: relative; width: 100%; height: 140px;">
+        <div style="position: absolute; top: 0; right: 0; width: 38px; height: 48px; border: 1px solid #1a1a1a; background: repeating-linear-gradient(45deg, transparent 0, transparent 3px, rgba(26,26,26,0.08) 3px, rgba(26,26,26,0.08) 4px); display: flex; align-items: center; justify-content: center; font-family: 'Cardo', serif; font-weight: 700; font-size: 12px;">01</div>
+        <div style="position: absolute; top: 32px; right: -4px; width: 50px; height: 50px; border: 1px solid #1a1a1a; border-radius: 50%; transform: rotate(-12deg); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 7px; text-align: center; line-height: 1.3;">SF<br>05.01</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.04em; color: rgba(26,26,26,0.7); border-bottom: 1px solid rgba(26,26,26,0.3); padding-bottom: 2px; margin-bottom: 4px; width: 50%;">To: anyone</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.04em; color: rgba(26,26,26,0.7); border-bottom: 1px solid rgba(26,26,26,0.3); padding-bottom: 2px; margin-bottom: 18px; width: 50%;">San Francisco</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; line-height: 1.15; color: #1a1a1a;">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">G · postcard</div>
+      <div class="name">Postcard / mailable object</div>
+      <div class="desc">Reject the digital-UI mental model. The active question is a postcard with stamp + postmark + addressed-to lines. Fits the "leaving a thought at a place" metaphor.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-H-indexcard.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="position: relative; width: 100%; padding-left: 24px;">
+        <div style="position: absolute; top: 8px; left: 4px; width: 10px; height: 10px; border: 1px solid rgba(26,26,26,0.45); border-radius: 50%;"></div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(26,26,26,0.65); padding-bottom: 6px; border-bottom: 1.5px solid #1a1a1a; margin-bottom: 14px;">Card #01 · May 1, 2026</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 22px; color: #1a1a1a; background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 21px, rgba(26,26,26,0.18) 21px, rgba(26,26,26,0.18) 22px); padding-bottom: 4px;">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">H · index card</div>
+      <div class="name">Typewriter index card</div>
+      <div class="desc">Reject the designed-system model. Looks like a 3x5 from a writer's notebook — ruled lines, punched binding hole, typed text. LTLYM-adjacent (the ancestor project literally was this).</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-I-poster.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="width: 100%; display: flex; flex-direction: column; justify-content: space-between; height: 140px;">
+        <div style="font-family: 'Cormorant Infant', serif; font-weight: 400; font-size: 32px; line-height: 1.0; letter-spacing: -0.02em; color: #1a1a1a;">I keep coming back to…</div>
+        <div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(26,26,26,0.55); padding-top: 8px; border-top: 1px solid rgba(26,26,26,0.25);"><span>Issue 01</span><span>May 1, 2026</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">I · poster</div>
+      <div class="name">Big-quote poster (no UI)</div>
+      <div class="desc">Reject the chrome-around-content model. No "Assignment" label. No prominent number. Just the question at poster scale, with tiny metadata at the bottom. The question is the entire UI.</div>
+    </div>
+  </a>
+
+</div>
+
+<h1 style="margin-top: 80px;">Card redesign — current shortlist</h1>
+<p class="lede">Two refined picks (A2 + B2) with vertical "Assignment" label and a calmer 88px number. Plus three new asymmetric variants in the D family — same off-balance graphic spirit, but with more sophisticated display-serif numerals.</p>
+
+<div class="grid">
+
+  <a class="cell" href="card-redesign-A2-editorial.html">
+    <div class="thumb">
+      <div class="thumb-wrap thumb-a">
+        <div class="lbl">Assignment</div>
+        <div class="num" style="font-size: 88px;">01</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">A2 · refined</div>
+      <div class="name">Editorial — serif system</div>
+      <div class="desc">Cormorant Infant throughout. Quiet literary magazine-cover restraint.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-B2-swiss.html">
+    <div class="thumb">
+      <div class="thumb-wrap thumb-b" style="grid-template-columns: 1fr;">
+        <div class="num" style="font-size: 88px;">01</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">B2 · refined</div>
+      <div class="name">Swiss — sans system</div>
+      <div class="desc">Inter 800 number + Inter 700 question. Confident, modern, design-conference clean.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-D2-didot.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="position: relative; height: 130px;">
+        <div style="position: absolute; top: 0; right: 0; font-family: 'GFS Didot', serif; font-size: 110px; line-height: 0.85; color: #1a1a1a;">01</div>
+        <div style="position: absolute; top: 0; left: 0; writing-mode: vertical-rl; transform: rotate(180deg); font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(26,26,26,0.6);">Assignment</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">D2 · refined didone</div>
+      <div class="name">GFS Didot — sophisticated hairlines</div>
+      <div class="desc">True Didot, very fine strokes. Number top-right at moderate scale. Question reads cleanly underneath in Hanken bold.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-D3-italic.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="width: 100%;">
+        <div style="font-family: 'DM Serif Display', serif; font-style: italic; font-size: 120px; line-height: 0.85; color: #1a1a1a; letter-spacing: -0.04em;">01</div>
+        <div style="border-top: 1px solid #1a1a1a; margin-top: 8px; padding-top: 8px; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px;">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">D3 · editorial italic</div>
+      <div class="name">DM Serif Display Italic</div>
+      <div class="desc">Italic numeral = movement. Hairline rule cuts the card in half — number above, Inter question below. Very Pentagram.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-D4-outline.html">
+    <div class="thumb">
+      <div class="thumb-wrap" style="position: relative; height: 130px; width: 100%;">
+        <div style="position: absolute; top: -10px; right: -8px; font-family: 'Fraunces', serif; font-size: 150px; line-height: 0.85; letter-spacing: -0.04em; color: transparent; -webkit-text-stroke: 1.5px #1a1a1a;">01</div>
+        <div style="position: absolute; bottom: 0; left: 0; font-family: 'Fraunces', serif; font-weight: 500; font-size: 40px; line-height: 1; color: #1a1a1a;">01</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">D4 · outline + display</div>
+      <div class="name">Fraunces outline + solid layered</div>
+      <div class="desc">Two number layers — huge outline numeral as backdrop, small solid numeral in front. Designerly, layered, intentional.</div>
+    </div>
+  </a>
+
+</div>
+
+<h1 style="margin-top: 80px;">Original 5 — for reference</h1>
+<p class="lede">The earlier round of explorations. Kept around in case you want to compare or pull elements from one of these into the refined picks.</p>
+
+<div class="grid">
+
+  <a class="cell" href="card-redesign-A-editorial.html">
+    <div class="thumb">
+      <div class="thumb-wrap thumb-a">
+        <div class="num">01</div>
+        <div class="lbl">Assignment Nº 01</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">A</div>
+      <div class="name">Editorial — magazine cover</div>
+      <div class="desc">Massive Cormorant numeral hero. Restrained vertical label. Question reads quietly underneath. Apartamento / NYT Magazine vibe.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-B-swiss.html">
+    <div class="thumb">
+      <div class="thumb-wrap thumb-b">
+        <div class="num">01</div>
+        <div class="q">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">B</div>
+      <div class="name">Swiss — grid system</div>
+      <div class="desc">Pure Inter sans, ratio-based grid, no serifs anywhere. Müller-Brockmann clean. Most rational and durable.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-C-ticket.html">
+    <div class="thumb">
+      <div class="thumb-wrap thumb-c">
+        <div class="row"><span>Assignment</span><span>May 1</span></div>
+        <div class="num">01</div>
+        <div class="q">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">C</div>
+      <div class="name">Ticket — library catalog card</div>
+      <div class="desc">Mono + serif italic mix. Ruled top/bottom dashes evoke a physical card stock. Tactile, archival.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-D-asymmetric.html">
+    <div class="thumb">
+      <div class="thumb-wrap thumb-d" style="height: 140px;">
+        <div class="num">01</div>
+        <div class="q">I keep coming back to…</div>
+        <div class="lbl">Assignment</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">D</div>
+      <div class="name">Asymmetric — off-balance</div>
+      <div class="desc">Number jammed into the top corner. Question pushed offset with deliberate white-space tension. Editorial-with-attitude.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="card-redesign-E-quiet.html">
+    <div class="thumb">
+      <div class="thumb-wrap thumb-e">
+        <div class="lbl">Week of May 1</div>
+        <div class="q">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">E</div>
+      <div class="name">Quiet — no number</div>
+      <div class="desc">Drop the issue number entirely. Tiny date marker + the question in italic serif. Maximum restraint.</div>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer-note">click any cell to view the design at full rail width</div>
+
+</body>
+</html>

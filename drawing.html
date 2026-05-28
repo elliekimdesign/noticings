@@ -232,6 +232,40 @@
     }
     body.panel-open #masthead .masthead-add { display: none; }
     #masthead .masthead-add:hover { background: #067CFA; color: #ffffff; }
+    /* Top-left corner spotlight toggle — rounded soft-black pill with a
+       small pin glyph + PINNED wordmark (Stripe-Press inspired). Sits
+       inside the masthead band; the original 36×36 outline box and the
+       checker SVG button below are preserved for future use. */
+    /* Top-left corner spotlight toggle — thin rounded soft-black pill with
+       a subtle PINNED wordmark. Wide and short, Stripe-Press-inspired. */
+    #masthead .masthead-corner {
+      position: absolute;
+      top: 7px;
+      left: 8px;
+      height: 20px;
+      padding: 0 16px;
+      background: #1a1a1a;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1002;
+      transition: background 0.15s ease;
+    }
+    #masthead .masthead-corner:hover { background: #333333; }
+    #masthead .masthead-corner .corner-mark {
+      font-family: 'Geist', 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1;
+    }
     /* ── Left archive rail — full-height column ── */
     #archive-rail {
       position: fixed;
@@ -283,7 +317,7 @@
        Yokoo): paper background, monochrome typography, a single red dot ("hi-no-maru"
        reference) as the only color accent. */
     #archive-list .archive-item.is-current {
-      padding: 20px 24px 22px 28px;
+      padding: 20px 28px 22px 16px;
       height: 170px;
       display: flex;
       flex-direction: column;
@@ -394,7 +428,7 @@
       gap: 14px;
       min-height: 28px;
       margin: 0;
-      padding: 8px 28px;
+      padding: 8px 28px 8px 16px;
       background: transparent;
       border: none;
       position: relative;
@@ -1041,7 +1075,7 @@
       height: auto;
       min-height: 20px;
       padding: 10px 14px;
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.4;
       display: block;
       overflow-wrap: break-word;
@@ -1098,7 +1132,7 @@
       height: 100%;
       display: flex; align-items: center; justify-content: flex-start;
       gap: 10px;
-      padding: 0 24px;
+      padding: 0 16px;
       box-sizing: border-box;
       font-family: 'Geist', 'Inter', sans-serif;
       font-size: 9px;
@@ -1112,7 +1146,7 @@
       flex: 1;
       height: 100%;
       display: flex; align-items: center;
-      padding: 0 24px;
+      padding: 0 16px;
     }
     #footer .label {
       font-size: 9px; letter-spacing: 0.06em;
@@ -2065,22 +2099,13 @@
       top: calc(36px + 170px + 16px) !important;
     }
 
-    /* Pin the eye-toggle on the map, directly below the + button (top-right),
-       on the same vertical line. Stays put in spotlight mode. */
+    /* Original checker eye-toggle — preserved in the DOM for later but
+       hidden now; the spotlight toggle moved to .masthead-corner above. */
     .zoom-scale #eye-toggle {
-      position: fixed !important;
-      top: 52px !important;
-      right: 8px !important;
-      left: auto !important;
-      bottom: auto !important;
-      z-index: 1100;
-      pointer-events: auto;
-    }
-    /* When the answer card is open, hide the toggle entirely. Card and
-       spotlight mode are alternatives, not concurrent surfaces. */
-    body.panel-open .zoom-scale #eye-toggle {
       display: none !important;
     }
+    /* Toggle now lives in the top-left masthead corner — visible in all
+       states (panel open or closed, spotlight on or off). */
     /* Checker spotlight toggle — same 5×5 check shape in both states.
        Active just deepens the orange on the same .cell.on dots. */
     .zoom-scale #eye-toggle.active .cell.on {
@@ -2128,10 +2153,11 @@
       font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
       font-weight: 500 !important;
       font-size: 12px !important;
+      color: #1a1a1a !important;
     }
     #archive-list .archive-item.is-past .question {
       font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
-      font-size: 15px !important;
+      font-size: 13px !important;
       color: rgba(26, 26, 26, 0.55) !important;
     }
     /* Archive row spacing — small breathing room between rows */
@@ -2144,12 +2170,66 @@
       color: #ffffff !important;
     }
 
+    /* ─── Viewport mode (spotlight) — lightweight override ─────────────
+       Masthead slides up out of view. Archive-rail (incl. main card)
+       stays hidden by the original spotlight rules. Map-badge stays
+       visible. The orange pin marker stays as a simple square — its
+       expanded "answer note" overlay is hidden because the answer is
+       shown in the standard slide-down answer panel instead. The
+       bottom-right "N PINS DROPPED" text is hidden too. */
+    /* Spotlight mode — minimal: only the map, its orange pin squares,
+       and the bottom-right PINNED badge remain. All chrome (masthead,
+       archive rail, answer panel, footer text, spotlight side card)
+       is hidden. The original spotlight rules already hide most of
+       these; we just add the remaining pieces and keep the badge. */
+    body.spotlight-on #map-badge { display: block !important; }
+    body.spotlight-on #spot-card { display: none !important; }
+    body.spotlight-on #spot-side-line { display: none !important; }
+    body.spotlight-on #eye-q-banner { display: none !important; }
+    body.spotlight-on #footer .footer-right .footer-end { display: none !important; }
+    /* Pin + expanded answer overlay stay visible in spotlight (default behaviour). */
+    /* Top-left spotlight question label — mirrors the archive-list hover row:
+       soft black bar, white issue number on left, white question on right. */
+    #spot-q-corner {
+      display: none;
+      position: fixed;
+      top: 36px; left: 0;
+      align-items: center;
+      gap: 28px;
+      padding: 12px 64px 12px 16px;
+      background: #1a1a1a;
+      color: #ffffff;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      z-index: 1100;
+      pointer-events: none;
+    }
+    body.spotlight-on #spot-q-corner { display: inline-flex; }
+    #spot-q-corner .q-num {
+      font-size: 13px;
+      font-weight: 500;
+      color: #ffffff;
+      min-width: 18px;
+    }
+    #spot-q-corner .q-body {
+      font-size: 15px;
+      font-weight: 400;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+    /* Hide the bottom-right "N PINS DROPPED" text in spotlight. */
+    body.spotlight-on #footer .footer-right .footer-end {
+      display: none !important;
+    }
+
   </style>
 </head>
 <body>
 
 <!-- ─────────── TOP MASTHEAD ─────────── -->
 <div id="masthead">
+  <button class="masthead-corner" id="masthead-corner-btn" type="button" title="Toggle spotlight" aria-label="Toggle spotlight">
+    <span class="corner-mark">PINNED</span>
+  </button>
   <div class="masthead-center">
     <div class="title">
       <a class="logo" href="about.html" aria-label="About — Pinned" style="text-decoration: none; color: inherit; pointer-events: auto; cursor: pointer;">
@@ -2179,6 +2259,9 @@
 
 <!-- ─────────── SPOTLIGHT SIDE LINE — replaces masthead in spotlight mode ─────────── -->
 <div id="spot-side-line" aria-hidden="true"></div>
+
+<!-- ─────────── SPOTLIGHT QUESTION LABEL — top-left mono tag in spotlight mode ─────────── -->
+<div id="spot-q-corner" aria-hidden="true"></div>
 
 <!-- ─────────── LEFT ARCHIVE RAIL — flat list of all questions ─────────── -->
 <aside id="archive-rail">
@@ -2637,6 +2720,18 @@ function renderEyePill() {
     spotQLabel.textContent = a ? `Assignment ${a.issueNo}` : '';
   }
   if (spotQText) spotQText.textContent = QUESTIONS[currentQuestionIndex];
+  // Top-left corner label — mirrors the archive-list hover row:
+  // issue number on the left, question text on the right, dark bar background.
+  const spotQCorner = document.getElementById('spot-q-corner');
+  if (spotQCorner) {
+    const q = QUESTIONS[currentQuestionIndex] || '';
+    const a = (typeof ASSIGNMENTS !== 'undefined') ? ASSIGNMENTS[currentQuestionIndex] : null;
+    const num = a ? pad2(a.issueNo) : '';
+    spotQCorner.innerHTML = `
+      <span class="q-num">${num}</span>
+      <span class="q-body">${q}</span>
+    `;
+  }
   // Footer assignment is no longer used in spotlight mode (footer is hidden)
   const footerNum = document.getElementById('footer-assignment-num');
   if (footerNum) footerNum.textContent = '';
@@ -3017,7 +3112,7 @@ function placeAnswerMarker({ lngLat, question, text, handle }) {
   new maplibregl.Marker({ element: wrap, anchor: 'top-left' })
     .setLngLat(lngLat)
     .addTo(map);
-  answerMarkers.push({ el: wrap, question, lngLat, hood });
+  answerMarkers.push({ el: wrap, question, lngLat, hood, text });
   applySpotlight();
 }
 
@@ -3288,6 +3383,11 @@ function autoOpenRandomPinForActiveQuestion() {
   pick.el.classList.add('is-open');
 }
 eyeToggle.addEventListener('click', () => setRevealed(!revealed));
+// New rounded PINNED corner button mirrors the checker toggle's behaviour.
+const mastheadCornerBtn = document.getElementById('masthead-corner-btn');
+if (mastheadCornerBtn) {
+  mastheadCornerBtn.addEventListener('click', () => setRevealed(!revealed));
+}
 
 // Zoom slider removed — map relies on mouse-wheel / trackpad zoom (maplibre default)
 

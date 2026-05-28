@@ -8,12 +8,12 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw; height: 100vh; overflow: hidden;
-      background: #ffffff;
+      background: #f7f9f7;
       font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
       cursor: none;
     }
@@ -44,8 +44,8 @@
     #masthead {
       position: fixed; top: 0; left: 0; right: 0;
       height: 36px; z-index: 1000;
-      background: #ffffff;
-      border-bottom: 1px solid #a3a3a3;
+      background: #f7f9f7;
+      border-bottom: 1px solid #d4d4d4;
       display: flex; align-items: center;
       padding: 0;
     }
@@ -99,7 +99,7 @@
       bottom: 0;
       right: 36px;
       width: 1px;
-      background: #a3a3a3;
+      background: #d4d4d4;
       pointer-events: none;
       z-index: 1001;
     }
@@ -144,238 +144,161 @@
     #masthead .masthead-add:hover { background: #067CFA; color: #ffffff; }
     #masthead .masthead-add svg { width: 12px; height: 12px; display: block; }
     /* ── Left archive rail — full-height column ── */
+    /* ===== VARIANT C — HAIRLINE RULES (Swiss grid) ===== */
     #archive-rail {
       position: fixed;
       top: 36px;
       left: 0;
       bottom: 36px;
-      width: 320px;
+      width: 360px;
       z-index: 900;
-      background: #ffffff;
+      background: #f7f9f7;
       padding: 0;
       overflow-y: auto;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
-    /* The vertical spine line — runs from below the masthead down to the bottom */
     #archive-spine {
       position: fixed;
       top: 36px;
       bottom: 0;
-      left: 320px;
+      left: 360px;
       width: 1px;
-      background: #a3a3a3;
+      background: #d4d4d4;
       z-index: 1100;
       pointer-events: none;
     }
-    /* Stack of assignment cards — the top one is large/full, the rest are compact */
     #archive-list {
       list-style: none;
       padding: 0;
       margin: 0;
+      flex: 1;
     }
     #archive-list .archive-item {
-      display: block;
+      display: grid;
+      grid-template-columns: 60px 1fr;
       width: 100%;
       text-align: left;
       background: transparent;
       border: none;
-      padding: 12px 24px;
+      padding: 0;
       cursor: pointer;
       font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
       box-sizing: border-box;
-      transition: background 0.15s ease;
     }
-    #archive-list .archive-item:first-child { border-top: none; }
-    /* Top (current) card — 1960s Japanese book/poster mood (Kamekura / Tanaka /
-       Yokoo): paper background, monochrome typography, a single red dot ("hi-no-maru"
-       reference) as the only color accent. */
+    /* === Current card — 2-col grid: serif "12" + question with hairlines === */
     #archive-list .archive-item.is-current {
-      padding: 20px 24px 22px 28px;
-      height: 170px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      overflow: hidden;
+      padding: 24px 28px 22px 28px;
+      align-items: start;
+      column-gap: 0;
       position: relative;
     }
-    #archive-list .archive-item.is-current::before {
-      display: none;
+    #archive-list .archive-item.is-current .label {
+      grid-column: 1;
+      align-self: start;
+      margin: 0;
+      padding-top: 4px;
     }
-    /* Restore default ink colors for inner text (no longer a colored cover) */
-    #archive-list .archive-item.is-current .question      { color: #1a1a1a; }
-    #archive-list .archive-item.is-current .label .issue-no    { color: #1a1a1a; }
-    #archive-list .archive-item.is-current .label .label-word  { color: #1a1a1a; }
-    #archive-list .archive-item.is-current .label .label-word .bracket { color: #D1241A; }
-    #archive-list .archive-item.is-current .assignment-tag { color: #999; }
-    #archive-list .archive-item .label {
+    #archive-list .archive-item.is-current .label .issue-no {
+      font-family: 'Instrument Serif', 'EB Garamond', Georgia, serif;
+      font-size: 44px;
+      font-weight: 400;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+    }
+    #archive-list .archive-item.is-current .label .label-word { display: none; }
+    #archive-list .archive-item.is-current .question {
+      grid-column: 2;
+      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: 0;
+      color: #1a1a1a;
+      padding: 10px 0 10px 0;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    #archive-list .archive-item.is-current .assignment-tag {
+      grid-column: 2;
       font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 9px;
       font-weight: 500;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(26,26,26,0.70);
-      margin-bottom: 28px;
-    }
-    #archive-list .archive-item .label .issue-no {
-      font-family: inherit;
-      font-weight: inherit;
-      font-style: normal;
-      letter-spacing: inherit;
-      text-transform: inherit;
-      font-size: inherit;
-      line-height: inherit;
-      vertical-align: baseline;
-      margin-right: 6px;
-    }
-    #archive-list .archive-item .label .label-word {
-      font-family: inherit;
-      font-weight: inherit;
-      letter-spacing: inherit;
-      text-transform: inherit;
-      font-size: inherit;
-      color: inherit;
-      vertical-align: baseline;
-    }
-    /* Active card — 01 + [Assignment] inline header (compact), question below */
-    #archive-list .archive-item.is-current .label {
-      margin-bottom: 8px;
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-    }
-    #archive-list .archive-item.is-current .label .label-word {
-      font-family: 'Geist', 'Inter', 'Helvetica Neue', sans-serif;
-      font-weight: 400;
-      font-size: 11px;
-      letter-spacing: 0.04em;
-      text-transform: none;
-      color: #1a1a1a;
-    }
-    #archive-list .archive-item.is-current .label .label-word .bracket {
-      color: #0088FF;
-      font-weight: 500;
-    }
-    #archive-list .archive-item.is-current .assignment-tag {
-      position: absolute;
-      left: 28px;
-      bottom: 20px;
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
-      font-size: 10px;
-      font-weight: 500;
-      color: rgba(26, 26, 26, 0.70);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      color: #999;
       line-height: 1;
-      pointer-events: none;
+      margin-top: 10px;
     }
-    #archive-list .archive-item.is-current .label .issue-no {
-      font-family: 'Instrument Serif', 'Cormorant Infant', 'Didot', serif;
-      font-weight: 400;
-      font-size: clamp(28px, 2.6vw, 36px);
-      line-height: 0.9;
-      letter-spacing: -0.02em;
-      color: #1a1a1a;
-      text-transform: none;
-      margin-right: 0;
-      vertical-align: baseline;
-    }
-    #archive-list .archive-item.is-current .question {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
-      font-size: clamp(15px, 1.4vw, 18px);
-      font-weight: 400;
-      line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.005em;
-      color: #1a1a1a;
-      word-break: normal;
-      overflow-wrap: break-word;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    /* Past cards — outline-only stripe rows. Right-aligned text, thin top hairline
-       acts as the band divider. No fill, even when active. */
+
+    /* === Past list — same 2-col grid, hairline above title col only === */
     #archive-list .archive-item.is-past {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      min-height: 32px;
-      margin: 0;
-      padding: 10px 28px;
+      align-items: center;
+      min-height: 38px;
+      padding: 0;
       background: transparent;
-      border: none;
-      position: relative;
       cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease;
+      transition: background 0.15s ease;
     }
-    /* Divider above the first past row */
-    #archive-list .archive-item.is-past::before {
-      display: none !important;
-    }
-    #archive-list li:has(.archive-item.is-current) + li .archive-item.is-past {
-      border-top: 1px solid #a3a3a3;
-    }
+    #archive-list .archive-item.is-past::before { display: none !important; }
     #archive-list .archive-item.is-past .label {
-      margin-bottom: 0;
-      flex-shrink: 0;
-      font-family: 'Jost', sans-serif;
+      grid-column: 1;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-weight: 500;
       font-size: 11px;
       line-height: 1;
-      color: #D1241A;
-      letter-spacing: 0;
-      text-transform: none;
-      width: 32px;
-      order: 1;
-      transition: color 0.15s ease;
+      color: #999;
+      letter-spacing: 0.04em;
+      text-align: left;
+      padding-left: 28px;
     }
     #archive-list .archive-item.is-past .label .label-word { display: none; }
-    #archive-list .archive-item.is-past .label .issue-no::before { content: none; }
     #archive-list .archive-item.is-past .question {
-      font-family: 'Jost', sans-serif;
+      grid-column: 2;
+      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
       font-size: 13px;
       font-weight: 400;
       letter-spacing: 0;
-      text-transform: none;
       color: #1a1a1a;
       line-height: 1.3;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-align: right;
-      flex: 1;
-      order: 2;
-      transition: color 0.15s ease;
+      padding: 10px 28px 10px 0;
+      border-top: 1px solid #d4d4d4;
+      transition: color 0.15s ease, font-weight 0.15s ease, border-color 0.15s ease;
+      position: relative;
     }
-    #archive-list .archive-item.is-past:hover { background: rgba(26,26,26,0.04); }
-    #archive-list .archive-item.is-past:hover .question { color: #1a1a1a; }
-    #archive-list .archive-item.is-past:hover .label { color: #D1241A; }
-
-    /* When a past row is clicked, it gets `is-current` styling (defined above)
-       and the original #12 row gets `.is-hidden` so it disappears from the rail. */
-    #archive-list .archive-item.is-hidden {
-      display: none !important;
+    #archive-list .archive-item.is-past:hover .question {
+      color: #000;
+      border-top-color: #999;
     }
 
-    /* ── Page-flip pagination — sits at the bottom of the archive rail, above the footer ── */
-    #archive-rail {
-      display: flex;
-      flex-direction: column;
+    /* Active state — 1.5px ink rule above title col + weight bump */
+    #archive-list .archive-item.is-past.active .question {
+      font-weight: 500;
+      border-top: 1.5px solid #1a1a1a;
     }
-    #archive-list { flex: 1; }
+
+    /* === Pagination === */
     .archive-pager {
       flex-shrink: 0;
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: 60px 1fr 60px;
       align-items: center;
-      border-top: 1px solid #a3a3a3;
-      font-family: 'Jost', 'Geist', 'Helvetica Neue', sans-serif;
+      border-top: 1px solid #1a1a1a;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
-      color: rgba(26,26,26,0.60);
+      letter-spacing: 0.1em;
+      color: rgba(26,26,26,0.30);
       user-select: none;
-      height: 32px;
-      padding: 0 12px;
-      gap: 12px;
+      min-height: 38px;
     }
     .archive-pager .pager-btn {
       background: transparent;
@@ -385,24 +308,20 @@
       align-items: center;
       justify-content: center;
       cursor: not-allowed;
-      color: rgba(26,26,26,0.45);
+      color: rgba(26,26,26,0.30);
       transition: color 0.15s ease;
     }
-    .archive-pager .pager-btn.is-active { color: rgba(26,26,26,0.80); cursor: pointer; }
-    .archive-pager .pager-btn.is-active:hover { color: #1a1a1a; }
+    .archive-pager .pager-btn.is-active { color: #1a1a1a; cursor: pointer; }
+    .archive-pager .pager-btn.is-active:hover { color: #067CFA; }
     .archive-pager .pager-btn svg { width: 8px; height: 10px; display: block; }
     .archive-pager .pager-divider {
-      font-family: 'Jost', 'Geist', 'Helvetica Neue', sans-serif;
-      font-weight: 500;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(26,26,26,0.70);
-      width: auto;
       background: transparent;
       align-self: center;
+      text-align: center;
+      color: #1a1a1a;
+      font-weight: 500;
     }
-    .archive-pager .pager-divider::before { content: 'PAGE 01 / 01'; }
+    .archive-pager .pager-divider::before { content: '01 / 01'; }
     /* Active past item — only the top "current" card shows the picked question;
        past rows stay as line-only stripes regardless of which is the source. */
 
@@ -508,11 +427,11 @@
       transition: opacity 0.3s ease, transform 0.2s ease;
     }
     .eye-toggle .cell { background: transparent; }
-    .eye-toggle .cell.on { background: #a3a3a3; }
+    .eye-toggle .cell.on { background: #d4d4d4; }
     .eye-toggle:hover { transform: scale(1.08); }
     .eye-toggle.active { opacity: 1; }
     /* Active state: invert — filled cells become empty, empty cells become filled (corners stay invisible) */
-    .eye-toggle.active .cell:not(.corner) { background: #a3a3a3; }
+    .eye-toggle.active .cell:not(.corner) { background: #d4d4d4; }
     .eye-toggle.active .cell.on { background: transparent; }
     .eye-toggle .cell.corner { background: transparent !important; }
     /* Zoom scale — horizontal line + 3 ticks + diamond, with checkerboard at the right */
@@ -552,7 +471,7 @@
       left: 0;
       width: 8px;
       height: 8px;
-      background: #a3a3a3;
+      background: #d4d4d4;
       transform: rotate(45deg);
       transform-origin: center center;
       cursor: ew-resize;
@@ -565,8 +484,8 @@
     body.spotlight-on::after {
       content: '';
       position: fixed;
-      top: 36px; bottom: 36px; left: 320px; right: 0;
-      background: rgba(26,26,26,0.45);
+      top: 36px; bottom: 36px; left: 360px; right: 0;
+      background: rgba(26,26,26,0.30);
       pointer-events: none;
       z-index: 5;
     }
@@ -624,7 +543,7 @@
       display: flex; flex-direction: column;
       gap: 14px;
       position: relative;
-      background: #ffffff;
+      background: #f7f9f7;
       border: 1px solid #1a1a1a;
       padding: 18px 20px;
     }
@@ -656,7 +575,7 @@
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
       font-weight: 400;
-      color: rgba(26, 26, 26, 0.70);
+      color: rgba(26, 26, 26, 0.55);
       letter-spacing: 0.02em;
       text-transform: none;
       font-feature-settings: "tnum";
@@ -665,7 +584,7 @@
     }
     #sheet .loc-coords:empty::before {
       content: '— — — · — — —';
-      color: rgba(26, 26, 26, 0.45);
+      color: rgba(26, 26, 26, 0.30);
     }
     #sheet .loc-name {
       order: 2;
@@ -684,7 +603,7 @@
       font-style: italic;
       letter-spacing: 0.02em;
       text-transform: none;
-      color: rgba(26, 26, 26, 0.70);
+      color: rgba(26, 26, 26, 0.40);
     }
 
     /* Body — plain textarea, no ruled lines */
@@ -736,7 +655,7 @@
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
       font-weight: 400;
-      color: rgba(26, 26, 26, 0.70);
+      color: rgba(26, 26, 26, 0.40);
       letter-spacing: 0.02em;
       font-feature-settings: "tnum";
       transition: color 0.15s ease;
@@ -750,7 +669,7 @@
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
       font-weight: 400;
-      color: rgba(26, 26, 26, 0.70);
+      color: rgba(26, 26, 26, 0.40);
       letter-spacing: 0.02em;
       background: transparent;
       border: none;
@@ -853,12 +772,12 @@
     body {
       padding-top: 36px;
       padding-bottom: 36px;
-      padding-left: 320px;
+      padding-left: 360px;
     }
 
     /* ── Map: fills the right column between masthead and footer ── */
     #map-pane {
-      width: calc(100vw - 320px);
+      width: calc(100vw - 360px);
       height: calc(100vh - 80px);
       position: relative;
       background: #f4f4f5; /* match map land color so resizes don't flash the page bg */
@@ -868,13 +787,13 @@
     #footer {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: 36px; z-index: 1400;
-      background: #ffffff;
-      border-top: 1px solid #a3a3a3;
+      background: #f7f9f7;
+      border-top: 1px solid #d4d4d4;
       display: flex; align-items: center;
       padding: 0;
     }
     #footer .footer-left {
-      width: 320px;
+      width: 360px;
       flex-shrink: 0;
       height: 100%;
       display: flex; align-items: center; justify-content: flex-start;
@@ -888,7 +807,7 @@
       color: #666;
       font-weight: 400;
     }
-    #footer .footer-left .sep { color: rgba(102,102,102,0.7); }
+    #footer .footer-left .sep { color: rgba(102,102,102,0.5); }
     #footer .footer-right {
       flex: 1;
       height: 100%;
@@ -905,7 +824,7 @@
       gap: 12px;
     }
     #footer .label .sep {
-      color: rgba(102,102,102,0.7);
+      color: rgba(102,102,102,0.5);
     }
     #footer .label .strong {
       color: #666;
@@ -922,7 +841,7 @@
       align-items: center;
       gap: 10px;
     }
-    #footer .volume .sep { color: rgba(102,102,102,0.7); }
+    #footer .volume .sep { color: rgba(102,102,102,0.5); }
     #footer .footer-end {
       margin-left: auto;
       font-family: 'Geist', 'Inter', sans-serif;
@@ -935,29 +854,14 @@
       align-items: center;
       gap: 8px;
     }
-    #footer .footer-end .dark-toggle {
-      width: 18px;
-      height: 18px;
-      padding: 0;
-      background: transparent;
-      border: 1px solid #a3a3a3;
-      color: #666;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    #footer .footer-end .footer-end-link {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      transition: color 0.15s ease;
     }
-    #footer .footer-end .dark-toggle svg {
-      width: 11px;
-      height: 11px;
-      display: block;
-    }
-    #footer .footer-end .dark-toggle:hover {
-      background: #1a1a1a;
-      color: #ffffff;
-      border-color: #1a1a1a;
-    }
+    #footer .footer-end .footer-end-link:hover { color: #1a1a1a; transition: color 0.15s ease; }
 
     /* ── Swiss-graphic pin ── */
     .ink-marker {
@@ -1004,7 +908,7 @@
     }
     .pop .desc {
       font-size: 9px; line-height: 1.65; letter-spacing: 0.04em;
-      color: rgba(26,26,26,0.80);
+      color: rgba(26,26,26,0.65);
     }
     #map { width: 100%; height: 100%; position: relative; }
     .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
@@ -1013,11 +917,11 @@
     #answer-panel {
       position: fixed;
       top: 36px;            /* below masthead */
-      left: 320px;          /* right of archive rail */
+      left: 360px;          /* right of archive rail */
       right: 0;
       height: 0;            /* runtime-set to match main question card height */
-      background: #ffffff;
-      border-bottom: 1px solid #a3a3a3;
+      background: #f7f9f7;
+      border-bottom: 1px solid #d4d4d4;
       z-index: 950;
       display: none;
       overflow: hidden;
@@ -1034,7 +938,7 @@
       overflow: hidden;
     }
     #answer-panel .panel-text {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
       font-weight: 400;
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
@@ -1060,7 +964,7 @@
       box-sizing: border-box;
       /* top padding mirrors question card; bottom padding = divider height (50px) + 12 buffer
          so the textarea above the divider has breathing room and never overlaps it */
-      padding: 20px 32px 62px 32px;
+      padding: 20px 56px 62px 32px;
       position: relative;
     }
     #answer-panel.is-write .panel-write { display: block; }
@@ -1078,7 +982,7 @@
       outline: none;
       resize: none;
       background: transparent;
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
       font-weight: 400;
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
@@ -1088,13 +992,13 @@
       overflow: hidden;
     }
     #answer-panel .panel-input::placeholder {
-      color: rgba(26,26,26,0.35);
+      color: rgba(26,26,26,0.28);
       font-weight: 400;
     }
     #answer-panel .panel-hood {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
-      font-weight: 500;
+      font-weight: 400;
       color: #666;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -1113,16 +1017,16 @@
       left: 32px;
       bottom: 19px;
       display: flex;
-      gap: 12px;
+      gap: 18px;
       align-items: baseline;
       z-index: 2;
     }
     #answer-panel .panel-handle {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      color: rgba(26,26,26,0.65);
-      letter-spacing: 0.04em;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(26,26,26,0.50);
+      letter-spacing: 0.02em;
       line-height: 1;
       position: absolute;
       bottom: 21px;
@@ -1130,10 +1034,10 @@
       z-index: 2;
     }
     #answer-panel .panel-count {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
       font-size: 18px;
       font-weight: 700;
-      color: rgba(26,26,26,0.45);
+      color: rgba(26,26,26,0.30);
       letter-spacing: 0.005em;
       line-height: 1;
       position: absolute;
@@ -1191,9 +1095,9 @@
       position: absolute;
       bottom: 21px;
       right: 64px;
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       color: #1a1a1a;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -1215,7 +1119,7 @@
       height: 50px;
       right: 50px;
       width: 1px;
-      background: #a3a3a3;
+      background: #d4d4d4;
       pointer-events: none;
       z-index: 1;
     }
@@ -1245,7 +1149,7 @@
       transition: stroke 0.15s ease;
     }
     #answer-panel .panel-submit:hover {
-      background: #D1241A;
+      background: #067CFA;
       color: #ffffff;
     }
     #answer-panel .panel-divider {
@@ -1255,7 +1159,7 @@
       right: 0;
       bottom: 50px;
       height: 1px;
-      background: #a3a3a3;
+      background: #d4d4d4;
       pointer-events: none;
       z-index: 1;
     }
@@ -1267,7 +1171,7 @@
       height: 50px;
       right: 100px;
       width: 1px;
-      background: #a3a3a3;
+      background: #d4d4d4;
       pointer-events: none;
       z-index: 1;
     }
@@ -1464,11 +1368,7 @@
       <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
     </div>
     <div class="footer-end">
-      <button class="dark-toggle" id="dark-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
+      <a class="footer-end-link" href="about.html">Where We Were</a>
     </div>
   </div>
 </div>
@@ -1658,11 +1558,12 @@ function buildArchive() {
     const isCurrent = i === 0;
     btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
     btn.dataset.idx = i;
-    btn.innerHTML = `
-      ${isCurrent ? '' : `<div class="label"><span class="issue-no">${pad2(a.issueNo)}</span><span class="label-word">Assignment</span></div>`}
-      <div class="question">${a.text}</div>
-      ${isCurrent ? `<div class="assignment-tag">Assignment ${pad2(a.issueNo)}</div>` : ''}
-    `;
+    btn.innerHTML = isCurrent
+      ? `<div class="label"><span class="issue-no">${pad2(a.issueNo)}</span></div>
+         <div class="question">${a.text}</div>
+         <div class="assignment-tag">Assignment · ${a.dates.split(' → ')[0].toUpperCase()} 2026</div>`
+      : `<div class="label">${pad2(a.issueNo)}</div>
+         <div class="question">${a.text}</div>`;
     if (i === currentQuestionIndex) btn.classList.add('active');
     if (!isCurrent && a.issueNo === ASSIGNMENTS[0].issueNo) btn.classList.add('active');
     btn.addEventListener('click', () => selectQuestion(i));
@@ -2078,7 +1979,7 @@ document.addEventListener('DOMContentLoaded', () => {
     panelInput.addEventListener('input', () => {
       const n = panelInput.value.length;
       if (panelCountCurrent) panelCountCurrent.textContent = String(n);
-      panelCount.style.color = n >= 170 ? '#ED3B36' : (n >= 140 ? 'rgba(26,26,26,0.80)' : 'rgba(26,26,26,0.45)');
+      panelCount.style.color = n >= 170 ? '#ED3B36' : (n >= 140 ? 'rgba(26,26,26,0.65)' : 'rgba(26,26,26,0.30)');
     });
     panelInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeAnswerPanel();

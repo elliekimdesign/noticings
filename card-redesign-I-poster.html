@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>I · Big-quote poster — card redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      min-height: 100vh;
+      font-family: 'Cormorant Infant', serif;
+    }
+    .back {
+      position: fixed; top: 24px; left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a1a1a; text-decoration: none; opacity: 0.55;
+    }
+    .back:hover { opacity: 1; }
+    .stage {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 32px;
+    }
+    .rail {
+      width: 400px;
+      border: 1.5px solid #666;
+      background: #faf7ee;
+    }
+
+    /* ── I · Big-quote poster ──
+       The question fills almost the whole rail at poster scale.
+       No "Assignment" label. No prominent number.
+       Just the question + tiny metadata tucked at bottom. */
+    .poster {
+      padding: 56px 32px 24px;
+      border-bottom: 1.5px solid #666;
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .poster .q {
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 56px;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+    }
+    .poster .meta {
+      margin-top: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.55);
+      padding-top: 14px;
+      border-top: 1px solid rgba(26,26,26,0.25);
+    }
+
+    /* ── Past list — visually subordinate ── */
+    .row {
+      padding: 14px 32px;
+      border-bottom: 1.5px solid #666;
+      display: grid;
+      grid-template-columns: 36px 1fr 50px;
+      gap: 12px;
+      align-items: baseline;
+    }
+    .row:last-child { border-bottom: none; }
+    .row .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: rgba(26,26,26,0.5);
+    }
+    .row .q {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: rgba(26,26,26,0.7);
+      line-height: 1.35;
+    }
+    .row .date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: rgba(26,26,26,0.45);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+<a class="back" href="card-redesign-INDEX.html">← all designs</a>
+
+<div class="stage">
+  <div class="rail">
+
+    <div class="poster">
+      <div class="q">I keep coming back to…</div>
+      <div class="meta">
+        <span>Issue 01</span>
+        <span>May 1, 2026</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="num">02</div>
+      <div class="q">The thing I miss most is…</div>
+      <div class="date">Apr 17</div>
+    </div>
+
+    <div class="row">
+      <div class="num">03</div>
+      <div class="q">A street I walk on Sundays</div>
+      <div class="date">Apr 03</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

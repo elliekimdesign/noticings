@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>A2·B — number 120px</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@300;400&family=Geist:wght@300;400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #faf7ee; color: #1a1a1a; min-height: 100vh; font-family: 'Geist', sans-serif; }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+    .stage { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 80px 32px; }
+    .rail { width: 400px; border: 1.5px solid #666; background: #faf7ee; }
+    .card { padding: 28px 24px 32px; border-bottom: 1.5px solid #666; min-height: 240px; }
+    .card .header { display: flex; align-items: stretch; gap: 14px; margin-bottom: 26px; }
+    .card .header .lbl { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(26,26,26,0.6); writing-mode: vertical-rl; transform: rotate(180deg); align-self: stretch; padding: 4px 0; }
+    .card .header .num { font-family: 'Cormorant Infant', serif; font-weight: 300; font-size: 120px; line-height: 0.85; letter-spacing: -0.015em; color: #1a1a1a; }
+    .card .q { font-family: 'Geist', sans-serif; font-weight: 300; font-size: 28px; line-height: 1.15; letter-spacing: -0.025em; color: #1a1a1a; }
+    .row { padding: 14px 24px; border-bottom: 1.5px solid #666; display: flex; gap: 12px; align-items: baseline; }
+    .row:last-child { border-bottom: none; }
+    .row .num { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(26,26,26,0.55); }
+    .row .q { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.55); line-height: 1.5; }
+  </style>
+</head>
+<body>
+<a class="back" href="axis-INDEX.html">← all axes</a>
+<div class="stage"><div class="rail">
+  <div class="card">
+    <div class="header"><div class="lbl">Assignment</div><div class="num">#01</div></div>
+    <div class="q">I keep coming back to…</div>
+  </div>
+  <div class="row"><div class="num">#02</div><div class="q">The thing I miss most is…</div></div>
+  <div class="row"><div class="num">#03</div><div class="q">A street I walk on Sundays</div></div>
+</div></div>
+</body>
+</html>

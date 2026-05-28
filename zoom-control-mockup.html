@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zoom control — minimal variants</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f7f9f7; color: #1a1a1a; font-family: 'Hanken Grotesk', sans-serif; min-height: 100vh; padding: 64px 48px; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+    p.lede { font-size: 13px; color: rgba(26,26,26,0.55); max-width: 720px; line-height: 1.55; margin-bottom: 56px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 32px; max-width: 1200px; }
+    .cell {
+      border: 1.5px solid #666;
+      background: #f7f9f7;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      min-height: 280px;
+    }
+    .cell-head { display: flex; align-items: baseline; gap: 12px; }
+    .cell-letter { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #067CFA; letter-spacing: 0.14em; }
+    .cell-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+    .cell-desc { font-size: 12px; color: rgba(26,26,26,0.55); line-height: 1.5; max-width: 380px; }
+
+    .stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 0 8px;
+      min-height: 140px;
+    }
+
+    .footer-note { margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.45); }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+
+    /* ─── A. Two tiny mono buttons (− zoom +) ─── */
+    .zoom-a { display: flex; align-items: center; gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    .zoom-a button { background: transparent; border: none; padding: 0; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 500; color: #1a1a1a; opacity: 0.55; transition: opacity 0.15s; line-height: 1; }
+    .zoom-a button:hover { opacity: 1; color: #067CFA; }
+    .zoom-a .level { font-size: 11px; opacity: 0.55; min-width: 34px; text-align: center; letter-spacing: 0.06em; }
+
+    /* ─── B. Five-dot stepper ─── */
+    .zoom-b { display: flex; align-items: center; gap: 9px; }
+    .zoom-b .dot { width: 6px; height: 6px; background: #1a1a1a; opacity: 0.20; border-radius: 50%; cursor: pointer; transition: opacity 0.15s, transform 0.15s; }
+    .zoom-b .dot:hover { opacity: 0.7; transform: scale(1.3); }
+    .zoom-b .dot.active { opacity: 1; transform: scale(1.5); }
+
+    /* ─── C. Plus/Minus inside a single mono frame ─── */
+    .zoom-c { display: flex; flex-direction: column; align-items: center; border: 1.5px solid #1a1a1a; }
+    .zoom-c button { width: 28px; height: 28px; background: transparent; border: none; padding: 0; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; color: #1a1a1a; line-height: 1; transition: background 0.15s, color 0.15s; }
+    .zoom-c button:hover { background: #1a1a1a; color: #f7f9f7; }
+    .zoom-c .div { width: 100%; height: 1.5px; background: #1a1a1a; }
+
+    /* ─── D. Horizontal segmented bar (5 ticks) ─── */
+    .zoom-d { display: flex; align-items: center; gap: 0; padding: 4px 0; position: relative; }
+    .zoom-d .tick { width: 1.5px; height: 12px; background: #1a1a1a; opacity: 0.30; }
+    .zoom-d .gap { width: 16px; height: 1.5px; background: #1a1a1a; opacity: 0.30; }
+    .zoom-d .tick.active { opacity: 1; height: 18px; }
+
+    /* ─── E. Numeric scale ─── */
+    .zoom-e { display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; }
+    .zoom-e .num { font-size: 22px; font-weight: 500; line-height: 1; color: #1a1a1a; }
+    .zoom-e .label { font-size: 9px; color: rgba(26,26,26,0.55); letter-spacing: 0.14em; text-transform: uppercase; }
+    .zoom-e .arrows { display: flex; gap: 14px; margin-top: 6px; }
+    .zoom-e .arrows button { background: transparent; border: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 12px; opacity: 0.55; transition: opacity 0.15s; line-height: 1; }
+    .zoom-e .arrows button:hover { opacity: 1; color: #067CFA; }
+
+    /* ─── F. Tiny ruler with movable head (horizontal) ─── */
+    .zoom-f { width: 90px; height: 14px; position: relative; }
+    .zoom-f .ruler { position: absolute; top: 50%; left: 0; right: 0; height: 1.5px; background: #1a1a1a; transform: translateY(-50%); }
+    .zoom-f .marks { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; }
+    .zoom-f .mark { width: 1px; height: 100%; background: #1a1a1a; opacity: 0.45; }
+    .zoom-f .head { position: absolute; top: 50%; left: 60%; width: 8px; height: 8px; background: #1a1a1a; transform: translate(-50%, -50%) rotate(45deg); cursor: ew-resize; }
+
+  </style>
+</head>
+<body>
+
+<a class="back" href="drawing-v13.html">← back to live</a>
+
+<h1>Zoom control — 6 minimal variants</h1>
+<p class="lede">All non-slider directions. None of them is a draggable bar like the current vertical zoom lever. Each tries a different metaphor — typographic, rhythmic, instrumental.</p>
+
+<div class="grid">
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">A</span><span class="cell-name">Two mono buttons · − zoom +</span></div>
+    <div class="cell-desc">Just two clickable characters, with the current zoom level printed between. Quietest, very editorial.</div>
+    <div class="stage">
+      <div class="zoom-a">
+        <button>−</button>
+        <span class="level">12.5</span>
+        <button>+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">B</span><span class="cell-name">Five-dot stepper</span></div>
+    <div class="cell-desc">5 small dots representing zoom levels. Click any dot to set zoom; the active one is bigger and full opacity.</div>
+    <div class="stage">
+      <div class="zoom-b">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">C</span><span class="cell-name">Stacked +/− framed</span></div>
+    <div class="cell-desc">A single small frame with + on top and − on bottom, divided by a line. Map-control classic but minimal mono.</div>
+    <div class="stage">
+      <div class="zoom-c">
+        <button>+</button>
+        <span class="div"></span>
+        <button>−</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">D</span><span class="cell-name">Horizontal tick scale</span></div>
+    <div class="cell-desc">5 vertical ticks with thin connecting lines, like a survey marker. Active tick is taller. Clickable to change zoom level.</div>
+    <div class="stage">
+      <div class="zoom-d">
+        <span class="tick"></span><span class="gap"></span>
+        <span class="tick"></span><span class="gap"></span>
+        <span class="tick active"></span><span class="gap"></span>
+        <span class="tick"></span><span class="gap"></span>
+        <span class="tick"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">E</span><span class="cell-name">Numeric scale</span></div>
+    <div class="cell-desc">Big legible zoom number with tiny up/down arrows underneath. Reads like a dashboard / instrument panel.</div>
+    <div class="stage">
+      <div class="zoom-e">
+        <span class="num">12.5</span>
+        <span class="label">zoom</span>
+        <span class="arrows">
+          <button>−</button>
+          <button>+</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">F</span><span class="cell-name">Ruler with diamond head</span></div>
+    <div class="cell-desc">Tiny horizontal ruler (5 marks + line) with a diamond-shaped indicator. Survey-instrument feel.</div>
+    <div class="stage">
+      <div class="zoom-f">
+        <div class="ruler"></div>
+        <div class="marks">
+          <span class="mark"></span><span class="mark"></span><span class="mark"></span><span class="mark"></span><span class="mark"></span>
+        </div>
+        <div class="head"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">tell me a / b / c / d / e / f</div>
+
+</body>
+</html>

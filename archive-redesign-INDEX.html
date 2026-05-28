@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Archive Rail — Redesign Variants</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      background: #f7f9f7;
+      color: #1a1a1a;
+      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      padding: 80px 60px 60px 60px;
+    }
+    .header {
+      max-width: 720px;
+      border-bottom: 1px solid #1a1a1a;
+      padding-bottom: 24px;
+      margin-bottom: 48px;
+    }
+    .eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 14px;
+    }
+    .title {
+      font-family: 'Instrument Serif', 'EB Garamond', Georgia, serif;
+      font-size: 44px;
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: #1a1a1a;
+    }
+    .intro {
+      max-width: 560px;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #555;
+      margin-top: 14px;
+    }
+    .variants {
+      max-width: 720px;
+      list-style: none;
+    }
+    .variant {
+      display: grid;
+      grid-template-columns: 60px 120px 1fr;
+      column-gap: 24px;
+      align-items: baseline;
+      padding: 22px 0;
+      border-top: 1px solid #d4d4d4;
+      transition: background 0.15s ease;
+    }
+    .variant:last-child {
+      border-bottom: 1px solid #d4d4d4;
+    }
+    .variant a {
+      display: contents;
+      color: inherit;
+      text-decoration: none;
+    }
+    .variant:hover { background: rgba(26,26,26,0.02); }
+    .v-letter {
+      font-family: 'Instrument Serif', 'EB Garamond', Georgia, serif;
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: #1a1a1a;
+    }
+    .v-name {
+      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #1a1a1a;
+    }
+    .v-desc {
+      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #555;
+    }
+    .v-meta {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #999;
+      margin-top: 6px;
+      display: block;
+    }
+    .footer {
+      margin-top: 60px;
+      max-width: 720px;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      color: #999;
+      letter-spacing: 0.04em;
+    }
+    .footer a { color: #999; text-decoration: underline; }
+    .footer a:hover { color: #1a1a1a; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="eyebrow">Pinned · San Francisco</div>
+    <h1 class="title">Archive Rail<br/><em style="font-style: italic; color: #999;">— redesign variants</em></h1>
+    <p class="intro">Four directions for the left archive column. Each is a standalone copy of the page, only the rail block differs. Pick a favorite (or a hybrid).</p>
+  </div>
+
+  <ul class="variants">
+    <li class="variant"><a href="archive-A-timeline.html">
+      <span class="v-letter">A</span>
+      <span class="v-name">Timeline<span class="v-meta">400 px · serif</span></span>
+      <span class="v-desc">Documentary-poster vertical rule. Past list as a chronology with Instrument Serif titles, mono numbers, year markers on the right edge.</span>
+    </a></li>
+
+    <li class="variant"><a href="archive-B-jostcolor.html">
+      <span class="v-letter">B</span>
+      <span class="v-name">Jost color<span class="v-meta">360 px · jost</span></span>
+      <span class="v-desc">Pale blue field, orange accents on issue numbers, Jost typeface throughout. The rail reads like a magazine cover paired with the map.</span>
+    </a></li>
+
+    <li class="variant"><a href="archive-C-rules.html">
+      <span class="v-letter">C</span>
+      <span class="v-name">Hairline rules<span class="v-meta">360 px · grid</span></span>
+      <span class="v-desc">Swiss two-column grid: serif numbers on the left, sans titles on the right with hairlines spanning only the title column. Most minimal.</span>
+    </a></li>
+
+    <li class="variant"><a href="archive-D-spread.html">
+      <span class="v-letter">D</span>
+      <span class="v-name">Spread<span class="v-meta">420 px · italic</span></span>
+      <span class="v-desc">Magazine table-of-contents treatment. Deep top margin, italic EB Garamond, Roman-numeral past list with dotted leaders and page folios.</span>
+    </a></li>
+
+    <li class="variant"><a href="archive-E-bold.html">
+      <span class="v-letter">E</span>
+      <span class="v-name">Bold accordion<span class="v-meta">360 px · inter · click to expand</span></span>
+      <span class="v-desc">Bold sans titles with hairline rules between rows. Click a past row to expand and see the people who answered, listed by ID in two quiet columns.</span>
+    </a></li>
+  </ul>
+
+  <div class="footer">
+    Original: <a href="drawing-v13.html">drawing-v13.html</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zoom · ruler with diamond — variants</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f7f9f7; color: #1a1a1a; font-family: 'Hanken Grotesk', sans-serif; min-height: 100vh; padding: 64px 48px; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+    p.lede { font-size: 13px; color: rgba(26,26,26,0.55); max-width: 720px; line-height: 1.55; margin-bottom: 56px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 32px; max-width: 1200px; }
+    .cell {
+      border: 1.5px solid #666;
+      background: #f7f9f7;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      min-height: 280px;
+    }
+    .cell-head { display: flex; align-items: baseline; gap: 12px; }
+    .cell-letter { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #067CFA; letter-spacing: 0.14em; }
+    .cell-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+    .cell-desc { font-size: 12px; color: rgba(26,26,26,0.55); line-height: 1.5; max-width: 380px; }
+
+    .stage {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 0 8px;
+      min-height: 140px;
+    }
+
+    .footer-note { margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.45); }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+
+    /* Shared base */
+    .ruler-base { position: relative; }
+    .diamond { width: 8px; height: 8px; background: #1a1a1a; transform: rotate(45deg); cursor: ew-resize; }
+    .diamond.lg { width: 10px; height: 10px; }
+    .diamond.sm { width: 6px; height: 6px; }
+    .diamond.outline { background: transparent; border: 1.5px solid #1a1a1a; }
+
+    /* ─── A · Original (reference) ─── */
+    .ruler-a { width: 90px; height: 14px; position: relative; }
+    .ruler-a .line { position: absolute; top: 50%; left: 0; right: 0; height: 1.5px; background: #1a1a1a; transform: translateY(-50%); }
+    .ruler-a .marks { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; }
+    .ruler-a .mark { width: 1px; height: 100%; background: #1a1a1a; opacity: 0.45; }
+    .ruler-a .head { position: absolute; top: 50%; left: 60%; width: 8px; height: 8px; background: #1a1a1a; transform: translate(-50%, -50%) rotate(45deg); cursor: ew-resize; }
+
+    /* ─── B · Just 3 marks + diamond (no line) ─── */
+    .ruler-b { width: 90px; height: 14px; position: relative; display: flex; align-items: center; justify-content: space-between; }
+    .ruler-b .mark { width: 1.5px; height: 14px; background: #1a1a1a; opacity: 0.55; }
+    .ruler-b .head { position: absolute; top: 50%; left: 65%; width: 8px; height: 8px; background: #1a1a1a; transform: translate(-50%, -50%) rotate(45deg); }
+
+    /* ─── C · Outline diamond moves over a continuous line, no marks ─── */
+    .ruler-c { width: 90px; height: 12px; position: relative; }
+    .ruler-c .line { position: absolute; top: 50%; left: 0; right: 0; height: 1.5px; background: #1a1a1a; transform: translateY(-50%); }
+    .ruler-c .head { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: #f7f9f7; border: 1.5px solid #1a1a1a; transform: translate(-50%, -50%) rotate(45deg); }
+
+    /* ─── D · Diamond between two end-caps ─── */
+    .ruler-d { width: 90px; height: 14px; position: relative; display: flex; align-items: center; justify-content: space-between; }
+    .ruler-d .cap { width: 1.5px; height: 10px; background: #1a1a1a; }
+    .ruler-d .line { position: absolute; top: 50%; left: 4px; right: 4px; height: 1.5px; background: #1a1a1a; opacity: 0.40; transform: translateY(-50%); }
+    .ruler-d .head { position: absolute; top: 50%; left: 55%; width: 8px; height: 8px; background: #1a1a1a; transform: translate(-50%, -50%) rotate(45deg); }
+
+    /* ─── E · Diamond with floating mono number above ─── */
+    .ruler-e { width: 90px; position: relative; padding-top: 16px; }
+    .ruler-e .num { position: absolute; top: 0; left: 60%; transform: translateX(-50%); font-family: 'JetBrains Mono', monospace; font-size: 9px; opacity: 0.55; letter-spacing: 0.06em; line-height: 1; }
+    .ruler-e .line { position: absolute; bottom: 50%; left: 0; right: 0; height: 1.5px; background: #1a1a1a; transform: translateY(50%); margin-bottom: 0; }
+    .ruler-e .marks { position: absolute; bottom: 0; left: 0; right: 0; height: 14px; display: flex; justify-content: space-between; }
+    .ruler-e .mark { width: 1px; height: 100%; background: #1a1a1a; opacity: 0.40; }
+    .ruler-e .head { position: absolute; bottom: 50%; left: 60%; width: 8px; height: 8px; background: #1a1a1a; transform: translate(-50%, 50%) rotate(45deg); }
+    .ruler-e .stage-wrap { position: relative; height: 24px; }
+
+    /* ─── F · Two diamonds (range) ─── */
+    .ruler-f { width: 90px; height: 14px; position: relative; }
+    .ruler-f .line { position: absolute; top: 50%; left: 0; right: 0; height: 1.5px; background: #1a1a1a; opacity: 0.45; transform: translateY(-50%); }
+    .ruler-f .head { position: absolute; top: 50%; width: 7px; height: 7px; background: #1a1a1a; transform: translate(-50%, -50%) rotate(45deg); }
+    .ruler-f .head.left { left: 15%; opacity: 0.45; }
+    .ruler-f .head.right { left: 65%; }
+
+  </style>
+</head>
+<body>
+
+<a class="back" href="zoom-control-mockup.html">← all zoom controls</a>
+
+<h1>Ruler · diamond — 6 variants</h1>
+<p class="lede">A is the original (reference). B–F are different minimal takes on the same diamond-on-ruler direction. All same visual size, all positioned 60% along to show the indicator state.</p>
+
+<div class="grid">
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">A</span><span class="cell-name">Original · ruler + 5 marks + diamond</span></div>
+    <div class="cell-desc">Reference. Solid diamond head, 5 vertical marks along a horizontal line.</div>
+    <div class="stage">
+      <div class="ruler-a">
+        <div class="line"></div>
+        <div class="marks">
+          <span class="mark"></span><span class="mark"></span><span class="mark"></span><span class="mark"></span><span class="mark"></span>
+        </div>
+        <div class="head"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">B</span><span class="cell-name">Bare · 3 ticks + diamond, no line</span></div>
+    <div class="cell-desc">Strip the line. Just three taller ticks (start / middle / end) and the floating diamond. Most reductive.</div>
+    <div class="stage">
+      <div class="ruler-b">
+        <span class="mark"></span><span class="mark"></span><span class="mark"></span>
+        <div class="head"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">C</span><span class="cell-name">Outline diamond · clean line</span></div>
+    <div class="cell-desc">Continuous line, no tick marks, larger outline diamond. Looks like a needle gauge — quiet but precise.</div>
+    <div class="stage">
+      <div class="ruler-c">
+        <div class="line"></div>
+        <div class="head"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">D</span><span class="cell-name">End-caps · soft middle line</span></div>
+    <div class="cell-desc">Two strong vertical end-caps, a faded middle line, diamond floats. Reads like a measuring span.</div>
+    <div class="stage">
+      <div class="ruler-d">
+        <span class="cap"></span>
+        <div class="line"></div>
+        <span class="cap"></span>
+        <div class="head"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">E</span><span class="cell-name">With floating zoom number</span></div>
+    <div class="cell-desc">Original ruler + tiny mono "12.5" hovering above the diamond. Adds info without clutter.</div>
+    <div class="stage">
+      <div class="ruler-e">
+        <span class="num">12.5</span>
+        <div class="line"></div>
+        <div class="marks">
+          <span class="mark"></span><span class="mark"></span><span class="mark"></span><span class="mark"></span><span class="mark"></span>
+        </div>
+        <div class="head"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">F</span><span class="cell-name">Two diamonds · zoom range</span></div>
+    <div class="cell-desc">Two diamonds on the same line — one faded (min reached), one solid (current). Suggests a zoomable range.</div>
+    <div class="stage">
+      <div class="ruler-f">
+        <div class="line"></div>
+        <div class="head left"></div>
+        <div class="head right"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">tell me a / b / c / d / e / f</div>
+
+</body>
+</html>

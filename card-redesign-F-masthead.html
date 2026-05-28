@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>F · Newspaper masthead — card redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=EB+Garamond:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      min-height: 100vh;
+      font-family: 'EB Garamond', serif;
+    }
+    .back {
+      position: fixed; top: 24px; left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a1a1a; text-decoration: none; opacity: 0.55;
+    }
+    .back:hover { opacity: 1; }
+    .stage {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 32px;
+    }
+    .rail {
+      width: 400px;
+      border: 1.5px solid #666;
+      background: #faf7ee;
+    }
+
+    /* ── F · Newspaper masthead ──
+       The "card" reads like the front-page nameplate of a publication.
+       Big Playfair Display title spelling the question. Above and below
+       are tiny mono-caps rules with edition info. The question itself
+       is the publication name. */
+    .masthead {
+      padding: 22px 24px 24px;
+      border-bottom: 1.5px solid #666;
+    }
+    .masthead .meta-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.6);
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1a1a1a;
+      margin-bottom: 16px;
+    }
+    .masthead .title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+      font-size: 46px;
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+      color: #1a1a1a;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .masthead .meta-bot {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.6);
+      padding-top: 10px;
+      border-top: 3px double #1a1a1a;
+    }
+
+    /* ── Past editions stack ── */
+    .editions-label {
+      padding: 14px 24px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.5);
+      border-bottom: 1px solid rgba(26,26,26,0.18);
+    }
+    .row {
+      padding: 14px 24px;
+      border-bottom: 1.5px solid #666;
+      display: grid;
+      grid-template-columns: 50px 1fr 50px;
+      gap: 12px;
+      align-items: baseline;
+    }
+    .row:last-child { border-bottom: none; }
+    .row .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: #1a1a1a;
+    }
+    .row .q {
+      font-family: 'EB Garamond', serif;
+      font-size: 14px;
+      font-style: italic;
+      color: rgba(26,26,26,0.75);
+      line-height: 1.35;
+    }
+    .row .date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: rgba(26,26,26,0.5);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+<a class="back" href="card-redesign-INDEX.html">← all designs</a>
+
+<div class="stage">
+  <div class="rail">
+
+    <div class="masthead">
+      <div class="meta-top">
+        <span>Vol. 01</span>
+        <span>San Francisco</span>
+        <span>Issue 01</span>
+      </div>
+      <div class="title">I keep coming back to…</div>
+      <div class="meta-bot">
+        <span>May 2026</span>
+        <span>Pinned</span>
+      </div>
+    </div>
+
+    <div class="editions-label">Previous editions</div>
+
+    <div class="row">
+      <div class="num">N° 02</div>
+      <div class="q">The thing I miss most is…</div>
+      <div class="date">Apr 17</div>
+    </div>
+
+    <div class="row">
+      <div class="num">N° 03</div>
+      <div class="q">A street I walk on Sundays</div>
+      <div class="date">Apr 03</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tag position — 3 options</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f7f9f7;
+      color: #1a1a1a;
+      font-family: 'Hanken Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 80px 64px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px; color: rgba(26,26,26,0.55);
+      max-width: 640px; line-height: 1.55; margin-bottom: 56px;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      max-width: 1400px;
+    }
+    .cell {
+      border: 1.5px solid #666;
+      background: #f7f9f7;
+      text-decoration: none;
+      color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.15s ease;
+    }
+    .cell:hover { background: rgba(26,26,26,0.03); }
+    .cell .thumb {
+      height: 200px;
+      border-bottom: 1.5px solid #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #f7f9f7;
+    }
+    .cell .meta {
+      padding: 18px 22px 22px;
+    }
+    .cell .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.16em;
+      color: #067CFA; margin-bottom: 8px;
+    }
+    .cell .name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 16px; font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .cell .desc {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 12px; color: rgba(26,26,26,0.55);
+      line-height: 1.5;
+    }
+    .footer-note {
+      margin-top: 48px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+    }
+
+    /* Tiny mock card thumbnails */
+    .mockcard {
+      width: 100%;
+      max-width: 280px;
+      height: 140px;
+      border: 1.5px solid #666;
+      background: #f7f9f7;
+      position: relative;
+      padding: 14px 16px;
+    }
+    .mocktag {
+      display: inline-block;
+      background: #067CFA;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 7px 3px;
+      line-height: 1;
+    }
+    .mockq {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      color: #1a1a1a;
+      line-height: 1.3;
+    }
+    /* A — top-left */
+    .mock-a .mocktag { margin-bottom: 12px; }
+    /* B — bottom-left */
+    .mock-b { display: flex; flex-direction: column; justify-content: space-between; }
+    /* C — overlap */
+    .mock-c .mocktag { position: absolute; top: -10px; left: 18px; }
+    .mock-c .mockq { padding-top: 16px; }
+  </style>
+</head>
+<body>
+
+<h1>Tag position — 3 options</h1>
+<p class="lede">Where should the LTLYM-style "Assignment 01" tag sit on the active question card? Click each to see at full rail width with surrounding context.</p>
+
+<div class="grid">
+
+  <a class="cell" href="tag-position-A-topleft.html">
+    <div class="thumb">
+      <div class="mockcard mock-a">
+        <div class="mocktag">Assignment 01</div>
+        <div class="mockq">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">A · top-left</div>
+      <div class="name">Above the question</div>
+      <div class="desc">Conventional reading order. Tag becomes a quiet identity anchor above the question. Most expected layout.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="tag-position-B-bottomleft.html">
+    <div class="thumb">
+      <div class="mockcard mock-b">
+        <div class="mockq">I keep coming back to…</div>
+        <div class="mocktag">Assignment 01</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">B · bottom-left</div>
+      <div class="name">Below the question</div>
+      <div class="desc">Reads like an art-label / signature. Distinctive but inverts convention — content first, then label.</div>
+    </div>
+  </a>
+
+  <a class="cell" href="tag-position-C-overlap.html">
+    <div class="thumb">
+      <div class="mockcard mock-c">
+        <div class="mocktag">Assignment 01</div>
+        <div class="mockq">I keep coming back to…</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt">C · overlap</div>
+      <div class="name">Floating on top edge</div>
+      <div class="desc">Tag sits half-on, half-off the card's top edge. Most LTLYM-feeling — graphic, bold, like a sticker.</div>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer-note">click any to view at full rail width with answer panel context</div>
+
+</body>
+</html>

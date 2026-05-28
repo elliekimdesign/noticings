@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pin icon — outline variants</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f7f9f7;
+      color: #1a1a1a;
+      font-family: 'Hanken Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 64px 48px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px; color: rgba(26,26,26,0.55);
+      max-width: 640px; line-height: 1.55; margin-bottom: 56px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 900px;
+    }
+
+    .cell {
+      border: 1.5px solid #666;
+      background: #f7f9f7;
+      padding: 32px 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .cell-head {
+      display: flex; align-items: baseline; gap: 12px;
+    }
+    .cell-letter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      color: #067CFA; letter-spacing: 0.14em;
+    }
+    .cell-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .cell-desc {
+      font-size: 12px;
+      color: rgba(26,26,26,0.55);
+      line-height: 1.5;
+      max-width: 320px;
+    }
+
+    .demo-row {
+      display: flex; align-items: center; gap: 32px;
+      padding: 16px 0 4px;
+    }
+    .demo-icon {
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .demo-icon svg { width: 24px; height: 24px; display: block; }
+
+    .demo-square {
+      width: 50px; height: 50px;
+      border: 1.5px solid #666;
+      display: flex; align-items: center; justify-content: center;
+      background: #f7f9f7;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .demo-square:hover { background: rgba(6,124,250,0.06); }
+    .demo-square:hover svg { stroke: #067CFA; }
+    .demo-square svg {
+      width: 22px; height: 22px;
+      transition: stroke 0.15s ease;
+    }
+    .demo-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      color: rgba(26,26,26,0.45);
+      text-transform: uppercase;
+    }
+
+    .footer-note {
+      margin-top: 56px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+    }
+  </style>
+</head>
+<body>
+
+<h1>Outline pin — 4 variants</h1>
+<p class="lede">Hover the 50×50 square to preview the live submit-button state. After you pick one, I'll wire it into the write panel and remove the "pin it →" text.</p>
+
+<div class="grid">
+
+  <!-- A — Classic teardrop -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">A</span>
+      <span class="cell-name">Classic teardrop</span>
+    </div>
+    <div class="cell-desc">Google Maps-style location pin. Most universally recognized as "drop a pin here."</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22 C 8 16, 4 13, 4 9 a 8 8 0 1 1 16 0 c 0 4 -4 7 -8 13 z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22 C 8 16, 4 13, 4 9 a 8 8 0 1 1 16 0 c 0 4 -4 7 -8 13 z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+  <!-- B — Push pin / thumbtack (top view) -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">B</span>
+      <span class="cell-name">Push-pin · top view</span>
+    </div>
+    <div class="cell-desc">Hexagonal head + needle. More like a literal pushpin / thumbtack — direct, graphic.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 4 L15 4 L13.5 10 L17 13 L7 13 L10.5 10 Z"/>
+          <line x1="12" y1="13" x2="12" y2="20"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 4 L15 4 L13.5 10 L17 13 L7 13 L10.5 10 Z"/>
+          <line x1="12" y1="13" x2="12" y2="20"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+  <!-- C — Side-view thumbtack (Mac-style) -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">C</span>
+      <span class="cell-name">Push-pin · side view</span>
+    </div>
+    <div class="cell-desc">Diagonal pin like Mac OS or Notes app. More dynamic, suggests motion of pinning.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.5 4 L20 9.5 L16.5 11 L13 14.5 L9.5 11 L13 7.5 Z"/>
+          <line x1="13" y1="14.5" x2="6" y2="21.5"/>
+          <path d="M9.5 11 L4 16.5 L7.5 17 L13 14.5"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.5 4 L20 9.5 L16.5 11 L13 14.5 L9.5 11 L13 7.5 Z"/>
+          <line x1="13" y1="14.5" x2="6" y2="21.5"/>
+          <path d="M9.5 11 L4 16.5 L7.5 17 L13 14.5"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+  <!-- D — Minimal pin (single drop) -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">D</span>
+      <span class="cell-name">Minimal · droplet</span>
+    </div>
+    <div class="cell-desc">Soft droplet shape with center hole. Quietest of the four — most LTLYM tone.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21 C 12 21, 5 13, 5 9 a 7 7 0 1 1 14 0 c 0 4 -7 12 -7 12 z"/>
+          <circle cx="12" cy="9" r="2"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21 C 12 21, 5 13, 5 9 a 7 7 0 1 1 14 0 c 0 4 -7 12 -7 12 z"/>
+          <circle cx="12" cy="9" r="2"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">tell me a / b / c / d — i'll wire it in and remove "pin it →" text.</div>
+
+</body>
+</html>

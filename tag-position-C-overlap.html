@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tag C · overlap — floating on top edge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f7f9f7;
+      color: #1a1a1a;
+      font-family: 'Hanken Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 64px 48px;
+    }
+    .back {
+      position: fixed; top: 24px; left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a1a1a; text-decoration: none; opacity: 0.55;
+    }
+    .back:hover { opacity: 1; }
+    .topbar {
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      display: flex; align-items: baseline; gap: 16px;
+    }
+    .topbar h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .topbar .sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(26,26,26,0.5);
+    }
+
+    .stage {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex; gap: 32px;
+      align-items: flex-start;
+    }
+    .rail {
+      width: 360px;
+      border: 1.5px solid #666;
+      background: #f7f9f7;
+      flex-shrink: 0;
+      /* extra top room so the floating tag isn't clipped */
+      margin-top: 14px;
+    }
+    .card-active {
+      padding: 26px 24px 22px 36px;
+      border-bottom: 1.5px solid #666;
+      min-height: 170px;
+      position: relative;
+    }
+    .card-active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 14px;
+      background: #067CFA;
+    }
+    .assignment-tag {
+      display: inline-block;
+      background: #067CFA;
+      color: #ffffff;
+      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 5px 10px 4px;
+      line-height: 1;
+      position: absolute;
+      top: -10px;
+      left: 22px;
+    }
+    .question {
+      font-family: 'Helvetica Neue', 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 26px;
+      line-height: 36px;
+      letter-spacing: 0.005em;
+      color: #1a1a1a;
+      padding-top: 14px;
+    }
+    .past-row {
+      padding: 14px 24px;
+      border-bottom: 1.5px solid #666;
+      display: flex; gap: 14px; align-items: baseline;
+    }
+    .past-row:last-child { border-bottom: none; }
+    .past-row .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(26,26,26,0.55);
+      display: flex; gap: 6px;
+    }
+    .past-row .q {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 13px;
+      color: rgba(26,26,26,0.7);
+      line-height: 1.45;
+    }
+
+    .answer-panel {
+      flex: 1;
+      max-width: 560px;
+      border: 1.5px solid #666;
+      background: #f7f9f7;
+      min-height: 360px;
+      padding: 20px 32px 32px;
+      margin-top: 14px;
+    }
+    .answer-panel .panel-text {
+      font-family: 'Helvetica Neue', 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 26px;
+      line-height: 36px;
+      letter-spacing: 0.005em;
+      color: rgba(26,26,26,0.4);
+    }
+
+    .legend {
+      max-width: 1200px;
+      margin: 48px auto 0;
+      padding: 18px 22px;
+      border: 1.5px dashed #999;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.08em;
+      color: rgba(26,26,26,0.65);
+      line-height: 1.6;
+    }
+    .legend strong { color: #1a1a1a; }
+  </style>
+</head>
+<body>
+
+<a class="back" href="tag-position-INDEX.html">← all positions</a>
+
+<div class="topbar">
+  <h1>Position C · overlap</h1>
+  <div class="sub">tag floating half-on top edge (sticker style)</div>
+</div>
+
+<div class="stage">
+
+  <div class="rail">
+    <div class="card-active">
+      <div class="assignment-tag">Assignment 01</div>
+      <div class="question">I keep coming back to…</div>
+    </div>
+    <div class="past-row">
+      <div class="label"><span>#02</span><span>Assignment</span></div>
+      <div class="q">The thing I miss most is…</div>
+    </div>
+    <div class="past-row">
+      <div class="label"><span>#03</span><span>Assignment</span></div>
+      <div class="q">A street I walk on Sundays</div>
+    </div>
+  </div>
+
+  <div class="answer-panel">
+    <div class="panel-text">Type your answer here. The first line of your answer should align with the first line of the question on the left…</div>
+  </div>
+
+</div>
+
+<div class="legend">
+  <strong>C · OVERLAP</strong> — Tag sits half above, half below the card's top edge — like a sticker or postage mark applied on top. Most LTLYM-feeling: graphic, bold, slightly playful.
+</div>
+
+</body>
+</html>

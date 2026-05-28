@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Submit button — pin vs enter / send icons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f7f9f7; color: #1a1a1a; font-family: 'Hanken Grotesk', sans-serif; min-height: 100vh; padding: 64px 48px; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+    p.lede { font-size: 13px; color: rgba(26,26,26,0.55); max-width: 720px; line-height: 1.55; margin-bottom: 56px; }
+
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,26,26,0.55);
+      margin: 56px 0 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed rgba(26,26,26,0.3);
+      max-width: 1200px;
+    }
+    .section-title:first-of-type { margin-top: 0; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 32px; max-width: 1200px; }
+    .cell { border: 1.5px solid #666; background: #f7f9f7; padding: 32px; display: flex; flex-direction: column; gap: 22px; }
+    .cell-head { display: flex; align-items: baseline; gap: 12px; }
+    .cell-letter { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #067CFA; letter-spacing: 0.14em; }
+    .cell-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+    .cell-desc { font-size: 12px; color: rgba(26,26,26,0.55); line-height: 1.5; max-width: 380px; }
+    .demo-row { display: flex; align-items: center; gap: 28px; padding: 8px 0 0; }
+    .demo-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+    .demo-icon svg { width: 24px; height: 24px; display: block; }
+    .demo-square { width: 50px; height: 50px; border: 1.5px solid #666; display: flex; align-items: center; justify-content: center; background: #f7f9f7; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; color: #1a1a1a; }
+    .demo-square svg { width: 22px; height: 22px; stroke: currentColor; transition: stroke 0.15s ease; }
+    .demo-square:hover { background: #067CFA; color: #ffffff; }
+    .demo-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.10em; color: rgba(26,26,26,0.45); text-transform: uppercase; }
+    .footer-note { margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.45); }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<a class="back" href="icon-design-mockup.html">← all icons</a>
+
+<h1>Submit button — pin vs enter / send</h1>
+<p class="lede">Two directions side by side: better pin variants (location metaphor) or enter / send icons (action metaphor). Pick a direction first, then a specific letter. Hover the 50×50 box to preview the live button state.</p>
+
+<!-- ─── Pin direction ─── -->
+<div class="section-title">Pin direction · location metaphor</div>
+
+<div class="grid">
+
+  <!-- P1 — Solid teardrop with white dot -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">P1</span><span class="cell-name">Solid teardrop · filled</span></div>
+    <div class="cell-desc">Filled teardrop with a hollow circle inside (negative space). Strong silhouette, very legible at small size.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 22 C 8 16, 4 13, 4 9 a 8 8 0 1 1 16 0 c 0 4 -4 7 -8 13 z" fill="#1a1a1a"/>
+          <circle cx="12" cy="9" r="2.5" fill="#f7f9f7"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 22 C 8 16, 4 13, 4 9 a 8 8 0 1 1 16 0 c 0 4 -4 7 -8 13 z" fill="currentColor"/>
+          <circle cx="12" cy="9" r="2.5" fill="#f7f9f7"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- P2 — Pin with motion drop line (dropping in) -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">P2</span><span class="cell-name">Pin dropping · motion line</span></div>
+    <div class="cell-desc">Pin with a small dotted trail above — captures the motion of "dropping" a pin. Active, energetic.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22 C 9 17, 6 14, 6 11 a 6 6 0 1 1 12 0 c 0 3 -3 6 -6 11 z"/>
+          <circle cx="12" cy="11" r="2"/>
+          <line x1="12" y1="2" x2="12" y2="3"/>
+          <line x1="12" y1="4.5" x2="12" y2="5.5"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22 C 9 17, 6 14, 6 11 a 6 6 0 1 1 12 0 c 0 3 -3 6 -6 11 z"/>
+          <circle cx="12" cy="11" r="2"/>
+          <line x1="12" y1="2" x2="12" y2="3"/>
+          <line x1="12" y1="4.5" x2="12" y2="5.5"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- P3 — Bookmark style pin (vertical) -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">P3</span><span class="cell-name">Bookmark · vertical pin</span></div>
+    <div class="cell-desc">Vertical bookmark/pennant shape. Different from the typical map pin — feels more like marking a page in a book.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 3 L17 3 L17 21 L12 17 L7 21 Z"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 3 L17 3 L17 21 L12 17 L7 21 Z"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- P4 — Pin with circular base ground -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">P4</span><span class="cell-name">Pin standing · circle base</span></div>
+    <div class="cell-desc">Map pin sitting on a small circular base — gives it weight, a sense of being placed on the ground.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 18 C 9 14, 6 11, 6 8 a 6 6 0 1 1 12 0 c 0 3 -3 6 -6 10 z"/>
+          <circle cx="12" cy="8" r="2"/>
+          <ellipse cx="12" cy="20" rx="4" ry="0.8"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 18 C 9 14, 6 11, 6 8 a 6 6 0 1 1 12 0 c 0 3 -3 6 -6 10 z"/>
+          <circle cx="12" cy="8" r="2"/>
+          <ellipse cx="12" cy="20" rx="4" ry="0.8"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── Enter / Send direction ─── -->
+<div class="section-title">Enter / Send direction · action metaphor</div>
+
+<div class="grid">
+
+  <!-- E1 — Return arrow (↵) -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">E1</span><span class="cell-name">Return arrow · ↵</span></div>
+    <div class="cell-desc">Classic return / enter arrow. Universally understood as "submit" via keyboard convention.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9,15 4,11 9,7"/>
+          <path d="M4 11 L17 11 a 3 3 0 0 0 3 -3 L20 5"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9,15 4,11 9,7"/>
+          <path d="M4 11 L17 11 a 3 3 0 0 0 3 -3 L20 5"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- E2 — Send arrow (paper plane) -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">E2</span><span class="cell-name">Paper plane · send</span></div>
+    <div class="cell-desc">Outline paper plane. Friendly, casual. Iconic "send a message" affordance from messaging apps.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11 L21 4 L18 21 L11 14 Z"/>
+          <line x1="11" y1="14" x2="3" y2="11"/>
+          <line x1="11" y1="14" x2="14" y2="11"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11 L21 4 L18 21 L11 14 Z"/>
+          <line x1="11" y1="14" x2="3" y2="11"/>
+          <line x1="11" y1="14" x2="14" y2="11"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- E3 — Right arrow in box (enter key) -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">E3</span><span class="cell-name">Enter key · keyboard cap</span></div>
+    <div class="cell-desc">Stylized enter key with the return arrow inside. Very direct keyboard reference.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="6" width="18" height="12" rx="1.5"/>
+          <polyline points="11,11 8,14 11,17"/>
+          <path d="M8 14 L15 14 a 1.5 1.5 0 0 0 1.5 -1.5 L16.5 10"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="6" width="18" height="12" rx="1.5"/>
+          <polyline points="11,11 8,14 11,17"/>
+          <path d="M8 14 L15 14 a 1.5 1.5 0 0 0 1.5 -1.5 L16.5 10"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- E4 — Simple right arrow → -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">E4</span><span class="cell-name">Simple arrow · →</span></div>
+    <div class="cell-desc">Pure right arrow. Quietest, most editorial — same character as the original "pin it →" text. Just the arrow, no text.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="12" x2="19" y2="12"/>
+          <polyline points="14,7 19,12 14,17"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="12" x2="19" y2="12"/>
+          <polyline points="14,7 19,12 14,17"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">tell me a letter (P1–P4 for pin direction, E1–E4 for enter/send direction)</div>
+
+</body>
+</html>

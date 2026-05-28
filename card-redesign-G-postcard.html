@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>G · Postcard / object — card redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Cardo:wght@400;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      min-height: 100vh;
+      font-family: 'Cardo', serif;
+    }
+    .back {
+      position: fixed; top: 24px; left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a1a1a; text-decoration: none; opacity: 0.55;
+    }
+    .back:hover { opacity: 1; }
+    .stage {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 32px;
+    }
+    .rail {
+      width: 400px;
+      border: 1.5px solid #666;
+      background: #faf7ee;
+    }
+
+    /* ── G · Postcard / object ──
+       The active card looks like a real postcard you'd stick in the mail.
+       Stamp graphic upper-right with circular postmark over part of it.
+       Address lines on the left. Question handwritten-feeling across the
+       body in Cormorant italic. */
+    .postcard {
+      position: relative;
+      padding: 22px 22px 22px;
+      border-bottom: 1.5px solid #666;
+      background: #faf7ee;
+    }
+
+    /* Stamp graphic — top right */
+    .stamp {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      width: 56px;
+      height: 70px;
+      border: 1px solid #1a1a1a;
+      background:
+        repeating-linear-gradient(45deg,
+          transparent 0, transparent 4px,
+          rgba(26,26,26,0.08) 4px, rgba(26,26,26,0.08) 5px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+    }
+    .stamp .price {
+      font-family: 'Cardo', serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    /* Postmark — circular stamp, partially overlapping */
+    .postmark {
+      position: absolute;
+      top: 56px;
+      right: 14px;
+      width: 70px;
+      height: 70px;
+      border: 1px solid #1a1a1a;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      transform: rotate(-12deg);
+      opacity: 0.85;
+      line-height: 1.3;
+      text-align: center;
+    }
+    .postmark .city { font-size: 8px; font-weight: 600; }
+    .postmark .date { font-size: 9px; font-weight: 600; }
+
+    /* Top label */
+    .postcard .head {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.55);
+      margin-bottom: 12px;
+    }
+
+    /* Address-style lines on the left */
+    .addr {
+      width: 50%;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: rgba(26,26,26,0.7);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .addr .line { border-bottom: 1px solid rgba(26,26,26,0.3); margin-bottom: 4px; padding-bottom: 2px; }
+
+    /* The question — handwritten-feel italic */
+    .postcard .q {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 1.15;
+      color: #1a1a1a;
+      letter-spacing: -0.005em;
+    }
+
+    /* ── Past postcard rows — tiny stamps ── */
+    .row {
+      padding: 14px 22px;
+      border-bottom: 1.5px solid #666;
+      display: grid;
+      grid-template-columns: 28px 1fr 60px;
+      gap: 12px;
+      align-items: center;
+    }
+    .row:last-child { border-bottom: none; }
+    .row .stamp-mini {
+      width: 22px;
+      height: 26px;
+      border: 1px solid #1a1a1a;
+      background: rgba(26,26,26,0.06);
+    }
+    .row .q {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: rgba(26,26,26,0.75);
+      line-height: 1.3;
+    }
+    .row .date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.5);
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+<a class="back" href="card-redesign-INDEX.html">← all designs</a>
+
+<div class="stage">
+  <div class="rail">
+
+    <div class="postcard">
+      <div class="stamp">
+        <div>San Francisco</div>
+        <div class="price">01</div>
+      </div>
+      <div class="postmark">
+        <div class="city">San Francisco</div>
+        <div class="date">05.01.26</div>
+        <div>Pinned</div>
+      </div>
+
+      <div class="head">Posted from San Francisco · 05.01.2026</div>
+
+      <div class="addr">
+        <div class="line">To: anyone</div>
+        <div class="line">San Francisco</div>
+        <div class="line">CA</div>
+      </div>
+
+      <div class="q">I keep coming back to…</div>
+    </div>
+
+    <div class="row">
+      <div class="stamp-mini"></div>
+      <div class="q">The thing I miss most is…</div>
+      <div class="date">Apr 17</div>
+    </div>
+
+    <div class="row">
+      <div class="stamp-mini"></div>
+      <div class="q">A street I walk on Sundays</div>
+      <div class="date">Apr 03</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

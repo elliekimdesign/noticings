@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>E · Quiet — card redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,1,300;9..144,1,400;9..144,1,500&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      min-height: 100vh;
+      font-family: 'Fraunces', serif;
+    }
+    .back {
+      position: fixed; top: 24px; left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a1a1a; text-decoration: none; opacity: 0.55;
+    }
+    .back:hover { opacity: 1; }
+    .stage {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 32px;
+    }
+    .rail {
+      width: 400px;
+      border: 1.5px solid #666;
+      background: #faf7ee;
+    }
+
+    /* ── E · Quiet ── */
+    .card {
+      padding: 36px 32px 40px;
+      border-bottom: 1.5px solid #666;
+    }
+    .card .lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.55);
+      margin-bottom: 24px;
+    }
+    .card .q {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 34px;
+      line-height: 1.15;
+      letter-spacing: -0.005em;
+      color: #1a1a1a;
+    }
+
+    /* ── Past rows ── */
+    .row {
+      padding: 16px 32px;
+      border-bottom: 1.5px solid #666;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .row:last-child { border-bottom: none; }
+    .row .lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+    }
+    .row .q {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 1.35;
+      color: rgba(26,26,26,0.7);
+    }
+  </style>
+</head>
+<body>
+
+<a class="back" href="card-redesign-INDEX.html">← all designs</a>
+
+<div class="stage">
+  <div class="rail">
+
+    <div class="card">
+      <div class="lbl">Week of May 1</div>
+      <div class="q">I keep coming back to…</div>
+    </div>
+
+    <div class="row">
+      <div class="lbl">Apr 17</div>
+      <div class="q">The thing I miss most is…</div>
+    </div>
+
+    <div class="row">
+      <div class="lbl">Apr 3</div>
+      <div class="q">A street I walk on Sundays</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

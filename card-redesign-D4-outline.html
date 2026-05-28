@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>D4 · Outline + display — card redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,700&family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      min-height: 100vh;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .back {
+      position: fixed; top: 24px; left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a1a1a; text-decoration: none; opacity: 0.55;
+    }
+    .back:hover { opacity: 1; }
+    .stage {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 32px;
+    }
+    .rail {
+      width: 400px;
+      border: 1.5px solid #666;
+      background: #faf7ee;
+    }
+
+    /* ── D4 · Outline + display ──
+       Two-layer numeral: a HUGE outline-stroke "01" sits as a backdrop,
+       a small SOLID "01" sits in front-left. Pentagram / Kerning Magazine
+       visual move — feels designerly, intentional, layered.
+       Vertical "Assignment" label down the right edge. */
+    .card {
+      position: relative;
+      padding: 28px 28px 32px;
+      border-bottom: 1.5px solid #666;
+      min-height: 280px;
+      overflow: hidden;
+    }
+    .card .num-outline {
+      position: absolute;
+      top: -22px;
+      right: -16px;
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 220px;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1.5px #1a1a1a;
+      text-stroke: 1.5px #1a1a1a;
+      pointer-events: none;
+    }
+    .card .num-solid {
+      position: relative;
+      z-index: 2;
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 56px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: #1a1a1a;
+      margin-bottom: 100px;
+    }
+    .card .lbl {
+      position: absolute;
+      top: 28px;
+      right: 14px;
+      z-index: 2;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.6);
+      writing-mode: vertical-rl;
+    }
+    .card .q {
+      position: relative;
+      z-index: 2;
+      max-width: 88%;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+    }
+
+    /* ── Past rows ── */
+    .row {
+      padding: 16px 28px;
+      border-bottom: 1.5px solid #666;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 14px;
+      align-items: baseline;
+    }
+    .row:last-child { border-bottom: none; }
+    .row .num {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 1;
+      color: #1a1a1a;
+    }
+    .row .q {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.6);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<a class="back" href="card-redesign-INDEX.html">← all designs</a>
+
+<div class="stage">
+  <div class="rail">
+
+    <div class="card">
+      <div class="num-outline">01</div>
+      <div class="lbl">Assignment</div>
+      <div class="num-solid">01</div>
+      <div class="q">I keep coming back to…</div>
+    </div>
+
+    <div class="row">
+      <div class="num">02</div>
+      <div class="q">The thing I miss most is…</div>
+    </div>
+
+    <div class="row">
+      <div class="num">03</div>
+      <div class="q">A street I walk on Sundays</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

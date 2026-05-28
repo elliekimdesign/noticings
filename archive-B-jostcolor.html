@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pinned — San Francisco</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Jost:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100vw; height: 100vh; overflow: hidden;
+      background: #f7f9f7;
+      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+      cursor: none;
+    }
+    /* Force-hide native cursor on all elements including pointer-style ones */
+    *, *::before, *::after { cursor: none !important; }
+
+    /* FISH CURSOR — small black fish silhouette that swims toward motion direction. */
+    .rgb-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 14px;
+      height: 7px;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+    .rgb-cursor svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    /* ── Top masthead — split by the spine line at x=220px ── */
+    #masthead {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 36px; z-index: 1000;
+      background: #f7f9f7;
+      border-bottom: 1px solid #d4d4d4;
+      display: flex; align-items: center;
+      padding: 0;
+    }
+    #masthead .masthead-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      pointer-events: none;
+      z-index: 1001;
+    }
+    #masthead .title {
+      font-family: 'Outfit', 'Helvetica Neue', sans-serif;
+      font-size: 12px; letter-spacing: 0.04em;
+      color: #1a1a1a; font-weight: 500;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    #masthead .title .logo {
+      display: inline-flex;
+      align-items: baseline;
+    }
+    #masthead .title .logo span {
+      display: inline-block;
+    }
+    /* P I N D sit on the baseline; second N jumps up a little; E jumps up more */
+    #masthead .title .logo .l-p,
+    #masthead .title .logo .l-i,
+    #masthead .title .logo .l-n1,
+    #masthead .title .logo .l-d { transform: translateY(0); }
+    #masthead .title .logo .l-n2,
+    #masthead .title .logo .l-e { transform: translateY(-3px); }
+    #masthead .city-center {
+      font-family: 'Outfit', 'Helvetica Neue', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #1a1a1a;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    #masthead .add-btn-wrap {
+      margin-left: auto;
+    }
+    #masthead .masthead-vdivider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 36px;
+      width: 1px;
+      background: #d4d4d4;
+      pointer-events: none;
+      z-index: 1001;
+    }
+    #masthead .masthead-close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      z-index: 1002;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    body.panel-open #masthead .masthead-close { display: flex; }
+    #masthead .masthead-close:hover { background: #067CFA; color: #ffffff; }
+    #masthead .masthead-close svg { width: 12px; height: 12px; display: block; }
+    #masthead .masthead-add {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      z-index: 1002;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    body.panel-open #masthead .masthead-add { display: none; }
+    #masthead .masthead-add:hover { background: #067CFA; color: #ffffff; }
+    #masthead .masthead-add svg { width: 12px; height: 12px; display: block; }
+    /* ── Left archive rail — full-height column ── */
+    /* ===== VARIANT B — JOST COLOR (orange + pale blue) ===== */
+    #archive-rail {
+      position: fixed;
+      top: 36px;
+      left: 0;
+      bottom: 36px;
+      width: 360px;
+      z-index: 900;
+      background: #DCE8EE;
+      padding: 0;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    #archive-spine {
+      position: fixed;
+      top: 36px;
+      bottom: 0;
+      left: 360px;
+      width: 1px;
+      background: #E1623C;
+      z-index: 1100;
+      pointer-events: none;
+    }
+    #archive-rail { display: flex; flex-direction: column; }
+    #archive-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex: 1;
+    }
+    #archive-list .archive-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-family: 'Jost', 'Inter', 'Helvetica Neue', sans-serif;
+      box-sizing: border-box;
+    }
+    #archive-list .archive-item:first-child { border-top: none; }
+    /* === Current cover card — pale blue field, huge orange "12" === */
+    #archive-list .archive-item.is-current {
+      padding: 28px 28px 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      border-bottom: 1px solid rgba(26,26,26,0.10);
+    }
+    #archive-list .archive-item.is-current .label {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      margin: 0;
+    }
+    #archive-list .archive-item.is-current .label .issue-no {
+      font-family: 'Jost', sans-serif;
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: #E1623C;
+    }
+    #archive-list .archive-item.is-current .label .label-word { display: none; }
+    #archive-list .archive-item.is-current .question {
+      font-family: 'Jost', sans-serif;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.005em;
+      color: #1a1a1a;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    #archive-list .archive-item.is-current .assignment-tag {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #E1623C;
+      line-height: 1;
+    }
+
+    /* === Past list — no fills, 12px row gaps, orange numbers === */
+    #archive-list .archive-item.is-past {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      min-height: 32px;
+      margin: 0;
+      padding: 10px 28px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    #archive-list .archive-item.is-past::before { display: none !important; }
+    #archive-list .archive-item.is-past .label {
+      flex-shrink: 0;
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      line-height: 1;
+      color: #E1623C;
+      letter-spacing: 0;
+      width: 32px;
+    }
+    #archive-list .archive-item.is-past .label .label-word { display: none; }
+    #archive-list .archive-item.is-past .question {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0;
+      color: #1a1a1a;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      text-align: right;
+      transition: color 0.15s ease;
+      position: relative;
+    }
+    #archive-list .archive-item.is-past:hover .question { color: #000; }
+    #archive-list .archive-item.is-past:hover .label { color: #c14820; }
+
+    /* Active state — subtle weight + orange underline */
+    #archive-list .archive-item.is-past.active .question {
+      font-weight: 500;
+    }
+    #archive-list .archive-item.is-past.active .question::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: -3px;
+      height: 1px;
+      background: #E1623C;
+      width: 70%;
+    }
+
+    /* === Pagination — orange arrows, "PAGE 01/01" centered === */
+    .archive-pager {
+      flex-shrink: 0;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      border-top: 1px solid rgba(26,26,26,0.10);
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      color: rgba(26,26,26,0.30);
+      user-select: none;
+      min-height: 42px;
+      padding: 0 12px;
+      gap: 12px;
+    }
+    .archive-pager .pager-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: not-allowed;
+      color: rgba(26,26,26,0.25);
+      transition: color 0.15s ease;
+    }
+    .archive-pager .pager-btn.is-active { color: #E1623C; cursor: pointer; }
+    .archive-pager .pager-btn.is-active:hover { color: #c14820; }
+    .archive-pager .pager-btn svg { width: 8px; height: 10px; display: block; }
+    .archive-pager .pager-divider {
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      width: auto;
+      background: transparent;
+      align-self: center;
+    }
+    .archive-pager .pager-divider::before { content: 'PAGE 01 / 01'; }
+    /* Active past item — only the top "current" card shows the picked question;
+       past rows stay as line-only stripes regardless of which is the source. */
+
+    /* ── Answer sheet positioning — vertically centered on the right ── */
+    #sheet-wrap {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1500;
+    }
+
+    /* ── Eye-mode question pill — only visible when body.spotlight-on ── */
+    #eye-q-banner {
+      display: none;
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1500;
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 12px 22px;
+      width: 360px;
+      height: 64px;
+      box-sizing: border-box;
+      align-items: center;
+    }
+    body.spotlight-on #eye-q-banner { display: flex; }
+    #eye-q-banner .q-text {
+      flex: 1;
+      font-size: 9px;
+      line-height: 1.5;
+      letter-spacing: 0.22em;
+      font-weight: 500;
+      text-transform: uppercase;
+      padding-right: 12px;
+      overflow: hidden;
+    }
+    #eye-q-banner .q-next {
+      width: 26px;
+      height: 26px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      opacity: 0.65;
+    }
+    #eye-q-banner .q-next:hover {
+      opacity: 1;
+      transform: translateY(2px);
+    }
+    #eye-q-banner .q-next svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+    /* + button in the masthead — plain inline icon, no box */
+    .add-btn {
+      border: none;
+      background: transparent;
+      color: #1a1a1a;
+      cursor: pointer;
+      padding: 0;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+    .add-btn svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      stroke: currentColor;
+      stroke-width: 1;
+      stroke-linecap: round;
+      fill: none;
+      transition: stroke 0.2s ease;
+    }
+    .add-btn:hover { transform: rotate(90deg); }
+    .add-btn.active { transform: rotate(45deg); color: #1a1a1a; }
+
+    /* Landmark recall button — Romanesque carved capital from Vézelay cloister */
+    /* Victorian eye toggle — floats below the masthead, right side */
+    .eye-toggle {
+      pointer-events: auto;
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 0;
+      opacity: 1;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+    .eye-toggle .cell { background: transparent; }
+    .eye-toggle .cell.on { background: #d4d4d4; }
+    .eye-toggle:hover { transform: scale(1.08); }
+    .eye-toggle.active { opacity: 1; }
+    /* Active state: invert — filled cells become empty, empty cells become filled (corners stay invisible) */
+    .eye-toggle.active .cell:not(.corner) { background: #d4d4d4; }
+    .eye-toggle.active .cell.on { background: transparent; }
+    .eye-toggle .cell.corner { background: transparent !important; }
+    /* Zoom scale — horizontal line + 3 ticks + diamond, with checkerboard at the right */
+    .zoom-scale {
+      position: fixed;
+      bottom: 56px;
+      right: 22px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      pointer-events: none;
+    }
+    .zoom-scale .zoom-line {
+      width: 80px;
+      height: 14px;
+      position: relative;
+      pointer-events: auto;
+    }
+    .zoom-scale .zoom-line .zoom-tick {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 14px;
+      background: #1a1a1a;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    .zoom-scale .zoom-line .zoom-tick:nth-of-type(1) { left: 0; }
+    .zoom-scale .zoom-line .zoom-tick:nth-of-type(2) { left: 50%; transform: translateX(-50%); }
+    .zoom-scale .zoom-line .zoom-tick:nth-of-type(3) { right: 0; }
+    .zoom-scale .zoom-indicator {
+      pointer-events: auto;
+      position: absolute;
+      top: calc(50% - 4px);
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background: #d4d4d4;
+      transform: rotate(45deg);
+      transform-origin: center center;
+      cursor: ew-resize;
+      transition: left 0.15s ease;
+      z-index: 2;
+    }
+    .zoom-scale .zoom-indicator.is-dragging { transition: none; }
+
+    /* Spotlight overlay — dims the map when revealed */
+    body.spotlight-on::after {
+      content: '';
+      position: fixed;
+      top: 36px; bottom: 36px; left: 360px; right: 0;
+      background: rgba(26,26,26,0.30);
+      pointer-events: none;
+      z-index: 5;
+    }
+    /* Eye mode: hide chrome and the flat dim — the map's spotlight mask handles dimming */
+    body.spotlight-on #masthead,
+    body.spotlight-on #footer,
+    body.spotlight-on #archive-rail,
+    body.spotlight-on #archive-spine { display: none !important; }
+    body.spotlight-on::after { display: none !important; }
+    /* Eye mode: let the map fill the full viewport */
+    body.spotlight-on #map-pane { width: 100vw !important; height: 100vh !important; }
+    body.spotlight-on { padding-top: 0 !important; padding-bottom: 0 !important; padding-left: 0 !important; }
+
+    /* Idle: all answer pins hidden by default. Revealed rules sit further down with the marker styles. */
+
+    /* Hint banner — appears when answer mode is active */
+    #hint {
+      position: fixed; top: 56px; left: 50%; transform: translateX(-50%);
+      z-index: 1100;
+      background: #1a1a1a; color: #ffffff;
+      padding: 8px 18px;
+      font-size: 9px; letter-spacing: 0.28em;
+      pointer-events: none;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    #hint.show { opacity: 1; }
+
+    /* Pending pin — Victorian-style pointing hand (manicule) */
+    .pending-pin {
+      width: 48px;
+      height: 48px;
+      pointer-events: none;
+    }
+    .pending-pin svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+      animation: handBob 1.6s ease-in-out infinite;
+    }
+    @keyframes handBob {
+      0%, 100% { transform: translate(0, 0); }
+      50%      { transform: translate(0, -3px); }
+    }
+
+    /* ── Answer sheet — minimal white note ── */
+    #sheet {
+      width: 360px;
+      box-sizing: border-box;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      display: flex; flex-direction: column;
+      gap: 14px;
+      position: relative;
+      background: #f7f9f7;
+      border: 1px solid #1a1a1a;
+      padding: 18px 20px;
+    }
+    #sheet.show {
+      max-height: 360px;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #sheet .sheet-bg { display: none; }
+    #sheet .sheet-q { display: none; }
+    #sheet .sheet-q-text { display: none; }
+
+    /* Header — coordinates on the left, neighborhood on the right */
+    #sheet .sheet-head {
+      padding: 0;
+      margin: 0;
+    }
+    #sheet .sheet-loc {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      background: transparent;
+      padding: 0;
+    }
+    #sheet .loc-coords {
+      order: 1;
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(26, 26, 26, 0.55);
+      letter-spacing: 0.02em;
+      text-transform: none;
+      font-feature-settings: "tnum";
+      background: transparent;
+      padding: 0;
+    }
+    #sheet .loc-coords:empty::before {
+      content: '— — — · — — —';
+      color: rgba(26, 26, 26, 0.30);
+    }
+    #sheet .loc-name {
+      order: 2;
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(26, 26, 26, 0.85);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: transparent;
+      padding: 0;
+      text-align: right;
+    }
+    #sheet .loc-name.is-prompt {
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      color: rgba(26, 26, 26, 0.40);
+    }
+
+    /* Body — plain textarea, no ruled lines */
+    #sheet .sheet-body { padding: 0; width: 100%; }
+    #sheet textarea.answer-field {
+      width: 100%;
+      min-height: 72px;
+      border: none;
+      outline: none;
+      resize: none;
+      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
+      font-size: 24px;
+      line-height: 1.5;
+      font-weight: 400;
+      letter-spacing: 0.005em;
+      color: #1a1a1a;
+      padding: 0;
+      background: transparent;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      overflow-y: auto;
+    }
+    #sheet textarea.answer-field::placeholder {
+      color: rgba(26, 26, 26, 0.35);
+      font-style: normal;
+    }
+
+    /* Footer area — top mini-row (counter alone, right-aligned) + bottom row (handle left, pin it right) */
+    #sheet .sheet-foot {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+    #sheet .foot-top {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+    #sheet .foot-bottom {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      width: 100%;
+      gap: 12px;
+    }
+    #sheet .char-count {
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(26, 26, 26, 0.40);
+      letter-spacing: 0.02em;
+      font-feature-settings: "tnum";
+      transition: color 0.15s ease;
+    }
+    #sheet .char-count.is-near-limit {
+      color: rgba(26, 26, 26, 0.85);
+    }
+
+    /* Anonymous handle — muted grey by default, click to edit (turns black) */
+    #sheet .handle {
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(26, 26, 26, 0.40);
+      letter-spacing: 0.02em;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 0;
+      cursor: pointer;
+      width: auto;
+      max-width: 60%;
+      transition: color 0.15s ease;
+    }
+    #sheet .handle:hover { color: rgba(26, 26, 26, 0.70); }
+    #sheet .handle.is-editing {
+      color: #1a1a1a;
+      cursor: text;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    /* Submit — small text link */
+    #sheet .submit-arrow {
+      border: none;
+      background: transparent;
+      color: #1a1a1a;
+      cursor: pointer;
+      padding: 0;
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      transition: opacity 0.15s ease;
+    }
+    #sheet .submit-arrow:hover { opacity: 0.55; }
+    #sheet .submit-arrow:disabled { opacity: 0.25; cursor: not-allowed; }
+    #sheet .submit-arrow:disabled:hover { opacity: 0.25; }
+
+    /* When sheet is open, raise the body padding so map doesn't hide behind it */
+
+    /* Lift map markers above map content */
+    .maplibregl-marker { z-index: 10; }
+
+    /* User-placed answer pin — collapsed = thin orange bookmark; expanded (on click) = horizontal bar with the answer text inside */
+    .answer-marker {
+      cursor: pointer;
+      position: relative;
+      transition: opacity 0.5s ease;
+      display: inline-flex;
+      align-items: center;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Spotlight (eye) mode still hides non-matching pins via .dim */
+    .answer-marker.dim { opacity: 0; pointer-events: none; }
+
+    /* The bookmark / bar itself — collapsed is a tall thin rectangle, expanded stretches horizontally */
+    .answer-note {
+      position: relative;
+      background: #0088FF;
+      color: #ffffff;
+      font-family: 'Geist', 'Helvetica Neue', 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
+      font-size: 10px;
+      line-height: 1.4;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      text-transform: none;
+      pointer-events: none;
+      box-sizing: border-box;
+      /* Collapsed (default): small solid orange square, no text visible */
+      width: 14px;
+      height: 14px;
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 0;
+      transition: width 0.28s ease, height 0.28s ease, padding 0.28s ease, font-size 0.18s ease;
+    }
+    /* Expanded (on click): bar extends horizontally, shows the answer text inside */
+    .answer-marker.is-open .answer-note {
+      width: auto;
+      max-width: 280px;
+      height: auto;
+      min-height: 20px;
+      padding: 6px 12px;
+      white-space: normal;
+      font-size: 10px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .answer-note .q { display: none; }
+    .answer-note .handle {
+      display: block;
+      margin-top: 4px;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.7);
+    }
+    /* Answer mode: change cursor on map */
+    #map-pane { cursor: crosshair; }
+
+    body {
+      padding-top: 36px;
+      padding-bottom: 36px;
+      padding-left: 360px;
+    }
+
+    /* ── Map: fills the right column between masthead and footer ── */
+    #map-pane {
+      width: calc(100vw - 360px);
+      height: calc(100vh - 80px);
+      position: relative;
+      background: #f4f4f5; /* match map land color so resizes don't flash the page bg */
+    }
+
+    /* ── Bottom static label bar — split by the spine line ── */
+    #footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 36px; z-index: 1400;
+      background: #f7f9f7;
+      border-top: 1px solid #d4d4d4;
+      display: flex; align-items: center;
+      padding: 0;
+    }
+    #footer .footer-left {
+      width: 360px;
+      flex-shrink: 0;
+      height: 100%;
+      display: flex; align-items: center; justify-content: flex-start;
+      gap: 10px;
+      padding: 0 24px;
+      box-sizing: border-box;
+      font-family: 'Geist', 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #666;
+      font-weight: 400;
+    }
+    #footer .footer-left .sep { color: rgba(102,102,102,0.5); }
+    #footer .footer-right {
+      flex: 1;
+      height: 100%;
+      display: flex; align-items: center;
+      padding: 0 24px;
+    }
+    #footer .label {
+      font-size: 9px; letter-spacing: 0.06em;
+      color: #666;
+      font-weight: 400;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    #footer .label .sep {
+      color: rgba(102,102,102,0.5);
+    }
+    #footer .label .strong {
+      color: #666;
+      font-weight: 500;
+    }
+    #footer .volume {
+      margin-left: auto;
+      font-family: 'Jacques Francois', 'Times New Roman', serif;
+      font-size: 9px;
+      font-weight: 400;
+      color: #666;
+      letter-spacing: 0.15em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #footer .volume .sep { color: rgba(102,102,102,0.5); }
+    #footer .footer-end {
+      margin-left: auto;
+      font-family: 'Geist', 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #666;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #footer .footer-end .footer-end-link {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      transition: color 0.15s ease;
+    }
+    #footer .footer-end .footer-end-link:hover { color: #1a1a1a; transition: color 0.15s ease; }
+
+    /* ── Swiss-graphic pin ── */
+    .ink-marker {
+      width: 26px; height: 56px;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+    .ink-marker:hover { transform: translateY(-3px); }
+    .ink-marker svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+    /* Popup card — quiet museum label */
+    .maplibregl-popup-content {
+      padding: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: 0 8px 30px rgba(20,20,20,0.10), 0 0 0 0.5px rgba(26,26,26,0.12) !important;
+      background: #ffffff !important;
+    }
+    .maplibregl-popup-tip { display: none !important; }
+    .maplibregl-popup-close-button {
+      color: rgba(26,26,26,0.4) !important;
+      font-size: 16px !important;
+      padding: 4px 8px !important;
+      font-family: 'Archivo', sans-serif !important;
+    }
+    .pop {
+      padding: 16px 18px 14px;
+      min-width: 200px; max-width: 240px;
+      font-family: 'Archivo', sans-serif;
+    }
+    .pop .label {
+      font-size: 7.5px; letter-spacing: 0.32em;
+      color: rgba(26,26,26,0.5);
+      margin-bottom: 8px;
+    }
+    .pop .name {
+      font-size: 12px; letter-spacing: 0.16em;
+      color: #1a1a1a; font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .pop .divider {
+      width: 22px; height: 0.5px;
+      background: rgba(26,26,26,0.3);
+      margin-bottom: 10px;
+    }
+    .pop .desc {
+      font-size: 9px; line-height: 1.65; letter-spacing: 0.04em;
+      color: rgba(26,26,26,0.65);
+    }
+    #map { width: 100%; height: 100%; position: relative; }
+    .maplibregl-ctrl-logo, .maplibregl-ctrl-attrib, .maplibregl-ctrl-group { display: none !important; }
+
+    /* ── Answer panel — slides in next to the main question card on pin click ── */
+    #answer-panel {
+      position: fixed;
+      top: 36px;            /* below masthead */
+      left: 360px;          /* right of archive rail */
+      right: 0;
+      height: 0;            /* runtime-set to match main question card height */
+      background: #f7f9f7;
+      border-bottom: 1px solid #d4d4d4;
+      z-index: 950;
+      display: none;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    #answer-panel.is-open { display: block; }
+    #answer-panel .panel-inner {
+      width: 100%;
+      height: 100%;
+      padding: 20px 56px 32px 32px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: flex-start;
+      overflow: hidden;
+    }
+    #answer-panel .panel-text {
+      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-size: clamp(15px, 1.4vw, 18px);
+      line-height: clamp(24px, 2.2vw, 28px);
+      letter-spacing: 0.005em;
+      color: #1a1a1a;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+
+    /* Mode switching: read vs write */
+    #answer-panel .panel-write { display: none; }
+    #answer-panel.is-write .panel-read { display: none; }
+    #answer-panel.is-write .panel-write { display: grid; }
+
+    /* WRITE MODE — grid layout
+       Row 1: textarea (full width, max 600px wrap)
+       Row 2: actions strip — hood + handle + counter + pin it on one line at bottom-right
+       Padding mirrors the question card (top: 20px, left: 32px) so the textarea
+       first line baseline-aligns with the question's first line. */
+    #answer-panel .panel-write {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      /* top padding mirrors question card; bottom padding = divider height (50px) + 12 buffer
+         so the textarea above the divider has breathing room and never overlaps it */
+      padding: 20px 56px 62px 32px;
+      position: relative;
+    }
+    #answer-panel.is-write .panel-write { display: block; }
+    #answer-panel .panel-write-input {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-start;
+      overflow: hidden;
+    }
+    #answer-panel .panel-input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      resize: none;
+      background: transparent;
+      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-size: clamp(15px, 1.4vw, 18px);
+      line-height: clamp(24px, 2.2vw, 28px);
+      letter-spacing: 0.005em;
+      color: #1a1a1a;
+      padding: 0;
+      overflow: hidden;
+    }
+    #answer-panel .panel-input::placeholder {
+      color: rgba(26,26,26,0.28);
+      font-weight: 400;
+    }
+    #answer-panel .panel-hood {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: #666;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    #answer-panel .panel-hood-marker {
+      width: 8px;
+      height: 8px;
+      background: #0088FF;
+      display: inline-block;
+      flex-shrink: 0;
+      opacity: 0.85;
+    }
+    #answer-panel .panel-write-actions {
+      position: absolute;
+      left: 32px;
+      bottom: 19px;
+      display: flex;
+      gap: 18px;
+      align-items: baseline;
+      z-index: 2;
+    }
+    #answer-panel .panel-handle {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 400;
+      color: rgba(26,26,26,0.50);
+      letter-spacing: 0.02em;
+      line-height: 1;
+      position: absolute;
+      bottom: 21px;
+      right: 120px;
+      z-index: 2;
+    }
+    #answer-panel .panel-count {
+      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: rgba(26,26,26,0.30);
+      letter-spacing: 0.005em;
+      line-height: 1;
+      position: absolute;
+      bottom: 60px;
+      right: 19px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    #answer-panel .panel-count .count-caret {
+      font-weight: 400;
+      color: rgba(26,26,26,0.22);
+      animation: count-caret-blink 1.05s steps(2, start) infinite;
+    }
+    @keyframes count-caret-blink {
+      to { visibility: hidden; }
+    }
+    /* Read mode: switch from flex to block so absolutely-positioned children
+       (hood row, divider, +) sit relative to the panel like write mode does. */
+    #answer-panel:not(.is-write) .panel-read {
+      display: block;
+      padding: 20px 56px 62px 32px;
+      position: relative;
+    }
+    #answer-panel .panel-divider-read { display: block; }
+    #answer-panel .panel-plus {
+      position: absolute;
+      right: 19px;
+      bottom: 19px;
+      width: 12px;
+      height: 12px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a1a1a;
+      transition: color 0.15s ease;
+      z-index: 10;
+      pointer-events: auto;
+    }
+    #answer-panel.is-write .panel-plus { display: none; }
+    #answer-panel .panel-plus svg {
+      width: 12px;
+      height: 12px;
+      display: block;
+      stroke: currentColor;
+    }
+    #answer-panel .panel-plus:hover { color: #067CFA; }
+    #answer-panel .panel-drop-label {
+      display: none;
+      position: absolute;
+      bottom: 21px;
+      right: 64px;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1;
+      pointer-events: none;
+      z-index: 2;
+    }
+    #answer-panel.is-write .panel-drop-label {
+      display: block;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    #answer-panel.is-write .panel-submit:hover ~ .panel-drop-label,
+    #answer-panel.is-write .panel-drop-label:hover { opacity: 1; }
+    #answer-panel .panel-vdivider {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      height: 50px;
+      right: 50px;
+      width: 1px;
+      background: #d4d4d4;
+      pointer-events: none;
+      z-index: 1;
+    }
+    #answer-panel.is-write .panel-vdivider { display: block; }
+    #answer-panel .panel-submit {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: background 0.15s ease, color 0.15s ease;
+      z-index: 2;
+    }
+    #answer-panel .panel-submit svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      stroke: currentColor;
+      transition: stroke 0.15s ease;
+    }
+    #answer-panel .panel-submit:hover {
+      background: #067CFA;
+      color: #ffffff;
+    }
+    #answer-panel .panel-divider {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 50px;
+      height: 1px;
+      background: #d4d4d4;
+      pointer-events: none;
+      z-index: 1;
+    }
+    #answer-panel.is-write .panel-divider { display: block; }
+    #answer-panel .panel-vdivider2 {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      height: 50px;
+      right: 100px;
+      width: 1px;
+      background: #d4d4d4;
+      pointer-events: none;
+      z-index: 1;
+    }
+    #answer-panel.is-write .panel-vdivider2 { display: block; }
+
+    /* Panel floats over the map without shrinking it */
+
+    /* SVG overlay that draws the connector line from pin → panel */
+    #pin-line {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 960;
+      display: none;
+    }
+    /* Connector line removed — panel stands alone */
+
+  </style>
+</head>
+<body>
+
+<!-- Fish cursor -->
+<div class="rgb-cursor" aria-hidden="true">
+  <svg viewBox="0 0 18 9" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 18 4.5
+             L 10 1.5
+             L 5 3.5
+             L 0 0
+             L 0 9
+             L 5 5.5
+             L 10 7.5
+             Z"
+          fill="#1a1a1a"/>
+  </svg>
+</div>
+
+<!-- ─────────── TOP MASTHEAD ─────────── -->
+<div id="masthead">
+  <div class="masthead-center">
+    <div class="title">
+      <span class="logo">
+        <span class="l-p">P</span><span class="l-i">i</span><span class="l-n1">n</span><span class="l-n2">n</span><span class="l-e">e</span><span class="l-d">d</span>
+      </span>
+    </div>
+    <div class="city-center">Where We Were</div>
+  </div>
+  <div class="masthead-vdivider" aria-hidden="true"></div>
+  <button class="masthead-close" id="panel-close" title="Close" aria-label="Close answer panel">
+    <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/>
+    </svg>
+  </button>
+  <button class="masthead-add" id="masthead-add" title="Drop a pin" aria-label="Drop a pin">
+    <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <line x1="5" y1="1" x2="5" y2="9"/><line x1="1" y1="5" x2="9" y2="5"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ─────────── VERTICAL SPINE LINE ─────────── -->
+<div id="archive-spine"></div>
+
+<!-- ─────────── LEFT ARCHIVE RAIL — flat list of all questions ─────────── -->
+<aside id="archive-rail">
+  <ul id="archive-list"></ul>
+  <div class="archive-pager" aria-label="Question pagination">
+    <button class="pager-btn" id="pager-prev" title="Previous question" aria-label="Previous question" disabled>
+      <svg viewBox="0 0 8 10" xmlns="http://www.w3.org/2000/svg"><polygon points="8,0 8,10 0,5" fill="currentColor"/></svg>
+    </button>
+    <span class="pager-divider"></span>
+    <button class="pager-btn" id="pager-next" title="Next question" aria-label="Next question" disabled>
+      <svg viewBox="0 0 8 10" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 0,10 8,5" fill="currentColor"/></svg>
+    </button>
+  </div>
+</aside>
+
+<!-- ─────────── EYE-MODE QUESTION PILL (only shown in eye mode) ─────────── -->
+<div id="eye-q-banner">
+  <div class="q-text" id="eye-q-text">I keep coming back to...</div>
+  <button class="q-next" id="eye-q-next" title="Next question" aria-label="Next question">
+    <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 3.6 5.5 L 8.9 12 L 14.3 5.6" />
+    </svg>
+  </button>
+</div>
+
+<!-- ─────────── ANSWER SHEET (floats bottom-right of the map) ─────────── -->
+<div id="sheet-wrap">
+  <div id="sheet">
+    <div class="sheet-head">
+      <div class="sheet-loc">
+        <div class="loc-coords" id="sheet-coords"></div>
+        <div class="loc-name is-prompt" id="sheet-loc">(click map)</div>
+      </div>
+    </div>
+    <div class="sheet-body">
+      <textarea id="sheet-input" class="answer-field" placeholder="Leave a thought" maxlength="100" rows="3"></textarea>
+    </div>
+    <div class="sheet-foot">
+      <div class="foot-top">
+        <span id="sheet-count" class="char-count">0 / 100</span>
+      </div>
+      <div class="foot-bottom">
+        <input id="sheet-handle" class="handle" type="text" readonly maxlength="20" title="Click to rename" />
+        <button id="sheet-submit" class="submit-arrow" title="Pin it (enter) · Esc to cancel">pin it →</button>
+      </div>
+    </div>
+    <button id="sheet-cancel" style="display:none;"></button>
+  </div>
+</div>
+
+
+<!-- Bottom sheet for typing the answer -->
+<!-- ─────────── ANSWER PANEL — read mode (pin click) OR write mode (empty map click) ─────────── -->
+<div id="answer-panel" aria-hidden="true">
+  <!-- READ MODE — shows existing pin's answer text -->
+  <div class="panel-inner panel-read" id="panel-read">
+    <div class="panel-text" id="panel-text">The fog comes in slow over the hills, and by the time you notice the streetlights are on, the whole afternoon has been quietly replaced by an early kind of evening.</div>
+    <div class="panel-write-actions">
+      <span class="panel-hood-marker" aria-hidden="true"></span>
+      <span class="panel-hood" id="panel-hood-read">RUSSIAN HILL · 37.81 · 122.43</span>
+    </div>
+    <div class="panel-divider panel-divider-read"></div>
+  </div>
+  <!-- WRITE MODE — input form for new answer (grid: input | actions row) -->
+  <div class="panel-inner panel-write" id="panel-write">
+    <div class="panel-write-input">
+      <textarea id="panel-input" class="panel-input" placeholder="Leave a thought" maxlength="170" rows="2"></textarea>
+    </div>
+    <div class="panel-write-actions">
+      <span class="panel-hood-marker" aria-hidden="true"></span>
+      <span class="panel-hood" id="panel-hood">RUSSIAN HILL · 37.81 · 122.43</span>
+    </div>
+    <div class="panel-divider"></div>
+    <div class="panel-vdivider"></div>
+    <span class="panel-count" id="panel-count">
+      <span class="count-current">0</span><span class="count-caret">|</span><span class="count-max">170</span>
+    </span>
+    <span class="panel-handle" id="panel-handle">fbmwa369</span>
+    <button class="panel-submit" id="panel-submit" title="Drop pin" aria-label="Drop pin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 4 C 14 5, 8 11, 5 19 L 9 18 C 13 12, 16 8, 20 4 Z"/>
+        <line x1="5" y1="19" x2="4" y2="20"/>
+        <circle cx="1.8" cy="22.2" r="1.7" fill="currentColor" stroke="none"/>
+      </svg>
+    </button>
+    <div class="panel-drop-label" aria-hidden="true"><span>DROP</span></div>
+  </div>
+
+
+</div>
+
+<!-- SVG overlay for the connector line from clicked pin to panel -->
+<svg id="pin-line" xmlns="http://www.w3.org/2000/svg">
+  <line id="pin-line-seg" x1="0" y1="0" x2="0" y2="0" stroke="#1a1a1a" stroke-width="1"/>
+</svg>
+
+<!-- ─────────── SF MAP ─────────── -->
+<div id="map-pane">
+  <div id="map"></div>
+</div>
+
+<!-- ─────────── MAP CONTROLS — horizontal: zoom slider + checkerboard reveal ─────────── -->
+<div class="zoom-scale" aria-label="Map controls">
+  <div class="zoom-line">
+    <span class="zoom-tick"></span>
+    <span class="zoom-tick"></span>
+    <span class="zoom-tick"></span>
+    <div class="zoom-indicator" id="zoom-indicator" title="Drag to zoom"></div>
+  </div>
+  <button class="eye-toggle" id="eye-toggle" title="Reveal answers" aria-label="Toggle answers visibility">
+    <span class="cell corner"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell corner"></span>
+    <span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span>
+    <span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span>
+    <span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span>
+    <span class="cell corner"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell corner"></span>
+  </button>
+</div>
+
+<!-- ─────────── BOTTOM LABEL BAR ─────────── -->
+<div id="footer">
+  <div class="footer-left">
+    <span>San Francisco</span>
+  </div>
+  <div class="footer-right">
+    <div class="label">
+      <span>1776</span>
+      <span class="sep">·</span>
+      <span>47 MI²</span>
+      <span class="sep">·</span>
+      <span>808,437 PEOPLE</span>
+      <span class="sep">·</span>
+      <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
+    </div>
+    <div class="footer-end">
+      <a class="footer-end-link" href="about.html">Where We Were</a>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-122.4194, 37.7749],
+  zoom: 12.5, pitch: 48, bearing: -16,
+  maxBounds: [[-122.562, 37.639],[-122.327, 37.930]],
+  minZoom: 10, maxZoom: 20, attributionControl: false,
+});
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+
+  for (const { id, type } of layers) {
+    try {
+      if (type === 'symbol' || type === 'fill-extrusion') { map.removeLayer(id); continue; }
+      if (id === 'background') { map.setPaintProperty(id, 'background-color', '#f4f4f5'); continue; }
+
+      if (/water|ocean|sea|bay|lake|river/.test(id)) {
+        if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#ffffff'); map.setPaintProperty(id, 'fill-opacity', 1); }
+        if (type === 'line') { map.setPaintProperty(id, 'line-color', '#bbb'); map.setPaintProperty(id, 'line-width', 0.4); }
+        continue;
+      }
+      if (/park|grass|wood|forest|nature|garden|cemetery|scrub|meadow|landuse|landcover|land-|earth|sand|beach|wetland|protected|golf|pitch|playground|recreation|national/.test(id)) {
+        if (type === 'fill') {
+          try { map.setPaintProperty(id, 'fill-pattern', null); } catch(_) {}
+          map.setPaintProperty(id, 'fill-color', '#f4f4f5');
+          map.setPaintProperty(id, 'fill-opacity', 1);
+        }
+        if (type === 'line') {
+          try { map.setPaintProperty(id, 'line-color', '#f4f4f5'); } catch(_) {}
+          map.setPaintProperty(id, 'line-opacity', 0);
+        }
+        continue;
+      }
+      if (/motorway|trunk/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.5);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.5, 12,0.8, 14,1.2, 17,2]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/primary|secondary/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.45);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 10,0.4, 12,0.6, 14,0.9, 17,1.5]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/road|street|tertiary|minor|service/.test(id)) {
+        if (type === 'line') {
+          map.setPaintProperty(id, 'line-color', '#555');
+          map.setPaintProperty(id, 'line-opacity', 0.55);
+          try { map.setPaintProperty(id, 'line-width',
+            ['interpolate',['linear'],['zoom'], 12,0.15, 14,0.35, 17,0.8]); } catch(_){}
+        }
+        if (type === 'fill') map.setPaintProperty(id, 'fill-opacity', 0);
+        continue;
+      }
+      if (/path|footway|cycleway|pedestrian|rail|transit/.test(id)) {
+        if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+        continue;
+      }
+      if (/building/.test(id) && type === 'fill') {
+        map.setPaintProperty(id, 'fill-color', '#d4d4d6');
+        map.setPaintProperty(id, 'fill-opacity', 1);
+        map.setPaintProperty(id, 'fill-outline-color', '#bbb');
+        continue;
+      }
+      if (type === 'fill') { map.setPaintProperty(id, 'fill-color', '#d4d4d6'); map.setPaintProperty(id, 'fill-opacity', 1); }
+      if (type === 'line') map.setPaintProperty(id, 'line-opacity', 0);
+    } catch(_) {}
+  }
+
+  try {
+    map.addLayer({
+      id: 'contour-minor',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['!=', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': '#bbb',
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.3, 14,0.55],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.5, 14,0.85, 16,0.25],
+      }
+    });
+    map.addLayer({
+      id: 'contour-major',
+      type: 'line',
+      source: 'openmaptiles',
+      'source-layer': 'contour',
+      filter: ['==', ['%', ['get', 'ele'], 100], 0],
+      paint: {
+        'line-color': ['interpolate',['linear'],['get','ele'], 0,'#bbb', 100,'#999', 200,'#777', 300,'#555'],
+        'line-width': ['interpolate',['linear'],['zoom'], 11,0.8, 13,1.4, 15,1.8],
+        'line-opacity': ['interpolate',['linear'],['zoom'], 11,0.7, 13,0.9, 16,0.35],
+      }
+    });
+  } catch(_) {}
+
+  map.addLayer({
+    id: 'building-ink',
+    type: 'line',
+    source: 'openmaptiles',
+    'source-layer': 'building',
+    minzoom: 14,
+    paint: { 'line-color': '#bbb', 'line-width': 0.35, 'line-opacity': 0.7 }
+  });
+
+  // ── SF spotlight mask: a "donut" polygon that darkens everything outside SF ──
+  fetch('assets/sf-boundary.geojson')
+    .then(r => r.json())
+    .then(sf => {
+      const outerRing = [[-180,-85],[180,-85],[180,85],[-180,85],[-180,-85]];
+      const sfRings = sf.features[0].geometry.coordinates.flatMap(poly => poly);
+      const donut = {
+        type: 'Feature',
+        properties: {},
+        geometry: { type: 'Polygon', coordinates: [outerRing, ...sfRings] }
+      };
+      map.addSource('sf-mask', { type: 'geojson', data: donut });
+      map.addLayer({
+        id: 'sf-spotlight-mask',
+        type: 'fill',
+        source: 'sf-mask',
+        paint: { 'fill-color': '#000', 'fill-opacity': 0 }
+      });
+    })
+    .catch(_ => {});
+
+  // ── Render any saved answers from localStorage ──
+  loadSavedAnswers();
+});
+
+// ─────────── ASSIGNMENTS (one question per fortnight) ───────────
+// ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
+const ASSIGNMENTS = [
+  { issueNo: 12, dates: 'Apr 15 → Apr 29', text: "I keep coming back to..." },
+  { issueNo: 11, dates: 'Apr 01 → Apr 14', text: "Where do you go to be alone?" },
+  { issueNo: 10, dates: 'Mar 18 → Mar 31', text: "What place feels like home?" },
+  { issueNo: 9,  dates: 'Mar 04 → Mar 17', text: "Where did you last get lost?" },
+  { issueNo: 8,  dates: 'Feb 18 → Mar 03', text: "A walk you take often" },
+  { issueNo: 7,  dates: 'Feb 04 → Feb 17', text: "Somewhere you sat for a while" },
+  { issueNo: 6,  dates: 'Jan 21 → Feb 03', text: "The last good Sunday morning" },
+  { issueNo: 5,  dates: 'Jan 07 → Jan 20', text: "A place you almost forgot" },
+  { issueNo: 4,  dates: 'Dec 24 → Jan 06', text: "Where the city felt small" },
+  { issueNo: 3,  dates: 'Dec 10 → Dec 23', text: "Somewhere you wait" },
+  { issueNo: 2,  dates: 'Nov 26 → Dec 09', text: "A view you keep returning to" },
+  { issueNo: 1,  dates: 'Nov 12 → Nov 25', text: "The first place you remember" },
+];
+
+// Flat array of question strings, used by the rest of the code (markers, spotlight, etc.)
+const QUESTIONS = ASSIGNMENTS.map(a => a.text);
+
+// Index 0 = current issue. viewingIndex is which assignment is shown in the rail's
+// "current" block — 0 by default, but switches when user clicks a past issue.
+let currentQuestionIndex = 0;     // which question is "active" (drives the map markers)
+let viewingIndex = 0;              // which assignment block is shown at the top of the rail
+
+// Mirror so existing code (e.g. addBtn handler) can still read the active question text
+const questionEl = {
+  get textContent() { return QUESTIONS[currentQuestionIndex]; },
+};
+
+// Issue number formatter (07, 06, 05…)
+function pad2(n) { return String(n).padStart(2, '0'); }
+
+const archiveListEl = document.getElementById('archive-list');
+
+function buildArchive() {
+  archiveListEl.innerHTML = '';
+  ASSIGNMENTS.forEach((a, i) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    const isCurrent = i === 0;
+    btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
+    btn.dataset.idx = i;
+    btn.innerHTML = isCurrent
+      ? `<div class="label"><span class="issue-no">${pad2(a.issueNo)}</span></div>
+         <div class="question">${a.text}</div>
+         <div class="assignment-tag">Assignment · ${a.dates.split(' → ')[0].toUpperCase()}</div>`
+      : `<div class="label">${pad2(a.issueNo)}</div>
+         <div class="question">${a.text}</div>`;
+    if (i === currentQuestionIndex) btn.classList.add('active');
+    if (!isCurrent && a.issueNo === ASSIGNMENTS[0].issueNo) btn.classList.add('active');
+    btn.addEventListener('click', () => selectQuestion(i));
+    li.appendChild(btn);
+    archiveListEl.appendChild(li);
+  });
+}
+
+function selectQuestion(idx) {
+  currentQuestionIndex = idx;
+  viewingIndex = idx;
+  archiveListEl.querySelectorAll('.archive-item').forEach(el => {
+    el.classList.toggle('active', Number(el.dataset.idx) === idx);
+  });
+  if (typeof applySpotlight === 'function') applySpotlight();
+}
+
+// ── Eye-mode question pill — shows the active question and advances on click ──
+const eyeQText = document.getElementById('eye-q-text');
+const eyeQNext = document.getElementById('eye-q-next');
+function renderEyePill() {
+  eyeQText.textContent = QUESTIONS[currentQuestionIndex];
+}
+function advanceEyeQuestion() {
+  const nextIdx = (currentQuestionIndex + 1) % QUESTIONS.length;
+  selectQuestion(nextIdx);
+  renderEyePill();
+}
+eyeQNext.addEventListener('click', (e) => {
+  e.stopPropagation();
+  advanceEyeQuestion();
+});
+
+// No more rotation, but keep no-op stubs in case other code references them
+function startRotation() {}
+function stopRotation() {}
+function closeDropdown() {}  // no-op — dropdown is gone
+
+buildArchive();
+renderEyePill();
+
+// ─────────── SF NEIGHBORHOODS — for friendly location labels ───────────
+const SF_NEIGHBORHOODS = [
+  { name: 'Mission', lat: 37.7599, lng: -122.4148 },
+  { name: 'Mission Dolores', lat: 37.7635, lng: -122.4263 },
+  { name: 'The Castro', lat: 37.7609, lng: -122.4350 },
+  { name: 'Hayes Valley', lat: 37.7766, lng: -122.4243 },
+  { name: 'Lower Haight', lat: 37.7714, lng: -122.4313 },
+  { name: 'The Haight', lat: 37.7692, lng: -122.4481 },
+  { name: 'Cole Valley', lat: 37.7660, lng: -122.4500 },
+  { name: 'Inner Sunset', lat: 37.7613, lng: -122.4666 },
+  { name: 'Outer Sunset', lat: 37.7558, lng: -122.4953 },
+  { name: 'Inner Richmond', lat: 37.7807, lng: -122.4675 },
+  { name: 'Outer Richmond', lat: 37.7799, lng: -122.4945 },
+  { name: 'Sea Cliff', lat: 37.7843, lng: -122.4924 },
+  { name: 'Presidio', lat: 37.7989, lng: -122.4662 },
+  { name: 'Marina', lat: 37.8030, lng: -122.4378 },
+  { name: 'Cow Hollow', lat: 37.7969, lng: -122.4368 },
+  { name: 'Pacific Heights', lat: 37.7929, lng: -122.4386 },
+  { name: 'Russian Hill', lat: 37.8014, lng: -122.4180 },
+  { name: 'Nob Hill', lat: 37.7930, lng: -122.4161 },
+  { name: 'North Beach', lat: 37.8062, lng: -122.4103 },
+  { name: 'Chinatown', lat: 37.7941, lng: -122.4078 },
+  { name: 'Financial District', lat: 37.7946, lng: -122.4006 },
+  { name: 'SoMa', lat: 37.7785, lng: -122.4039 },
+  { name: 'Mission Bay', lat: 37.7706, lng: -122.3893 },
+  { name: 'Potrero Hill', lat: 37.7587, lng: -122.4012 },
+  { name: 'Bernal Heights', lat: 37.7430, lng: -122.4156 },
+  { name: 'Noe Valley', lat: 37.7506, lng: -122.4337 },
+  { name: 'Glen Park', lat: 37.7338, lng: -122.4339 },
+  { name: 'Twin Peaks', lat: 37.7544, lng: -122.4477 },
+  { name: 'Tenderloin', lat: 37.7849, lng: -122.4143 },
+  { name: 'Civic Center', lat: 37.7793, lng: -122.4193 },
+  { name: 'Dogpatch', lat: 37.7575, lng: -122.3899 },
+  { name: 'Bayview', lat: 37.7300, lng: -122.3877 },
+  { name: 'Excelsior', lat: 37.7240, lng: -122.4318 },
+  { name: 'Visitacion Valley', lat: 37.7136, lng: -122.4060 },
+  { name: 'Lakeshore', lat: 37.7280, lng: -122.4900 },
+];
+function nearestNeighborhood([lng, lat]) {
+  let best = SF_NEIGHBORHOODS[0];
+  let bestDist = Infinity;
+  for (const n of SF_NEIGHBORHOODS) {
+    const dLat = n.lat - lat;
+    const dLng = n.lng - lng;
+    const d = dLat * dLat + dLng * dLng;
+    if (d < bestDist) { bestDist = d; best = n; }
+  }
+  return best.name;
+}
+
+// ─────────── ANSWER MODE ───────────
+// Map is always in answer mode — clicking anywhere drops a pin and opens the sheet.
+const hint = { classList: { toggle() {} } }; // no-op: hint banner removed
+const sheet = document.getElementById('sheet');
+const sheetInput = document.getElementById('sheet-input');
+const sheetQText = document.getElementById('sheet-q-text');
+const sheetLoc = document.getElementById('sheet-loc');
+const sheetCoords = document.getElementById('sheet-coords');
+const sheetCancel = document.getElementById('sheet-cancel');
+const sheetSubmit = document.getElementById('sheet-submit');
+const sheetCount = document.getElementById('sheet-count');
+const sheetHandle = document.getElementById('sheet-handle');
+
+function updateCount() {
+  const len = sheetInput.value.length;
+  sheetCount.textContent = `${len} / 100`;
+  sheetCount.classList.toggle('is-near-limit', len > 85);
+}
+sheetInput.addEventListener('input', updateCount);
+
+// ─────────── ANONYMOUS HANDLE ───────────
+// Generate a small random handle (5–6 lowercase letters + 3 digits, e.g. "sdfeg341")
+// once per browser, persist in localStorage. Click to rename; Enter saves, Esc cancels.
+const HANDLE_KEY = 'sf-mood-handle';
+function generateHandle() {
+  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  const letterCount = 5 + Math.floor(Math.random() * 2); // 5 or 6
+  let s = '';
+  for (let i = 0; i < letterCount; i++) s += letters[Math.floor(Math.random() * letters.length)];
+  for (let i = 0; i < 3; i++) s += Math.floor(Math.random() * 10);
+  return s;
+}
+function loadHandle() {
+  let h = localStorage.getItem(HANDLE_KEY);
+  if (!h) { h = generateHandle(); localStorage.setItem(HANDLE_KEY, h); }
+  return h;
+}
+function saveHandle(value) { localStorage.setItem(HANDLE_KEY, value); }
+
+let handleBeforeEdit = '';
+sheetHandle.value = loadHandle();
+
+sheetHandle.addEventListener('click', () => {
+  if (sheetHandle.readOnly) {
+    handleBeforeEdit = sheetHandle.value;
+    sheetHandle.readOnly = false;
+    sheetHandle.classList.add('is-editing');
+    sheetHandle.focus();
+    sheetHandle.select();
+  }
+});
+sheetHandle.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); sheetHandle.blur(); }
+  else if (e.key === 'Escape') { e.preventDefault(); sheetHandle.value = handleBeforeEdit; sheetHandle.blur(); }
+});
+sheetHandle.addEventListener('blur', () => {
+  const trimmed = sheetHandle.value.trim();
+  if (!trimmed) sheetHandle.value = handleBeforeEdit; // empty reverts
+  else { sheetHandle.value = trimmed; saveHandle(trimmed); }
+  sheetHandle.readOnly = true;
+  sheetHandle.classList.remove('is-editing');
+});
+
+let pendingLngLat = null;
+let pendingQuestion = null;
+let pendingMarker = null;
+
+function openSheet() {
+  sheet.classList.add('show');
+  document.body.classList.add('sheet-open');
+  if (typeof closeDropdown === 'function') closeDropdown();
+  stopRotation(); // freeze the question while the user is answering
+  setTimeout(() => sheetInput.focus(), 350);
+}
+function closeSheet() {
+  sheet.classList.remove('show');
+  document.body.classList.remove('sheet-open');
+  if (pendingMarker) { pendingMarker.remove(); pendingMarker = null; }
+  pendingLngLat = null;
+  pendingQuestion = null;
+  sheetInput.value = '';
+  updateCount();
+  sheetLoc.textContent = '(click map)';
+  sheetLoc.classList.add('is-prompt');
+  sheetCoords.textContent = '';
+  startRotation(); // resume rotation when the sheet closes
+}
+
+map.on('click', (e) => {
+  // Close any expanded answer-marker when clicking the map background
+  answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+  // Lock in the current question when a click happens
+  pendingQuestion = questionEl.textContent;
+  if (sheetQText) sheetQText.textContent = pendingQuestion;
+  pendingLngLat = [e.lngLat.lng, e.lngLat.lat];
+
+  // Drop / move the temporary pending pin
+  if (pendingMarker) pendingMarker.remove();
+  const pendingEl = document.createElement('div');
+  pendingEl.className = 'pending-pin';
+  // Victorian-style pointing hand — fingertip is at SVG (10, 38), which is the marker's anchor point
+  pendingEl.innerHTML = `
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <g fill="#fff" stroke="#1a1a1a" stroke-width="1" stroke-linejoin="round" stroke-linecap="round">
+        <!-- Cuff (sleeve, top-right) -->
+        <path d="M 30 4 L 46 8 L 46 16 L 30 12 Z" />
+        <line x1="32" y1="6" x2="46" y2="9.5" stroke-width="0.6" />
+        <line x1="32" y1="11" x2="46" y2="14.5" stroke-width="0.6" />
+        <!-- Cuff button -->
+        <circle cx="42" cy="11" r="1" fill="#1a1a1a" stroke="none" />
+        <!-- Back of hand -->
+        <path d="M 30 4 L 30 12 L 26 13 Q 22 14 20 17 L 18 21 Q 18 24 22 25 L 28 25 L 32 25 L 36 25 Q 40 24 40 20 L 40 10 Q 40 6 36 5 Z" />
+        <!-- Index finger pointing down-left toward (10, 38) -->
+        <path d="M 26 13 Q 22 16 18 22 L 14 30 Q 12 34 10 38 L 13 38 Q 16 35 20 30 L 24 24 Q 27 20 27 16 Q 27 13 26 13 Z" />
+        <!-- Fingernail at fingertip (10, 38) -->
+        <path d="M 10.5 36.5 Q 12 36.8 13 37 L 12.5 38 Q 11 38.2 10 38 Z" fill="#1a1a1a" stroke-width="0.5" />
+        <!-- Curled middle finger -->
+        <path d="M 27 16 Q 31 17 32 21 Q 32 24 30 25 Q 27 25 26 23" stroke-width="0.9" />
+        <!-- Curled ring finger -->
+        <path d="M 30 18 Q 34 19 35 22 Q 35 24 32 25 Q 30 25 29 24" stroke-width="0.9" />
+        <!-- Curled pinky -->
+        <path d="M 33 20 Q 36 21 36 23 Q 36 25 34 25 Q 32 25 32 24" stroke-width="0.9" />
+        <!-- Thumb tucked at base -->
+        <path d="M 24 24 Q 26 26 30 26 Q 28 28 24 27 Z" stroke-width="0.8" />
+        <!-- Knuckle shading lines -->
+        <path d="M 22 17 Q 21 19 20 21" fill="none" stroke-width="0.4" />
+        <path d="M 25 19 Q 23 21 22 23" fill="none" stroke-width="0.4" />
+        <!-- Finger crease -->
+        <path d="M 18 24 Q 19 25 21 25" fill="none" stroke-width="0.4" />
+      </g>
+    </svg>
+  `;
+  // Anchor the SVG at the fingertip — viewBox is 48x48, fingertip is at (10, 38),
+  // so as a fraction: x=10/48, y=38/48. MapLibre's offset is in pixels from the
+  // anchor 'center' point, so we shift the element so that (10, 38) lands on the click.
+  // Element is 48px tall × 48px wide; center is (24, 24). Fingertip offset from center
+  // is (10-24, 38-24) = (-14, +14). To place fingertip on click, shift element by -(-14, +14) = (+14, -14).
+  pendingMarker = new maplibregl.Marker({
+    element: pendingEl,
+    anchor: 'center',
+    offset: [14, -14]
+  })
+    .setLngLat(pendingLngLat)
+    .addTo(map);
+
+  // Update catalog-card header — coords on the left (catalog code), neighborhood on the right (subject heading)
+  const name = nearestNeighborhood(pendingLngLat);
+  sheetLoc.textContent = name;
+  sheetLoc.classList.remove('is-prompt');
+  sheetCoords.textContent = `${pendingLngLat[1].toFixed(4)}° N · ${Math.abs(pendingLngLat[0]).toFixed(4)}° W`;
+
+  // Open the write-mode answer panel (replaces the old floating sheet)
+  openWritePanel({ lngLat: pendingLngLat, hood: name });
+});
+
+function submitAnswer() {
+  const text = sheetInput.value.trim();
+  if (!text) {
+    sheetInput.focus();
+    return;
+  }
+  if (!pendingLngLat) {
+    // Flash a hint that they need to click the map
+    sheetCoords.textContent = '← click the map first';
+    sheetCoords.style.color = '#1a1a1a';
+    setTimeout(() => { sheetCoords.textContent = ''; sheetCoords.style.color = ''; }, 1800);
+    return;
+  }
+  const handle = (sheetHandle.value || '').trim();
+  saveAnswer({ lngLat: pendingLngLat, question: pendingQuestion, text, handle });
+  placeAnswerMarker({ lngLat: pendingLngLat, question: pendingQuestion, text, handle });
+  closeSheet();
+}
+
+sheetSubmit.addEventListener('click', submitAnswer);
+sheetCancel.addEventListener('click', closeSheet);
+sheetInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    submitAnswer();
+  } else if (e.key === 'Escape') closeSheet();
+});
+
+// ─────────── STORAGE ───────────
+const STORAGE_KEY = 'sf-mood-answers';
+function saveAnswer(entry) {
+  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  all.push({ ...entry, timestamp: Date.now() });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+  updatePinCount();
+}
+function loadSavedAnswers() {
+  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  all.forEach(placeAnswerMarker);
+  updatePinCount();
+}
+function updatePinCount() {
+  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const el = document.getElementById('footer-pins');
+  if (el) el.textContent = all.length.toLocaleString();
+}
+
+// ─────────── MARKER ───────────
+// Track every answer marker element + its question, so we can highlight/dim them as the question rotates
+const answerMarkers = [];
+function placeAnswerMarker({ lngLat, question, text, handle }) {
+  const hood = nearestNeighborhood(lngLat);
+  const wrap = document.createElement('div');
+  wrap.className = 'answer-marker';
+  wrap.dataset.question = question;
+  const handleHtml = handle ? `<div class="handle">${escapeHtml(handle)}</div>` : '';
+  wrap.innerHTML = `
+    <div class="answer-note">
+      <div class="q">${escapeHtml(question)}</div>
+      <div>${escapeHtml(text)}</div>
+      ${handleHtml}
+    </div>
+  `;
+  // Click the orange pin → open the side panel with this answer's text,
+  // shrink the map, and draw a connector line from pin to panel.
+  wrap.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const wasOpen = wrap.classList.contains('is-open');
+    answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+    if (wasOpen) {
+      closeAnswerPanel();
+    } else {
+      wrap.classList.add('is-open');
+      openAnswerPanel({ text, lngLat, hood });
+    }
+  });
+  new maplibregl.Marker({ element: wrap, anchor: 'top-left' })
+    .setLngLat(lngLat)
+    .addTo(map);
+  answerMarkers.push({ el: wrap, question, lngLat, hood });
+  applySpotlight();
+}
+
+// ─────────── ANSWER PANEL ───────────
+const answerPanel   = document.getElementById('answer-panel');
+const panelText     = document.getElementById('panel-text');
+const panelCloseBtn = document.getElementById('panel-close');
+const pinLineSvg    = document.getElementById('pin-line');
+const pinLineSeg    = document.getElementById('pin-line-seg');
+let activePinLngLat = null;
+
+function getMainQuestionHeight() {
+  const cur = document.querySelector('#archive-list .archive-item.is-current');
+  return cur ? cur.getBoundingClientRect().height : 160;
+}
+
+function openAnswerPanel({ text, lngLat, hood }) {
+  panelText.textContent = text;
+  const hoodEl = document.getElementById('panel-hood-read');
+  if (hoodEl && lngLat) {
+    const lat = lngLat[1].toFixed(2);
+    const lng = Math.abs(lngLat[0]).toFixed(2);
+    hoodEl.textContent = `${(hood || '').toUpperCase()} · ${lat} · ${lng}`;
+  }
+  answerPanel.classList.remove('is-write');
+  const h = getMainQuestionHeight();
+  document.documentElement.style.setProperty('--panel-h', h + 'px');
+  answerPanel.style.height = h + 'px';
+  answerPanel.classList.add('is-open');
+  document.body.classList.add('panel-open');
+  activePinLngLat = lngLat;
+}
+
+function openWritePanel({ lngLat, hood }) {
+  // Fill in the write-mode fields
+  const panelHood   = document.getElementById('panel-hood');
+  const panelHandle = document.getElementById('panel-handle');
+  const panelInput  = document.getElementById('panel-input');
+  const panelCount  = document.getElementById('panel-count');
+  if (panelHood) {
+    const lat = lngLat[1].toFixed(2);
+    const lng = Math.abs(lngLat[0]).toFixed(2);
+    const hoodName = (hood || '').toUpperCase();
+    panelHood.textContent = `${hoodName} · ${lat} · ${lng}`;
+  }
+  if (panelHandle) panelHandle.textContent = randomHandle();
+  if (panelInput)  panelInput.value = '';
+  if (panelCount) {
+    const cur = panelCount.querySelector('.count-current');
+    if (cur) cur.textContent = '0';
+    panelCount.style.color = '';
+  }
+  answerPanel.classList.add('is-write');
+  // Match the main question card height — same fixed footprint as read mode.
+  const h = getMainQuestionHeight();
+  document.documentElement.style.setProperty('--panel-h', h + 'px');
+  answerPanel.style.height = h + 'px';
+  answerPanel.classList.add('is-open');
+  document.body.classList.add('panel-open');
+  activePinLngLat = lngLat;
+  // Focus the textarea after panel transition
+  setTimeout(() => { if (panelInput) panelInput.focus(); }, 50);
+}
+
+function randomHandle() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let s = '';
+  for (let i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
+
+function closeAnswerPanel() {
+  answerPanel.classList.remove('is-open');
+  answerPanel.classList.remove('is-write');
+  document.body.classList.remove('panel-open');
+  activePinLngLat = null;
+  answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+}
+
+// Wire up live character counter + submit for write mode
+document.addEventListener('DOMContentLoaded', () => {
+  const panelInput  = document.getElementById('panel-input');
+  const panelCount  = document.getElementById('panel-count');
+  const panelSubmit = document.getElementById('panel-submit');
+  if (panelInput && panelCount) {
+    const panelCountCurrent = panelCount.querySelector('.count-current');
+    panelInput.addEventListener('input', () => {
+      const n = panelInput.value.length;
+      if (panelCountCurrent) panelCountCurrent.textContent = String(n);
+      panelCount.style.color = n >= 170 ? '#ED3B36' : (n >= 140 ? 'rgba(26,26,26,0.65)' : 'rgba(26,26,26,0.30)');
+    });
+    panelInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAnswerPanel();
+    });
+  }
+  if (panelSubmit) {
+    panelSubmit.addEventListener('click', () => {
+      const text = (panelInput && panelInput.value || '').trim();
+      if (!text) { if (panelInput) panelInput.focus(); return; }
+      console.log('pin it →', { text, lngLat: activePinLngLat });
+      closeAnswerPanel();
+    });
+  }
+  const panelPlus = document.getElementById('panel-plus');
+  if (panelPlus) {
+    panelPlus.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if (!activePinLngLat) return;
+      const hood = nearestNeighborhood(activePinLngLat);
+      openWritePanel({ lngLat: activePinLngLat, hood });
+    });
+  }
+  const mastheadAdd = document.getElementById('masthead-add');
+  if (mastheadAdd) {
+    mastheadAdd.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const c = map.getCenter();
+      const lngLat = [c.lng, c.lat];
+      const hood = nearestNeighborhood(lngLat);
+      openWritePanel({ lngLat, hood });
+    });
+  }
+});
+
+function drawPinLine() {
+  if (!activePinLngLat || !map) return;
+  const pt = map.project(activePinLngLat);
+  const mapRect = document.getElementById('map-pane').getBoundingClientRect();
+  // Pin coordinates in viewport space (map.project gives map-relative coords)
+  const pinX = mapRect.left + pt.x;
+  const pinY = mapRect.top + pt.y;
+  // Panel bottom-center as the line target
+  const panelRect = answerPanel.getBoundingClientRect();
+  const targetX = panelRect.left + panelRect.width / 2;
+  const targetY = panelRect.bottom;
+  pinLineSeg.setAttribute('x1', targetX);
+  pinLineSeg.setAttribute('y1', targetY);
+  pinLineSeg.setAttribute('x2', pinX);
+  pinLineSeg.setAttribute('y2', pinY);
+}
+
+panelCloseBtn.addEventListener('click', closeAnswerPanel);
+window.addEventListener('resize', () => {
+  if (document.body.classList.contains('panel-open')) {
+    const h = getMainQuestionHeight();
+    document.documentElement.style.setProperty('--panel-h', h + 'px');
+    answerPanel.style.height = h + 'px';
+    if (map) map.resize();
+    drawPinLine();
+  }
+});
+
+// ─────────── REVEAL TOGGLE ───────────
+const eyeToggle = document.getElementById('eye-toggle');
+let revealed = false; // start in idle: pins hidden, map clear
+const DEFAULT_VIEW = { center: [-122.4194, 37.7749], zoom: 12.5, pitch: 48, bearing: -16 };
+const EYE_VIEW     = { center: [-122.4394, 37.7720], zoom: 11.4, pitch: 0,  bearing: 0 };
+function setRevealed(on) {
+  revealed = on;
+  document.body.classList.toggle('spotlight-on', on);
+  eyeToggle.classList.toggle('active', on);
+  if (on && typeof closeDropdown === 'function') closeDropdown();
+  // Resize synchronously — must happen *before* flyTo so the viewport size is correct
+  // when the animation starts; otherwise the new strip uncovered by the rail flashes briefly.
+  map.resize();
+  map.flyTo({ ...(on ? EYE_VIEW : DEFAULT_VIEW), duration: 1200, essential: true });
+  applySpotlight();
+}
+eyeToggle.addEventListener('click', () => setRevealed(!revealed));
+
+// Zoom scale wiring — + / − buttons step the map zoom; indicator reflects + sets zoom level
+const zoomIndicator = document.getElementById('zoom-indicator');
+const zoomLine = document.querySelector('.zoom-scale .zoom-line');
+
+// Three discrete zoom positions (out / mid / in) snapped to the 3 ticks.
+function getSnapTier(z) {
+  const minZ = map.getMinZoom();
+  const maxZ = map.getMaxZoom();
+  const range = maxZ - minZ;
+  const t = range > 0 ? (z - minZ) / range : 0;
+  if (t < 0.33) return 0;
+  if (t < 0.67) return 1;
+  return 2;
+}
+
+function updateZoomIndicator() {
+  const tier = getSnapTier(map.getZoom());
+  // Tick centers (ticks are 1.5px wide, positioned at left:0, left:50%, right:0)
+  const lineWidth = zoomLine ? zoomLine.getBoundingClientRect().width : 80;
+  const tickWidth = 1.5;
+  const tickCenters = [
+    tickWidth / 2,                        // left tick: positioned at left:0, center is half its width in
+    lineWidth / 2,                        // middle tick: positioned at left:50% with translateX(-50%), so center is at width/2
+    lineWidth - tickWidth / 2             // right tick: positioned at right:0, center is half its width from right edge
+  ];
+  // Diamond is 8px; its `left` is its left edge. To center diamond on tick, set left = tickCenter - 4
+  const indicatorWidth = 8;
+  const px = tickCenters[tier] - indicatorWidth / 2;
+  zoomIndicator.style.left = `${px}px`;
+}
+
+map.on('zoom', updateZoomIndicator);
+map.on('load', updateZoomIndicator);
+updateZoomIndicator();
+
+// Keep the pin → panel connector line in sync with map pan/zoom
+map.on('move', () => {
+  if (document.body.classList.contains('panel-open')) drawPinLine();
+});
+
+// Drag the indicator to set zoom level directly (horizontal: left = zoom-out, right = zoom-in)
+let isDraggingZoom = false;
+function setZoomFromX(clientX) {
+  const rect = zoomLine.getBoundingClientRect();
+  let t = (clientX - rect.left) / rect.width;
+  t = Math.max(0, Math.min(1, t));
+  // Snap to nearest of 3 tiers: 0, 0.5, 1
+  let tier;
+  if (t < 0.25) tier = 0;
+  else if (t < 0.75) tier = 1;
+  else tier = 2;
+  const minZ = map.getMinZoom();
+  const maxZ = map.getMaxZoom();
+  const z = minZ + (tier / 2) * (maxZ - minZ);
+  map.setZoom(z);
+}
+zoomIndicator.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  isDraggingZoom = true;
+  zoomIndicator.classList.add('is-dragging');
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isDraggingZoom) return;
+  setZoomFromX(e.clientX);
+});
+window.addEventListener('mouseup', () => {
+  if (!isDraggingZoom) return;
+  isDraggingZoom = false;
+  zoomIndicator.classList.remove('is-dragging');
+});
+
+// Apply the spotlight effect: only when revealed; otherwise pins stay hidden via CSS
+function applySpotlight() {
+  if (!revealed) return;
+  const currentQ = QUESTIONS[currentQuestionIndex];
+  answerMarkers.forEach(m => {
+    m.el.classList.toggle('dim', m.question !== currentQ);
+  });
+}
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// Open the answer panel by default with placeholder text — preview mode
+window.requestAnimationFrame(() => {
+  const placeholder = panelText.textContent;
+  const h = getMainQuestionHeight();
+  document.documentElement.style.setProperty('--panel-h', h + 'px');
+  answerPanel.style.height = h + 'px';
+  answerPanel.classList.add('is-open');
+  document.body.classList.add('panel-open');
+  panelText.textContent = placeholder;
+});
+
+// Fish cursor — small fish silhouette that swims toward mouse motion direction
+(function () {
+  const cursor = document.querySelector('.rgb-cursor');
+  const svg = cursor && cursor.querySelector('svg');
+  if (!cursor || !svg) return;
+
+  let mx = window.innerWidth / 2;
+  let my = window.innerHeight / 2;
+  let vx = 0, vy = 0;
+  let lastX = mx, lastY = my;
+  let currentAngle = 0;
+  let targetAngle = 0;
+  let swayPhase = 0;
+  let lastMoveTime = performance.now();
+
+  window.addEventListener('mousemove', (e) => {
+    mx = e.clientX;
+    my = e.clientY;
+    lastMoveTime = performance.now();
+  });
+
+  function tick(now) {
+    cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+
+    const ix = mx - lastX;
+    const iy = my - lastY;
+    vx = vx * 0.78 + ix * 0.22;
+    vy = vy * 0.78 + iy * 0.22;
+    lastX = mx;
+    lastY = my;
+
+    const speed = Math.hypot(vx, vy);
+    if (speed > 0.5) {
+      targetAngle = Math.atan2(vy, vx) * 180 / Math.PI;
+    }
+
+    const idleFor = now - lastMoveTime;
+    let angleToShow = targetAngle;
+    if (idleFor > 500) {
+      swayPhase += 0.04;
+      angleToShow = targetAngle + Math.sin(swayPhase) * 6;
+    } else {
+      swayPhase = 0;
+    }
+
+    let delta = angleToShow - currentAngle;
+    while (delta > 180)  delta -= 360;
+    while (delta < -180) delta += 360;
+    currentAngle += delta * 0.18;
+
+    svg.style.transform = `rotate(${currentAngle}deg)`;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+})();
+</script>
+</body>
+</html>

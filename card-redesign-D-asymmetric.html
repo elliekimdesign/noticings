@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>D · Asymmetric — card redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,700;6..96,800&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      min-height: 100vh;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .back {
+      position: fixed; top: 24px; left: 32px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a1a1a; text-decoration: none; opacity: 0.55;
+    }
+    .back:hover { opacity: 1; }
+    .stage {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 32px;
+    }
+    .rail {
+      width: 400px;
+      border: 1.5px solid #666;
+      background: #faf7ee;
+    }
+
+    /* ── D · Asymmetric ── */
+    .card {
+      position: relative;
+      padding: 28px 28px 36px;
+      border-bottom: 1.5px solid #666;
+      min-height: 280px;
+      overflow: hidden;
+    }
+    .card .num {
+      position: absolute;
+      top: -18px;
+      right: -10px;
+      font-family: 'Bodoni Moda', serif;
+      font-weight: 700;
+      font-size: 200px;
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      color: #1a1a1a;
+      pointer-events: none;
+    }
+    .card .lbl {
+      position: relative;
+      z-index: 2;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(26,26,26,0.7);
+      margin-bottom: 130px;
+    }
+    .card .q {
+      position: relative;
+      z-index: 2;
+      max-width: 75%;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
+      color: #1a1a1a;
+    }
+
+    /* ── Past rows ── */
+    .row {
+      padding: 14px 28px;
+      border-bottom: 1.5px solid #666;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 14px;
+      align-items: baseline;
+    }
+    .row:last-child { border-bottom: none; }
+    .row .num {
+      font-family: 'Bodoni Moda', serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      color: #1a1a1a;
+    }
+    .row .q {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(26,26,26,0.65);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<a class="back" href="card-redesign-INDEX.html">← all designs</a>
+
+<div class="stage">
+  <div class="rail">
+
+    <div class="card">
+      <div class="num">01</div>
+      <div class="lbl">Assignment</div>
+      <div class="q">I keep coming back to…</div>
+    </div>
+
+    <div class="row">
+      <div class="num">02</div>
+      <div class="q">The thing I miss most is…</div>
+    </div>
+
+    <div class="row">
+      <div class="num">03</div>
+      <div class="q">A street I walk on Sundays</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

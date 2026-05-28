@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Card axis testing — pick one variable at a time</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@300;400;500&family=Geist:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #faf7ee;
+      color: #1a1a1a;
+      font-family: 'Hanken Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 80px 64px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px; color: rgba(26,26,26,0.6);
+      max-width: 700px; line-height: 1.55; margin-bottom: 8px;
+    }
+    p.process {
+      font-size: 12px; color: rgba(26,26,26,0.5);
+      max-width: 700px; line-height: 1.5; margin-bottom: 56px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+    section { margin-bottom: 72px; }
+    h2 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+    .axis-desc {
+      font-size: 12px; color: rgba(26,26,26,0.55);
+      margin-bottom: 22px; max-width: 600px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 1400px;
+    }
+    .cell {
+      border: 1.5px solid #666;
+      background: #faf7ee;
+      text-decoration: none;
+      color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.15s ease;
+    }
+    .cell:hover { background: rgba(26,26,26,0.03); }
+    .cell .meta {
+      padding: 16px 20px 20px;
+    }
+    .cell .opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; font-weight: 600; letter-spacing: 0.16em;
+      color: #FF8000; margin-bottom: 6px;
+    }
+    .cell .name {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 14px; font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .cell .desc {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: rgba(26,26,26,0.55);
+      letter-spacing: 0.04em;
+    }
+    .footer-note {
+      margin-top: 48px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+    }
+  </style>
+</head>
+<body>
+
+<h1>Card axis testing</h1>
+<p class="lede">Decide one variable at a time. Each axis isolates a single design decision while holding everything else constant. Click through, pick the winner of each axis, and the final design emerges.</p>
+<p class="process">Default baseline: vertical "Assignment" left↑ · 120px Cormorant Infant · "#01" with hash · Geist Light question.</p>
+
+<section>
+  <h2>Axis 1 — Vertical "Assignment" position</h2>
+  <div class="axis-desc">Where does the rotated word sit, and which direction does it read?</div>
+  <div class="grid">
+    <a class="cell" href="axis1-comp-A.html">
+      <div class="meta">
+        <div class="opt">A1 · A</div>
+        <div class="name">Left, bottom-to-top</div>
+        <div class="desc">word climbs up beside number</div>
+      </div>
+    </a>
+    <a class="cell" href="axis1-comp-B.html">
+      <div class="meta">
+        <div class="opt">A1 · B</div>
+        <div class="name">Left, top-to-bottom</div>
+        <div class="desc">word descends down beside number</div>
+      </div>
+    </a>
+    <a class="cell" href="axis1-comp-C.html">
+      <div class="meta">
+        <div class="opt">A1 · C</div>
+        <div class="name">Right, bottom-to-top</div>
+        <div class="desc">word climbs up on right side</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section>
+  <h2>Axis 2 — Number size</h2>
+  <div class="axis-desc">How dominant is the numeral on the card?</div>
+  <div class="grid">
+    <a class="cell" href="axis2-size-A.html">
+      <div class="meta">
+        <div class="opt">A2 · A</div>
+        <div class="name">96px — restrained hero</div>
+        <div class="desc">number leads but doesn't dominate</div>
+      </div>
+    </a>
+    <a class="cell" href="axis2-size-B.html">
+      <div class="meta">
+        <div class="opt">A2 · B</div>
+        <div class="name">120px — confident hero</div>
+        <div class="desc">number is clearly the focal point</div>
+      </div>
+    </a>
+    <a class="cell" href="axis2-size-C.html">
+      <div class="meta">
+        <div class="opt">A2 · C</div>
+        <div class="name">140px — full magazine cover</div>
+        <div class="desc">number takes most of the card</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section>
+  <h2>Axis 3 — Hash prefix</h2>
+  <div class="axis-desc">Keep the "#" or drop it from the big numeral?</div>
+  <div class="grid">
+    <a class="cell" href="axis3-hash-A.html">
+      <div class="meta">
+        <div class="opt">A3 · A</div>
+        <div class="name">No hash — just "01"</div>
+        <div class="desc">cleaner with the big serif</div>
+      </div>
+    </a>
+    <a class="cell" href="axis3-hash-B.html">
+      <div class="meta">
+        <div class="opt">A3 · B</div>
+        <div class="name">With hash — "#01"</div>
+        <div class="desc">keeps LTLYM symbol literal</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section>
+  <h2>Axis 4 — Question font</h2>
+  <div class="axis-desc">Now that the number is hero, what does the question wear?</div>
+  <div class="grid">
+    <a class="cell" href="axis4-font-A.html">
+      <div class="meta">
+        <div class="opt">A4 · A</div>
+        <div class="name">Geist Light — quiet sans</div>
+        <div class="desc">number leads, question whispers</div>
+      </div>
+    </a>
+    <a class="cell" href="axis4-font-B.html">
+      <div class="meta">
+        <div class="opt">A4 · B</div>
+        <div class="name">Inter Bold 700</div>
+        <div class="desc">number + question both shout</div>
+      </div>
+    </a>
+    <a class="cell" href="axis4-font-C.html">
+      <div class="meta">
+        <div class="opt">A4 · C</div>
+        <div class="name">Cormorant Infant — single font</div>
+        <div class="desc">unified serif system</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<div class="footer-note">click each option · pick the winner of each axis · the final card emerges</div>
+
+</body>
+</html>

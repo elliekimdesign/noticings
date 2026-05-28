@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Icon ideas — same line family as push-pin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f7f9f7;
+      color: #1a1a1a;
+      font-family: 'Hanken Grotesk', sans-serif;
+      min-height: 100vh;
+      padding: 64px 48px;
+    }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.lede {
+      font-size: 13px; color: rgba(26,26,26,0.55);
+      max-width: 720px; line-height: 1.55; margin-bottom: 56px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 1100px;
+    }
+
+    .cell {
+      border: 1.5px solid #666;
+      background: #f7f9f7;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .cell-head {
+      display: flex; align-items: baseline; gap: 12px;
+    }
+    .cell-letter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      color: #067CFA; letter-spacing: 0.14em;
+    }
+    .cell-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .cell-desc {
+      font-size: 12px;
+      color: rgba(26,26,26,0.55);
+      line-height: 1.5;
+      max-width: 380px;
+    }
+
+    .demo-row {
+      display: flex; align-items: center; gap: 28px;
+      padding: 8px 0 0;
+    }
+    .demo-icon {
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .demo-icon svg { width: 24px; height: 24px; display: block; }
+
+    .demo-square {
+      width: 50px; height: 50px;
+      border: 1.5px solid #666;
+      display: flex; align-items: center; justify-content: center;
+      background: #f7f9f7;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      color: #1a1a1a;
+    }
+    .demo-square svg {
+      width: 22px; height: 22px;
+      stroke: currentColor;
+      transition: stroke 0.15s ease;
+    }
+    .demo-square:hover {
+      background: #067CFA;
+      color: #ffffff;
+    }
+    .demo-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      color: rgba(26,26,26,0.45);
+      text-transform: uppercase;
+    }
+
+    .footer-note {
+      margin-top: 56px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(26,26,26,0.45);
+    }
+  </style>
+</head>
+<body>
+
+<h1>Icon ideas — same line family as push-pin</h1>
+<p class="lede">All drawn in the exact style of the existing pin button (1.5px stroke, rounded line caps, currentColor — so they inherit hover blue). Hover the 50×50 square to preview the active state. Tell me which one you'd like, and where to use it (replace the typewriter caret in the counter? add elsewhere?).</p>
+
+<div class="grid">
+
+  <!-- A — Tiny envelope -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">A</span>
+      <span class="cell-name">Folded note · paper plane vibe</span>
+    </div>
+    <div class="cell-desc">A folded paper note — message about to be sent into the world. Ties to "leave a thought" / postal feeling.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 7 L21 7 L19 18 L5 18 Z"/>
+          <path d="M3 7 L12 14 L21 7"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 7 L21 7 L19 18 L5 18 Z"/>
+          <path d="M3 7 L12 14 L21 7"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+  <!-- B — Open book -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">B</span>
+      <span class="cell-name">Open book · journal</span>
+    </div>
+    <div class="cell-desc">An open notebook — for the archive / reading metaphor. Quiet, editorial.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 5 L11 7 L11 19 L3 17 Z"/>
+          <path d="M21 5 L13 7 L13 19 L21 17 Z"/>
+          <line x1="11" y1="7" x2="13" y2="7"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 5 L11 7 L11 19 L3 17 Z"/>
+          <path d="M21 5 L13 7 L13 19 L21 17 Z"/>
+          <line x1="11" y1="7" x2="13" y2="7"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+  <!-- C — Compass / north arrow -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">C</span>
+      <span class="cell-name">Compass · navigation</span>
+    </div>
+    <div class="cell-desc">A small compass — map / wayfinding metaphor. Cartographer's tool, fits the SF map theme.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <polygon points="12,5 14.5,12 12,11 9.5,12"/>
+          <polygon points="12,19 9.5,12 12,13 14.5,12"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <polygon points="12,5 14.5,12 12,11 9.5,12"/>
+          <polygon points="12,19 9.5,12 12,13 14.5,12"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+  <!-- D — Quill / fountain pen nib -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">D</span>
+      <span class="cell-name">Quill · feather pen</span>
+    </div>
+    <div class="cell-desc">A quill / feather pen — the writing companion to the pin. Most LTLYM-poetic.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 4 C 13 5, 7 11, 5 19 L 9 18 C 11 13, 14 9, 19 4 Z"/>
+          <line x1="5" y1="19" x2="3" y2="21"/>
+          <line x1="11" y1="11" x2="15" y2="11"/>
+          <line x1="9" y1="14" x2="13" y2="14"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 4 C 13 5, 7 11, 5 19 L 9 18 C 11 13, 14 9, 19 4 Z"/>
+          <line x1="5" y1="19" x2="3" y2="21"/>
+          <line x1="11" y1="11" x2="15" y2="11"/>
+          <line x1="9" y1="14" x2="13" y2="14"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+  <!-- E — Postal stamp / corner crop -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">E</span>
+      <span class="cell-name">Postage stamp · perforated edge</span>
+    </div>
+    <div class="cell-desc">A small postage stamp — archival, ritual, "stamping a place into memory."</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 5 L19 5 L19 19 L5 19 Z"/>
+          <line x1="5" y1="9" x2="3" y2="9"/><line x1="5" y1="12" x2="3" y2="12"/><line x1="5" y1="15" x2="3" y2="15"/>
+          <line x1="21" y1="9" x2="19" y2="9"/><line x1="21" y1="12" x2="19" y2="12"/><line x1="21" y1="15" x2="19" y2="15"/>
+          <line x1="9" y1="5" x2="9" y2="3"/><line x1="12" y1="5" x2="12" y2="3"/><line x1="15" y1="5" x2="15" y2="3"/>
+          <line x1="9" y1="19" x2="9" y2="21"/><line x1="12" y1="19" x2="12" y2="21"/><line x1="15" y1="19" x2="15" y2="21"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 5 L19 5 L19 19 L5 19 Z"/>
+          <line x1="5" y1="9" x2="3" y2="9"/><line x1="5" y1="12" x2="3" y2="12"/><line x1="5" y1="15" x2="3" y2="15"/>
+          <line x1="21" y1="9" x2="19" y2="9"/><line x1="21" y1="12" x2="19" y2="12"/><line x1="21" y1="15" x2="19" y2="15"/>
+          <line x1="9" y1="5" x2="9" y2="3"/><line x1="12" y1="5" x2="12" y2="3"/><line x1="15" y1="5" x2="15" y2="3"/>
+          <line x1="9" y1="19" x2="9" y2="21"/><line x1="12" y1="19" x2="12" y2="21"/><line x1="15" y1="19" x2="15" y2="21"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+  <!-- F — Folded map -->
+  <div class="cell">
+    <div class="cell-head">
+      <span class="cell-letter">F</span>
+      <span class="cell-name">Folded map</span>
+    </div>
+    <div class="cell-desc">A folded map (like Google Maps icon, but outline) — the canvas itself. Ties to SF mapping.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6 L9 4 L15 6 L21 4 L21 18 L15 20 L9 18 L3 20 Z"/>
+          <line x1="9" y1="4" x2="9" y2="18"/>
+          <line x1="15" y1="6" x2="15" y2="20"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6 L9 4 L15 6 L21 4 L21 18 L15 20 L9 18 L3 20 Z"/>
+          <line x1="9" y1="4" x2="9" y2="18"/>
+          <line x1="15" y1="6" x2="15" y2="20"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ button size 50×50</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">tell me a / b / c / d / e / f — and where you'd like to use it</div>
+
+</body>
+</html>

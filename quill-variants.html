@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quill — variants</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f7f9f7; color: #1a1a1a; font-family: 'Hanken Grotesk', sans-serif; min-height: 100vh; padding: 64px 48px; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+    p.lede { font-size: 13px; color: rgba(26,26,26,0.55); max-width: 720px; line-height: 1.55; margin-bottom: 56px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 32px; max-width: 1200px; }
+    .cell { border: 1.5px solid #666; background: #f7f9f7; padding: 32px; display: flex; flex-direction: column; gap: 22px; }
+    .cell-head { display: flex; align-items: baseline; gap: 12px; }
+    .cell-letter { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #067CFA; letter-spacing: 0.14em; }
+    .cell-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+    .cell-desc { font-size: 12px; color: rgba(26,26,26,0.55); line-height: 1.5; max-width: 380px; }
+    .demo-row { display: flex; align-items: center; gap: 28px; padding: 8px 0 0; }
+    .demo-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+    .demo-icon svg { width: 24px; height: 24px; display: block; }
+    .demo-square { width: 50px; height: 50px; border: 1.5px solid #666; display: flex; align-items: center; justify-content: center; background: #f7f9f7; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; color: #1a1a1a; }
+    .demo-square svg { width: 22px; height: 22px; stroke: currentColor; transition: stroke 0.15s ease; }
+    .demo-square:hover { background: #067CFA; color: #ffffff; }
+    .demo-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.10em; color: rgba(26,26,26,0.45); text-transform: uppercase; }
+    .footer-note { margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.45); }
+    .back { position: fixed; top: 24px; left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; opacity: 0.55; }
+    .back:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<a class="back" href="icon-design-mockup.html">← all icons</a>
+
+<h1>Quill — 5 variants</h1>
+<p class="lede">A is the current one (from the original mockup). B–E are new versions: different angles, fuller feathers, with/without ink drop, etc. Hover the 50×50 box to preview the live button state.</p>
+
+<div class="grid">
+
+  <!-- A — Original -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">A</span><span class="cell-name">Original · current quill</span></div>
+    <div class="cell-desc">Slim feather slanted top-right. Simple inner ridges. The version from the first icon mockup.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 4 C 13 5, 7 11, 5 19 L 9 18 C 11 13, 14 9, 19 4 Z"/>
+          <line x1="5" y1="19" x2="3" y2="21"/>
+          <line x1="11" y1="11" x2="15" y2="11"/>
+          <line x1="9" y1="14" x2="13" y2="14"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 4 C 13 5, 7 11, 5 19 L 9 18 C 11 13, 14 9, 19 4 Z"/>
+          <line x1="5" y1="19" x2="3" y2="21"/>
+          <line x1="11" y1="11" x2="15" y2="11"/>
+          <line x1="9" y1="14" x2="13" y2="14"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- B — Curved feather -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">B</span><span class="cell-name">Curved · soft arc</span></div>
+    <div class="cell-desc">Gentle S-curve along the spine. Softer, more lyrical — like a feather caught mid-air.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 4 Q 12 6, 8 12 Q 5 17, 4 20 L 8 19 Q 12 17, 16 11 Q 19 7, 20 4 Z"/>
+          <line x1="4" y1="20" x2="2" y2="22"/>
+          <path d="M10 12 Q 12 11, 14 11"/>
+          <path d="M8 15 Q 10 14, 12 14"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 4 Q 12 6, 8 12 Q 5 17, 4 20 L 8 19 Q 12 17, 16 11 Q 19 7, 20 4 Z"/>
+          <line x1="4" y1="20" x2="2" y2="22"/>
+          <path d="M10 12 Q 12 11, 14 11"/>
+          <path d="M8 15 Q 10 14, 12 14"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- C — Quill with ink drop -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">C</span><span class="cell-name">With ink drop · writing now</span></div>
+    <div class="cell-desc">A small ink drop at the nib tip — captures the moment of writing. Active / engaged.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 4 C 13 5, 7 11, 5 17 L 8 16 C 11 12, 14 9, 19 4 Z"/>
+          <line x1="5" y1="17" x2="4" y2="19"/>
+          <path d="M3.5 19.5 C 3.5 19.5, 2 21, 3 22 C 4 23, 5 21, 5 21 Z" fill="currentColor"/>
+          <line x1="11" y1="11" x2="14" y2="11"/>
+          <line x1="9" y1="14" x2="12" y2="14"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 4 C 13 5, 7 11, 5 17 L 8 16 C 11 12, 14 9, 19 4 Z"/>
+          <line x1="5" y1="17" x2="4" y2="19"/>
+          <path d="M3.5 19.5 C 3.5 19.5, 2 21, 3 22 C 4 23, 5 21, 5 21 Z" fill="currentColor"/>
+          <line x1="11" y1="11" x2="14" y2="11"/>
+          <line x1="9" y1="14" x2="12" y2="14"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- D — Vertical quill upright -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">D</span><span class="cell-name">Upright · standing in inkwell</span></div>
+    <div class="cell-desc">Quill standing vertically, like sitting in an inkwell. More iconic, less action.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 3 C 10 5, 8 12, 9 19 L 13 19 C 15 12, 16 7, 14 3 Z"/>
+          <line x1="11" y1="19" x2="11" y2="22"/>
+          <line x1="10.5" y1="9" x2="13.5" y2="9"/>
+          <line x1="10" y1="13" x2="13" y2="13"/>
+          <line x1="10" y1="16" x2="13" y2="16"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 3 C 10 5, 8 12, 9 19 L 13 19 C 15 12, 16 7, 14 3 Z"/>
+          <line x1="11" y1="19" x2="11" y2="22"/>
+          <line x1="10.5" y1="9" x2="13.5" y2="9"/>
+          <line x1="10" y1="13" x2="13" y2="13"/>
+          <line x1="10" y1="16" x2="13" y2="16"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+  <!-- E — Minimal quill (just outline + nib, no ridges) -->
+  <div class="cell">
+    <div class="cell-head"><span class="cell-letter">E</span><span class="cell-name">Minimal · single line silhouette</span></div>
+    <div class="cell-desc">Pure silhouette, no inner detail. Most quiet, blends into UI without claiming attention.</div>
+    <div class="demo-row">
+      <div class="demo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 4 C 14 5, 8 11, 5 19 L 9 18 C 13 12, 16 8, 20 4 Z"/>
+          <line x1="5" y1="19" x2="3" y2="21"/>
+        </svg>
+      </div>
+      <div class="demo-square">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 4 C 14 5, 8 11, 5 19 L 9 18 C 13 12, 16 8, 20 4 Z"/>
+          <line x1="5" y1="19" x2="3" y2="21"/>
+        </svg>
+      </div>
+      <div class="demo-label">@ 50×50</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">tell me a / b / c / d / e</div>
+
+</body>
+</html>
