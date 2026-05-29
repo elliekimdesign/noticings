@@ -317,7 +317,7 @@
        Yokoo): paper background, monochrome typography, a single red dot ("hi-no-maru"
        reference) as the only color accent. */
     #archive-list .archive-item.is-current {
-      padding: 20px 28px 22px 16px;
+      padding: 20px 28px 22px 28px;
       height: 170px;
       display: flex;
       flex-direction: column;
@@ -428,7 +428,7 @@
       gap: 14px;
       min-height: 28px;
       margin: 0;
-      padding: 8px 28px 8px 16px;
+      padding: 8px 28px 8px 28px;
       background: transparent;
       border: none;
       position: relative;
@@ -449,7 +449,7 @@
       font-weight: 500;
       font-size: 11px;
       line-height: 1;
-      color: #D1241A;
+      color: #D9531E;
       letter-spacing: 0;
       text-transform: none;
       width: 32px;
@@ -477,6 +477,23 @@
     #archive-list .archive-item.is-past:hover { background: rgba(26,26,26,0.04); }
     #archive-list .archive-item.is-past:hover .question { color: #1a1a1a; }
     #archive-list .archive-item.is-past:hover .label { color: #D1241A; }
+    /* On hover, reveal any clipped question text: drop the ellipsis clip and
+       slide the inner <span> left by exactly its overflow amount (set by JS in
+       --q-shift). Short questions get --q-shift:0 and stay put. The slide runs
+       once and holds — no looping. */
+    #archive-list .archive-item.is-past .question > .q-scroll {
+      display: inline-block;
+      white-space: nowrap;
+      transition: transform 0.55s ease;
+      transform: translateX(0);
+    }
+    #archive-list .archive-item.is-past:hover .question {
+      overflow: hidden;
+      text-overflow: clip;
+    }
+    #archive-list .archive-item.is-past:hover .question > .q-scroll {
+      transform: translateX(var(--q-shift, 0px));
+    }
 
     /* When a past row is clicked, it gets `is-current` styling (defined above)
        and the original #12 row gets `.is-hidden` so it disappears from the rail. */
@@ -817,8 +834,8 @@
 
     /* Pending pin — vintage-orange square outline, slightly larger than answer pins */
     .pending-pin {
-      width: 16px;
-      height: 16px;
+      width: var(--pin-preview-size);
+      height: var(--pin-preview-size);
       pointer-events: none;
     }
     .pending-pin svg {
@@ -1045,8 +1062,8 @@
       font-size: 0;
       pointer-events: none;
       box-sizing: border-box;
-      width: 16px;
-      height: 16px;
+      width: var(--pin-size);
+      height: var(--pin-size);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1124,13 +1141,13 @@
       background: #ffffff;
       border-top: 1px solid #a3a3a3;
       display: flex; align-items: center;
-      padding: 0;
+      padding: 1px 0 0;
     }
     #footer .footer-left {
       width: 320px;
       flex-shrink: 0;
       height: 100%;
-      display: flex; align-items: center; justify-content: flex-start;
+      display: flex; align-items: center; justify-content: space-between;
       gap: 10px;
       padding: 0 16px;
       box-sizing: border-box;
@@ -1142,6 +1159,10 @@
       font-weight: 400;
     }
     #footer .footer-left .sep { color: rgba(102,102,102,0.7); }
+    #footer .footer-left .footer-left-end {
+      white-space: nowrap;
+      padding-right: 8px;
+    }
     #footer .footer-right {
       flex: 1;
       height: 100%;
@@ -1373,11 +1394,12 @@
       z-index: 2;
     }
     #answer-panel .panel-handle {
-      font-family: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      color: rgba(26,26,26,0.85);
-      letter-spacing: 0.02em;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--edge);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       line-height: 1;
       position: absolute;
       bottom: 16px;
@@ -1388,19 +1410,21 @@
       background: transparent;
       border: none;
       outline: none;
-      color: inherit;
-      font: inherit;
-      letter-spacing: inherit;
       padding: 0;
-      width: 8ch;
-      text-align: left;
+      width: 100%;
+      text-align: center;
       caret-color: #D9531E;
-      border-bottom: 1px solid rgba(26, 26, 26, 0.30);
-      transition: border-color 0.15s ease;
+      /* Match the neighborhood (.panel-hood) text exactly */
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--edge);
     }
-    /* Focus → orange underline */
+    /* Focus keeps ink color — only the caret is orange. */
     #panel-handle .panel-name-field:focus {
-      border-bottom-color: #D9531E;
+      color: var(--edge);
     }
     /* Show placeholder text only when the field is focused */
     #panel-handle .panel-name-field:focus::placeholder {
@@ -1419,7 +1443,7 @@
       line-height: 1;
       position: absolute;
       bottom: 60px;
-      right: 50px;
+      right: 18px;
       z-index: 2;
       display: inline-flex;
       align-items: baseline;
@@ -1503,48 +1527,7 @@
     #answer-panel.is-write .panel-vdivider { display: block; }
 
     /* Read-mode vertical divider — full card height, aligned with masthead × button */
-    #answer-panel .panel-vdivider-read {
-      display: none;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 36px;
-      width: var(--edge-w, 1.5px);
-      background: var(--edge, #1a1a1a);
-      pointer-events: none;
-      z-index: 1;
-    }
-    #answer-panel:not(.is-write) .panel-vdivider-read { display: block; }
 
-    /* Read-mode shuffle button — full card height, shows a new random story */
-    #answer-panel .panel-shuffle {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 36px;
-      background: transparent;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      color: #1a1a1a;
-      transition: background 0.15s ease, color 0.15s ease;
-      z-index: 2;
-    }
-    #answer-panel:not(.is-write) .panel-shuffle { display: flex; }
-    #answer-panel .panel-shuffle svg {
-      width: 18px;
-      height: 18px;
-      display: block;
-      stroke: currentColor;
-    }
-    #answer-panel .panel-shuffle:hover {
-      background: var(--accent, #D9531E);
-      color: #ffffff;
-    }
     #answer-panel .panel-submit {
       position: absolute;
       right: 0;
@@ -1571,7 +1554,7 @@
       transition: stroke 0.15s ease;
     }
     #answer-panel .panel-submit:hover {
-      background: #D1241A;
+      background: var(--accent, #D9531E);
       color: #ffffff;
     }
     /* On hover, replace the pen icon with the word DROP inside the same square button */
@@ -1590,7 +1573,7 @@
       display: none;
       position: absolute;
       left: 0;
-      right: 36px;
+      right: 0;
       bottom: 50px;
       height: 1px;
       background: #a3a3a3;
@@ -1609,7 +1592,7 @@
       pointer-events: none;
       z-index: 1;
     }
-    #answer-panel.is-write .panel-vdivider2 { display: block; }
+    #answer-panel.is-write .panel-vdivider2 { display: none; }
 
     /* Panel floats over the map without shrinking it */
 
@@ -1754,12 +1737,20 @@
       height: 9px;
       opacity: 1;
     }
-    #answer-panel .panel-handle,
     #answer-panel .panel-count {
       font-family: var(--mono);
       color: rgba(26,26,26,0.18);
       font-weight: 400;
       font-size: 15px;
+    }
+    /* Handle matches the neighborhood line exactly. */
+    #answer-panel .panel-handle {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--edge);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
     #answer-panel .panel-count .count-quill {
       width: 16px;
@@ -1772,9 +1763,9 @@
       color: var(--edge);
       letter-spacing: 0.14em;
     }
-    /* Submit button — square the hover into a black block (inverted Mosaic button) */
+    /* Submit button — orange accent on hover */
     #answer-panel .panel-submit:hover {
-      background: var(--edge);
+      background: var(--accent, #D9531E);
       color: #fff;
     }
 
@@ -1859,6 +1850,8 @@
 
     :root {
       --accent: #D9531E;   /* vintage orange — used sparingly */
+      --pin-size: 18px;        /* saved pin (filled square) */
+      --pin-preview-size: 16px; /* click-preview outline square */
     }
 
     /* Active card: issue-number bracket gets the orange */
@@ -1944,12 +1937,12 @@
        just like the masthead's +/× buttons. Text and icon sizes stay
        the same — only vertical space changes. */
 
-    /* Submit button cell — full card height, 36px wide so its left edge
-       aligns with the masthead × button's left edge. */
+    /* Submit button cell — 36×36 square sitting on the bottom strip,
+       right next to the nickname box (matches the masthead × button). */
     #answer-panel .panel-submit {
       width: 36px !important;
-      height: auto !important;
-      top: 0 !important;
+      height: 36px !important;
+      top: auto !important;
       bottom: 0 !important;
     }
 
@@ -1958,27 +1951,38 @@
       bottom: 36px !important;
     }
 
-    /* Vertical line at the submit cell's left edge — runs full card height. */
+    /* Vertical line at the submit cell's left edge — only spans the 36px
+       bottom strip, bordering the two square cells (nickname | quill). */
     #answer-panel .panel-vdivider {
-      top: 0 !important;
+      top: auto !important;
       bottom: 0 !important;
-      height: auto !important;
+      height: 36px !important;
       right: 36px !important;
     }
 
-    /* Vertical line at the handle cell's left edge — handle cell width = 36px */
+    /* Vertical line at the handle cell's left edge — handle box width = 84px,
+       sitting left of the 36px submit box, so its left edge is at right:120px. */
     #answer-panel .panel-vdivider2 {
       height: 36px !important;
-      right: 72px !important;
+      right: 120px !important;
     }
 
     /* Re-center the text baselines inside the new 36px strip */
     #answer-panel .panel-write-actions {
       bottom: 12px !important;
     }
-    #answer-panel .panel-handle {
-      bottom: 9px !important;
-      right: 60px !important;
+    /* Name handle sits just left of the 36px quill submit box. No divider. */
+    #answer-panel.is-write .panel-handle {
+      position: absolute !important;
+      right: 36px !important;
+      top: auto !important;
+      bottom: 0 !important;
+      width: 84px !important;
+      height: 36px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-sizing: border-box !important;
     }
     #answer-panel .panel-plus {
       bottom: 12px !important;
@@ -1994,7 +1998,7 @@
        Background matches the map's water base color (#fafaf7) —
        warm off-white / soft beige, no dot texture. */
     #archive-list .archive-item.is-current {
-      background: #fafaf7 !important;
+      background: transparent !important;
     }
     #archive-list .archive-item.is-current .assignment-tag {
       display: none !important;
@@ -2006,9 +2010,7 @@
       gap: 14px !important;
     }
     #archive-list .archive-item.is-current > .label {
-      flex-shrink: 0 !important;
-      width: 32px !important;
-      margin-bottom: 0 !important;
+      display: none !important;
     }
     #archive-list .archive-item.is-current .label .issue-no {
       font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
@@ -2116,8 +2118,8 @@
     #footer .footer-left,
     #footer .label,
     #footer .footer-end {
-      font-size: 12px !important;
-      letter-spacing: 0.08em !important;
+      font-size: 10px !important;
+      letter-spacing: 0.05em !important;
     }
     /* Middle: coordinates + city in monospace — small data line,
        full charcoal, distinct from the bold uppercase chrome on the
@@ -2126,9 +2128,9 @@
     #footer .label span {
       font-family: 'JetBrains Mono', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace !important;
       font-style: normal !important;
-      font-size: 11px !important;
+      font-size: 10px !important;
       font-weight: 400 !important;
-      letter-spacing: 0.04em !important;
+      letter-spacing: 0.03em !important;
       color: var(--edge, #1a1a1a) !important;
       text-transform: uppercase !important;
     }
@@ -2136,7 +2138,7 @@
     #footer .footer-left,
     #footer .footer-end {
       font-weight: 700 !important;
-      letter-spacing: 0.1em !important;
+      letter-spacing: 0.06em !important;
     }
 
     /* ─── Archive row hierarchy fix ──────────────────────────────────
@@ -2153,7 +2155,7 @@
       font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
       font-weight: 500 !important;
       font-size: 12px !important;
-      color: #1a1a1a !important;
+      color: #D9531E !important;
     }
     #archive-list .archive-item.is-past .question {
       font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
@@ -2321,15 +2323,9 @@
     <div class="panel-text" id="panel-text">The fog comes in slow over the hills, and by the time you notice the streetlights are on, the whole afternoon has been quietly replaced by an early kind of evening.</div>
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
-      <span class="panel-hood" id="panel-hood-read">RUSSIAN HILL · 37.81 · 122.43</span>
+      <span class="panel-hood" id="panel-hood-read">RUSSIAN HILL 37.81 122.43</span>
     </div>
     <div class="panel-divider panel-divider-read"></div>
-    <div class="panel-vdivider-read"></div>
-    <button class="panel-shuffle" id="panel-shuffle" title="Show another spot" aria-label="Show another spot">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="9 5 16 12 9 19"/>
-      </svg>
-    </button>
   </div>
   <!-- WRITE MODE — input form for new answer (grid: input | actions row) -->
   <div class="panel-inner panel-write" id="panel-write">
@@ -2338,7 +2334,7 @@
     </div>
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
-      <span class="panel-hood" id="panel-hood">RUSSIAN HILL · 37.81 · 122.43</span>
+      <span class="panel-hood" id="panel-hood">RUSSIAN HILL 37.81 122.43</span>
     </div>
     <div class="panel-divider"></div>
     <div class="panel-vdivider"></div>
@@ -2351,11 +2347,12 @@
       </svg>
       <span class="count-max">170</span>
     </span>
-    <span class="panel-handle" id="panel-handle"><input type="text" id="panel-first" class="panel-name-field" maxlength="20" placeholder="" autocomplete="given-name" data-placeholder="First"/><span class="panel-name-sep"></span><input type="text" id="panel-last" class="panel-name-field" maxlength="20" placeholder="" autocomplete="family-name" data-placeholder="Last"/></span>
+    <span class="panel-handle" id="panel-handle"><input type="text" id="panel-name" class="panel-name-field" maxlength="20" placeholder="" autocomplete="off" spellcheck="false"/></span>
     <button class="panel-submit" id="panel-submit" title="Drop pin" aria-label="Drop pin">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12"/>
-        <polyline points="13 6 19 12 13 18"/>
+        <path d="M20 4 C 14 5, 8 11, 5 19 L 9 18 C 13 12, 16 8, 20 4 Z"/>
+        <line x1="5" y1="19" x2="4" y2="20"/>
+        <circle cx="1.8" cy="22.2" r="1.7" fill="currentColor" stroke="none"/>
       </svg>
     </button>
   </div>
@@ -2439,14 +2436,15 @@
 <!-- ─────────── BOTTOM LABEL BAR ─────────── -->
 <div id="footer">
   <div class="footer-left">
-    <span>Assignment <span id="footer-assignment-num"></span></span>
+    <span>Assignment</span>
+    <span class="footer-left-end">No.&nbsp;<span id="footer-assignment-num"></span></span>
   </div>
   <div class="footer-right">
     <div class="label">
       <span>37.77°N&nbsp;&nbsp;122.42°W&nbsp;&nbsp;&nbsp;SAN FRANCISCO</span>
     </div>
     <div class="footer-end">
-      <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;PINS DROPPED</span>
+      <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;<span id="footer-pins-word">PINS</span> DROPPED</span>
     </div>
   </div>
 </div>
@@ -2626,18 +2624,7 @@ map.on('style.load', () => {
 // ─────────── ASSIGNMENTS (one question per fortnight) ───────────
 // ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
 const ASSIGNMENTS = [
-  { issueNo: 12, dates: 'Apr 15 → Apr 29', text: "I keep coming back to..." },
-  { issueNo: 11, dates: 'Apr 01 → Apr 14', text: "Where do you go to be alone?" },
-  { issueNo: 10, dates: 'Mar 18 → Mar 31', text: "What place feels like home?" },
-  { issueNo: 9,  dates: 'Mar 04 → Mar 17', text: "Where did you last get lost?" },
-  { issueNo: 8,  dates: 'Feb 18 → Mar 03', text: "A walk you take often" },
-  { issueNo: 7,  dates: 'Feb 04 → Feb 17', text: "Somewhere you sat for a while" },
-  { issueNo: 6,  dates: 'Jan 21 → Feb 03', text: "The last good Sunday morning" },
-  { issueNo: 5,  dates: 'Jan 07 → Jan 20', text: "A place you almost forgot" },
-  { issueNo: 4,  dates: 'Dec 24 → Jan 06', text: "Where the city felt small" },
-  { issueNo: 3,  dates: 'Dec 10 → Dec 23', text: "Somewhere you wait" },
-  { issueNo: 2,  dates: 'Nov 26 → Dec 09', text: "A view you keep returning to" },
-  { issueNo: 1,  dates: 'Nov 12 → Nov 25', text: "The first place you remember" },
+  { issueNo: 1, dates: 'May 28 → Jun 11', text: "Describe a moment you'd want to keep" },
 ];
 
 // Flat array of question strings, used by the rest of the code (markers, spotlight, etc.)
@@ -2660,29 +2647,50 @@ const archiveListEl = document.getElementById('archive-list');
 
 function buildArchive() {
   archiveListEl.innerHTML = '';
-  // Reorder so the active assignment is rendered first; the rest keep
-  // newest-first (issueNo desc) order so the list below stays stable.
-  const ordered = [
-    ASSIGNMENTS[currentQuestionIndex],
-    ...ASSIGNMENTS.filter((_, i) => i !== currentQuestionIndex),
-  ];
-  ordered.forEach((a, displayIdx) => {
-    const originalIdx = ASSIGNMENTS.indexOf(a);
+
+  const makeItem = (a, originalIdx, isCurrent) => {
     const li = document.createElement('li');
     const btn = document.createElement('button');
-    const isCurrent = displayIdx === 0;
     btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
     btn.dataset.idx = originalIdx;
+    const questionHtml = isCurrent ? a.text : `<span class="q-scroll">${a.text}</span>`;
     btn.innerHTML = `
       <div class="label"><span class="issue-no">${pad2(a.issueNo)}</span>${isCurrent ? '' : '<span class="label-word">Assignment</span>'}</div>
-      <div class="question">${a.text}</div>
+      <div class="question">${questionHtml}</div>
       ${isCurrent ? `<div class="assignment-tag">Assignment ${pad2(a.issueNo)}</div>` : ''}
     `;
     if (originalIdx === currentQuestionIndex) btn.classList.add('active');
     btn.addEventListener('click', () => selectQuestion(originalIdx));
+    // On hover of a list row, measure how far the question text overflows its
+    // box and expose it as --q-shift so the CSS slides it left by exactly that
+    // much (revealing the clipped tail). Short questions overflow 0 → no shift.
+    if (!isCurrent) {
+      btn.addEventListener('mouseenter', () => {
+        const q = btn.querySelector('.question');
+        const span = btn.querySelector('.q-scroll');
+        if (!q || !span) return;
+        const overflow = span.scrollWidth - q.clientWidth;
+        span.style.setProperty('--q-shift', (overflow > 0 ? -overflow : 0) + 'px');
+      });
+    }
     li.appendChild(btn);
     archiveListEl.appendChild(li);
-  });
+  };
+
+  // 1) Billboard card — the selected question, shown large at the top.
+  makeItem(ASSIGNMENTS[currentQuestionIndex], currentQuestionIndex, true);
+
+  // 2) Fixed list below — always full 12→01 order, never reordered on click.
+  //    The currently selected row stays in place and is highlighted via .active.
+  ASSIGNMENTS.forEach((a, i) => makeItem(a, i, false));
+
+  // Footer "No. NN" — mirrors the ASSIGNMENT label at the opposite end of the
+  // left footer cell, tracking the active assignment's issue number.
+  const footerNum = document.getElementById('footer-assignment-num');
+  if (footerNum) {
+    const a = ASSIGNMENTS[currentQuestionIndex];
+    footerNum.textContent = a ? pad2(a.issueNo) : '';
+  }
 }
 
 function selectQuestion(idx) {
@@ -2732,9 +2740,8 @@ function renderEyePill() {
       <span class="q-body">${q}</span>
     `;
   }
-  // Footer assignment is no longer used in spotlight mode (footer is hidden)
-  const footerNum = document.getElementById('footer-assignment-num');
-  if (footerNum) footerNum.textContent = '';
+  // (Footer "No. NN" is filled by buildArchive(); not touched here so it stays
+  //  visible in normal mode. The footer is hidden in spotlight mode anyway.)
   activeRandomPin = pickRandomPinForActiveQuestion();
   // In spotlight, the bottom-right "N PINS DROPPED" reflects the active
   // question's count (not the global total).
@@ -2743,7 +2750,10 @@ function renderEyePill() {
       const all = JSON.parse(localStorage.getItem('sf-mood-answers') || '[]');
       const q = QUESTIONS[currentQuestionIndex];
       const el = document.getElementById('footer-pins');
-      if (el) el.textContent = all.filter(e => e.question === q).length.toLocaleString();
+      const n = all.filter(e => e.question === q).length;
+      if (el) el.textContent = n.toLocaleString();
+      const wordEl = document.getElementById('footer-pins-word');
+      if (wordEl) wordEl.textContent = n === 1 ? 'PIN' : 'PINS';
     } catch (_) {}
   }
 }
@@ -2853,31 +2863,24 @@ function loadHandle() {
 }
 function saveHandle(value) { localStorage.setItem(HANDLE_KEY, value); }
 
-// Name persistence — first / last entered in the write panel
-const FIRST_KEY = 'sf-mood-first';
-const LAST_KEY  = 'sf-mood-last';
-function loadFirst()  { return localStorage.getItem(FIRST_KEY) || ''; }
-function loadLast()   { return localStorage.getItem(LAST_KEY)  || ''; }
-function saveFirst(v) { localStorage.setItem(FIRST_KEY, v); }
-function saveLast(v)  { localStorage.setItem(LAST_KEY,  v); }
+// Name persistence — single random handle stored for next time
+const NAME_KEY = 'sf-mood-name';
+function loadName()  { return localStorage.getItem(NAME_KEY) || ''; }
+function saveName(v) { localStorage.setItem(NAME_KEY, v); }
 
-// "Ellie Kim" → "em" (first letter of first + last letter of last, lowercase)
-function deriveInitials(handle) {
-  if (!handle) return '';
-  const parts = String(handle).trim().split(/\s+/);
-  if (parts.length < 2) return parts[0] ? parts[0][0].toLowerCase() : '';
-  const first = parts[0];
-  const last  = parts[parts.length - 1];
-  return (first[0] + last[last.length - 1]).toLowerCase();
+// Generate a random 8-char alphanumeric handle (e.g. "x0s04pvp").
+function randomName() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let s = '';
+  for (let i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
 }
 
-// Prefill sheet's two name fields from localStorage so the user only types them once
-(function () {
-  const sheetFirst = document.getElementById('sheet-first');
-  const sheetLast  = document.getElementById('sheet-last');
-  if (sheetFirst) sheetFirst.value = loadFirst();
-  if (sheetLast)  sheetLast.value  = loadLast();
-})();
+// Handle → first two chars, lowercase (e.g. "x0s04pvp" → "x0")
+function deriveInitials(handle) {
+  const h = (handle || '').trim();
+  return h.slice(0, 2).toLowerCase();
+}
 
 let pendingLngLat = null;
 let pendingQuestion = null;
@@ -2956,15 +2959,8 @@ function submitAnswer() {
     setTimeout(() => { sheetCoords.textContent = ''; sheetCoords.style.color = ''; }, 1800);
     return;
   }
-  const firstEl = document.getElementById('sheet-first');
-  const lastEl  = document.getElementById('sheet-last');
-  const first = (firstEl && firstEl.value || '').trim();
-  const last  = (lastEl  && lastEl.value  || '').trim();
-  if (!first) { firstEl && firstEl.focus(); return; }
-  if (!last)  { lastEl  && lastEl.focus();  return; }
-  saveFirst(first);
-  saveLast(last);
-  const handle = `${first} ${last}`;
+  const handle = loadName() || randomName();
+  saveName(handle);
   saveAnswer({ lngLat: pendingLngLat, question: pendingQuestion, text, handle });
   placeAnswerMarker({ lngLat: pendingLngLat, question: pendingQuestion, text, handle });
   closeSheet();
@@ -2997,12 +2993,16 @@ function updatePinCount() {
   const el = document.getElementById('footer-pins');
   if (el) {
     const inSpotlight = document.body.classList.contains('spotlight-on');
+    let n;
     if (inSpotlight && typeof QUESTIONS !== 'undefined' && typeof currentQuestionIndex !== 'undefined') {
       const q = QUESTIONS[currentQuestionIndex];
-      el.textContent = all.filter(e => e.question === q).length.toLocaleString();
+      n = all.filter(e => e.question === q).length;
     } else {
-      el.textContent = all.length.toLocaleString();
+      n = all.length;
     }
+    el.textContent = n.toLocaleString();
+    const wordEl = document.getElementById('footer-pins-word');
+    if (wordEl) wordEl.textContent = n === 1 ? 'PIN' : 'PINS';
   }
   if (typeof renderEyePill === 'function') renderEyePill();
 }
@@ -3135,7 +3135,7 @@ function openAnswerPanel({ text, lngLat, hood }) {
   if (hoodEl && lngLat) {
     const lat = lngLat[1].toFixed(2);
     const lng = Math.abs(lngLat[0]).toFixed(2);
-    hoodEl.textContent = `${(hood || '').toUpperCase()} · ${lat} · ${lng}`;
+    hoodEl.textContent = `${(hood || '').toUpperCase()} ${lat} ${lng}`;
   }
   answerPanel.classList.remove('is-write');
   const h = getMainQuestionHeight();
@@ -3155,13 +3155,11 @@ function openWritePanel({ lngLat, hood }) {
     const lat = lngLat[1].toFixed(2);
     const lng = Math.abs(lngLat[0]).toFixed(2);
     const hoodName = (hood || '').toUpperCase();
-    panelHood.textContent = `${hoodName} · ${lat} · ${lng}`;
+    panelHood.textContent = `${hoodName} ${lat} ${lng}`;
   }
-  // Prefill the two name fields from localStorage, only if empty
-  const panelFirst = document.getElementById('panel-first');
-  const panelLast  = document.getElementById('panel-last');
-  if (panelFirst && !panelFirst.value) panelFirst.value = loadFirst();
-  if (panelLast  && !panelLast.value)  panelLast.value  = loadLast();
+  // Prefill the name field: saved name if any, otherwise a fresh random ID.
+  const panelName = document.getElementById('panel-name');
+  if (panelName) panelName.value = loadName() || randomName();
   if (panelInput)  panelInput.value = '';
   if (panelCount) {
     const cur = panelCount.querySelector('.count-current');
@@ -3221,35 +3219,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Escape') closeAnswerPanel();
     });
   }
-  // Prefill the two name fields from localStorage so the user only types them once per browser
-  const panelFirst = document.getElementById('panel-first');
-  const panelLast  = document.getElementById('panel-last');
-  if (panelFirst) panelFirst.value = loadFirst();
-  if (panelLast)  panelLast.value  = loadLast();
-
-  // On focus, expose the data-placeholder as the visible placeholder; on blur, hide it
-  [panelFirst, panelLast].forEach((el) => {
-    if (!el) return;
-    el.addEventListener('focus', () => { el.placeholder = el.dataset.placeholder || ''; });
-    el.addEventListener('blur',  () => { el.placeholder = ''; });
-  });
+  // Prefill the name field with the saved name, or a fresh random ID.
+  const panelName = document.getElementById('panel-name');
+  if (panelName && !panelName.value) panelName.value = loadName() || randomName();
 
   if (panelSubmit) {
     panelSubmit.addEventListener('click', () => {
       const text = (panelInput && panelInput.value || '').trim();
       if (!text) { if (panelInput) panelInput.focus(); return; }
 
-      const first = (panelFirst && panelFirst.value || '').trim();
-      const last  = (panelLast  && panelLast.value  || '').trim();
-      if (!first) { panelFirst && panelFirst.focus(); return; }
-      if (!last)  { panelLast  && panelLast.focus();  return; }
-
       const lngLat = activePinLngLat;
       if (!lngLat) { closeAnswerPanel(); return; }
 
-      const handle = `${first} ${last}`;
-      saveFirst(first);
-      saveLast(last);
+      const handle = (panelName && panelName.value || '').trim() || randomName();
+      saveName(handle);
 
       const question = pendingQuestion || (questionEl && questionEl.textContent) || '';
       saveAnswer({ lngLat, question, text, handle });
@@ -3268,26 +3251,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!activePinLngLat) return;
       const hood = nearestNeighborhood(activePinLngLat);
       openWritePanel({ lngLat: activePinLngLat, hood });
-    });
-  }
-  const panelShuffle = document.getElementById('panel-shuffle');
-  if (panelShuffle) {
-    panelShuffle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      try {
-        const all = JSON.parse(localStorage.getItem('sf-mood-answers') || '[]');
-        if (!all.length) return;
-        let pick;
-        let tries = 0;
-        do {
-          pick = all[Math.floor(Math.random() * all.length)];
-          tries++;
-        } while (all.length > 1 && pick.lngLat && activePinLngLat &&
-                 pick.lngLat[0] === activePinLngLat[0] && pick.lngLat[1] === activePinLngLat[1] &&
-                 tries < 10);
-        const hood = pick.lngLat ? nearestNeighborhood(pick.lngLat) : '';
-        openAnswerPanel({ text: pick.text || '', lngLat: pick.lngLat, hood });
-      } catch (_) {}
     });
   }
   const mastheadRandom = document.getElementById('masthead-spot-random');
