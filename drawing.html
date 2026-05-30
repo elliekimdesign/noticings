@@ -238,33 +238,30 @@
        checker SVG button below are preserved for future use. */
     /* Top-left corner spotlight toggle — thin rounded soft-black pill with
        a subtle PINNED wordmark. Wide and short, Stripe-Press-inspired. */
+    /* Top-left corner = small SF outline logo, links to about.html. */
     #masthead .masthead-corner {
       position: absolute;
-      top: 7px;
-      left: 8px;
-      height: 20px;
-      padding: 0 16px;
-      background: #1a1a1a;
-      color: #ffffff;
+      top: 8px;
+      left: 12px;
+      width: 22px;
+      height: 22px;
+      background: transparent;
       border: none;
-      border-radius: 4px;
-      box-sizing: border-box;
+      padding: 0;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 1002;
-      transition: background 0.15s ease;
+      color: #1a1a1a;
+      transition: opacity 0.15s ease;
+      text-decoration: none;
     }
-    #masthead .masthead-corner:hover { background: #333333; }
-    #masthead .masthead-corner .corner-mark {
-      font-family: 'Geist', 'Inter', sans-serif;
-      font-weight: 400;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #ffffff;
-      line-height: 1;
+    #masthead .masthead-corner:hover { background: transparent; opacity: 0.65; }
+    #masthead .masthead-corner .corner-glyph {
+      display: block;
+      width: 21px;
+      height: 21px;
     }
     /* ── Left archive rail — full-height column ── */
     #archive-rail {
@@ -1376,6 +1373,19 @@
       text-transform: uppercase;
       line-height: 1;
     }
+    /* Read-mode hood line: location + coords only */
+    #panel-hood-read {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    /* Finishing mark (hedera ❧) after the answer sentence. */
+    #answer-panel .panel-mark {
+      margin-left: 0.3em;
+      font-size: 0.72em;
+      color: #1a1a1a;
+      white-space: nowrap;
+    }
     #answer-panel .panel-hood-marker {
       width: 8px;
       height: 8px;
@@ -1387,6 +1397,7 @@
     #answer-panel .panel-write-actions {
       position: absolute;
       left: 32px;
+      right: 32px;
       bottom: 19px;
       display: flex;
       gap: 12px;
@@ -1625,11 +1636,14 @@
     /* Masthead — bold bottom edge, monospace title hint */
     #masthead { border-bottom: var(--edge-w) solid #555; }
     #masthead .masthead-vdivider { background: var(--edge); width: var(--edge-w); }
+    /* Tagline shares the PINNED wordmark font (Outfit), but sits on a straight
+       baseline — no letter hop. */
     #masthead .city-center {
-      font-family: var(--mono);
-      font-weight: 500;
-      letter-spacing: 0.12em;
+      display: inline-flex;
+      align-items: baseline;
     }
+    #masthead .city-center span { display: inline-block; }
+    #masthead .city-center .up { transform: none; }
     /* Square the masthead +/x hover state */
     #masthead .masthead-add:hover,
     #masthead .masthead-close:hover { background: var(--edge); color: #fff; }
@@ -2055,6 +2069,60 @@
       z-index: 600;
       color: var(--accent, #D9531E);
     }
+    /* Map bottom-left button — toggles flat-map (spotlight) mode.
+       Uses a Unicode glyph (◱ U+25F1) as the icon. z-index is pushed very high
+       so the toggle remains clickable on top of any spotlight chrome. */
+    #map-sf-logo {
+      position: fixed;
+      left: 320px;
+      bottom: calc(36px + 16px);
+      width: 32px;
+      height: 32px;
+      margin-left: 16px;
+      z-index: 9999;
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    #map-sf-logo:hover { opacity: 0.6; }
+    #map-sf-logo .glyph {
+      display: block;
+      width: 27px;
+      height: 27px;
+      color: #1a1a1a;
+      transform-origin: center;
+      transition: color 0.15s ease;
+    }
+    /* Gentle continuous rotation while the button is hovered. Suppressed when
+       the user prefers reduced motion. */
+    @keyframes spot-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    #map-sf-logo:hover .glyph {
+      animation: spot-spin 3s linear infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #map-sf-logo:hover .glyph { animation: none; }
+    }
+    /* In spotlight: re-anchor to the screen edge (archive rail is gone) and
+       turn the glyph accent-orange as a subtle "engaged" cue. No chip bg,
+       no size change. */
+    body.spotlight-on #map-sf-logo {
+      left: 16px;
+      margin-left: 0;
+      bottom: 16px;
+      pointer-events: auto !important;
+    }
+    body.spotlight-on #map-sf-logo .glyph {
+      color: var(--accent, #D9531E);
+    }
     /* Crumpled-paper / worn-ink effect applied to the center PINNED
        wordmark only — leaves the ring text and bridge mark sharp. */
     #map-badge .center-text {
@@ -2229,16 +2297,23 @@
 
 <!-- ─────────── TOP MASTHEAD ─────────── -->
 <div id="masthead">
-  <button class="masthead-corner" id="masthead-corner-btn" type="button" title="Toggle spotlight" aria-label="Toggle spotlight">
-    <span class="corner-mark">PINNED</span>
-  </button>
+  <a class="masthead-corner" id="masthead-corner-btn" href="about.html" title="About" aria-label="About">
+    <!-- Simplified San Francisco city outline (hollow): the project's SF
+         peninsula silhouette reduced from ~30 points to ~13, smoothed for logo
+         use so it stays legible at this small corner size. fill:none, soft-black
+         #1a1a1a, round joins — matches the spotlight button's hollow line. -->
+    <svg class="corner-glyph" width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M2.0 6.4 L3.8 4.0 L6.4 4.0 L15.8 4.6 L18.6 6.0 L19.6 8.6 L19.4 12.8 L22.0 15.4 L20.4 18.6 L16.8 21.0 L2.4 21.0 L1.6 15.0 L1.6 9.4 Z"
+            fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+  </a>
   <div class="masthead-center">
     <div class="title">
       <a class="logo" href="about.html" aria-label="About — Pinned" style="text-decoration: none; color: inherit; pointer-events: auto; cursor: pointer;">
         <span class="l-p">P</span><span class="l-i">i</span><span class="l-n1">n</span><span class="l-n2">n</span><span class="l-e">e</span><span class="l-d">d</span>
       </a>
     </div>
-    <div class="city-center">Where We Were</div>
+    <div class="city-center" aria-label="Where We Were"><span>W</span><span class="up">h</span><span>e</span><span class="up">r</span><span>e</span><span>&nbsp;</span><span>W</span><span class="up">e</span><span>&nbsp;</span><span>W</span><span class="up">e</span><span>r</span><span class="up">e</span></div>
   </div>
   <div class="masthead-vdivider" aria-hidden="true"></div>
   <div class="masthead-spot-q" id="masthead-spot-q" aria-hidden="true">
@@ -2323,7 +2398,7 @@
     <div class="panel-text" id="panel-text">The fog comes in slow over the hills, and by the time you notice the streetlights are on, the whole afternoon has been quietly replaced by an early kind of evening.</div>
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
-      <span class="panel-hood" id="panel-hood-read">RUSSIAN HILL 37.81 122.43</span>
+      <span class="panel-hood" id="panel-hood-read"><span class="hood-loc">RUSSIAN HILL 37.81 122.43</span></span>
     </div>
     <div class="panel-divider panel-divider-read"></div>
   </div>
@@ -2380,6 +2455,19 @@
     <span class="cell corner"></span><span class="cell on"></span><span class="cell"></span><span class="cell on"></span><span class="cell corner"></span>
   </button>
 </div>
+
+<!-- ─────────── SF OUTLINE LOGO (bottom-left of map, symmetric with map-badge) ─────────── -->
+<button id="map-sf-logo" type="button" title="Toggle flat map" aria-label="Toggle flat map">
+  <!-- Topographic-contour icon: two nested terrain rings around a center dot,
+       like map elevation lines. Hollow (fill:none), round joins. currentColor →
+       soft-black normally, accent-orange in spotlight mode (see #map-sf-logo
+       .glyph color rules). -->
+  <svg class="glyph" width="27" height="27" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 13 Q7 5 13 6 Q21 7 19 14 Q17 20 10 19 Q4 18 5 13 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M9 13 Q10 9 13 10 Q16 11 15 14 Q14 16 11 16 Q8 16 9 13 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="12.5" cy="13" r="1.3" fill="currentColor" stroke="none"/>
+  </svg>
+</button>
 
 <!-- ─────────── CIRCULAR-TEXT LOGO (no background, on map, bottom-left) ─────────── -->
 <div id="map-badge" aria-hidden="true">
@@ -2642,6 +2730,16 @@ const questionEl = {
 
 // Issue number formatter (07, 06, 05…)
 function pad2(n) { return String(n).padStart(2, '0'); }
+
+// Stamp date for the answer card author line: 1748… → "29 MAY '26"
+function formatStampDate(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  const MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()];
+  const dd = pad2(d.getDate());
+  const yy = pad2(d.getFullYear() % 100);
+  return `${dd} ${MON} '${yy}`;
+}
 
 const archiveListEl = document.getElementById('archive-list');
 
@@ -2962,7 +3060,7 @@ function submitAnswer() {
   const handle = loadName() || randomName();
   saveName(handle);
   saveAnswer({ lngLat: pendingLngLat, question: pendingQuestion, text, handle });
-  placeAnswerMarker({ lngLat: pendingLngLat, question: pendingQuestion, text, handle });
+  placeAnswerMarker({ lngLat: pendingLngLat, question: pendingQuestion, text, handle, timestamp: Date.now() });
   closeSheet();
 }
 
@@ -3079,7 +3177,7 @@ function updatePinCount() {
 // ─────────── MARKER ───────────
 // Track every answer marker element + its question, so we can highlight/dim them as the question rotates
 const answerMarkers = [];
-function placeAnswerMarker({ lngLat, question, text, handle }) {
+function placeAnswerMarker({ lngLat, question, text, handle, timestamp }) {
   const hood = nearestNeighborhood(lngLat);
   const wrap = document.createElement('div');
   wrap.className = 'answer-marker';
@@ -3105,14 +3203,14 @@ function placeAnswerMarker({ lngLat, question, text, handle }) {
       wrap.classList.add('is-open');
       // In spotlight, only expand the inline note — no big side panel.
       if (!document.body.classList.contains('spotlight-on')) {
-        openAnswerPanel({ text, lngLat, hood });
+        openAnswerPanel({ text, lngLat, hood, handle, timestamp });
       }
     }
   });
   new maplibregl.Marker({ element: wrap, anchor: 'top-left' })
     .setLngLat(lngLat)
     .addTo(map);
-  answerMarkers.push({ el: wrap, question, lngLat, hood, text });
+  answerMarkers.push({ el: wrap, question, lngLat, hood, text, handle, timestamp });
   applySpotlight();
 }
 
@@ -3129,14 +3227,22 @@ function getMainQuestionHeight() {
   return cur ? cur.getBoundingClientRect().height : 160;
 }
 
-function openAnswerPanel({ text, lngLat, hood }) {
+function openAnswerPanel({ text, lngLat, hood, handle, timestamp }) {
   panelText.textContent = text;
   const hoodEl = document.getElementById('panel-hood-read');
   if (hoodEl && lngLat) {
     const lat = lngLat[1].toFixed(2);
     const lng = Math.abs(lngLat[0]).toFixed(2);
-    hoodEl.textContent = `${(hood || '').toUpperCase()} ${lat} ${lng}`;
+    const locEl = hoodEl.querySelector('.hood-loc');
+    if (locEl) locEl.textContent = `${(hood || '').toUpperCase()} ${lat} ${lng}`;
   }
+  // Finishing mark after the sentence — floral heart / hedera (❦ U+2766).
+  // Inherits .panel-mark's ink color and text sizing.
+  const mark = document.createElement('span');
+  mark.className = 'panel-mark';
+  mark.setAttribute('aria-hidden', 'true');
+  mark.textContent = '❦';
+  panelText.append(' ', mark);
   answerPanel.classList.remove('is-write');
   const h = getMainQuestionHeight();
   document.documentElement.style.setProperty('--panel-h', h + 'px');
@@ -3236,7 +3342,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const question = pendingQuestion || (questionEl && questionEl.textContent) || '';
       saveAnswer({ lngLat, question, text, handle });
-      placeAnswerMarker({ lngLat, question, text, handle });
+      placeAnswerMarker({ lngLat, question, text, handle, timestamp: Date.now() });
       if (pendingMarker) { pendingMarker.remove(); pendingMarker = null; }
       pendingLngLat = null;
       pendingQuestion = null;
@@ -3346,10 +3452,12 @@ function autoOpenRandomPinForActiveQuestion() {
   pick.el.classList.add('is-open');
 }
 eyeToggle.addEventListener('click', () => setRevealed(!revealed));
-// New rounded PINNED corner button mirrors the checker toggle's behaviour.
-const mastheadCornerBtn = document.getElementById('masthead-corner-btn');
-if (mastheadCornerBtn) {
-  mastheadCornerBtn.addEventListener('click', () => setRevealed(!revealed));
+// Top-left masthead corner is now a plain <a> link to about.html — no JS handler.
+
+// Map SF outline logo (bottom-left of the map) toggles flat-map (spotlight) mode.
+const mapSfLogo = document.getElementById('map-sf-logo');
+if (mapSfLogo) {
+  mapSfLogo.addEventListener('click', () => setRevealed(!revealed));
 }
 
 // Zoom slider removed — map relies on mouse-wheel / trackpad zoom (maplibre default)

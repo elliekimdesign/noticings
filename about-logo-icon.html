@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SF logo · icon treatments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      background: #e8e8e6; color: #1a1a1a;
+      padding: 48px 40px 120px; -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+    .intro { margin: 10px 0 28px; font-size: 13px; line-height: 1.6; color: #555; max-width: 600px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .card {
+      position: relative; background: #ffffff; border: 1px solid #a3a3a3;
+      padding: 30px 22px 18px; display: flex; flex-direction: column; align-items: center;
+    }
+    .card-label {
+      position: absolute; top: -9px; left: 12px; background: #e8e8e6; padding: 0 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #888;
+    }
+    .map-panel {
+      width: 100%; height: 140px; background: #f4f4f5; border: 1px solid #d8d8d6;
+      display: flex; align-items: center; justify-content: center; gap: 28px;
+    }
+    .swatches {
+      margin-top: 12px; display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 0.06em; color: rgba(26,26,26,0.55);
+    }
+    .swatches i { width: 9px; height: 9px; display: inline-block; }
+
+    /* SVG sizing — two copies per card */
+    .logo-real, .logo-zoom { display: block; }
+    .logo-real svg, .logo-zoom svg { width: 100%; height: 100%; display: block; }
+    .logo-real { width: 32px; height: 32px; }
+    .logo-zoom { width: 80px; height: 80px; }
+
+    /* ── A · Filled silhouettes (path fill only) ── */
+    .i1 svg path { fill: #1a1a1a; stroke: none; }
+    .i2 svg path { fill: #D9531E; stroke: none; }
+    .i3 svg path { fill: rgba(26,26,26,0.55); stroke: none; }
+
+    /* ── B · Filled + thin outline ── */
+    .i4 svg path { fill: #ffffff; stroke: #1a1a1a; stroke-width: 8; stroke-linejoin: round; }
+    .i5 svg path { fill: #D9531E; stroke: #1a1a1a; stroke-width: 8; stroke-linejoin: round; }
+
+    /* ── C · Containerized chips ── */
+    .chip-real, .chip-zoom { display: flex; align-items: center; justify-content: center; }
+    .chip-real { width: 32px; height: 32px; }
+    .chip-zoom { width: 80px; height: 80px; }
+    .chip-real svg { width: 60%; height: 60%; display: block; }
+    .chip-zoom svg { width: 60%; height: 60%; display: block; }
+
+    .i6 .chip-real, .i6 .chip-zoom { background: #1a1a1a; border-radius: 50%; }
+    .i6 svg path { fill: #ffffff; stroke: none; }
+    .i7 .chip-real, .i7 .chip-zoom { background: #f6efe2; border-radius: 6px; }
+    .i7 .chip-zoom { border-radius: 14px; }
+    .i7 svg path { fill: #1a1a1a; stroke: none; }
+    .i8 .chip-real, .i8 .chip-zoom { background: #D9531E; border-radius: 6px; }
+    .i8 .chip-zoom { border-radius: 14px; }
+    .i8 svg path { fill: #ffffff; stroke: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>SF logo · icon treatments (filled / chipped)</h1>
+    <p class="intro">Same SF outline, eight icon-style treatments — filled
+       silhouettes and contained chips, drawn on the actual map color
+       (#f4f4f5). Pick I1–I8.</p>
+
+    <div class="grid">
+
+      <!-- ────────── A · Filled silhouettes ────────── -->
+
+      <!-- I1 -->
+      <div class="card i1">
+        <span class="card-label">I1 · Ink fill</span>
+        <div class="map-panel">
+          <span class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+          <span class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+        </div>
+        <div class="swatches"><i style="background:#1a1a1a"></i>#1A1A1A · fill</div>
+      </div>
+
+      <!-- I2 -->
+      <div class="card i2">
+        <span class="card-label">I2 · Vintage orange fill</span>
+        <div class="map-panel">
+          <span class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+          <span class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+        </div>
+        <div class="swatches"><i style="background:#D9531E"></i>#D9531E · fill</div>
+      </div>
+
+      <!-- I3 -->
+      <div class="card i3">
+        <span class="card-label">I3 · Faint ink fill</span>
+        <div class="map-panel">
+          <span class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+          <span class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+        </div>
+        <div class="swatches"><i style="background:rgba(26,26,26,0.55)"></i>ink 55% · fill</div>
+      </div>
+
+      <!-- ────────── B · Filled + thin outline ────────── -->
+
+      <!-- I4 -->
+      <div class="card i4">
+        <span class="card-label">I4 · White fill + ink outline</span>
+        <div class="map-panel">
+          <span class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+          <span class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+        </div>
+        <div class="swatches"><i style="background:#fff;border:1px solid #1a1a1a"></i>#FFF · <i style="background:#1a1a1a"></i>#1A1A1A outline</div>
+      </div>
+
+      <!-- I5 -->
+      <div class="card i5">
+        <span class="card-label">I5 · Orange fill + ink outline</span>
+        <div class="map-panel">
+          <span class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+          <span class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+        </div>
+        <div class="swatches"><i style="background:#D9531E"></i>#D9531E · <i style="background:#1a1a1a"></i>#1A1A1A outline</div>
+      </div>
+
+      <!-- ────────── C · Containerized chips ────────── -->
+
+      <!-- I6 -->
+      <div class="card i6">
+        <span class="card-label">I6 · Black circle chip</span>
+        <div class="map-panel">
+          <span class="chip-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+          <span class="chip-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+        </div>
+        <div class="swatches"><i style="background:#1a1a1a"></i>#1A1A1A chip · #FFF SF</div>
+      </div>
+
+      <!-- I7 -->
+      <div class="card i7">
+        <span class="card-label">I7 · Cream rounded chip</span>
+        <div class="map-panel">
+          <span class="chip-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+          <span class="chip-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+        </div>
+        <div class="swatches"><i style="background:#f6efe2"></i>#F6EFE2 chip · ink SF</div>
+      </div>
+
+      <!-- I8 -->
+      <div class="card i8">
+        <span class="card-label">I8 · Orange chip</span>
+        <div class="map-panel">
+          <span class="chip-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+          <span class="chip-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </span>
+        </div>
+        <div class="swatches"><i style="background:#D9531E"></i>#D9531E chip · #FFF SF</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

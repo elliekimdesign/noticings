@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Map button · Unicode glyph icons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      background: #e8e8e6; color: #1a1a1a;
+      padding: 48px 40px 120px; -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+    .intro { margin: 10px 0 28px; font-size: 13px; line-height: 1.6; color: #555; max-width: 600px; }
+    .section-title {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; color: #888;
+      margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid #c8c8c4;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .card {
+      position: relative; background: #ffffff; border: 1px solid #a3a3a3;
+      padding: 30px 22px 18px; display: flex; flex-direction: column; align-items: center;
+    }
+    .card-label {
+      position: absolute; top: -9px; left: 12px; background: #e8e8e6; padding: 0 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #888;
+    }
+    .map-panel {
+      width: 100%; height: 140px; background: #f4f4f5; border: 1px solid #d8d8d6;
+      display: flex; align-items: center; justify-content: center; gap: 32px;
+    }
+    .glyph-real, .glyph-zoom {
+      display: flex; align-items: center; justify-content: center;
+      color: #1a1a1a; line-height: 1;
+    }
+    .glyph-real { width: 32px; height: 32px; font-size: 22px; }
+    .glyph-zoom { width: 80px; height: 80px; font-size: 60px; }
+    .meta {
+      margin-top: 12px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 0.06em; color: rgba(26,26,26,0.55);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Map button · Unicode glyph icons</h1>
+    <p class="intro">Pure Unicode glyphs as the map's bottom-left button. The
+       button toggles "flatten map" (spotlight). Picks should suggest map / view /
+       expand. Drawn on the real map color so blends look honest. Pick a
+       codepoint (e.g. "G6 · ⛶ U+26F6"). Glyph shape depends on the OS font; the
+       chosen one can later be redrawn as SVG.</p>
+
+    <div class="section-title">A · Map / world / focal point</div>
+    <div class="grid">
+
+      <div class="card">
+        <span class="card-label">G1</span>
+        <div class="map-panel">
+          <span class="glyph-real">🜨</span>
+          <span class="glyph-zoom">🜨</span>
+        </div>
+        <div class="meta">🜨  U+1F728 · alchemical earth</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G2</span>
+        <div class="map-panel">
+          <span class="glyph-real">⊕</span>
+          <span class="glyph-zoom">⊕</span>
+        </div>
+        <div class="meta">⊕  U+2295 · circled plus / origin</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G3</span>
+        <div class="map-panel">
+          <span class="glyph-real">⊙</span>
+          <span class="glyph-zoom">⊙</span>
+        </div>
+        <div class="meta">⊙  U+2299 · circled dot / target</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G4</span>
+        <div class="map-panel">
+          <span class="glyph-real">⌖</span>
+          <span class="glyph-zoom">⌖</span>
+        </div>
+        <div class="meta">⌖  U+2316 · position indicator</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G5</span>
+        <div class="map-panel">
+          <span class="glyph-real">◉</span>
+          <span class="glyph-zoom">◉</span>
+        </div>
+        <div class="meta">◉  U+25C9 · fisheye / focal</div>
+      </div>
+
+    </div>
+
+    <div class="section-title">B · Expand / flatten / fullscreen</div>
+    <div class="grid">
+
+      <div class="card">
+        <span class="card-label">G6 · recommended</span>
+        <div class="map-panel">
+          <span class="glyph-real">⛶</span>
+          <span class="glyph-zoom">⛶</span>
+        </div>
+        <div class="meta">⛶  U+26F6 · fullscreen square</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G7</span>
+        <div class="map-panel">
+          <span class="glyph-real">⤢</span>
+          <span class="glyph-zoom">⤢</span>
+        </div>
+        <div class="meta">⤢  U+2922 · NE/SW expand</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G8</span>
+        <div class="map-panel">
+          <span class="glyph-real">⤡</span>
+          <span class="glyph-zoom">⤡</span>
+        </div>
+        <div class="meta">⤡  U+2921 · NW/SE expand</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G9</span>
+        <div class="map-panel">
+          <span class="glyph-real">▣</span>
+          <span class="glyph-zoom">▣</span>
+        </div>
+        <div class="meta">▣  U+25A3 · square in square / view</div>
+      </div>
+
+    </div>
+
+    <div class="section-title">C · Cross / grid / quiet mark</div>
+    <div class="grid">
+
+      <div class="card">
+        <span class="card-label">G10</span>
+        <div class="map-panel">
+          <span class="glyph-real">⌗</span>
+          <span class="glyph-zoom">⌗</span>
+        </div>
+        <div class="meta">⌗  U+2317 · viewdata grid</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G11</span>
+        <div class="map-panel">
+          <span class="glyph-real">✚</span>
+          <span class="glyph-zoom">✚</span>
+        </div>
+        <div class="meta">✚  U+271A · heavy cross / center</div>
+      </div>
+
+      <div class="card">
+        <span class="card-label">G12</span>
+        <div class="map-panel">
+          <span class="glyph-real">⊞</span>
+          <span class="glyph-zoom">⊞</span>
+        </div>
+        <div class="meta">⊞  U+229E · squared plus / grid</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

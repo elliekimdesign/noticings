@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SF logo · highlighter colors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      background: #e8e8e6;
+      color: #1a1a1a;
+      padding: 48px 40px 120px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+    .intro { margin: 10px 0 28px; font-size: 13px; line-height: 1.6; color: #555; max-width: 600px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      position: relative; background: #ffffff; border: 1px solid #a3a3a3;
+      padding: 30px 22px 18px; display: flex; flex-direction: column; align-items: center;
+    }
+    .card-label {
+      position: absolute; top: -9px; left: 12px; background: #e8e8e6; padding: 0 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #888;
+    }
+    /* The map-colored panel where the highlighter mark sits */
+    .map-panel {
+      width: 100%;
+      height: 140px;
+      background: #f4f4f5;
+      border: 1px solid #d8d8d6;
+      display: flex; align-items: center; justify-content: center;
+      gap: 28px;
+    }
+    .logo-real { width: 32px; height: 32px; }
+    .logo-zoom { width: 80px; height: 80px; }
+    .logo-real svg, .logo-zoom svg { width: 100%; height: 100%; display: block; }
+    .logo-real svg path, .logo-zoom svg path {
+      fill: none;
+      stroke-width: 16;
+      stroke-linecap: butt;
+      stroke-linejoin: round;
+      mix-blend-mode: multiply;
+    }
+
+    /* The card's caption row */
+    .swatches {
+      margin-top: 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      letter-spacing: 0.06em; color: rgba(26,26,26,0.55);
+    }
+    .swatches i { width: 9px; height: 9px; display: inline-block; }
+
+    /* ── M1 · Warm yellow ── */
+    .m1 svg path { stroke: rgba(252, 184, 39, 0.70); }   /* #FCB827 */
+    /* ── M2 · Soft yellow ── */
+    .m2 svg path { stroke: rgba(245, 225, 83, 0.75); }   /* #F5E153 */
+    /* ── M3 · Vintage orange ── */
+    .m3 svg path { stroke: rgba(217, 83, 30, 0.65); }    /* #D9531E */
+    /* ── M4 · Coral pink ── */
+    .m4 svg path { stroke: rgba(242, 107, 107, 0.70); }  /* #F26B6B */
+    /* ── M5 · Mint green ── */
+    .m5 svg path { stroke: rgba(127, 207, 174, 0.70); }  /* #7FCFAE */
+    /* ── M6 · Sky cyan ── */
+    .m6 svg path { stroke: rgba(124, 198, 245, 0.70); }  /* #7CC6F5 */
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>SF corner logo · highlighter-pen colors</h1>
+    <p class="intro">Same icon, six highlighter colors, drawn on the actual map
+       background (#f4f4f5) so the multiply blend looks real. Pick M1–M6.</p>
+
+    <div class="grid">
+
+      <!-- M1 -->
+      <div class="card m1">
+        <span class="card-label">M1 · Warm yellow</span>
+        <div class="map-panel">
+          <div class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+          <div class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+        </div>
+        <div class="swatches"><i style="background:#FCB827"></i>#FCB827 · 70%</div>
+      </div>
+
+      <!-- M2 -->
+      <div class="card m2">
+        <span class="card-label">M2 · Soft yellow</span>
+        <div class="map-panel">
+          <div class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+          <div class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+        </div>
+        <div class="swatches"><i style="background:#F5E153"></i>#F5E153 · 75%</div>
+      </div>
+
+      <!-- M3 -->
+      <div class="card m3">
+        <span class="card-label">M3 · Vintage orange</span>
+        <div class="map-panel">
+          <div class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+          <div class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+        </div>
+        <div class="swatches"><i style="background:#D9531E"></i>#D9531E · 65%</div>
+      </div>
+
+      <!-- M4 -->
+      <div class="card m4">
+        <span class="card-label">M4 · Coral pink</span>
+        <div class="map-panel">
+          <div class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+          <div class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+        </div>
+        <div class="swatches"><i style="background:#F26B6B"></i>#F26B6B · 70%</div>
+      </div>
+
+      <!-- M5 -->
+      <div class="card m5">
+        <span class="card-label">M5 · Mint green</span>
+        <div class="map-panel">
+          <div class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+          <div class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+        </div>
+        <div class="swatches"><i style="background:#7FCFAE"></i>#7FCFAE · 70%</div>
+      </div>
+
+      <!-- M6 -->
+      <div class="card m6">
+        <span class="card-label">M6 · Sky cyan</span>
+        <div class="map-panel">
+          <div class="logo-real">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+          <div class="logo-zoom">
+            <svg viewBox="-8 -8 304 304"><path d="M16.1 74.0 L28.9 43.6 L44.2 27.6 L72.2 27.6 L76.4 31.6 L79.3 33.1 L94.9 30.7 L113.9 34.4 L133.6 34.8 L151.9 32.7 L170.9 31.6 L188.2 37.7 L216.2 50.6 L223.7 62.0 L228.0 73.1 L233.5 90.6 L228.0 115.5 L226.6 138.7 L231.8 161.9 L266.0 186.8 L261.5 206.5 L237.7 239.3 L198.6 252.4 L94.9 252.4 L20.6 252.4 L15.0 230.5 L14.0 193.3 L14.0 147.9 L15.6 112.5 L16.1 74.0 Z"/></svg>
+          </div>
+        </div>
+        <div class="swatches"><i style="background:#7CC6F5"></i>#7CC6F5 · 70%</div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

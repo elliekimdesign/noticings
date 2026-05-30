@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>End mark 5 — more glyphs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --accent: #D9531E; --edge: #1a1a1a; }
+    body {
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      background: #e8e8e6; color: #1a1a1a;
+      padding: 48px 40px 120px; -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    h1 { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+    .intro { margin: 10px 0 28px; font-size: 13px; line-height: 1.6; color: #555; max-width: 600px; }
+    .section-title {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent);
+      margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid #c8c8c4;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+    .tile {
+      background: #fff; border: 1px solid #c4c4c0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 14px 6px 8px; gap: 6px;
+    }
+    .tile .g { font-size: 28px; line-height: 1; color: #1a1a1a; }
+    .tile .id { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #999; letter-spacing: 0.04em; }
+    .card {
+      position: relative; background: #fff; border: 1px solid #a3a3a3;
+      margin: 0 0 16px; padding: 26px 48px 28px 32px;
+    }
+    .card-label {
+      position: absolute; top: -9px; left: 12px; background: #e8e8e6; padding: 0 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #888;
+    }
+    .answer {
+      font-family: 'Jost', 'Helvetica Neue', sans-serif; font-weight: 400;
+      font-size: clamp(17px, 1.6vw, 20px); line-height: clamp(26px, 2.4vw, 30px);
+      letter-spacing: 0.005em; color: #1a1a1a; max-width: 560px;
+    }
+    .mark { margin-left: 0.3em; white-space: nowrap; font-size: 0.9em; color: #1a1a1a; }
+    .mark.orange { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>End mark · more glyphs (round 5)</h1>
+    <p class="intro">New families not shown before — crosses, bracket ornaments,
+       CJK/wavy, geometric, dot clusters, hearts, doubles. Grid up top with
+       codepoints; ~8 in context below. Pick a codepoint. Shape depends on OS font;
+       can be redrawn as SVG.</p>
+
+    <div class="section-title">Crosses / heraldic</div>
+    <div class="grid">
+      <div class="tile"><span class="g">✠</span><span class="id">U+2720</span></div>
+      <div class="tile"><span class="g">✢</span><span class="id">U+2722</span></div>
+      <div class="tile"><span class="g">✣</span><span class="id">U+2723</span></div>
+      <div class="tile"><span class="g">✤</span><span class="id">U+2724</span></div>
+      <div class="tile"><span class="g">✥</span><span class="id">U+2725</span></div>
+      <div class="tile"><span class="g">❂</span><span class="id">U+2742</span></div>
+      <div class="tile"><span class="g">⁜</span><span class="id">U+205C</span></div>
+      <div class="tile"><span class="g">✚</span><span class="id">U+271A</span></div>
+      <div class="tile"><span class="g">✜</span><span class="id">U+271C</span></div>
+    </div>
+
+    <div class="section-title">Quote / bracket ornaments</div>
+    <div class="grid">
+      <div class="tile"><span class="g">❛</span><span class="id">U+275B</span></div>
+      <div class="tile"><span class="g">❜</span><span class="id">U+275C</span></div>
+      <div class="tile"><span class="g">❝</span><span class="id">U+275D</span></div>
+      <div class="tile"><span class="g">❞</span><span class="id">U+275E</span></div>
+      <div class="tile"><span class="g">❨</span><span class="id">U+2768</span></div>
+      <div class="tile"><span class="g">❩</span><span class="id">U+2769</span></div>
+      <div class="tile"><span class="g">⟨</span><span class="id">U+27E8</span></div>
+      <div class="tile"><span class="g">⟩</span><span class="id">U+27E9</span></div>
+    </div>
+
+    <div class="section-title">CJK / full-width / wavy</div>
+    <div class="grid">
+      <div class="tile"><span class="g">※</span><span class="id">U+203B</span></div>
+      <div class="tile"><span class="g">⁑</span><span class="id">U+2051</span></div>
+      <div class="tile"><span class="g">〜</span><span class="id">U+301C</span></div>
+      <div class="tile"><span class="g">〰</span><span class="id">U+3030</span></div>
+      <div class="tile"><span class="g">⸻</span><span class="id">U+2E3B</span></div>
+      <div class="tile"><span class="g">⌇</span><span class="id">U+2307</span></div>
+    </div>
+
+    <div class="section-title">Geometric figures</div>
+    <div class="grid">
+      <div class="tile"><span class="g">◐</span><span class="id">U+25D0</span></div>
+      <div class="tile"><span class="g">◑</span><span class="id">U+25D1</span></div>
+      <div class="tile"><span class="g">⬢</span><span class="id">U+2B22</span></div>
+      <div class="tile"><span class="g">⬣</span><span class="id">U+2B23</span></div>
+      <div class="tile"><span class="g">⏣</span><span class="id">U+23E3</span></div>
+      <div class="tile"><span class="g">❒</span><span class="id">U+2752</span></div>
+      <div class="tile"><span class="g">◧</span><span class="id">U+25E7</span></div>
+      <div class="tile"><span class="g">⊕</span><span class="id">U+2295</span></div>
+      <div class="tile"><span class="g">⊗</span><span class="id">U+2297</span></div>
+      <div class="tile"><span class="g">◍</span><span class="id">U+25CD</span></div>
+    </div>
+
+    <div class="section-title">Dot clusters / dividers</div>
+    <div class="grid">
+      <div class="tile"><span class="g">∴</span><span class="id">U+2234</span></div>
+      <div class="tile"><span class="g">∵</span><span class="id">U+2235</span></div>
+      <div class="tile"><span class="g">⁙</span><span class="id">U+2059</span></div>
+      <div class="tile"><span class="g">⸫</span><span class="id">U+2E2B</span></div>
+      <div class="tile"><span class="g">⸬</span><span class="id">U+2E2C</span></div>
+      <div class="tile"><span class="g">⌗</span><span class="id">U+2317</span></div>
+      <div class="tile"><span class="g">⋰</span><span class="id">U+22F0</span></div>
+      <div class="tile"><span class="g">⋱</span><span class="id">U+22F1</span></div>
+    </div>
+
+    <div class="section-title">Hearts / hedera variants</div>
+    <div class="grid">
+      <div class="tile"><span class="g">☙</span><span class="id">U+2619</span></div>
+      <div class="tile"><span class="g">❥</span><span class="id">U+2765</span></div>
+      <div class="tile"><span class="g">❣</span><span class="id">U+2763</span></div>
+      <div class="tile"><span class="g">❢</span><span class="id">U+2762</span></div>
+      <div class="tile"><span class="g">❡</span><span class="id">U+2761</span></div>
+    </div>
+
+    <div class="section-title">Doubles / guillemet</div>
+    <div class="grid">
+      <div class="tile"><span class="g">⊰</span><span class="id">U+22B0</span></div>
+      <div class="tile"><span class="g">⊱</span><span class="id">U+22B1</span></div>
+      <div class="tile"><span class="g">⋙</span><span class="id">U+22D9</span></div>
+      <div class="tile"><span class="g">≫</span><span class="id">U+226B</span></div>
+      <div class="tile"><span class="g">⫸</span><span class="id">U+2AF8</span></div>
+      <div class="tile"><span class="g">⟫</span><span class="id">U+27EB</span></div>
+      <div class="tile"><span class="g">»</span><span class="id">U+00BB</span></div>
+    </div>
+
+    <div class="section-title">In context (after the sentence)</div>
+
+    <div class="card"><span class="card-label">✤ U+2724</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">✤</span></div></div>
+
+    <div class="card"><span class="card-label">☙ U+2619 (reversed hedera)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">☙</span></div></div>
+
+    <div class="card"><span class="card-label">❥ U+2765 (rotated heart)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">❥</span></div></div>
+
+    <div class="card"><span class="card-label">⬢ U+2B22 (hexagon)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">⬢</span></div></div>
+
+    <div class="card"><span class="card-label">∴ U+2234 (therefore)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">∴</span></div></div>
+
+    <div class="card"><span class="card-label">⁜ U+205C (dotted cross)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">⁜</span></div></div>
+
+    <div class="card"><span class="card-label">✤ U+2724 (orange)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark orange">✤</span></div></div>
+
+    <div class="card"><span class="card-label">☙ U+2619 (orange)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark orange">☙</span></div></div>
+
+  </div>
+</body>
+</html>

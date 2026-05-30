@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>End mark 6 — rounded arrowhead family</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --accent: #D9531E; --edge: #1a1a1a; }
+    body {
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      background: #e8e8e6; color: #1a1a1a;
+      padding: 48px 40px 120px; -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .intro { margin: 10px 0 28px; font-size: 13px; line-height: 1.6; color: #555; max-width: 620px; }
+    .intro b { color: #1a1a1a; font-weight: 600; }
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid #c8c8c4;
+    }
+
+    /* glyph grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+    .tile {
+      background: #fff; border: 1px solid #c4c4c0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 14px 6px 8px; gap: 6px;
+    }
+    .tile .g { font-size: 30px; line-height: 1; color: #1a1a1a; }
+    .tile .id {
+      font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #999; letter-spacing: 0.04em;
+    }
+
+    /* in-context cards */
+    .card {
+      position: relative; background: #fff; border: 1px solid #a3a3a3;
+      margin: 0 0 16px; padding: 26px 48px 28px 32px;
+    }
+    .card-label {
+      position: absolute; top: -9px; left: 12px; background: #e8e8e6; padding: 0 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #888;
+    }
+    .answer {
+      font-family: 'Jost', 'Helvetica Neue', sans-serif; font-weight: 400;
+      font-size: clamp(17px, 1.6vw, 20px); line-height: clamp(26px, 2.4vw, 30px);
+      letter-spacing: 0.005em; color: #1a1a1a; max-width: 560px;
+    }
+    /* subtle size, matching the current live mark's small feel */
+    .mark { margin-left: 0.3em; white-space: nowrap; font-size: 0.72em; color: #1a1a1a; }
+    .mark.orange { color: var(--accent); }
+    .mark svg { vertical-align: 0.05em; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>End mark · rounded arrowhead family (round 6)</h1>
+    <p class="intro">More glyphs in the mood of the <b>current mark</b> — the small,
+       plump, right-pointing arrowhead from <b>➼ U+27BC</b>. Top: candidate grids by
+       feel. Bottom: the strongest shown small &amp; in context after a real sentence,
+       with the current custom SVG mark for comparison. Pick a codepoint (e.g.
+       "U+27A4 ➤") — note the exact shape depends on the OS font, so the final pick
+       can be redrawn as SVG to look identical everywhere.</p>
+
+    <div class="section-title">A · Rounded / plump arrowheads (closest to current)</div>
+    <div class="grid">
+      <div class="tile"><span class="g">➤</span><span class="id">U+27A4</span></div>
+      <div class="tile"><span class="g">➢</span><span class="id">U+27A2</span></div>
+      <div class="tile"><span class="g">➣</span><span class="id">U+27A3</span></div>
+      <div class="tile"><span class="g">➸</span><span class="id">U+27B8</span></div>
+      <div class="tile"><span class="g">➼</span><span class="id">U+27BC</span></div>
+      <div class="tile"><span class="g">➽</span><span class="id">U+27BD</span></div>
+      <div class="tile"><span class="g">➾</span><span class="id">U+27BE</span></div>
+      <div class="tile"><span class="g">➻</span><span class="id">U+27BB</span></div>
+      <div class="tile"><span class="g">➺</span><span class="id">U+27BA</span></div>
+      <div class="tile"><span class="g">➹</span><span class="id">U+27B9</span></div>
+      <div class="tile"><span class="g">➵</span><span class="id">U+27B5</span></div>
+      <div class="tile"><span class="g">➴</span><span class="id">U+27B4</span></div>
+    </div>
+
+    <div class="section-title">B · Solid triangles / wedges (right-pointing)</div>
+    <div class="grid">
+      <div class="tile"><span class="g">▶</span><span class="id">U+25B6</span></div>
+      <div class="tile"><span class="g">▸</span><span class="id">U+25B8</span></div>
+      <div class="tile"><span class="g">►</span><span class="id">U+25BA</span></div>
+      <div class="tile"><span class="g">‣</span><span class="id">U+2023</span></div>
+      <div class="tile"><span class="g">⏵</span><span class="id">U+23F5</span></div>
+      <div class="tile"><span class="g">❯</span><span class="id">U+276F</span></div>
+      <div class="tile"><span class="g">❭</span><span class="id">U+276D</span></div>
+      <div class="tile"><span class="g">⟩</span><span class="id">U+27E9</span></div>
+      <div class="tile"><span class="g">🞂</span><span class="id">U+1F782</span></div>
+    </div>
+
+    <div class="section-title">C · Dot + arrow / fishhook tails (playful, rounded)</div>
+    <div class="grid">
+      <div class="tile"><span class="g">➛</span><span class="id">U+279B</span></div>
+      <div class="tile"><span class="g">➜</span><span class="id">U+279C</span></div>
+      <div class="tile"><span class="g">➔</span><span class="id">U+2794</span></div>
+      <div class="tile"><span class="g">↠</span><span class="id">U+21A0</span></div>
+      <div class="tile"><span class="g">⤐</span><span class="id">U+2910</span></div>
+      <div class="tile"><span class="g">⇢</span><span class="id">U+21E2</span></div>
+    </div>
+
+    <div class="section-title">In context — subtle size, after the sentence</div>
+
+    <div class="card"><span class="card-label">current (SVG arrowhead)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark"><svg width="0.95em" height="0.78em" viewBox="0 0 12 10" aria-hidden="true"><path d="M0 0 L7 0 L12 5 L7 10 L0 10 L4 5 Z" fill="currentColor" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg></span></div></div>
+
+    <div class="card"><span class="card-label">➤ U+27A4</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">➤</span></div></div>
+
+    <div class="card"><span class="card-label">➸ U+27B8</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">➸</span></div></div>
+
+    <div class="card"><span class="card-label">➼ U+27BC</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">➼</span></div></div>
+
+    <div class="card"><span class="card-label">▶ U+25B6</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">▶</span></div></div>
+
+    <div class="card"><span class="card-label">▸ U+25B8</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">▸</span></div></div>
+
+    <div class="card"><span class="card-label">‣ U+2023</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">‣</span></div></div>
+
+    <div class="card"><span class="card-label">❯ U+276F</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark">❯</span></div></div>
+
+    <div class="card"><span class="card-label">➤ U+27A4 (orange)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark orange">➤</span></div></div>
+
+    <div class="card"><span class="card-label">➸ U+27B8 (orange)</span>
+      <div class="answer">I bike 5 miles to work every morning, and this turn is by far my favorite part.<span class="mark orange">➸</span></div></div>
+
+  </div>
+</body>
+</html>

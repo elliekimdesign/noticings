@@ -13,7 +13,7 @@
       --ink: #1a1a1a;
       --ink-muted: rgba(26,26,26,0.55);
       --ink-faint: rgba(26,26,26,0.30);
-      --paper: #f4f4f5;
+      --paper: #ffffff;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -103,11 +103,9 @@
       left: 0;
       right: 0;
       bottom: 32px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 24px;
+      display: flex;
+      justify-content: center;
       padding: 0 32px;
-      align-items: end;
       z-index: 30;
     }
     .info-block {
@@ -196,43 +194,35 @@
        has no positional role. Both blocks are always visible. */
     .reveal-stack { display: contents; }
 
-    /* HOMAGE — graphic poster style. Columns at staggered heights,
-       mixed weights, wide spacing. Like a Wim Crouwel / Tanaka grid. */
-    .homage {
+    /* SF SILHOUETTE — Golden Gate Bridge as a solid black filled shape,
+       centered. Bold zine-poster mood. */
+    .sf-silhouette {
       position: fixed;
+      top: 50%;
       left: 50%;
-      top: 55%;
       transform: translate(-50%, -50%);
-      font-family: 'Inter', 'Helvetica Neue', sans-serif;
-      color: var(--ink);
+      width: min(420px, 48vw);
+      height: auto;
       z-index: 10;
       pointer-events: none;
-      display: flex;
-      flex-direction: row;
-      gap: 2.6em;
-      align-items: flex-start;
     }
-    .homage .h-line {
+    .sf-silhouette svg {
+      width: 100%;
+      height: 100%;
       display: block;
-      writing-mode: vertical-rl;
-      text-orientation: upright;
-      font-size: clamp(28px, 4.6vh, 48px);
-      line-height: 1.05;
-      letter-spacing: 0.06em;
-      /* OUTLINE-ONLY — hollow letters with hand-drawn yellow + blue strokes,
-         echoing the SF map silhouette directly. */
-      color: transparent;
-      -webkit-text-stroke: 1.5px #FCB827;
-      text-shadow:
-        2.5px 2px 0 #5B8FE6,
-        -1px -1px 0 #FCB827;
     }
-    /* Staggered top offsets — not all columns aligned, creates visual rhythm */
-    .homage .h-line:nth-child(1) { margin-top: 3em;   font-weight: 900; }
-    .homage .h-line:nth-child(2) { margin-top: 1.2em; font-weight: 300; }
-    .homage .h-line:nth-child(3) { margin-top: 0.4em; font-weight: 800; }
-    .homage .h-line:nth-child(4) { margin-top: 2.6em; font-weight: 400; }
-    .homage .h-line:nth-child(5) { margin-top: 0.8em; font-weight: 900; }
+    .sf-silhouette .fill { fill: #1a1a1a; stroke: none; }
+    .sf-silhouette .label {
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -283,28 +273,28 @@
     </p>
   </div>
 
-  <div class="homage" aria-hidden="true">
-    <span class="h-line">a</span>
-    <span class="h-line">slow</span>
-    <span class="h-line">record</span>
-    <span class="h-line">of</span>
-    <span class="h-line">here</span>
+  <div class="sf-silhouette" aria-hidden="true">
+    <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- Towers -->
+      <rect class="fill" x="55" y="14" width="12" height="110"/>
+      <rect class="fill" x="253" y="14" width="12" height="110"/>
+      <!-- Side cables (filled curves) -->
+      <path class="fill" d="M -10 120 Q 25 50 55 24 L 57 26 Q 27 53 -8 122 Z"/>
+      <path class="fill" d="M 265 24 Q 295 50 330 120 L 328 122 Q 293 53 263 26 Z"/>
+      <!-- Main cable (filled curve) -->
+      <path class="fill" d="M 55 24 Q 160 100 265 24 L 265 27 Q 160 103 55 27 Z"/>
+      <!-- Deck strip -->
+      <rect class="fill" x="0" y="122" width="320" height="6"/>
+    </svg>
+    <span class="label">San Francisco</span>
   </div>
 
   <div class="info-row">
-    <div class="info-block">
-      <span class="logo"><span class="l-p">P</span><span class="l-i">I</span><span class="l-n1">N</span><span class="l-n2">N</span><span class="l-e">E</span><span class="l-d">D</span></span><br>
-      SAN FRANCISCO
-    </div>
     <div class="info-block center">
       <div class="ltlym-credit">
-        Inspired by <em>Learning To Love You More</em><br>
-        Harrell Fletcher &amp; Miranda July  2002–2009
+        A slow map of <em>Where We Were</em><br>
+        Interface Dynamics  Kimkenny  2026 – 20XX
       </div>
-    </div>
-    <div class="info-block right">
-      37.7749° N<br>
-      122.4194° W
     </div>
   </div>
 </main>
