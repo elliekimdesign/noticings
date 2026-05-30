@@ -1313,7 +1313,7 @@
       line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.005em;
       color: #1a1a1a;
-      max-width: 100%;
+      max-width: 54em;
       overflow-wrap: break-word;
     }
 
@@ -1474,6 +1474,13 @@
       display: block;
       padding: 20px 56px 62px 32px;
       position: relative;
+    }
+    /* Read mode: anchor the neighborhood line so its bottom gap equals the
+       card's top gap (text top inset = 20px) → vertically balanced card.
+       !important needed to beat the write-mode override (`bottom:12px !important`
+       further down) that also matches this selector. Write mode keeps 12px. */
+    #answer-panel:not(.is-write) .panel-read .panel-write-actions {
+      bottom: 20px !important;
     }
     #answer-panel .panel-divider-read { display: block; }
     #answer-panel .panel-plus {
