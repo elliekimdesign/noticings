@@ -8,7 +8,7 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -59,13 +59,14 @@
     #masthead .title .logo .l-n2,
     #masthead .title .logo .l-e { transform: translateY(-3px); }
     #masthead .city-center {
-      font-family: 'Outfit', 'Helvetica Neue', sans-serif;
-      font-size: 12px;
+      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-size: 15px;
       font-weight: 400;
       color: #1a1a1a;
       letter-spacing: 0.04em;
-      text-transform: uppercase;
+      text-transform: none;
       line-height: 1;
+      -webkit-text-stroke: 0.6px #1a1a1a;
     }
     #masthead .add-btn-wrap {
       margin-left: auto;
@@ -198,13 +199,19 @@
       z-index: 1002;
       transition: background 0.15s ease, color 0.15s ease;
     }
-    body.panel-open #masthead .masthead-close,
-    body.panel-open #masthead .masthead-close:hover {
+    /* Resting state while panel is open: transparent + black ×. Note: the
+       :hover is intentionally NOT included here so the orange hover (below and
+       at the shared +/× hover rule) can show. */
+    body.panel-open #masthead .masthead-close {
       display: flex;
       background: transparent !important;
       color: #1a1a1a !important;
     }
-    #masthead .masthead-close:hover { background: #067CFA; color: #ffffff; }
+    /* Orange hover, also when the panel is open (matches +, submit, PIN IT). */
+    body.panel-open #masthead .masthead-close:hover {
+      background: var(--accent, #D9531E) !important;
+      color: #ffffff !important;
+    }
     #masthead .masthead-icon {
       font-family: 'Instrument Serif', serif;
       font-size: 26px;
@@ -1636,7 +1643,7 @@
 
     :root {
       --edge: #1a1a1a;
-      --edge-w: 1.5px;
+      --edge-w: 1.7px;
       --mono: 'JetBrains Mono', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
     }
 
@@ -2304,7 +2311,7 @@
 
 <!-- ─────────── TOP MASTHEAD ─────────── -->
 <div id="masthead">
-  <a class="masthead-corner" id="masthead-corner-btn" href="about.html" title="About" aria-label="About">
+  <a class="masthead-corner" id="masthead-corner-btn" href="about-yellowbook.html" title="About" aria-label="About">
     <!-- Simplified San Francisco city outline (hollow): the project's SF
          peninsula silhouette reduced from ~30 points to ~13, smoothed for logo
          use so it stays legible at this small corner size. fill:none, soft-black
@@ -2320,7 +2327,7 @@
         <span class="l-p">P</span><span class="l-i">i</span><span class="l-n1">n</span><span class="l-n2">n</span><span class="l-e">e</span><span class="l-d">d</span>
       </a>
     </div>
-    <div class="city-center" aria-label="Where We Were"><span>W</span><span class="up">h</span><span>e</span><span class="up">r</span><span>e</span><span>&nbsp;</span><span>W</span><span class="up">e</span><span>&nbsp;</span><span>W</span><span class="up">e</span><span>r</span><span class="up">e</span></div>
+    <div class="city-center" aria-label="The City Archive"><span>T</span><span class="up">h</span><span>e</span><span>&nbsp;</span><span>C</span><span class="up">i</span><span>t</span><span class="up">y</span><span>&nbsp;</span><span>A</span><span class="up">r</span><span>c</span><span class="up">h</span><span>i</span><span class="up">v</span><span>e</span></div>
   </div>
   <div class="masthead-vdivider" aria-hidden="true"></div>
   <div class="masthead-spot-q" id="masthead-spot-q" aria-hidden="true">
