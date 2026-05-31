@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — black-card hand-drawn edge (A vs B)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --ink:#1a1a1a; --ink-muted:rgba(26,26,26,0.55); --paper:#fff; --rule:#1a1a1a; }
+    html, body {
+      background: var(--paper); color: var(--ink);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+    .compare { display: flex; flex-wrap: wrap; gap: 0; }
+    .col { flex: 1 1 50%; min-width: 360px; position: relative; }
+    .col-tag {
+      position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 50; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted);
+    }
+
+    .frame {
+      position: relative;
+      height: calc(100vh - 24px);
+      margin: 12px;
+      padding: 0;
+      overflow: hidden;
+    }
+    .frame-rule { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+    .frame-rule path { fill:none; stroke:var(--rule); stroke-linejoin:round; stroke-linecap:round; vector-effect:non-scaling-stroke; }
+    .frame-rule .outer { stroke-width: 2.5px; }
+    .frame-rule .inner { stroke-width: 1.7px; }
+
+    .sheet {
+      position: relative; z-index: 1; max-width: 460px; height: 100%; margin: 0 auto;
+      padding: 40px 28px 60px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    }
+
+    .title {
+      font-family: 'Libre Caslon Display', Georgia, serif; font-weight: 400;
+      font-size: clamp(30px, 3.4vw, 48px); line-height: 1.02; letter-spacing: 0.03em;
+      color: var(--ink); white-space: nowrap; -webkit-text-stroke: 0.4px var(--ink);
+    }
+    .title .cap { font-size: 1.5em; line-height: 1; vertical-align: -0.06em; }
+    .top-label {
+      font-family: 'Libre Caslon Display', Georgia, serif; font-weight: 400;
+      font-size: clamp(14px, 1.6vw, 18px); letter-spacing: 0.03em; color: var(--ink);
+      -webkit-text-stroke: 0.4px var(--ink); margin-top: 12px;
+    }
+    .top-label .ic { -webkit-text-stroke: 0.8px var(--ink); }
+    .volume-line {
+      font-family: 'Libre Caslon Display', Georgia, serif; font-weight: 400;
+      font-size: clamp(12px, 1.4vw, 15px); letter-spacing: 0.03em; color: var(--ink);
+      -webkit-text-stroke: 0.4px var(--ink); margin-top: 9px;
+    }
+    .volume-line .gap { display: inline-block; width: 1.2em; }
+    .volume-line .ic { -webkit-text-stroke: 0.8px var(--ink); }
+    .volume-line .d { display: inline-block; font-size: 0.9em; }
+    .volume-line .d1 { transform: translateY(0);     margin-left: 0.3em; }
+    .volume-line .d2 { transform: translateY(-2.5px); margin-left: 0.18em; }
+    .volume-line .d3 { transform: translateY(1.5px);  margin-left: 0.06em; }
+    .volume-line .d4 { transform: translateY(1px);    margin-left: -0.01em; }
+
+    /* The black card wrapper. */
+    .dark-block {
+      position: relative;
+      max-width: 60ch;
+      margin: 24px auto 0;
+      padding: 28px 34px 32px;
+    }
+    /* Version A: solid black fill via CSS bg + white wobbly keyline (SVG) on top */
+    .dark-block.vA { background: var(--ink); }
+    .card-rule { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+    .card-rule path { fill:none; stroke:#fff; stroke-width:1.4px; stroke-linejoin:round; stroke-linecap:round; vector-effect:non-scaling-stroke; }
+    /* Version B: black fill comes from a wobbly SVG path (no CSS bg), edges uneven */
+    .card-fill { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+    .card-fill path { fill: var(--ink); stroke:none; }
+
+    .dark-block .inner-content { position: relative; z-index: 1; }
+    .dark-block .body-text p { color: #fff; }
+    .dark-block .body-text em { color: #fff; }
+    .dark-block .plate { margin-top: 8px; }
+
+    .plate { width: min(300px, 60%); margin: 6px auto 4px; }
+    .plate svg { width: 100%; height: auto; display: block; }
+
+    .body-text { max-width: 40ch; margin: 30px auto 0; }
+    .body-text p {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7;
+      letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink);
+      text-align: center; margin-bottom: 16px;
+    }
+    .body-text p:last-child { margin-bottom: 0; }
+    .body-text em { font-style: normal; font-weight: 600; }
+
+    .imprint {
+      position: absolute; left:0; right:0; bottom: 30px; text-align: center;
+      font-family: 'Libre Caslon Display', Georgia, serif; font-size: clamp(13px,1.6vw,17px);
+      color: var(--ink);
+    }
+  </style>
+</head>
+<body>
+<div class="compare">
+
+  <!-- ===================== VERSION A ===================== -->
+  <div class="col">
+    <div class="col-tag">A · solid card + white hand-drawn keyline</div>
+    <div class="frame">
+      <svg class="frame-rule" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+        <path class="outer" d="M2,1 L250,3 L500,0 L750,2 L998,1 L997,250 L1000,500 L998,750 L999,999 L750,997 L500,1000 L250,998 L2,999 L1,750 L3,500 L0,250 L2,1 Z"/>
+        <path class="inner" d="M14,13 L250,15 L500,12 L750,14 L986,13 L985,250 L988,500 L986,750 L987,987 L750,985 L500,988 L250,986 L14,987 L13,750 L15,500 L12,250 L14,13 Z"/>
+      </svg>
+      <div class="sheet">
+        <h1 class="title"><span class="cap">T</span>he <span class="cap">C</span>ity <span class="cap">A</span>rchive</h1>
+        <div class="top-label"><span class="ic">A</span>n <span class="ic">A</span>rchive of <span class="ic">S</span>an <span class="ic">F</span>rancisco</div>
+        <div class="volume-line"><span class="ic">V</span>olume <span class="ic">I</span><span class="gap"></span>May, <span class="d d1 ic">2</span><span class="d d2">0</span><span class="d d3">2</span><span class="d d4">6</span></div>
+
+        <div class="dark-block vA">
+          <!-- white wobbly keyline inside the solid black card -->
+          <svg class="card-rule" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M20,16 L250,19 L500,14 L750,18 L980,16 L982,250 L979,500 L982,750 L980,984 L750,981 L500,986 L250,982 L20,984 L17,750 L21,500 L18,250 L20,16 Z"/>
+          </svg>
+          <div class="inner-content">
+            <div class="plate" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+                  <path d="M55 124 L54.5 70 L55.5 30 L55 14.5 Q60.5 13.5 66.5 14.5 L67 30 L66 70 L67 124"/>
+                  <line x1="58.5" y1="20" x2="58" y2="119" stroke-width="0.7"/>
+                  <line x1="62" y1="22" x2="61.5" y2="118" stroke-width="0.55"/>
+                  <path d="M253 124 L252.5 70 L253.5 30 L253 14.5 Q258.5 13.5 264.5 14.5 L265 30 L264 70 L265 124"/>
+                  <line x1="256.5" y1="20" x2="256" y2="119" stroke-width="0.7"/>
+                  <line x1="260" y1="22" x2="259.5" y2="118" stroke-width="0.55"/>
+                  <path d="M -6 121 Q 12 86 30 60 Q 44 38 56 22"/>
+                  <path d="M 264 22 Q 277 39 291 61 Q 309 87 326 121"/>
+                  <path d="M 56 23 Q 100 70 158 80 Q 216 71 264 22"/>
+                  <path d="M 3 123 Q 80 122 160 123.5 Q 240 122.5 317 123"/>
+                  <path d="M 3 129 Q 80 128.5 160 129.5 Q 240 128.5 317 129" stroke-width="0.8"/>
+                  <line x1="40" y1="124" x2="39.5" y2="128" stroke-width="0.5"/>
+                  <line x1="140" y1="124" x2="139.5" y2="128.5" stroke-width="0.5"/>
+                  <line x1="232" y1="124" x2="232.5" y2="128" stroke-width="0.5"/>
+                </g>
+              </svg>
+            </div>
+            <div class="body-text">
+              <p><em>The City Archive</em> : Pinned is a project about San Francisco. Every so often a question is posted, and people answer in one sentence, pinning it to a real place.</p>
+              <p>You can leave your own, or read what others left. Over time the map fills with the ordinary things people remember about a place.</p>
+              <p>In the spirit of <em>Learning to Love You More</em>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="imprint">Interface Dynamics</div>
+    </div>
+  </div>
+
+  <!-- ===================== VERSION B ===================== -->
+  <div class="col">
+    <div class="col-tag">B · black fill with wobbly hand-painted edges</div>
+    <div class="frame">
+      <svg class="frame-rule" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+        <path class="outer" d="M2,1 L250,3 L500,0 L750,2 L998,1 L997,250 L1000,500 L998,750 L999,999 L750,997 L500,1000 L250,998 L2,999 L1,750 L3,500 L0,250 L2,1 Z"/>
+        <path class="inner" d="M14,13 L250,15 L500,12 L750,14 L986,13 L985,250 L988,500 L986,750 L987,987 L750,985 L500,988 L250,986 L14,987 L13,750 L15,500 L12,250 L14,13 Z"/>
+      </svg>
+      <div class="sheet">
+        <h1 class="title"><span class="cap">T</span>he <span class="cap">C</span>ity <span class="cap">A</span>rchive</h1>
+        <div class="top-label"><span class="ic">A</span>n <span class="ic">A</span>rchive of <span class="ic">S</span>an <span class="ic">F</span>rancisco</div>
+        <div class="volume-line"><span class="ic">V</span>olume <span class="ic">I</span><span class="gap"></span>May, <span class="d d1 ic">2</span><span class="d d2">0</span><span class="d d3">2</span><span class="d d4">6</span></div>
+
+        <div class="dark-block">
+          <!-- black fill drawn as a wobbly-edged SVG path -->
+          <svg class="card-fill" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M6,4 L250,8 L500,2 L750,7 L994,5 L996,250 L992,500 L996,750 L993,995 L750,991 L500,997 L250,992 L7,995 L4,750 L9,500 L3,250 L6,4 Z"/>
+          </svg>
+          <div class="inner-content">
+            <div class="plate" aria-hidden="true">
+              <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+                  <path d="M55 124 L54.5 70 L55.5 30 L55 14.5 Q60.5 13.5 66.5 14.5 L67 30 L66 70 L67 124"/>
+                  <line x1="58.5" y1="20" x2="58" y2="119" stroke-width="0.7"/>
+                  <line x1="62" y1="22" x2="61.5" y2="118" stroke-width="0.55"/>
+                  <path d="M253 124 L252.5 70 L253.5 30 L253 14.5 Q258.5 13.5 264.5 14.5 L265 30 L264 70 L265 124"/>
+                  <line x1="256.5" y1="20" x2="256" y2="119" stroke-width="0.7"/>
+                  <line x1="260" y1="22" x2="259.5" y2="118" stroke-width="0.55"/>
+                  <path d="M -6 121 Q 12 86 30 60 Q 44 38 56 22"/>
+                  <path d="M 264 22 Q 277 39 291 61 Q 309 87 326 121"/>
+                  <path d="M 56 23 Q 100 70 158 80 Q 216 71 264 22"/>
+                  <path d="M 3 123 Q 80 122 160 123.5 Q 240 122.5 317 123"/>
+                  <path d="M 3 129 Q 80 128.5 160 129.5 Q 240 128.5 317 129" stroke-width="0.8"/>
+                  <line x1="40" y1="124" x2="39.5" y2="128" stroke-width="0.5"/>
+                  <line x1="140" y1="124" x2="139.5" y2="128.5" stroke-width="0.5"/>
+                  <line x1="232" y1="124" x2="232.5" y2="128" stroke-width="0.5"/>
+                </g>
+              </svg>
+            </div>
+            <div class="body-text">
+              <p><em>The City Archive</em> : Pinned is a project about San Francisco. Every so often a question is posted, and people answer in one sentence, pinning it to a real place.</p>
+              <p>You can leave your own, or read what others left. Over time the map fills with the ordinary things people remember about a place.</p>
+              <p>In the spirit of <em>Learning to Love You More</em>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="imprint">Interface Dynamics</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

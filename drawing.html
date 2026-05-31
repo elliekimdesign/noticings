@@ -3058,6 +3058,17 @@ map.on('click', (e) => {
   openWritePanel({ lngLat: pendingLngLat, hood: name });
 });
 
+// If arriving from the About page's "Leave your sentence" link (drawing.html?write),
+// auto-open the write panel at the current map center once the map is ready.
+if (new URLSearchParams(location.search).has('write')) {
+  map.on('load', () => {
+    setTimeout(() => {
+      if (document.body.classList.contains('spotlight-on')) return;
+      map.fire('click', { lngLat: map.getCenter() });
+    }, 400);
+  });
+}
+
 function submitAnswer() {
   const text = sheetInput.value.trim();
   if (!text) {

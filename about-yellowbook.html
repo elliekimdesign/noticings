@@ -8,6 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Caslon+Display&family=Prata&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
   <style>
+    /* Overused Grotesk (SIL OFL) — variable font served from the official repo via jsDelivr */
+    @font-face {
+      font-family: 'Overused Grotesk';
+      src: url('https://cdn.jsdelivr.net/gh/RandomMaerks/Overused-Grotesk/fonts/variable/OverusedGrotesk-VF.woff2') format('woff2');
+      font-weight: 300 900;
+      font-style: normal;
+      font-display: swap;
+    }
     :root {
       --ink: #1a1a1a;
       --ink-muted: rgba(26,26,26,0.55);
@@ -44,18 +52,28 @@
     .frame {
       position: relative;
       height: calc(100vh - 24px);
-      margin: 12px;
-      border: 2.5px solid var(--rule);
+      margin: 12px min(25vw, 360px);
       padding: 0;
       overflow: hidden;
     }
-    .frame::before {
-      content: "";
+    /* Hand-drawn double rule (matches the bridge's inked look). */
+    .frame-rule {
       position: absolute;
-      inset: 5px;
-      border: 1.7px solid var(--rule);
+      inset: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
+      z-index: 0;
     }
+    .frame-rule path {
+      fill: none;
+      stroke: var(--rule);
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+    .frame-rule .outer { stroke-width: 2.5px; }
+    .frame-rule .inner { stroke-width: 1.7px; }
 
     /* Inner content column, centered on the vertical axis */
     .sheet {
@@ -70,6 +88,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      transform: translateY(0.3vh);
     }
 
     /* Subtitle line under the title — same serif as the title, larger than a
@@ -81,6 +100,7 @@
       letter-spacing: 0.03em;
       color: var(--ink);
       -webkit-text-stroke: 0.4px var(--ink);
+      filter: url(#inktext);
       margin-top: 14px;
     }
     /* Each word's initial cap slightly bolder than the rest of the subtitle. */
@@ -93,6 +113,7 @@
       letter-spacing: 0.03em;
       color: var(--ink);
       -webkit-text-stroke: 0.4px var(--ink);
+      filter: url(#inktext);
       margin-top: 10px;
     }
     .volume-line .gap { display: inline-block; width: 1.2em; }
@@ -116,6 +137,7 @@
       color: var(--ink);
       white-space: nowrap;
       -webkit-text-stroke: 0.4px var(--ink);
+      filter: url(#inktext);
     }
     /* Each word's initial cap larger (1.5×) and shifted slightly below the
        small-letters' baseline so the big caps settle a touch lower, balancing
@@ -156,6 +178,23 @@
     }
 
     /* Central illustration plate — Golden Gate silhouette */
+    /* Black card holding the plate + body, inverted to white. The black fill
+       is an SVG path with very slightly hand-painted (wobbly) edges. */
+    .dark-block {
+      position: relative;
+      max-width: 72ch;
+      margin: 28px auto 0;
+      padding: 30px 40px 34px;
+    }
+    .dark-block .card-fill {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+    .dark-block .card-fill path { fill: var(--ink); stroke: none; }
+    .dark-block .inner-content { position: relative; z-index: 1; }
+    .dark-block .body-text p { color: #fff; }
+    .dark-block .body-text em { color: #fff; }
+    .dark-block .plate { margin-top: 8px; }
     .plate {
       width: min(340px, 56vw);
       margin: 40px auto 4px;
@@ -174,11 +213,11 @@
 
     /* Body — monospace, kept from about.html, centered column */
     .body-text {
-      max-width: 64ch;
+      max-width: 42ch;
       margin: 36px auto 0;
     }
     .body-text p {
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
       font-size: 12px;
       line-height: 1.7;
       letter-spacing: 0.02em;
@@ -189,6 +228,22 @@
     }
     .body-text p:last-child { margin-bottom: 0; }
     .body-text em { font-style: normal; font-weight: 600; }
+
+    /* Invitation line just below the black card — same style as .volume-line,
+       but an underlined link that opens the map's write panel. */
+    .card-cta {
+      display: inline-block;
+      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(14px, 2vw, 19px);
+      letter-spacing: 0.03em;
+      color: var(--ink);
+      -webkit-text-stroke: 0.4px var(--ink);
+      margin-top: 16px;
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+    .card-cta:hover { opacity: 0.55; }
 
     /* Imprint line — bottom-centered, "London: Elkin Mathews & John Lane" slot */
     .imprint {
@@ -226,6 +281,16 @@
 </head>
 <body>
 
+<!-- Subtle ink/hand displacement filter for the serif title lines -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="inktext">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013 0.018" numOctaves="1" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
 <div class="rgb-cursor" aria-hidden="true">
   <svg viewBox="0 0 18 9" xmlns="http://www.w3.org/2000/svg">
     <path d="M 18 4.5 L 10 1.5 L 5 3.5 L 0 0 L 0 9 L 5 5.5 L 10 7.5 Z" fill="#1a1a1a"/>
@@ -233,43 +298,80 @@
 </div>
 
 <div class="frame">
+  <!-- Hand-drawn double frame, inked like the bridge: edges anchored at the
+       viewBox border with a gentle wobble. -->
+  <svg class="frame-rule" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+    <path class="outer" d="M1,1 L250,1.5 L500,0.5 L750,1 L999,1
+      L999,250 L1000,500 L999,750 L999.5,999
+      L750,999 L500,999.5 L250,999 L1,999.5
+      L0.5,750 L1.5,500 L0.5,250 L1,1 Z"/>
+    <path class="inner" d="M13,13 L250,13.5 L500,12.5 L750,13 L987,13
+      L987,250 L988,500 L987,750 L987.5,987
+      L750,987 L500,987.5 L250,987 L13,987.5
+      L12.5,750 L13.5,500 L12.5,250 L13,13 Z"/>
+  </svg>
   <a class="back-link" href="drawing.html">← BACK TO MAP</a>
 
   <div class="sheet">
     <h1 class="title"><span class="cap">T</span>he <span class="cap">C</span>ity <span class="cap">A</span>rchive</h1>
-    <div class="top-label"><span class="ic">A</span>n <span class="ic">A</span>rchive of <span class="ic">S</span>an <span class="ic">F</span>rancisco</div>
+    <div class="top-label"><span class="ic">A</span> <span class="ic">P</span>inned <span class="ic">M</span>ap of <span class="ic">S</span>an <span class="ic">F</span>rancisco</div>
     <div class="volume-line"><span class="ic">V</span>olume <span class="ic">I</span><span class="gap"></span>May, <span class="d d1 ic">2</span><span class="d d2">0</span><span class="d d3">2</span><span class="d d4">6</span></div>
 
+    <!-- Black card: plate + body inverted to white, like a Beardsley plate.
+         Fill is an SVG path with a hair of hand-painted edge wobble. -->
+    <div class="dark-block">
+    <svg class="card-fill" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M2,3 L250,1 L500,3 L750,1 L998,2 L997,250 L999,500 L997,750 L998,998 L750,999 L500,997 L250,999 L2,998 L3,750 L1,500 L3,250 L2,3 Z"/>
+    </svg>
+    <div class="inner-content">
     <!-- Central plate: Golden Gate silhouette (from about.html) -->
     <div class="plate" aria-hidden="true">
-      <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
-        <rect class="fill" x="55" y="14" width="12" height="110"/>
-        <rect class="fill" x="253" y="14" width="12" height="110"/>
-        <path class="fill" d="M -10 120 Q 25 50 55 24 L 57 26 Q 27 53 -8 122 Z"/>
-        <path class="fill" d="M 265 24 Q 295 50 330 120 L 328 122 Q 293 53 263 26 Z"/>
-        <path class="fill" d="M 55 24 Q 160 100 265 24 L 265 27 Q 160 103 55 27 Z"/>
-        <rect class="fill" x="0" y="122" width="320" height="6"/>
+      <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" class="etch">
+        <!-- Pen-and-ink / hand-drawn etching: outlines + a few thin shading
+             lines, slightly wobbly so it reads as inked by hand. -->
+        <g fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+          <!-- Left tower: closed path with slightly uneven hand-drawn edges -->
+          <path d="M55 124 L54.5 70 L55.5 30 L55 14.5 Q60.5 13.5 66.5 14.5 L67 30 L66 70 L67 124"/>
+          <line x1="58.5" y1="20" x2="58" y2="119" stroke-width="0.7"/>
+          <line x1="62" y1="22" x2="61.5" y2="118" stroke-width="0.55"/>
+          <!-- Right tower -->
+          <path d="M253 124 L252.5 70 L253.5 30 L253 14.5 Q258.5 13.5 264.5 14.5 L265 30 L264 70 L265 124"/>
+          <line x1="256.5" y1="20" x2="256" y2="119" stroke-width="0.7"/>
+          <line x1="260" y1="22" x2="259.5" y2="118" stroke-width="0.55"/>
+          <!-- Side cables: hand-swept, not mathematically perfect -->
+          <path d="M -6 121 Q 12 86 30 60 Q 44 38 56 22"/>
+          <path d="M 264 22 Q 277 39 291 61 Q 309 87 326 121"/>
+          <!-- Main cable: gentle uneven sag -->
+          <path d="M 56 23 Q 100 70 158 80 Q 216 71 264 22"/>
+          <!-- Deck: two slightly undulating rules + uneven hatch ticks -->
+          <path d="M 3 123 Q 80 122 160 123.5 Q 240 122.5 317 123"/>
+          <path d="M 3 129 Q 80 128.5 160 129.5 Q 240 128.5 317 129" stroke-width="0.8"/>
+          <line x1="40" y1="124" x2="39.5" y2="128" stroke-width="0.5"/>
+          <line x1="88" y1="124.5" x2="89" y2="128" stroke-width="0.5"/>
+          <line x1="140" y1="124" x2="139.5" y2="128.5" stroke-width="0.5"/>
+          <line x1="192" y1="124.5" x2="191.5" y2="128" stroke-width="0.5"/>
+          <line x1="232" y1="124" x2="232.5" y2="128" stroke-width="0.5"/>
+          <line x1="280" y1="124.5" x2="279.5" y2="128" stroke-width="0.5"/>
+        </g>
       </svg>
     </div>
 
     <div class="body-text">
       <p>
-        <em>Pinned</em> is a project about San Francisco. Every so often, a question
-        is posted. People answer in one sentence and pin that sentence to a real
-        place in the city.
+        <em>The City Archive</em> : Pinned is a project about San Francisco.
+        Every so often a question is posted, and people answer in one
+        sentence, pinning it to a real place.
       </p>
       <p>
-        You can read every answer that has been left. You can leave your own. You
-        cannot edit, reply to, or react to anyone else's. Over time the map fills
-        with the small, ordinary things people remember about places — Sunday
-        mornings, walks they take often, places they sat for a while. The city
-        shows up the way people actually use it, not the way it appears on a postcard.
+        You can leave your own, or read what others left. Over time the
+        map fills with the ordinary things people remember about a place.
       </p>
       <p>
-        The format is borrowed from <em>Learning to Love You More</em>, a project
-        by Harrell Fletcher and Miranda July.
+        In the spirit of <em>Learning to Love You More</em>.
       </p>
     </div>
+    </div><!-- /.inner-content -->
+    </div><!-- /.dark-block -->
   </div>
 
   <div class="imprint">
