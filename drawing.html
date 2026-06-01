@@ -10,6 +10,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
   <style>
+    /* Overused Grotesk (SIL OFL) — variable font from the official repo via jsDelivr */
+    @font-face {
+      font-family: 'Overused Grotesk';
+      src: url('https://cdn.jsdelivr.net/gh/RandomMaerks/Overused-Grotesk/fonts/variable/OverusedGrotesk-VF.woff2') format('woff2');
+      font-weight: 300 900;
+      font-style: normal;
+      font-display: swap;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100vw; height: 100vh; overflow: hidden;
@@ -65,7 +73,7 @@
     #masthead .title .logo .l-n2,
     #masthead .title .logo .l-e { transform: translateY(-3px); }
     #masthead .city-center {
-      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
       font-size: 15px;
       font-weight: 400;
       color: #1a1a1a;
@@ -187,6 +195,39 @@
       pointer-events: none;
       z-index: 1001;
     }
+    /* "?" help button — top-left square cell, mirror of the top-right × cell */
+    #masthead .masthead-help {
+      position: absolute;
+      top: 0; left: 0;
+      width: 36px;
+      height: calc(36px - 1px);
+      background: transparent;
+      border: none;
+      box-sizing: border-box;
+      padding: 0;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #1a1a1a;
+      z-index: 1002;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    #masthead .masthead-help:hover { background: var(--accent, #D9531E); color: #fff; }
+    #masthead .masthead-help .help-icon {
+      font-family: 'Instrument Serif', serif;
+      font-size: 22px; line-height: 1; font-weight: 400; display: block;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+    /* Grid line to the right of the "?" cell — mirror of .masthead-vdivider */
+    #masthead .masthead-vdivider-left {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 36px;
+      width: var(--edge-w, 1.7px);
+      background: var(--edge, #1a1a1a);
+      pointer-events: none;
+      z-index: 1001;
+    }
     #masthead .masthead-close {
       position: absolute;
       top: 0;
@@ -224,6 +265,17 @@
       line-height: 1;
       display: block;
       font-weight: 400;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+    /* Hand-drawn, elongated × / + marks (SVG strokes; follow button color). */
+    #masthead .mark-icon { display: block; overflow: visible; }
+    #masthead .mark-icon path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
     }
     #masthead .masthead-add {
       position: absolute;
@@ -345,7 +397,7 @@
     #archive-list .archive-item.is-current .label .label-word .bracket { color: #D1241A; }
     #archive-list .archive-item.is-current .assignment-tag { color: #999; }
     #archive-list .archive-item .label {
-      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
       font-size: 9px;
       font-weight: 500;
       letter-spacing: 0.18em;
@@ -417,11 +469,11 @@
       vertical-align: baseline;
     }
     #archive-list .archive-item.is-current .question {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
       font-size: clamp(15px, 1.4vw, 18px);
       font-weight: 400;
       line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.005em;
+      letter-spacing: 0.01em;
       color: #1a1a1a;
       word-break: normal;
       overflow-wrap: break-word;
@@ -469,7 +521,7 @@
     #archive-list .archive-item.is-past .label .label-word { display: none; }
     #archive-list .archive-item.is-past .label .issue-no::before { content: none; }
     #archive-list .archive-item.is-past .question {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
       font-size: 13px;
       font-weight: 400;
       letter-spacing: 0;
@@ -895,7 +947,7 @@
     }
     #sheet .loc-coords {
       order: 1;
-      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 10px;
       font-weight: 400;
       color: rgba(26, 26, 26, 0.70);
@@ -937,11 +989,11 @@
       border: none;
       outline: none;
       resize: none;
-      font-family: 'Neue Haas Grotesk Display Pro', 'Neue Haas Grotesk Text Pro', Helvetica, Arial, sans-serif;
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
       font-size: 24px;
       line-height: 1.5;
       font-weight: 400;
-      letter-spacing: 0.005em;
+      letter-spacing: 0.01em;
       color: #1a1a1a;
       padding: 0;
       background: transparent;
@@ -1161,7 +1213,7 @@
       gap: 10px;
       padding: 0 16px;
       box-sizing: border-box;
-      font-family: 'Geist', 'Inter', sans-serif;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 9px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -1180,6 +1232,7 @@
       padding: 0 16px;
     }
     #footer .label {
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 9px; letter-spacing: 0.06em;
       color: #666;
       font-weight: 400;
@@ -1209,7 +1262,7 @@
     #footer .volume .sep { color: rgba(102,102,102,0.7); }
     #footer .footer-end {
       margin-left: auto;
-      font-family: 'Geist', 'Inter', sans-serif;
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 9px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -1219,6 +1272,46 @@
       align-items: center;
       gap: 8px;
     }
+    /* How-it-works modal */
+    #help-overlay {
+      position: fixed; inset: 0; z-index: 3000;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(26,26,26,0.35);
+    }
+    #help-overlay[hidden] { display: none; }
+    #help-card {
+      position: relative;
+      background: #ffffff;
+      border: 1.5px solid #1a1a1a;
+      max-width: 440px; width: calc(100% - 48px);
+      padding: 36px 40px 34px;
+      color: #1a1a1a;
+    }
+    #help-card h2 {
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600; font-size: 26px; letter-spacing: 0.01em;
+      margin: 0 0 16px;
+    }
+    #help-card .help-body {
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
+      font-size: 13px; line-height: 1.7; letter-spacing: 0.01em;
+      color: #1a1a1a;
+    }
+    #help-card .help-body p { margin: 0 0 10px; }
+    #help-card .help-foot {
+      margin-top: 18px;
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
+      font-style: italic; font-size: 15px; color: rgba(26,26,26,0.6);
+    }
+    #help-close {
+      position: absolute; top: 12px; right: 14px;
+      width: 24px; height: 24px; padding: 0;
+      border: none; background: transparent;
+      font-family: 'Jost', sans-serif; font-size: 20px; line-height: 1;
+      color: #1a1a1a; cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    #help-close:hover { opacity: 0.5; }
     #footer .footer-end .dark-toggle {
       width: 18px;
       height: 18px;
@@ -1320,11 +1413,11 @@
       overflow: hidden;
     }
     #answer-panel .panel-text {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
       font-weight: 400;
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.005em;
+      letter-spacing: 0.01em;
       color: #1a1a1a;
       max-width: 54em;
       overflow-wrap: break-word;
@@ -1364,11 +1457,11 @@
       outline: none;
       resize: none;
       background: transparent;
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
       font-weight: 400;
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.005em;
+      letter-spacing: 0.01em;
       color: #1a1a1a;
       padding: 0;
       overflow: hidden;
@@ -1584,6 +1677,17 @@
       stroke: currentColor;
       transition: stroke 0.15s ease;
     }
+    /* Hand-drawn submit arrow (replaces the quill) — wide/short, keep proportion */
+    #answer-panel .panel-submit .submit-arrowmark {
+      width: 20px;
+      height: 12px;
+    }
+    #answer-panel .panel-submit .submit-arrowmark path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      vector-effect: non-scaling-stroke;
+    }
     #answer-panel .panel-submit:hover {
       background: var(--accent, #D9531E);
       color: #ffffff;
@@ -1697,7 +1801,7 @@
       font-weight: 700;
     }
     #archive-list .archive-item.is-past .question {
-      font-family: var(--mono);
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
       font-size: 11px;
       letter-spacing: 0.02em;
       color: var(--edge);
@@ -1808,12 +1912,15 @@
       border: var(--edge-w) solid var(--edge);
       box-shadow: none;
     }
-    #sheet .loc-coords,
     #sheet .loc-name,
     #sheet .char-count,
     #sheet .handle,
     #sheet .submit-arrow {
       font-family: var(--mono);
+      color: var(--edge);
+    }
+    #sheet .loc-coords {
+      font-family: 'Jost', 'Helvetica Neue', sans-serif;
       color: var(--edge);
     }
     #sheet .loc-name { letter-spacing: 0.12em; }
@@ -2062,8 +2169,8 @@
       line-height: clamp(26px, 2.4vw, 30px) !important;
     }
     #answer-panel .panel-text {
-      font-size: clamp(17px, 1.6vw, 20px) !important;
-      line-height: clamp(26px, 2.4vw, 30px) !important;
+      font-size: clamp(18px, 1.7vw, 21px) !important;
+      line-height: clamp(28px, 2.5vw, 32px) !important;
     }
     #answer-panel .panel-input {
       font-size: clamp(17px, 1.6vw, 20px) !important;
@@ -2246,7 +2353,7 @@
       color: #D9531E !important;
     }
     #archive-list .archive-item.is-past .question {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
+      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif !important;
       font-size: 13px !important;
       color: rgba(26, 26, 26, 0.55) !important;
     }
@@ -2317,16 +2424,10 @@
 
 <!-- ─────────── TOP MASTHEAD ─────────── -->
 <div id="masthead">
-  <a class="masthead-corner" id="masthead-corner-btn" href="about-yellowbook.html" title="About" aria-label="About">
-    <!-- Simplified San Francisco city outline (hollow): the project's SF
-         peninsula silhouette reduced from ~30 points to ~13, smoothed for logo
-         use so it stays legible at this small corner size. fill:none, soft-black
-         #1a1a1a, round joins — matches the spotlight button's hollow line. -->
-    <svg class="corner-glyph" width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M2.0 6.4 L3.8 4.0 L6.4 4.0 L15.8 4.6 L18.6 6.0 L19.6 8.6 L19.4 12.8 L22.0 15.4 L20.4 18.6 L16.8 21.0 L2.4 21.0 L1.6 15.0 L1.6 9.4 Z"
-            fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    </svg>
-  </a>
+  <button class="masthead-help" id="help-btn" type="button" title="How it works" aria-label="How it works">
+    <span class="help-icon">?</span>
+  </button>
+  <div class="masthead-vdivider-left" aria-hidden="true"></div>
   <div class="masthead-center">
     <div class="title">
       <a class="logo" href="about-yellowbook.html" aria-label="About — Pinned" style="text-decoration: none; color: inherit; pointer-events: auto; cursor: pointer;">
@@ -2343,10 +2444,14 @@
     <span class="spot-q-text" id="spot-q-text">I keep coming back to...</span>
   </div>
   <button class="masthead-close" id="panel-close" title="Close" aria-label="Close answer panel">
-    <span class="masthead-icon">×</span>
+    <svg class="mark-icon" width="18" height="18" viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M4 4 Q 18 17 32 33"/><path d="M33 5 Q 17 18 4 31"/>
+    </svg>
   </button>
   <button class="masthead-add" id="masthead-add" title="Drop a pin" aria-label="Drop a pin">
-    <span class="masthead-icon">+</span>
+    <svg class="mark-icon" width="18" height="18" viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M18 3 Q 18.6 18 17.6 33"/><path d="M3 18 Q 18 18.4 33 17.4"/>
+    </svg>
   </button>
   <button class="masthead-spot-random" id="masthead-spot-random" aria-label="Show another random spot">Random</button>
 </div>
@@ -2435,19 +2540,18 @@
     <div class="panel-vdivider"></div>
     <span class="panel-count" id="panel-count">
       <span class="count-current">0</span>
-      <svg class="count-quill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M20 4 C 14 5, 8 11, 5 19 L 9 18 C 13 12, 16 8, 20 4 Z"/>
-        <line x1="5" y1="19" x2="4" y2="20"/>
-        <circle cx="1.8" cy="22.2" r="1.7" fill="currentColor" stroke="none"/>
+      <svg class="count-quill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" aria-hidden="true">
+        <path d="M20.5 3.5 Q 13 5.5 8.5 11 Q 6 14.5 4.5 19.2 Q 7 18.6 9.2 17.6 Q 13.5 12 17 8 Q 19 5.6 20.5 3.5 Z"/>
+        <path d="M4.5 19.2 Q 3.6 20 3 20.8"/>
+        <circle cx="1.7" cy="22.4" r="1.7" fill="currentColor" stroke="none"/>
       </svg>
       <span class="count-max">170</span>
     </span>
     <span class="panel-handle" id="panel-handle"><input type="text" id="panel-name" class="panel-name-field" maxlength="20" placeholder="" autocomplete="off" spellcheck="false"/></span>
     <button class="panel-submit" id="panel-submit" title="Drop pin" aria-label="Drop pin">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 4 C 14 5, 8 11, 5 19 L 9 18 C 13 12, 16 8, 20 4 Z"/>
-        <line x1="5" y1="19" x2="4" y2="20"/>
-        <circle cx="1.8" cy="22.2" r="1.7" fill="currentColor" stroke="none"/>
+      <svg class="submit-arrowmark" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M1 6 Q 11 5.5 21 6.1"/>
+        <path d="M16 2 Q 20 4.5 21.5 6.1 Q 20 8 16.5 10"/>
       </svg>
     </button>
   </div>
@@ -2519,7 +2623,7 @@
       <textPath href="#badge-ring-top" startOffset="50%" text-anchor="middle">Interface Dynamics City Archive</textPath>
     </text>
     <!-- Center wordmark — sits up inside the arc's cradle, tilted 15° -->
-    <text class="center-text" x="75" y="78" transform="rotate(-5 75 78)">PINNED</text>
+    <text class="center-text" x="75" y="78" transform="rotate(-2 75 78)">PINNED</text>
     <!-- Simplified Golden Gate Bridge silhouette — deck + two towers + cables -->
     <g class="sf-mark" transform="translate(63, 118)">
       <!-- horizontal deck -->
@@ -2554,6 +2658,19 @@
     <div class="footer-end">
       <span style="white-space: nowrap;"><span id="footer-pins">0</span>&nbsp;<span id="footer-pins-word">PINS</span> DROPPED</span>
     </div>
+  </div>
+</div>
+
+<!-- ─────────── HOW-IT-WORKS MODAL (copy is placeholder — write final text here) ─────────── -->
+<div id="help-overlay" hidden>
+  <div id="help-card" role="dialog" aria-modal="true" aria-label="How it works">
+    <button id="help-close" type="button" aria-label="Close">×</button>
+    <h2>How it works</h2>
+    <div class="help-body">
+      <p>[ Write the usage guide here. ]</p>
+      <p>[ e.g. how to read a question, leave one sentence, and pin it. ]</p>
+    </div>
+    <p class="help-foot">In the spirit of <em>Learning to Love You More</em>.</p>
   </div>
 </div>
 
@@ -3522,6 +3639,20 @@ window.requestAnimationFrame(() => {
   document.body.classList.add('panel-open');
   panelText.textContent = placeholder;
 });
+
+// How-it-works modal: ? button opens; ×, backdrop click, or Esc closes.
+(function () {
+  const overlay = document.getElementById('help-overlay');
+  const openBtn = document.getElementById('help-btn');
+  const closeBtn = document.getElementById('help-close');
+  if (!overlay || !openBtn) return;
+  const open = () => { overlay.hidden = false; };
+  const close = () => { overlay.hidden = true; };
+  openBtn.addEventListener('click', open);
+  closeBtn && closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) close(); });
+})();
 
 </script>
 </body>
