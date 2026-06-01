@@ -52,11 +52,12 @@
     .frame {
       position: relative;
       height: calc(100vh - 24px);
-      margin: 12px min(25vw, 360px);
+      margin: 12px;
       padding: 0;
       overflow: hidden;
     }
-    /* Hand-drawn double rule (matches the bridge's inked look). */
+    /* Hand-ruled double frame: SVG paths with a gentle wobble (clean, even
+       line weight — the "book" look), stretched to the frame box. */
     .frame-rule {
       position: absolute;
       inset: 0;
@@ -184,16 +185,9 @@
       position: relative;
       max-width: 72ch;
       margin: 28px auto 0;
-      padding: 30px 40px 34px;
+      padding: 0;
     }
-    .dark-block .card-fill {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      z-index: 0; pointer-events: none;
-    }
-    .dark-block .card-fill path { fill: var(--ink); stroke: none; }
     .dark-block .inner-content { position: relative; z-index: 1; }
-    .dark-block .body-text p { color: #fff; }
-    .dark-block .body-text em { color: #fff; }
     .dark-block .plate { margin-top: 8px; }
     .plate {
       width: min(340px, 56vw);
@@ -213,7 +207,7 @@
 
     /* Body — monospace, kept from about.html, centered column */
     .body-text {
-      max-width: 42ch;
+      max-width: 56ch;
       margin: 36px auto 0;
     }
     .body-text p {
@@ -228,6 +222,15 @@
     }
     .body-text p:last-child { margin-bottom: 0; }
     .body-text em { font-style: normal; font-weight: 600; }
+    /* CTA — invites people to go pin their own; harpoon ⇀ signals it's clickable */
+    .body-text .cta-line { margin-top: 30px; }
+    .body-text .cta {
+      color: var(--ink);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.15s ease;
+    }
+    .body-text .cta:hover { opacity: 0.5; }
 
     /* Invitation line just below the black card — same style as .volume-line,
        but an underlined link that opens the map's write panel. */
@@ -262,21 +265,23 @@
     /* Wide gap between imprint groups — spaces instead of middot separators. */
     .imprint .gap { display: inline-block; width: 1.6em; }
 
-    /* Back link — top-left, inside the frame */
+    /* Back link — manicule (pointing hand) + italic serif "to the map", top-left */
     .back-link {
       position: absolute;
-      top: 18px; left: 20px;
+      top: 22px; left: 26px;
       z-index: 100;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 9px;
       color: var(--ink);
       text-decoration: none;
-      font-weight: 500;
       transition: opacity 0.15s ease;
     }
     .back-link:hover { opacity: 0.5; }
+    .back-link .label {
+      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-style: italic; font-size: 16px;
+    }
+    .back-link .hand { display: block; flex: none; }
+    .back-link .hand path { fill: var(--ink); stroke: none; }
   </style>
 </head>
 <body>
@@ -298,61 +303,36 @@
 </div>
 
 <div class="frame">
-  <!-- Hand-drawn double frame, inked like the bridge: edges anchored at the
-       viewBox border with a gentle wobble. -->
   <svg class="frame-rule" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
-    <path class="outer" d="M1,1 L250,1.5 L500,0.5 L750,1 L999,1
-      L999,250 L1000,500 L999,750 L999.5,999
-      L750,999 L500,999.5 L250,999 L1,999.5
-      L0.5,750 L1.5,500 L0.5,250 L1,1 Z"/>
-    <path class="inner" d="M13,13 L250,13.5 L500,12.5 L750,13 L987,13
-      L987,250 L988,500 L987,750 L987.5,987
-      L750,987 L500,987.5 L250,987 L13,987.5
-      L12.5,750 L13.5,500 L12.5,250 L13,13 Z"/>
+    <path class="outer" d="M1,1 L250,1.5 L500,0.5 L750,1 L999,1 L999,250 L1000,500 L999,750 L999.5,999 L750,999 L500,999.5 L250,999 L1,999.5 L0.5,750 L1.5,500 L0.5,250 L1,1 Z"/>
+    <path class="inner" d="M4.5,8 L250,8.5 L500,7.5 L750,8 L995.5,8 L995.5,250 L996,500 L995.5,750 L995.5,992 L750,992 L500,992.5 L250,992 L4.5,992.5 L4,750 L5,500 L4,250 L4.5,8 Z"/>
   </svg>
-  <a class="back-link" href="drawing.html">← BACK TO MAP</a>
+  <a class="back-link" href="drawing.html">
+    <svg class="hand" width="26" height="17" viewBox="0 0 100 64" aria-hidden="true">
+      <path d="M99 18 Q 99 12 92 12 L 64 12 Q 60 12 60 8 Q 60 2 53 2 Q 47 2 47 8 Q 47 13 49 18 Q 50 22 46 23 L 12 26 Q 6 27 6 32 Q 6 37 12 37 L 40 36 Q 45 36 41 39 L 33 44 Q 28 47 31 51 Q 34 54 39 51 L 49 46 Q 53 44 51 48 Q 49 53 53 55 Q 57 56 60 52 L 66 45 Q 69 41 70 47 Q 71 53 76 53 Q 81 52 80 46 Q 79 40 82 41 L 92 41 Q 99 41 99 35 Z"/>
+    </svg>
+    <span class="label">to the map</span>
+  </a>
 
   <div class="sheet">
     <h1 class="title"><span class="cap">T</span>he <span class="cap">C</span>ity <span class="cap">A</span>rchive</h1>
     <div class="top-label"><span class="ic">A</span> <span class="ic">P</span>inned <span class="ic">M</span>ap of <span class="ic">S</span>an <span class="ic">F</span>rancisco</div>
     <div class="volume-line"><span class="ic">V</span>olume <span class="ic">I</span><span class="gap"></span>May, <span class="d d1 ic">2</span><span class="d d2">0</span><span class="d d3">2</span><span class="d d4">6</span></div>
 
-    <!-- Black card: plate + body inverted to white, like a Beardsley plate.
-         Fill is an SVG path with a hair of hand-painted edge wobble. -->
+    <!-- Bridge + body, black ink on the white page. -->
     <div class="dark-block">
-    <svg class="card-fill" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M2,3 L250,1 L500,3 L750,1 L998,2 L997,250 L999,500 L997,750 L998,998 L750,999 L500,997 L250,999 L2,998 L3,750 L1,500 L3,250 L2,3 Z"/>
-    </svg>
     <div class="inner-content">
     <!-- Central plate: Golden Gate silhouette (from about.html) -->
     <div class="plate" aria-hidden="true">
-      <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" class="etch">
-        <!-- Pen-and-ink / hand-drawn etching: outlines + a few thin shading
-             lines, slightly wobbly so it reads as inked by hand. -->
-        <g fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
-          <!-- Left tower: closed path with slightly uneven hand-drawn edges -->
-          <path d="M55 124 L54.5 70 L55.5 30 L55 14.5 Q60.5 13.5 66.5 14.5 L67 30 L66 70 L67 124"/>
-          <line x1="58.5" y1="20" x2="58" y2="119" stroke-width="0.7"/>
-          <line x1="62" y1="22" x2="61.5" y2="118" stroke-width="0.55"/>
-          <!-- Right tower -->
-          <path d="M253 124 L252.5 70 L253.5 30 L253 14.5 Q258.5 13.5 264.5 14.5 L265 30 L264 70 L265 124"/>
-          <line x1="256.5" y1="20" x2="256" y2="119" stroke-width="0.7"/>
-          <line x1="260" y1="22" x2="259.5" y2="118" stroke-width="0.55"/>
-          <!-- Side cables: hand-swept, not mathematically perfect -->
-          <path d="M -6 121 Q 12 86 30 60 Q 44 38 56 22"/>
-          <path d="M 264 22 Q 277 39 291 61 Q 309 87 326 121"/>
-          <!-- Main cable: gentle uneven sag -->
-          <path d="M 56 23 Q 100 70 158 80 Q 216 71 264 22"/>
-          <!-- Deck: two slightly undulating rules + uneven hatch ticks -->
-          <path d="M 3 123 Q 80 122 160 123.5 Q 240 122.5 317 123"/>
-          <path d="M 3 129 Q 80 128.5 160 129.5 Q 240 128.5 317 129" stroke-width="0.8"/>
-          <line x1="40" y1="124" x2="39.5" y2="128" stroke-width="0.5"/>
-          <line x1="88" y1="124.5" x2="89" y2="128" stroke-width="0.5"/>
-          <line x1="140" y1="124" x2="139.5" y2="128.5" stroke-width="0.5"/>
-          <line x1="192" y1="124.5" x2="191.5" y2="128" stroke-width="0.5"/>
-          <line x1="232" y1="124" x2="232.5" y2="128" stroke-width="0.5"/>
-          <line x1="280" y1="124.5" x2="279.5" y2="128" stroke-width="0.5"/>
-        </g>
+      <svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- Clean solid Golden Gate silhouette: tower bars, filled cable
+             slivers, deck bar. -->
+        <rect class="fill" x="55" y="14" width="12" height="110"/>
+        <rect class="fill" x="253" y="14" width="12" height="110"/>
+        <path class="fill" d="M -10 120 Q 25 50 55 24 L 57 26 Q 27 53 -8 122 Z"/>
+        <path class="fill" d="M 265 24 Q 295 50 330 120 L 328 122 Q 293 53 263 26 Z"/>
+        <path class="fill" d="M 55 24 Q 160 100 265 24 L 265 27 Q 160 103 55 27 Z"/>
+        <rect class="fill" x="0" y="122" width="320" height="6"/>
       </svg>
     </div>
 
@@ -369,6 +349,7 @@
       <p>
         In the spirit of <em>Learning to Love You More</em>.
       </p>
+      <p class="cta-line"><a class="cta" href="drawing.html?write">Add your own&nbsp;&#10144;</a></p>
     </div>
     </div><!-- /.inner-content -->
     </div><!-- /.dark-block -->
