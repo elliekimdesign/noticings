@@ -6,7 +6,7 @@
   <title>About — Pinned · City Archive</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Caslon+Display&family=Prata&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Libre+Caslon+Display&family=Cormorant+Infant:wght@400;500;600;700&family=Prata&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
   <style>
     /* Overused Grotesk (SIL OFL) — variable font served from the official repo via jsDelivr */
     @font-face {
@@ -95,7 +95,7 @@
     /* Subtitle line under the title — same serif as the title, larger than a
        caption, sits just below "City Archive". */
     .top-label {
-      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
       font-weight: 400;
       font-size: clamp(16px, 2.4vw, 24px);
       letter-spacing: 0.03em;
@@ -108,7 +108,7 @@
     .top-label .ic { -webkit-text-stroke: 0.8px var(--ink); }
     /* Volume / date line under the subtitle — like "Volume I, April 1894". */
     .volume-line {
-      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
       font-weight: 400;
       font-size: clamp(14px, 2vw, 19px);
       letter-spacing: 0.03em;
@@ -130,11 +130,11 @@
 
     /* Main serif title — the one place we break from mono */
     .title {
-      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
       font-weight: 400;
       font-size: clamp(38px, 6vw, 68px);
       line-height: 1.02;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.01em;
       color: var(--ink);
       white-space: nowrap;
       -webkit-text-stroke: 0.4px var(--ink);
@@ -228,6 +228,7 @@
       color: var(--ink);
       text-decoration: none;
       white-space: nowrap;
+      font-weight: 700;
       transition: opacity 0.15s ease;
     }
     .body-text .cta:hover { opacity: 0.5; }
@@ -254,11 +255,13 @@
       left: 0; right: 0;
       bottom: 34px;
       text-align: center;
-      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
       font-weight: 400;
       font-size: clamp(14px, 1.9vw, 19px);
-      letter-spacing: 0;
+      letter-spacing: 0.03em;
       color: var(--ink);
+      -webkit-text-stroke: 0.4px var(--ink);
+      filter: url(#inktext);
       line-height: 1.8;
     }
     .imprint .strong { color: var(--ink); }
@@ -277,8 +280,10 @@
     }
     .back-link:hover { opacity: 0.5; }
     .back-link .label {
-      font-family: 'Libre Caslon Display', Georgia, serif;
+      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
       font-style: italic; font-size: 16px;
+      font-weight: 600;
+      -webkit-text-stroke: 0.4px var(--ink);
     }
     .back-link .hand { display: block; flex: none; }
     .back-link .hand path { fill: var(--ink); stroke: none; }
