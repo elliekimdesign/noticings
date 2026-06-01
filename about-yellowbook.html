@@ -193,7 +193,18 @@
       width: min(340px, 56vw);
       margin: 40px auto 4px;
     }
-    .plate svg { width: 100%; height: auto; display: block; }
+    .plate svg {
+      width: 100%; height: auto; display: block;
+      /* Film-credit style: descend from above + fade in, once, on load. */
+      animation: gg-fall 1.5s ease-in 0.1s both;
+    }
+    @keyframes gg-fall {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .plate svg { animation: none; opacity: 1; }
+    }
     .plate .fill { fill: var(--ink); stroke: none; }
     .plate .caption {
       display: block;
