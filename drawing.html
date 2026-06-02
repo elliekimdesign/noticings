@@ -10,13 +10,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
   <style>
-    /* Overused Grotesk (SIL OFL) — variable font from the official repo via jsDelivr */
+    /* Neue Haas Grotesk Display Pro — self-hosted from assets/ (Roman/Medium/Bold) */
     @font-face {
-      font-family: 'Overused Grotesk';
-      src: url('https://cdn.jsdelivr.net/gh/RandomMaerks/Overused-Grotesk/fonts/variable/OverusedGrotesk-VF.woff2') format('woff2');
-      font-weight: 300 900;
-      font-style: normal;
-      font-display: swap;
+      font-family: 'Neue Haas Grotesk Display';
+      src: url('assets/NeueHaasDisplay-Roman.ttf') format('truetype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk Display';
+      src: url('assets/NeueHaasDisplay-Medium.ttf') format('truetype');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Neue Haas Grotesk Display';
+      src: url('assets/NeueHaasDisplay-Bold.ttf') format('truetype');
+      font-weight: 700; font-style: normal; font-display: swap;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
@@ -65,17 +73,17 @@
     #masthead .title .logo span {
       display: inline-block;
     }
-    /* P I N D sit on the baseline; second N jumps up a little; E jumps up more */
+    /* All letters sit flat on one baseline */
     #masthead .title .logo .l-p,
     #masthead .title .logo .l-i,
     #masthead .title .logo .l-n1,
     #masthead .title .logo .l-d { transform: translateY(0); }
     #masthead .title .logo .l-n2,
-    #masthead .title .logo .l-e { transform: translateY(-3px); }
+    #masthead .title .logo .l-e { transform: translateY(0); }
     #masthead .city-center {
       font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
       font-size: 15px;
-      font-weight: 400;
+      font-weight: 500;
       color: #1a1a1a;
       letter-spacing: 0.04em;
       text-transform: none;
@@ -397,7 +405,7 @@
     #archive-list .archive-item.is-current .label .label-word .bracket { color: #D1241A; }
     #archive-list .archive-item.is-current .assignment-tag { color: #999; }
     #archive-list .archive-item .label {
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-size: 9px;
       font-weight: 500;
       letter-spacing: 0.18em;
@@ -469,7 +477,7 @@
       vertical-align: baseline;
     }
     #archive-list .archive-item.is-current .question {
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-size: clamp(15px, 1.4vw, 18px);
       font-weight: 400;
       line-height: clamp(24px, 2.2vw, 28px);
@@ -521,7 +529,7 @@
     #archive-list .archive-item.is-past .label .label-word { display: none; }
     #archive-list .archive-item.is-past .label .issue-no::before { content: none; }
     #archive-list .archive-item.is-past .question {
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-size: 13px;
       font-weight: 400;
       letter-spacing: 0;
@@ -989,7 +997,7 @@
       border: none;
       outline: none;
       resize: none;
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-size: 24px;
       line-height: 1.5;
       font-weight: 400;
@@ -1443,7 +1451,7 @@
       overflow: hidden;
     }
     #answer-panel .panel-text {
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-weight: 400;
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
@@ -1487,7 +1495,7 @@
       outline: none;
       resize: none;
       background: transparent;
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-weight: 400;
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
@@ -1831,7 +1839,7 @@
       font-weight: 700;
     }
     #archive-list .archive-item.is-past .question {
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-size: 11px;
       letter-spacing: 0.02em;
       color: var(--edge);
@@ -2383,7 +2391,7 @@
       color: #D9531E !important;
     }
     #archive-list .archive-item.is-past .question {
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif !important;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif !important;
       font-size: 13px !important;
       color: rgba(26, 26, 26, 0.55) !important;
     }
