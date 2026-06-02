@@ -8,7 +8,7 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
   <style>
     /* Neue Haas Grotesk Display Pro — self-hosted from assets/ (Roman/Medium/Bold) */
     @font-face {
@@ -847,14 +847,14 @@
       background: #D9531E;
       color: #ffffff;
       padding: 14px 16px;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Geist Mono', monospace;
       font-size: 13px;
       line-height: 1.55;
     }
     .spot-card-meta {
       padding: 12px 20px;
       border-bottom: 1px solid #a3a3a3;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Geist Mono', monospace;
       font-size: 10px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -877,7 +877,7 @@
     .spot-next {
       background: transparent;
       border: none;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: 'Geist Mono', monospace;
       font-size: 12px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
@@ -1298,14 +1298,14 @@
       background: #ffffff;
       border-right: 1.5px solid #1a1a1a;   /* the dividing vertical line */
       color: #1a1a1a;
-      padding: 44px 56px;
+      padding: 0;                          /* minimal layout manages its own spacing */
       overflow: auto;
       pointer-events: auto;          /* panel itself is interactive */
       font-family: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
       font-size: 15px; line-height: 1.6;
     }
     #help-panel .help-x {
-      position: absolute; top: 14px; right: 16px;
+      position: absolute; top: 14px; right: 16px; z-index: 6;
       width: 28px; height: 28px; padding: 0;
       background: transparent; border: none;
       font-family: 'Inter', system-ui, sans-serif;
@@ -1314,41 +1314,69 @@
     }
     #help-panel .help-x:hover { opacity: 0.5; }
 
-    /* Image left, text right — side by side, top-aligned, one tidy block */
+    /* ── "Index Grid" positions, stripped clean ──
+       Headline · row of (image left + text right) · How It Works · email.
+       No grid lines, no numbers, no vertical label, NO frame on the image. */
     #help-panel .help-body {
-      max-width: 820px;
-      display: flex; gap: 36px; align-items: flex-start;
+      padding: 44px 48px;
+    }
+    #help-panel .help-lede { font-size: 18px; margin: 0 0 40px; text-indent: 0; }
+    #help-panel .help-row {
+      display: grid; grid-template-columns: 240px 1fr; gap: 32px;
+      align-items: start; margin-bottom: 44px;
     }
     #help-panel .help-figure {
-      flex: 0 0 240px;         /* fixed-width left column */
-      width: 240px; height: auto;
-      display: block; margin: 0;
-      object-fit: contain;     /* keep full image visible, no cropping */
-      background: #f0f0ee;     /* neutral placeholder if the image fails to load */
+      display: block; width: 100%; height: 260px;
+      object-fit: cover; object-position: center 32%;
+      background: #f0f0ee;                 /* NO border / outline / frame */
     }
-    #help-panel .help-text { flex: 1 1 auto; min-width: 0; }
-    #help-panel .help-body p { margin: 0 0 18px; }
+    #help-panel .help-text { min-width: 0; }
+    #help-panel .help-text p { margin: 0 0 18px; }
+    #help-panel .help-text p:last-child { margin: 0; }
     #help-panel .help-body strong { font-weight: 600; }
-    #help-panel .help-lede { font-size: 18px; }
     #help-panel h2 {
-      margin: 34px 0 14px;
+      margin: 40px 0 14px;                 /* big gap above, stays close to its list */
       font-family: 'Inter', system-ui, sans-serif;
-      font-weight: 600; font-size: 20px;
+      font-weight: 700; font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase;
     }
     #help-panel .help-hiw {
-      margin: 0 0 22px; padding-left: 20px;
+      margin: 0; padding-left: 20px;
     }
     #help-panel .help-hiw li { margin: 0 0 8px; }
+    /* Two-column Step / Guide layout (figma-footer style, no grid lines).
+       Row-based grid so each 01/02/03 lines up exactly with its sentence. */
+    #help-panel .help-stepguide {
+      margin: 24px 0 0 272px;              /* offset right + tighter = diagonal from the image */
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      column-gap: 28px;
+      row-gap: 14px;
+      align-items: baseline;
+    }
+    #help-panel .sg-head {
+      font-size: 15px; font-weight: 400; color: #1a1a1a; margin: 0 0 6px;
+    }
+    #help-panel .sg-num {
+      font-size: 15px; font-weight: 400; color: #1a1a1a; margin: 0;   /* match intro, no accent */
+    }
+    #help-panel .sg-text {
+      font-size: 15px; line-height: 1.6; color: #1a1a1a; margin: 0;   /* match intro paragraph */
+    }
     #help-panel .help-cta, #help-panel .help-link {
       color: var(--accent, #D9531E);
       font-weight: 600; text-decoration: underline; text-underline-offset: 3px;
     }
-    #help-panel .help-inquiries { font-size: 14px; color: rgba(26,26,26,0.85); }
+    #help-panel .help-inquiries {
+      font-size: 14px; color: rgba(26,26,26,0.85); margin-top: 40px;
+    }
 
-    /* Narrow screens: panel fills the width; image + text stack */
+    /* Narrow screens: image stacks above text */
     @media (max-width: 720px) {
-      #help-panel { width: 100%; max-width: none; border-right: none; padding: 32px 28px; }
-      #help-panel .help-body { flex-direction: column; gap: 22px; }
+      #help-panel { width: 100%; max-width: none; border-right: none; }
+      #help-panel .help-body { padding: 28px 24px; }
+      #help-panel .help-row { grid-template-columns: 1fr; gap: 18px; }
+      #help-panel .help-figure { height: 200px; }
+      #help-panel .help-stepguide { margin-left: 0; }
     }
     #footer .footer-end .dark-toggle {
       width: 18px;
@@ -1735,7 +1763,7 @@
     #answer-panel .panel-submit::after {
       content: 'DROP';
       display: none;
-      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 9px;
       font-weight: 500;
       letter-spacing: 0.14em;
@@ -1792,7 +1820,7 @@
     :root {
       --edge: #1a1a1a;
       --edge-w: 1.7px;
-      --mono: 'JetBrains Mono', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
     }
 
     /* Masthead — bold bottom edge, monospace title hint */
@@ -2359,18 +2387,18 @@
        sides (different shape, same ink weight = harmonized). */
     #footer .label,
     #footer .label span {
-      font-family: 'JetBrains Mono', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace !important;
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace !important;
       font-style: normal !important;
       font-size: 10px !important;
-      font-weight: 400 !important;
+      font-weight: 500 !important;
       letter-spacing: 0.03em !important;
       color: var(--edge, #1a1a1a) !important;
       text-transform: uppercase !important;
     }
-    /* Stronger weight on the bookend labels so they read as headers */
+    /* Bookend labels match the neighborhood/nickname weight (medium) */
     #footer .footer-left,
     #footer .footer-end {
-      font-weight: 700 !important;
+      font-weight: 500 !important;
       letter-spacing: 0.06em !important;
     }
 
@@ -2705,33 +2733,35 @@
      This is an info area, not product UI — plain Inter type.
      COPY BELOW IS PLACEHOLDER — edit the text freely. -->
 <div id="help-overlay" hidden>
-  <aside id="help-panel" role="dialog" aria-modal="true" aria-label="About — State of the Art Noticings">
+  <aside id="help-panel" role="dialog" aria-modal="true" aria-label="About — PINNED">
     <button id="help-close" class="help-x" type="button" aria-label="Close">×</button>
     <div class="help-body">
-      <!-- Odilon Redon, "It was a hand…" — La maison hantée, 1896 (image hot-linked from oldbookillustrations.com) -->
-      <img class="help-figure"
-           src="https://www.oldbookillustrations.com/site/assets/files/11050/flesh-blood.jpg"
-           alt="Odilon Redon — a ghostly translucent hand reaches for a letter on a table (La maison hantée, 1896)"
-           loading="lazy" />
-      <div class="help-text">
-      <p class="help-lede"><strong>State of the Art</strong> is a zine produced in San Francisco.</p>
-      <p>We publish nonfiction, fiction, and the occasional poem, online and in print. We believe in singular visions, sharp prose, evasive design, red meat, the liberatory promise of technology, and tomorrow.</p>
+      <p class="help-lede"><strong>PINNED</strong> is San Francisco, told in pins.</p>
 
-      <p><a class="help-cta" href="#" target="_blank" rel="noopener">READ THE ZINE HERE</a></p>
-
-      <p><strong>NOTICINGS</strong> is a project by <strong>State of the Art</strong>. What story could only you tell us about San Francisco? Tell us in no more than three lines. The more detailed, the better.</p>
-
-      <h2>How It Works</h2>
-      <ul class="help-hiw">
-        <li>Long press on the map or click (+) to drop a pin.</li>
-        <li>Write a diary entry (250 chars max).</li>
-        <li>Explore other pins on the map to step into other stories. Download and share what you noticed.</li>
-      </ul>
-
-      <p class="help-inquiries">For inquiries or pitches, email
-        <a class="help-link" href="mailto:stateoftheartmag@gmail.com">stateoftheartmag@gmail.com</a>.
-      </p>
+      <div class="help-row">
+        <!-- Image left (fills its cell, no frame). Odilon Redon, La maison hantée, 1896 (hot-linked) -->
+        <img class="help-figure"
+             src="https://www.oldbookillustrations.com/site/assets/files/11050/flesh-blood.jpg"
+             alt="Odilon Redon — a ghostly translucent hand reaches for a letter on a table (La maison hantée, 1896)"
+             loading="lazy" />
+        <div class="help-text">
+          <p>On a regular cadence, a new assignment appears: a single question about the city. You answer it where it happened. Drop a pin on the map and leave a few lines only you could write.</p>
+          <p>Read what others have noticed, and the map slowly fills in. A collective diary of the city, overheard, remembered, half-true.</p>
+        </div>
       </div>
+
+      <div class="help-stepguide">
+        <p class="sg-head">Step</p>
+        <p class="sg-head">Guide</p>
+        <p class="sg-num">01</p>
+        <p class="sg-text">A new question goes up every so often.</p>
+        <p class="sg-num">02</p>
+        <p class="sg-text">Pin the spot on the map where your answer happened.</p>
+        <p class="sg-num">03</p>
+        <p class="sg-text">Say it in 170 characters. Small pin, strong opinion.</p>
+      </div>
+
+      <p class="help-inquiries">PINNED is one experiment within <strong>Interface Dynamics</strong>, an ongoing study of user-interface experience, by <strong>Kimkenny</strong>.</p>
     </div>
   </aside>
 </div>
