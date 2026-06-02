@@ -1272,46 +1272,76 @@
       align-items: center;
       gap: 8px;
     }
-    /* How-it-works modal */
+    /* ─────────── About / How-it-works info panel ───────────
+       Sits between the masthead (top 36px) and footer (bottom 36px), both stay
+       visible. Left ~60% white text panel; the real map shows on the right.
+       Overlay is click-through except the panel itself, so the exposed map
+       stays usable behind it. Plain Inter — this is info, not product UI. */
     #help-overlay {
-      position: fixed; inset: 0; z-index: 3000;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(26,26,26,0.35);
+      position: fixed; top: 36px; bottom: 36px; left: 0; right: 0;
+      z-index: 2000;
+      pointer-events: none;          /* let map clicks pass through on the right */
     }
     #help-overlay[hidden] { display: none; }
-    #help-card {
+    #help-panel {
       position: relative;
+      width: 60%; max-width: 860px; height: 100%;
+      box-sizing: border-box;
       background: #ffffff;
-      border: 1.5px solid #1a1a1a;
-      max-width: 440px; width: calc(100% - 48px);
-      padding: 36px 40px 34px;
+      border-right: 1.5px solid #1a1a1a;   /* the dividing vertical line */
       color: #1a1a1a;
+      padding: 44px 56px;
+      overflow: auto;
+      pointer-events: auto;          /* panel itself is interactive */
+      font-family: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+      font-size: 15px; line-height: 1.6;
     }
-    #help-card h2 {
-      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
-      font-weight: 600; font-size: 26px; letter-spacing: 0.01em;
-      margin: 0 0 16px;
+    #help-panel .help-x {
+      position: absolute; top: 14px; right: 16px;
+      width: 28px; height: 28px; padding: 0;
+      background: transparent; border: none;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 24px; line-height: 1; color: #1a1a1a;
+      cursor: pointer; transition: opacity 0.15s ease;
     }
-    #help-card .help-body {
-      font-family: 'Overused Grotesk', 'Helvetica Neue', sans-serif;
-      font-size: 13px; line-height: 1.7; letter-spacing: 0.01em;
-      color: #1a1a1a;
+    #help-panel .help-x:hover { opacity: 0.5; }
+
+    /* Image left, text right — side by side, top-aligned, one tidy block */
+    #help-panel .help-body {
+      max-width: 820px;
+      display: flex; gap: 36px; align-items: flex-start;
     }
-    #help-card .help-body p { margin: 0 0 10px; }
-    #help-card .help-foot {
-      margin-top: 18px;
-      font-family: 'Cormorant Infant', 'Cormorant Garamond', Georgia, serif;
-      font-style: italic; font-size: 15px; color: rgba(26,26,26,0.6);
+    #help-panel .help-figure {
+      flex: 0 0 240px;         /* fixed-width left column */
+      width: 240px; height: auto;
+      display: block; margin: 0;
+      object-fit: contain;     /* keep full image visible, no cropping */
+      background: #f0f0ee;     /* neutral placeholder if the image fails to load */
     }
-    #help-close {
-      position: absolute; top: 12px; right: 14px;
-      width: 24px; height: 24px; padding: 0;
-      border: none; background: transparent;
-      font-family: 'Jost', sans-serif; font-size: 20px; line-height: 1;
-      color: #1a1a1a; cursor: pointer;
-      transition: opacity 0.15s ease;
+    #help-panel .help-text { flex: 1 1 auto; min-width: 0; }
+    #help-panel .help-body p { margin: 0 0 18px; }
+    #help-panel .help-body strong { font-weight: 600; }
+    #help-panel .help-lede { font-size: 18px; }
+    #help-panel h2 {
+      margin: 34px 0 14px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-weight: 600; font-size: 20px;
     }
-    #help-close:hover { opacity: 0.5; }
+    #help-panel .help-hiw {
+      margin: 0 0 22px; padding-left: 20px;
+    }
+    #help-panel .help-hiw li { margin: 0 0 8px; }
+    #help-panel .help-cta, #help-panel .help-link {
+      color: var(--accent, #D9531E);
+      font-weight: 600; text-decoration: underline; text-underline-offset: 3px;
+    }
+    #help-panel .help-inquiries { font-size: 14px; color: rgba(26,26,26,0.85); }
+
+    /* Narrow screens: panel fills the width; image + text stack */
+    @media (max-width: 720px) {
+      #help-panel { width: 100%; max-width: none; border-right: none; padding: 32px 28px; }
+      #help-panel .help-body { flex-direction: column; gap: 22px; }
+    }
     #footer .footer-end .dark-toggle {
       width: 18px;
       height: 18px;
@@ -2661,17 +2691,41 @@
   </div>
 </div>
 
-<!-- ─────────── HOW-IT-WORKS MODAL (copy is placeholder — write final text here) ─────────── -->
+<!-- ─────────── ABOUT / HOW-IT-WORKS INFO PANEL ───────────
+     Opened by the "?" masthead button. Sits BETWEEN the masthead and footer
+     (both stay visible). Left ~60% text panel; the real map shows on the right.
+     This is an info area, not product UI — plain Inter type.
+     COPY BELOW IS PLACEHOLDER — edit the text freely. -->
 <div id="help-overlay" hidden>
-  <div id="help-card" role="dialog" aria-modal="true" aria-label="How it works">
-    <button id="help-close" type="button" aria-label="Close">×</button>
-    <h2>How it works</h2>
+  <aside id="help-panel" role="dialog" aria-modal="true" aria-label="About — State of the Art Noticings">
+    <button id="help-close" class="help-x" type="button" aria-label="Close">×</button>
     <div class="help-body">
-      <p>[ Write the usage guide here. ]</p>
-      <p>[ e.g. how to read a question, leave one sentence, and pin it. ]</p>
+      <!-- Odilon Redon, "It was a hand…" — La maison hantée, 1896 (image hot-linked from oldbookillustrations.com) -->
+      <img class="help-figure"
+           src="https://www.oldbookillustrations.com/site/assets/files/11050/flesh-blood.jpg"
+           alt="Odilon Redon — a ghostly translucent hand reaches for a letter on a table (La maison hantée, 1896)"
+           loading="lazy" />
+      <div class="help-text">
+      <p class="help-lede"><strong>State of the Art</strong> is a zine produced in San Francisco.</p>
+      <p>We publish nonfiction, fiction, and the occasional poem, online and in print. We believe in singular visions, sharp prose, evasive design, red meat, the liberatory promise of technology, and tomorrow.</p>
+
+      <p><a class="help-cta" href="#" target="_blank" rel="noopener">READ THE ZINE HERE</a></p>
+
+      <p><strong>NOTICINGS</strong> is a project by <strong>State of the Art</strong>. What story could only you tell us about San Francisco? Tell us in no more than three lines. The more detailed, the better.</p>
+
+      <h2>How It Works</h2>
+      <ul class="help-hiw">
+        <li>Long press on the map or click (+) to drop a pin.</li>
+        <li>Write a diary entry (250 chars max).</li>
+        <li>Explore other pins on the map to step into other stories. Download and share what you noticed.</li>
+      </ul>
+
+      <p class="help-inquiries">For inquiries or pitches, email
+        <a class="help-link" href="mailto:stateoftheartmag@gmail.com">stateoftheartmag@gmail.com</a>.
+      </p>
+      </div>
     </div>
-    <p class="help-foot">In the spirit of <em>Learning to Love You More</em>.</p>
-  </div>
+  </aside>
 </div>
 
 
@@ -3640,7 +3694,8 @@ window.requestAnimationFrame(() => {
   panelText.textContent = placeholder;
 });
 
-// How-it-works modal: ? button opens; ×, backdrop click, or Esc closes.
+// About / how-it-works info panel: ? button opens; × or Esc closes.
+// (The map on the right stays usable — the overlay is click-through except the panel.)
 (function () {
   const overlay = document.getElementById('help-overlay');
   const openBtn = document.getElementById('help-btn');
@@ -3650,7 +3705,6 @@ window.requestAnimationFrame(() => {
   const close = () => { overlay.hidden = true; };
   openBtn.addEventListener('click', open);
   closeBtn && closeBtn.addEventListener('click', close);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.hidden) close(); });
 })();
 
