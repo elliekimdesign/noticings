@@ -1292,6 +1292,7 @@
     }
     #help-overlay[hidden] { display: none; }
     #help-panel {
+      --img-col: 315px;                    /* shared: image cell width = grid empty-cell width */
       position: relative;
       width: 60%; max-width: 860px; height: 100%;
       box-sizing: border-box;
@@ -1304,79 +1305,75 @@
       font-family: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
       font-size: 15px; line-height: 1.6;
     }
+    /* × close button — 36×36 dark square (same size as masthead buttons) */
     #help-panel .help-x {
-      position: absolute; top: 14px; right: 16px; z-index: 6;
-      width: 28px; height: 28px; padding: 0;
-      background: transparent; border: none;
+      position: absolute; top: 0; right: 0; z-index: 6;
+      width: 36px; height: 36px; padding: 0;
+      background: #1a1a1a; border: none;
       font-family: 'Inter', system-ui, sans-serif;
-      font-size: 24px; line-height: 1; color: #1a1a1a;
+      font-size: 20px; line-height: 1; color: #ffffff;
       cursor: pointer; transition: opacity 0.15s ease;
+      display: flex; align-items: center; justify-content: center;
     }
-    #help-panel .help-x:hover { opacity: 0.5; }
+    #help-panel .help-x:hover { opacity: 0.78; }
 
-    /* ── "Index Grid" positions, stripped clean ──
-       Headline · row of (image left + text right) · How It Works · email.
-       No grid lines, no numbers, no vertical label, NO frame on the image. */
-    #help-panel .help-body {
-      padding: 44px 48px;
+    /* ── Full GRID layout (Image #14) — thick charcoal rules, 36px module ──
+       Top: image | (headline + intro). Spacer row. Step | dark-bar | Guide.
+       Bottom: colophon line. 1.7px #1a1a1a rules; gutters keyed to 36px. */
+    #help-panel .help-grid { display: block; }
+
+    /* Top row: image cell + intro cell */
+    #help-panel .hg-top {
+      display: grid; grid-template-columns: var(--img-col) 1fr;
+      border-bottom: 1.7px solid #1a1a1a;
     }
-    #help-panel .help-lede { font-size: 18px; margin: 0 0 40px; text-indent: 0; }
-    #help-panel .help-row {
-      display: grid; grid-template-columns: 240px 1fr; gap: 32px;
-      align-items: start; margin-bottom: 44px;
+    #help-panel .hg-img {
+      padding: 0;                          /* image fills the cell, flush top-left */
+      display: flex; align-items: flex-start; justify-content: flex-start;
     }
     #help-panel .help-figure {
-      display: block; width: 100%; height: 260px;
+      display: block; width: 100%; height: 370px;   /* fills the cell → right edge = divider */
       object-fit: cover; object-position: center 32%;
-      background: #f0f0ee;                 /* NO border / outline / frame */
+      background: #f0f0ee;                 /* NO image border; grid rules frame it */
     }
-    #help-panel .help-text { min-width: 0; }
-    #help-panel .help-text p { margin: 0 0 18px; }
-    #help-panel .help-text p:last-child { margin: 0; }
-    #help-panel .help-body strong { font-weight: 600; }
-    #help-panel h2 {
-      margin: 40px 0 14px;                 /* big gap above, stays close to its list */
-      font-family: 'Inter', system-ui, sans-serif;
-      font-weight: 700; font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase;
-    }
-    #help-panel .help-hiw {
-      margin: 0; padding-left: 20px;
-    }
-    #help-panel .help-hiw li { margin: 0 0 8px; }
-    /* Two-column Step / Guide layout (figma-footer style, no grid lines).
-       Row-based grid so each 01/02/03 lines up exactly with its sentence. */
-    #help-panel .help-stepguide {
-      margin: 24px 0 0 272px;              /* offset right + tighter = diagonal from the image */
-      display: grid;
-      grid-template-columns: 64px 1fr;
-      column-gap: 28px;
-      row-gap: 14px;
-      align-items: baseline;
-    }
-    #help-panel .sg-head {
-      font-size: 15px; font-weight: 400; color: #1a1a1a; margin: 0 0 6px;
-    }
-    #help-panel .sg-num {
-      font-size: 15px; font-weight: 400; color: #1a1a1a; margin: 0;   /* match intro, no accent */
-    }
-    #help-panel .sg-text {
-      font-size: 15px; line-height: 1.6; color: #1a1a1a; margin: 0;   /* match intro paragraph */
-    }
-    #help-panel .help-cta, #help-panel .help-link {
-      color: var(--accent, #D9531E);
-      font-weight: 600; text-decoration: underline; text-underline-offset: 3px;
-    }
-    #help-panel .help-inquiries {
-      font-size: 14px; color: rgba(26,26,26,0.85); margin-top: 40px;
-    }
+    #help-panel .hg-intro { padding: 56px 36px 36px 28px; }  /* left gap from image; a little lower */
+    #help-panel .help-lede { font-size: 22px; margin: 0 0 28px; text-indent: 0; }
+    #help-panel .hg-intro p { margin: 0 0 18px; font-size: 15px; line-height: 1.6; color: #1a1a1a; }
+    #help-panel .hg-intro p:last-child { margin: 0; }
+    #help-panel strong { font-weight: 600; }
 
-    /* Narrow screens: image stacks above text */
+    /* Step | dark bar | Guide. Empty cell on the left under the image. */
+    #help-panel .hg-steps {
+      display: grid;
+      grid-template-columns: var(--img-col) 72px 36px 1fr;   /* empty cell = image width → divider at image's right edge */
+      border-bottom: 1.7px solid #1a1a1a;
+      align-items: stretch;
+    }
+    #help-panel .hg-empty { border-right: 1.7px solid #1a1a1a; }   /* line continues from image's right edge */
+    #help-panel .hg-step { padding: 36px 12px 36px 18px; }
+    #help-panel .hg-bar { background: #1a1a1a; align-self: stretch; height: 100%; margin: 0; }
+    #help-panel .hg-guide { padding: 36px 36px 36px 36px; }
+    #help-panel .sg-head { font-size: 15px; font-weight: 400; color: #1a1a1a; margin: 0 0 18px; }
+    #help-panel .sg-num  { font-size: 15px; font-weight: 400; color: #1a1a1a; margin: 0 0 14px; }
+    #help-panel .sg-num:last-child { margin-bottom: 0; }
+    #help-panel .sg-text { font-size: 15px; line-height: 1.6; color: #1a1a1a; margin: 0 0 14px; }
+    #help-panel .sg-text:last-child { margin-bottom: 0; }
+
+    /* Bottom colophon row */
+    #help-panel .hg-foot { padding: 36px 36px; }
+    #help-panel .help-inquiries { font-size: 14px; color: rgba(26,26,26,0.85); margin: 0; }
+    #help-panel .help-link { color: var(--accent, #D9531E); font-weight: 600; }
+
+    /* Narrow screens: collapse columns; dark bar becomes a rule */
     @media (max-width: 720px) {
       #help-panel { width: 100%; max-width: none; border-right: none; }
-      #help-panel .help-body { padding: 28px 24px; }
-      #help-panel .help-row { grid-template-columns: 1fr; gap: 18px; }
-      #help-panel .help-figure { height: 200px; }
-      #help-panel .help-stepguide { margin-left: 0; }
+      #help-panel .hg-top { grid-template-columns: 1fr; }
+      #help-panel .hg-img { border-right: none; border-bottom: 1.7px solid #1a1a1a; }
+      #help-panel .help-figure { height: 220px; }
+      #help-panel .hg-steps { grid-template-columns: 1fr; }
+      #help-panel .hg-empty { display: none; }
+      #help-panel .hg-bar { display: none; }
+      #help-panel .hg-step { border-bottom: 1.7px solid #1a1a1a; }
     }
     #footer .footer-end .dark-toggle {
       width: 18px;
@@ -2735,33 +2732,45 @@
 <div id="help-overlay" hidden>
   <aside id="help-panel" role="dialog" aria-modal="true" aria-label="About — PINNED">
     <button id="help-close" class="help-x" type="button" aria-label="Close">×</button>
-    <div class="help-body">
-      <p class="help-lede"><strong>PINNED</strong> is San Francisco, told in pins.</p>
-
-      <div class="help-row">
-        <!-- Image left (fills its cell, no frame). Odilon Redon, La maison hantée, 1896 (hot-linked) -->
-        <img class="help-figure"
-             src="https://www.oldbookillustrations.com/site/assets/files/11050/flesh-blood.jpg"
-             alt="Odilon Redon — a ghostly translucent hand reaches for a letter on a table (La maison hantée, 1896)"
-             loading="lazy" />
-        <div class="help-text">
+    <div class="help-grid">
+      <!-- Top row: image cell | (headline + intro) cell -->
+      <div class="hg-top">
+        <div class="hg-img">
+          <!-- Odilon Redon, La maison hantée, 1896 (hot-linked). Framed by grid rules, no image border. -->
+          <img class="help-figure"
+               src="https://www.oldbookillustrations.com/site/assets/files/11050/flesh-blood.jpg"
+               alt="Odilon Redon — a ghostly translucent hand reaches for a letter on a table (La maison hantée, 1896)"
+               loading="lazy" />
+        </div>
+        <div class="hg-intro">
+          <p class="help-lede"><strong>PINNED</strong> is San Francisco, told in pins.</p>
           <p>On a regular cadence, a new assignment appears: a single question about the city. You answer it where it happened. Drop a pin on the map and leave a few lines only you could write.</p>
           <p>Read what others have noticed, and the map slowly fills in. A collective diary of the city, overheard, remembered, half-true.</p>
         </div>
       </div>
 
-      <div class="help-stepguide">
-        <p class="sg-head">Step</p>
-        <p class="sg-head">Guide</p>
-        <p class="sg-num">01</p>
-        <p class="sg-text">A new question goes up every so often.</p>
-        <p class="sg-num">02</p>
-        <p class="sg-text">Pin the spot on the map where your answer happened.</p>
-        <p class="sg-num">03</p>
-        <p class="sg-text">Say it in 170 characters. Small pin, strong opinion.</p>
+      <!-- Step | dark bar | Guide. Empty cell under the image. -->
+      <div class="hg-steps">
+        <div class="hg-empty"></div>
+        <div class="hg-step">
+          <p class="sg-head">Step</p>
+          <p class="sg-num">01</p>
+          <p class="sg-num">02</p>
+          <p class="sg-num">03</p>
+        </div>
+        <div class="hg-bar"></div>
+        <div class="hg-guide">
+          <p class="sg-head">Guide</p>
+          <p class="sg-text">A new question goes up every so often.</p>
+          <p class="sg-text">Pin the spot on the map where your answer happened.</p>
+          <p class="sg-text">Say it in 170 characters. Small pin, strong opinion.</p>
+        </div>
       </div>
 
-      <p class="help-inquiries">PINNED is one experiment within <strong>Interface Dynamics</strong>, an ongoing study of user-interface experience, by <strong>Kimkenny</strong>.</p>
+      <!-- Bottom colophon row -->
+      <div class="hg-foot">
+        <p class="help-inquiries">PINNED is one experiment within <strong>Interface Dynamics</strong>, an ongoing study of user-interface experience, by <strong>Kimkenny</strong>.</p>
+      </div>
     </div>
   </aside>
 </div>
