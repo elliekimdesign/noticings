@@ -1291,6 +1291,9 @@
       pointer-events: none;          /* let map clicks pass through on the right */
     }
     #help-overlay[hidden] { display: none; }
+    /* While the About modal is open, hide the bottom map controls so they don't show through the panel */
+    body:has(#help-overlay:not([hidden])) .zoom-scale,
+    body:has(#help-overlay:not([hidden])) #map-sf-logo { display: none; }
     #help-panel {
       --img-col: 260px;                    /* shared: image cell width = grid empty-cell width */
       position: relative;
@@ -1344,8 +1347,8 @@
       background: #f0f0ee;                 /* NO image border; grid rules frame it */
     }
     #help-panel .hg-intro { padding: 56px 36px 36px 41px; }  /* left gap from image; a little lower */
-    #help-panel .help-lede { font-size: 18px; margin: 0 0 28px; text-indent: 0; }
-    #help-panel .hg-intro p { margin: 0 0 18px; font-size: 14px; line-height: 1.6; color: #1a1a1a; }
+    #help-panel .hg-intro .help-lede { font-size: 16px; margin: 0 0 28px; text-indent: 0; }
+    #help-panel .hg-intro p { margin: 0 0 22px; font-size: 14px; line-height: 1.6; color: #1a1a1a; }
     #help-panel .hg-intro p:last-child { margin: 0; }
     #help-panel strong { font-weight: 600; }
 
@@ -1381,14 +1384,21 @@
       align-items: center;                                   /* 행 안 세로 가운데, 문장 왼쪽 */
       padding: 0 36px;
     }
-    #help-panel .sg-head { font-size: 14px; font-weight: 400; color: #1a1a1a; margin: 0; }
-    #help-panel .sg-num  { font-size: 15px; font-weight: 400; color: #1a1a1a; margin: 0; }
-    #help-panel .sg-text { font-size: 15px; line-height: 1.6; color: #1a1a1a; margin: 0; }
+    #help-panel .sg-head { font-size: 14px; font-weight: 600; color: #1a1a1a; margin: 0; }
+    #help-panel .sg-num  { font-size: 14px; font-weight: 400; color: #1a1a1a; margin: 0; }
+    #help-panel .sg-text { font-size: 14px; line-height: 1.6; color: #1a1a1a; margin: 0; }
 
     /* Bottom colophon row */
-    #help-panel .hg-foot { padding: 36px 36px; }
-    #help-panel .help-inquiries { font-size: 14px; color: rgba(26,26,26,0.85); margin: 0; }
+    #help-panel .hg-foot { padding: 36px 36px 36px 281px; }   /* left-aligned with the "Step" label (measured) */
+    #help-panel .help-inquiries { font-size: 14px; color: #1a1a1a; margin: 0; max-width: 520px; text-align: left; }
     #help-panel .help-link { color: var(--accent, #D9531E); font-weight: 600; }
+    /* Secondary colophon line — monospace, smaller, faded; reads as supplementary meta */
+    #help-panel .help-meta {
+      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      font-size: 12px; line-height: 1.6; color: rgba(26,26,26,0.5);
+      margin: 32px 0 0; max-width: 520px; text-align: left;
+    }
+    #help-panel .help-meta a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
     /* Narrow screens: collapse columns; dark bar becomes a rule */
     @media (max-width: 720px) {
@@ -2769,9 +2779,9 @@
                loading="lazy" />
         </div>
         <div class="hg-intro">
-          <p class="help-lede"><strong>PINNED</strong> is San Francisco, told in pins.</p>
-          <p>On a regular cadence, a new assignment appears: a single question about the city. You answer it where it happened. Drop a pin on the map and leave a few lines only you could write.</p>
-          <p>Read what others have noticed, and the map slowly fills in. A collective diary of the city, overheard, remembered, half-true.</p>
+          <p class="help-lede"><strong>PINNED</strong> is a city archive of San Francisco.</p>
+          <p>The project explores how analog experiences can live on through digital media. A question appears, and the answer is left where it happened. Each moment is marked with a single pin and a few lines of text.</p>
+          <p>Over time, the map fills with these records. Through unscripted moments and words left behind by chance, the city reveals itself again.</p>
         </div>
       </div>
 
@@ -2787,15 +2797,16 @@
         <div class="hg-bar"></div>
         <div class="hg-guide">
           <p class="sg-head">Guide</p>
-          <p class="sg-text">A new question goes up every so often.</p>
-          <p class="sg-text">Pin the spot on the map where your answer happened.</p>
-          <p class="sg-text">Say it in 170 characters. Small pin, strong opinion.</p>
+          <p class="sg-text">Click the map or the (+) button to drop a pin.</p>
+          <p class="sg-text">Leave a note (170 chars max). You can include your name.</p>
+          <p class="sg-text">Explore the map and see what others left behind.</p>
         </div>
       </div>
 
       <!-- Bottom colophon row -->
       <div class="hg-foot">
-        <p class="help-inquiries">PINNED is one experiment within <strong>Interface Dynamics</strong>, an ongoing study of user-interface experience, by <strong>Kimkenny</strong>.</p>
+        <p class="help-inquiries"><strong>PINNED The City Archive</strong> is a project by <strong>Interface Dynamics</strong>.</p>
+        <p class="help-meta">for inquiries, <a href="mailto:seohyeonkimkenny@gmail.com">seohyeonkimkenny@gmail.com</a></p>
       </div>
     </div>
   </aside>
