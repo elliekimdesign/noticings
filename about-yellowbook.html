@@ -56,26 +56,6 @@
       padding: 0;
       overflow: hidden;
     }
-    /* Hand-ruled double frame: SVG paths with a gentle wobble (clean, even
-       line weight — the "book" look), stretched to the frame box. */
-    .frame-rule {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .frame-rule path {
-      fill: none;
-      stroke: var(--rule);
-      stroke-linejoin: round;
-      stroke-linecap: round;
-      vector-effect: non-scaling-stroke;
-    }
-    .frame-rule .outer { stroke-width: 1.7px; }
-    .frame-rule .inner { stroke-width: 1.5px; }
-
     /* Inner content column, centered on the vertical axis */
     .sheet {
       position: relative;
@@ -319,10 +299,6 @@
 </div>
 
 <div class="frame">
-  <svg class="frame-rule" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
-    <path class="outer" d="M1,1 L250,1.5 L500,0.5 L750,1 L999,1 L999,250 L1000,500 L999,750 L999.5,999 L750,999 L500,999.5 L250,999 L1,999.5 L0.5,750 L1.5,500 L0.5,250 L1,1 Z"/>
-    <path class="inner" d="M4.5,8 L250,8.5 L500,7.5 L750,8 L995.5,8 L995.5,250 L996,500 L995.5,750 L995.5,992 L750,992 L500,992.5 L250,992 L4.5,992.5 L4,750 L5,500 L4,250 L4.5,8 Z"/>
-  </svg>
   <a class="back-link" href="drawing.html">
     <svg class="hand" width="26" height="17" viewBox="0 0 100 64" aria-hidden="true">
       <path d="M99 18 Q 99 12 92 12 L 64 12 Q 60 12 60 8 Q 60 2 53 2 Q 47 2 47 8 Q 47 13 49 18 Q 50 22 46 23 L 12 26 Q 6 27 6 32 Q 6 37 12 37 L 40 36 Q 45 36 41 39 L 33 44 Q 28 47 31 51 Q 34 54 39 51 L 49 46 Q 53 44 51 48 Q 49 53 53 55 Q 57 56 60 52 L 66 45 Q 69 41 70 47 Q 71 53 76 53 Q 81 52 80 46 Q 79 40 82 41 L 92 41 Q 99 41 99 35 Z"/>
