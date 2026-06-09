@@ -6,6 +6,7 @@
   <title>Pinned — San Francisco</title>
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700;6..96,800;6..96,900&family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Cardo:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Gilda+Display&family=GFS+Didot&family=Gupter:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Instrument+Sans:wdth,wght@75,400;75,500;75,600;75,700&family=Instrument+Serif:ital@0;1&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Familjen+Grotesk:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=Gloock&family=Jacques+Francois&family=Playfair+Display:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Libre+Caslon+Display&display=swap" rel="stylesheet">
@@ -3104,7 +3105,7 @@ const spotMetaCoords = document.getElementById('spot-meta-coords');
 let activeRandomPin = null;
 function pickRandomPinForActiveQuestion() {
   try {
-    const all = JSON.parse(localStorage.getItem('sf-mood-answers') || '[]');
+    const all = PINS;
     const q = QUESTIONS[currentQuestionIndex];
     const matches = all.filter(e => e.question === q);
     if (!matches.length) return null;
@@ -3141,7 +3142,7 @@ function renderEyePill() {
   // question's count (not the global total).
   if (document.body.classList.contains('spotlight-on')) {
     try {
-      const all = JSON.parse(localStorage.getItem('sf-mood-answers') || '[]');
+      const all = PINS;
       const q = QUESTIONS[currentQuestionIndex];
       const el = document.getElementById('footer-pins');
       const n = all.filter(e => e.question === q).length;
@@ -3382,19 +3383,39 @@ sheetInput.addEventListener('keydown', (e) => {
 
 // ─────────── STORAGE ───────────
 const STORAGE_KEY = 'sf-mood-answers';
-function saveAnswer(entry) {
-  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  all.push({ ...entry, timestamp: Date.now() });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+
+// ─────────── SUPABASE (shared pin storage) ───────────
+// Pins now live in a shared Postgres table instead of each visitor's
+// localStorage, so everyone sees everyone's pins. The anon key is safe to
+// expose — row-level security only allows reading and inserting pins.
+const SUPABASE_URL  = 'https://adcuqirrfbkfdjwwvhle.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFkY3VxaXJyZmJrZmRqd3d2aGxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NTI0MzgsImV4cCI6MjA5NjUyODQzOH0.cpXlv6R1JTFz3vlT8sp2qEdsq_093CVnCPV5Z8JZcs8';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+// In-memory cache of all pins — the rest of the code reads this instead of localStorage.
+let PINS = [];
+
+async function saveAnswer(entry) {
+  const [lng, lat] = entry.lngLat;
+  // Optimistic: show it immediately, then persist to the DB.
+  PINS.push({ ...entry, timestamp: Date.now() });
   updatePinCount();
+  const { error } = await sb.from('pins').insert({
+    lng, lat, question: entry.question, text: entry.text, handle: entry.handle
+  });
+  if (error) console.error('pin save failed', error);
 }
-function loadSavedAnswers() {
-  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  all.forEach(placeAnswerMarker);
+async function loadSavedAnswers() {
+  const { data, error } = await sb.from('pins').select('*').order('created_at', { ascending: true });
+  if (error) { console.error('pin load failed', error); return; }
+  PINS = (data || []).map(r => ({
+    lngLat: [r.lng, r.lat], question: r.question, text: r.text,
+    handle: r.handle, timestamp: new Date(r.created_at).getTime()
+  }));
+  PINS.forEach(placeAnswerMarker);
   updatePinCount();
 }
 function updatePinCount() {
-  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const all = PINS;
   const el = document.getElementById('footer-pins');
   if (el) {
     const inSpotlight = document.body.classList.contains('spotlight-on');
@@ -3426,7 +3447,7 @@ function updatePinCount() {
   let currentStory = null;
 
   function buildStoryList() {
-    const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const all = PINS;
     storyList = all.slice();
   }
   function issueNoFor(question) {
