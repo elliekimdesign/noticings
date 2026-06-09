@@ -2509,27 +2509,53 @@
       position: fixed;
       top: 36px; left: 0;
       align-items: center;
-      gap: 28px;
-      padding: 12px 64px 12px 16px;
+      gap: 14px;
+      padding: 12px 6px;
+      width: 440px; max-width: calc(100vw - 32px);
+      box-sizing: border-box;
       background: #1a1a1a;
       color: #ffffff;
       font-family: 'Jost', 'Helvetica Neue', sans-serif;
       z-index: 1100;
       pointer-events: none;
     }
-    body.spotlight-on #spot-q-corner { display: inline-flex; }
+    body.spotlight-on #spot-q-corner { display: flex; }
+    /* ◂ ▸ pin-stepping arrows live inside the dark bar; only they are clickable. */
+    #spot-q-corner .spot-nav {
+      pointer-events: auto;
+      background: transparent; border: none; padding: 2px; margin: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #ffffff; cursor: pointer; opacity: 0.7;
+      transition: opacity 0.15s ease, color 0.15s ease;
+    }
+    #spot-q-corner .spot-nav:hover { opacity: 1; color: var(--accent, #D9531E); }
+    #spot-q-corner .spot-nav { flex: none; }
+    #spot-q-corner .spot-nav .mark-icon path {
+      fill: none; stroke: currentColor; stroke-width: 2.0;
+      stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke;
+    }
     #spot-q-corner .q-num {
       font-size: 13px;
       font-weight: 500;
       color: #ffffff;
       min-width: 18px;
+      flex: none;
     }
+    /* Fixed-width viewport: long questions are clipped; hovering slides them. */
     #spot-q-corner .q-body {
       font-size: 15px;
       font-weight: 400;
       color: #ffffff;
       line-height: 1.3;
+      flex: 1; min-width: 0;
+      overflow: hidden; white-space: nowrap;
+      pointer-events: auto;            /* allow hover here without blocking the map elsewhere */
     }
+    #spot-q-corner .q-roll {
+      display: inline-block; white-space: nowrap;
+      transition: transform 2s linear; transform: translateX(0);
+    }
+    #spot-q-corner .q-body:hover .q-roll { transform: translateX(var(--q-shift, 0px)); }
     /* Hide the bottom-right "N PINS DROPPED" text in spotlight. */
     body.spotlight-on #footer .footer-right .footer-end {
       display: none !important;
@@ -3131,9 +3157,22 @@ function renderEyePill() {
     const a = (typeof ASSIGNMENTS !== 'undefined') ? ASSIGNMENTS[currentQuestionIndex] : null;
     const num = a ? pad2(a.issueNo) : '';
     spotQCorner.innerHTML = `
+      <button class="spot-nav" id="spot-nav-prev" type="button" aria-label="Previous pin (left)"><svg class="mark-icon etch" width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4 L7 12 L15 20"/></svg></button>
       <span class="q-num">${num}</span>
-      <span class="q-body">${q}</span>
+      <span class="q-body"><span class="q-roll">${q}</span></span>
+      <button class="spot-nav" id="spot-nav-next" type="button" aria-label="Next pin (right)"><svg class="mark-icon etch" width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 L17 12 L9 20"/></svg></button>
     `;
+    const prevB = spotQCorner.querySelector('#spot-nav-prev');
+    const nextB = spotQCorner.querySelector('#spot-nav-next');
+    if (prevB) prevB.addEventListener('click', (e) => { e.stopPropagation(); stepSpotlight(-1); });
+    if (nextB) nextB.addEventListener('click', (e) => { e.stopPropagation(); stepSpotlight(1); });
+    // Measure overflow so a long question can slide left on hover (clipped otherwise).
+    const qBody = spotQCorner.querySelector('.q-body');
+    const qRoll = spotQCorner.querySelector('.q-roll');
+    if (qBody && qRoll) {
+      const ov = qRoll.scrollWidth - qBody.clientWidth;
+      qRoll.style.setProperty('--q-shift', (ov > 0 ? -ov : 0) + 'px');
+    }
   }
   // (Footer "No. NN" is filled by buildArchive(); not touched here so it stays
   //  visible in normal mode. The footer is hidden in spotlight mode anyway.)
@@ -3487,14 +3526,20 @@ function updatePinCount() {
   }
 
   nextBtn.addEventListener('click', randomStory);
+  // Arrow keys step through pins left/right by on-screen position (matches the ◂ ▸ bar arrows).
   window.addEventListener('keydown', (e) => {
     if (!document.body.classList.contains('spotlight-on')) return;
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); randomStory(); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); stepSpotlight(1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); stepSpotlight(-1); }
   });
 
   function onSpotlightEnter() {
     buildStoryList();
     render(pickRandom());
+    // Also open a random pin on the map so ◂ ▸ has a starting point.
+    if (answerMarkers.length) {
+      openSpotlightMarker(answerMarkers[Math.floor(Math.random() * answerMarkers.length)]);
+    }
   }
   const observer = new MutationObserver(() => {
     if (document.body.classList.contains('spotlight-on')) onSpotlightEnter();
@@ -3505,6 +3550,29 @@ function updatePinCount() {
 // ─────────── MARKER ───────────
 // Track every answer marker element + its question, so we can highlight/dim them as the question rotates
 const answerMarkers = [];
+
+// ── Spotlight left/right navigation: step through pins by their on-screen
+//    x-position (left→right) so the ◂ ▸ arrows match the map visually. ──
+let spotCurrent = null;   // the marker currently expanded in spotlight
+function spotlightOrdered() {
+  if (typeof map === 'undefined' || !map) return answerMarkers.slice();
+  return answerMarkers
+    .map(m => ({ m, x: map.project(m.lngLat).x }))
+    .sort((a, b) => a.x - b.x)
+    .map(o => o.m);
+}
+function openSpotlightMarker(m) {
+  answerMarkers.forEach(x => x.el.classList.remove('is-open'));
+  if (m) { m.el.classList.add('is-open'); spotCurrent = m; }
+}
+function stepSpotlight(dir) {   // dir: +1 = right pin, -1 = left pin
+  const ord = spotlightOrdered();
+  if (!ord.length) return;
+  let i = spotCurrent ? ord.indexOf(spotCurrent) : -1;
+  i = (i + dir + ord.length) % ord.length;   // wrap around
+  openSpotlightMarker(ord[i]);
+}
+
 function placeAnswerMarker({ lngLat, question, text, handle, timestamp }) {
   const hood = nearestNeighborhood(lngLat);
   const wrap = document.createElement('div');
@@ -3530,7 +3598,9 @@ function placeAnswerMarker({ lngLat, question, text, handle, timestamp }) {
     } else {
       wrap.classList.add('is-open');
       // In spotlight, only expand the inline note — no big side panel.
-      if (!document.body.classList.contains('spotlight-on')) {
+      if (document.body.classList.contains('spotlight-on')) {
+        spotCurrent = answerMarkers.find(m => m.el === wrap) || spotCurrent;
+      } else {
         openAnswerPanel({ text, lngLat, hood, handle, timestamp });
       }
     }
@@ -3564,13 +3634,6 @@ function openAnswerPanel({ text, lngLat, hood, handle, timestamp }) {
     const locEl = hoodEl.querySelector('.hood-loc');
     if (locEl) locEl.textContent = `${(hood || '').toUpperCase()} ${lat} ${lng}`;
   }
-  // Finishing mark after the sentence — floral heart / hedera (❦ U+2766).
-  // Inherits .panel-mark's ink color and text sizing.
-  const mark = document.createElement('span');
-  mark.className = 'panel-mark';
-  mark.setAttribute('aria-hidden', 'true');
-  mark.textContent = '❦';
-  panelText.append(' ', mark);
   answerPanel.classList.remove('is-write');
   const h = getMainQuestionHeight();
   document.documentElement.style.setProperty('--panel-h', h + 'px');
