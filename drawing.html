@@ -181,7 +181,7 @@
     body.spotlight-on #masthead .masthead-spot-random { display: none; }
     #masthead .masthead-spot-random:hover {
       background: transparent;
-      color: var(--accent, #D9531E);
+      color: #1a1a1a;
     }
     body.spotlight-on #masthead .masthead-add,
     body.spotlight-on #masthead .masthead-close { display: none !important; }
@@ -220,11 +220,12 @@
       z-index: 1002;
       transition: background 0.15s ease, color 0.15s ease;
     }
-    #masthead .masthead-help:hover { background: var(--accent, #D9531E); color: #fff; }
+    #masthead .masthead-help:hover { background: #1a1a1a; color: #fff; }
     #masthead .masthead-help .help-icon {
       font-family: 'Instrument Serif', serif;
       font-size: 22px; line-height: 1; font-weight: 400; display: block;
-      -webkit-text-stroke: 0.4px currentColor;
+      -webkit-text-stroke: 1.0px currentColor;
+      filter: url(#rough2);
     }
     /* Grid line to the right of the "?" cell — mirror of .masthead-vdivider */
     #masthead .masthead-vdivider-left {
@@ -265,7 +266,7 @@
     }
     /* Orange hover, also when the panel is open (matches +, submit, PIN IT). */
     body.panel-open #masthead .masthead-close:hover {
-      background: var(--accent, #D9531E) !important;
+      background: #1a1a1a !important;
       color: #ffffff !important;
     }
     #masthead .masthead-icon {
@@ -294,7 +295,7 @@
       right: 0;
       width: 36px;
       height: calc(36px - 1.5px);
-      background: transparent;
+      background: #D9531E;
       border: none;
       box-sizing: border-box;
       padding: 0;
@@ -302,12 +303,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #1a1a1a;
+      color: #ffffff;
       z-index: 1002;
       transition: background 0.15s ease, color 0.15s ease;
     }
     body.panel-open #masthead .masthead-add { display: none; }
-    #masthead .masthead-add:hover { background: #067CFA; color: #ffffff; }
+    #masthead .masthead-add:hover { background: #1a1a1a; color: #ffffff; }
     /* Top-left corner spotlight toggle — rounded soft-black pill with a
        small pin glyph + PINNED wordmark (Stripe-Press inspired). Sits
        inside the masthead band; the original 36×36 outline box and the
@@ -345,7 +346,7 @@
       top: 36px;
       left: 0;
       bottom: 36px;
-      width: 320px;
+      width: 360px;
       z-index: 900;
       background: #ffffff;
       padding: 0;
@@ -360,8 +361,9 @@
     #archive-spine {
       position: fixed;
       top: 36px;
-      bottom: 0;
-      left: 319px;
+      bottom: 0;   /* full height — the continuous spine at the rail edge runs
+                      through the toolbar and footer too. */
+      left: 359px;
       width: 1.5px;
       background: #1a1a1a;
       z-index: 1500;
@@ -888,7 +890,7 @@
       cursor: pointer;
       padding: 4px 0;
     }
-    .spot-next:hover { color: #D9531E; }
+    .spot-next:hover { color: #1a1a1a; }
 
 
     /* Idle: all answer pins hidden by default. Revealed rules sit further down with the marker styles. */
@@ -1195,14 +1197,14 @@
 
     body {
       padding-top: 36px;
-      padding-bottom: 36px;
-      padding-left: 320px;
+      padding-bottom: 72px;   /* toolbar band 36 + footer 36 */
+      padding-left: 360px;
     }
 
     /* ── Map: fills the right column between masthead and footer ── */
     #map-pane {
-      width: calc(100vw - 320px);
-      height: calc(100vh - 72px);   /* masthead 36 + footer 36 */
+      width: calc(100vw - 360px);
+      height: calc(100vh - 108px);   /* masthead 36 + toolbar 36 + footer 36 */
       position: relative;
       background: #f4f4f5; /* match map land color so resizes don't flash the page bg */
     }
@@ -1217,7 +1219,7 @@
       padding: 1px 0 0;
     }
     #footer .footer-left {
-      width: 320px;
+      width: 360px;
       flex-shrink: 0;
       height: 100%;
       display: flex; align-items: center; justify-content: space-between;
@@ -1498,7 +1500,7 @@
     #answer-panel {
       position: fixed;
       top: 36px;            /* below masthead */
-      left: 320px;          /* right of archive rail */
+      left: 360px;          /* right of archive rail */
       right: 0;
       height: 0;            /* runtime-set to match main question card height */
       background: #ffffff;
@@ -1731,7 +1733,7 @@
       display: block;
       stroke: currentColor;
     }
-    #answer-panel .panel-plus:hover { color: #067CFA; }
+    #answer-panel .panel-plus:hover { color: #1a1a1a; }
     #answer-panel .panel-drop-label {
       display: none;
       position: absolute;
@@ -1776,14 +1778,14 @@
       bottom: 0;
       width: 36px;
       height: auto;
-      background: transparent;
+      background: #D9531E;
       border: none;
       padding: 0;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #1a1a1a;
+      color: #ffffff;
       transition: background 0.15s ease, color 0.15s ease;
       z-index: 2;
     }
@@ -1806,7 +1808,7 @@
       vector-effect: non-scaling-stroke;
     }
     #answer-panel .panel-submit:hover {
-      background: var(--accent, #D9531E);
+      background: #1a1a1a;
       color: #ffffff;
     }
     /* On hover, replace the pen icon with the word DROP inside the same square button */
@@ -1944,6 +1946,105 @@
 
     /* Footer — bold top edge, monospace metadata, hard separators */
     #footer { border-top: var(--edge-w) solid var(--edge); }
+    /* Toolbar band — a real white bar sitting directly above the footer,
+       same chrome as the masthead/footer. Holds the share link, direction
+       keys, etc. Full width; framed top + bottom by the hard rule (its
+       bottom rule doubles as the footer's top line → the double-rule look).
+       Landing view only — hidden in spotlight mode. */
+    #toolbar {
+      position: fixed;
+      bottom: 36px; left: 0; right: 0;
+      height: 36px;
+      z-index: 1300;
+      background: #ffffff;
+      border-top: var(--edge-w) solid var(--edge);
+      /* No border-bottom — the footer's border-top draws the shared lower
+         rule, so the line between toolbar and footer stays single grid weight. */
+      display: flex;
+      align-items: center;
+    }
+    /* Four equal cells across the full width, split by 3 inner rules (same
+       weight/color as the frame). At the 1440px design width each cell is
+       360px = the archive-rail width, so the first divider lands on the spine. */
+    #toolbar .tb-cell {
+      flex: 1 1 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* The first cell is pinned to the rail width (360px), so its right edge
+       lands exactly on the #archive-spine — a button hovered here can't bleed
+       past the spine into cell 2. Cells 2–4 share the remaining width. */
+    #toolbar .tb-cell:first-child {
+      flex: 0 0 360px;
+    }
+    #toolbar .tb-cell + .tb-cell {
+      border-left: var(--edge-w) solid var(--edge);
+    }
+    /* The first divider (between cell 1 and cell 2) sits at the rail edge,
+       where the continuous #archive-spine already draws the line — so skip
+       the toolbar's own border there to avoid a doubled vertical. */
+    #toolbar .tb-cell:nth-child(2) {
+      border-left: none;
+    }
+    /* Toolbar button (e.g. COPY LINK) — mono caps matching the footer labels;
+       flips to black on hover like the rest of the chrome. Centered in its cell. */
+    #toolbar .tb-btn {
+      width: 100%; height: 100%;
+      background: transparent; border: none; cursor: pointer;
+      padding: 0 16px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 7px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--edge);
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    #toolbar .tb-btn:hover { background: #1a1a1a; color: #ffffff; }
+    /* COPY LINK gets a light-grey fill so the share action stands out. */
+    #toolbar #copy-link-btn { background: #f5f5f5; }
+    #toolbar #copy-link-btn:hover { background: #1a1a1a; }
+    /* The label keeps the same baseline; a strikethrough is drawn across it
+       when copied. We animate the line-through in via a pseudo-element so it
+       can sweep left→right and so it reads as "done". */
+    #toolbar .tb-btn-label {
+      position: relative;
+      white-space: nowrap;
+    }
+    #toolbar .tb-btn-label::after {
+      content: "";
+      position: absolute;
+      left: 0; top: 50%;
+      width: 0;
+      height: 1px;
+      background: currentColor;
+      transition: width 0.22s ease;
+    }
+    /* The checkmark sits to the right, hidden until copied. */
+    #toolbar .tb-btn-check {
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.18s ease 0.12s, transform 0.18s ease 0.12s;
+    }
+    /* Copied state: strike the label, reveal the check. (No background flip —
+       the strikethrough + check is the feedback.) */
+    #toolbar .tb-btn.is-copied .tb-btn-label::after { width: 100%; }
+    #toolbar .tb-btn.is-copied .tb-btn-check {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    /* Hand glyph (☞, U+261E; left mirrored) for the pan buttons. Apple SD Gothic
+       Neo draws the thin all-outline hand (hollow cuff); the rest are fallbacks. */
+    #toolbar .tb-glyph {
+      font-family: 'Apple SD Gothic Neo','Apple Symbols','Menlo','Segoe UI Symbol','Noto Sans Symbols 2',monospace;
+      font-size: 24px;
+      line-height: 1;
+    }
+    /* Mirror the right-pointing hand so the left pan button points left. */
+    #toolbar .tb-glyph--flip { display: inline-block; transform: scaleX(-1); }
     #footer .footer-left,
     #footer .label,
     #footer .footer-end {
@@ -2137,25 +2238,25 @@
        without touching the resting state. */
     #masthead .masthead-add:hover,
     #masthead .masthead-close:hover {
-      background: var(--accent) !important;
+      background: #1a1a1a !important;
       color: #fff !important;
     }
     #footer .footer-end .dark-toggle:hover {
-      background: var(--accent) !important;
+      background: #1a1a1a !important;
       color: #fff !important;
-      border-color: var(--accent) !important;
+      border-color: #1a1a1a !important;
     }
     #answer-panel .panel-submit:hover {
-      background: var(--accent) !important;
+      background: #1a1a1a !important;
       color: #fff !important;
     }
     #sheet .submit-arrow:hover {
-      background: var(--accent) !important;
+      background: #1a1a1a !important;
       color: #fff !important;
       text-decoration: none !important;
     }
     .archive-pager .pager-btn.is-active:hover {
-      background: var(--accent) !important;
+      background: #1a1a1a !important;
       color: #fff !important;
     }
 
@@ -2306,7 +2407,7 @@
     #map-badge {
       position: fixed;
       right: 16px;
-      bottom: calc(36px + 16px);
+      bottom: calc(72px + 16px);
       width: 140px;
       height: 140px;
       pointer-events: none;
@@ -2318,8 +2419,8 @@
        so the toggle remains clickable on top of any spotlight chrome. */
     #map-sf-logo {
       position: fixed;
-      left: 320px;
-      bottom: calc(36px + 16px);
+      left: 360px;
+      bottom: calc(72px + 16px);
       width: 32px;
       height: 32px;
       margin-left: 16px;
@@ -2492,11 +2593,13 @@
        shown in the standard slide-down answer panel instead. The
        bottom-right "N PINS DROPPED" text is hidden too. */
     /* Spotlight mode — minimal: only the map, its orange pin squares,
-       and the bottom-right PINNED badge remain. All chrome (masthead,
-       archive rail, answer panel, footer text, spotlight side card)
-       is hidden. The original spotlight rules already hide most of
-       these; we just add the remaining pieces and keep the badge. */
-    body.spotlight-on #map-badge { display: block !important; }
+       remains. All chrome (masthead, archive rail, answer panel,
+       footer text, spotlight side card, the bottom-right PINNED badge
+       and the bottom-left target glyph) is hidden — those two only
+       show on the landing view. */
+    body.spotlight-on #map-badge { display: none !important; }
+    body.spotlight-on #map-sf-logo { display: none !important; }
+    body.spotlight-on #toolbar { display: none !important; }
     body.spotlight-on #spot-card { display: none !important; }
     body.spotlight-on #spot-side-line { display: none !important; }
     body.spotlight-on #eye-q-banner { display: none !important; }
@@ -2528,7 +2631,7 @@
       color: #ffffff; cursor: pointer; opacity: 0.7;
       transition: opacity 0.15s ease, color 0.15s ease;
     }
-    #spot-q-corner .spot-nav:hover { opacity: 1; color: var(--accent, #D9531E); }
+    #spot-q-corner .spot-nav:hover { opacity: 1; color: #ffffff; }
     #spot-q-corner .spot-nav { flex: none; }
     #spot-q-corner .spot-nav .mark-icon path {
       fill: none; stroke: currentColor; stroke-width: 2.0;
@@ -2564,6 +2667,14 @@
   </style>
 </head>
 <body>
+
+<!-- Roughen filter for the Brush-style "?" help glyph (hand-inked edges). -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="rough2">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2"/>
+  </filter>
+</svg>
 
 <!-- ─────────── TOP MASTHEAD ─────────── -->
 <div id="masthead">
@@ -2786,6 +2897,29 @@
       <path d="M 17,2 Q 21,3 24,8" fill="none" stroke="currentColor" stroke-width="1.5"/>
     </g>
   </svg>
+</div>
+
+<!-- ─────────── TOOLBAR BAND (share link, direction keys, …) ─────────── -->
+<div id="toolbar">
+  <div class="tb-cell">
+    <button id="copy-link-btn" class="tb-btn" type="button" aria-label="Copy link to this site">
+      <span class="tb-btn-label">COPY LINK</span>
+      <span class="tb-btn-check" aria-hidden="true">✓</span>
+    </button>
+  </div>
+  <div class="tb-cell">
+    <button id="pan-left-btn" class="tb-btn" type="button" aria-label="Pan map left">
+      <span class="tb-glyph tb-glyph--flip">☞</span>
+    </button>
+  </div>
+  <div class="tb-cell">
+    <button id="reset-view-btn" class="tb-btn" type="button" aria-label="Reset to landing view">RESET</button>
+  </div>
+  <div class="tb-cell">
+    <button id="pan-right-btn" class="tb-btn" type="button" aria-label="Pan map right">
+      <span class="tb-glyph">☞</span>
+    </button>
+  </div>
 </div>
 
 <!-- ─────────── BOTTOM LABEL BAR ─────────── -->
@@ -3777,6 +3911,58 @@ document.addEventListener('DOMContentLoaded', () => {
       const lngLat = [c.lng, c.lat];
       const hood = nearestNeighborhood(lngLat);
       openWritePanel({ lngLat, hood });
+    });
+  }
+
+  // Toolbar "COPY LINK" — copies the current page URL. Feedback is the
+  // strikethrough sweep + checkmark (handled in CSS via .is-copied); the
+  // label text stays "COPY LINK".
+  const copyLinkBtn = document.getElementById('copy-link-btn');
+  if (copyLinkBtn) {
+    let copyResetTimer = null;
+    copyLinkBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+      } catch (_) {
+        // Fallback for older / non-secure contexts.
+        const t = document.createElement('textarea');
+        t.value = window.location.href;
+        document.body.appendChild(t);
+        t.select();
+        try { document.execCommand('copy'); } catch (_) {}
+        t.remove();
+      }
+      copyLinkBtn.classList.add('is-copied');
+      if (copyResetTimer) clearTimeout(copyResetTimer);
+      copyResetTimer = setTimeout(() => {
+        copyLinkBtn.classList.remove('is-copied');
+      }, 1600);
+    });
+  }
+
+  // Toolbar pan buttons (☞ ☞) — slide the map left / right.
+  const panLeftBtn = document.getElementById('pan-left-btn');
+  if (panLeftBtn) {
+    panLeftBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      map.panBy([-220, 0], { duration: 320 });
+    });
+  }
+  const panRightBtn = document.getElementById('pan-right-btn');
+  if (panRightBtn) {
+    panRightBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      map.panBy([220, 0], { duration: 320 });
+    });
+  }
+
+  // Toolbar RESET — fly back to the default San Francisco landing view.
+  const resetViewBtn = document.getElementById('reset-view-btn');
+  if (resetViewBtn) {
+    resetViewBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      map.flyTo({ ...DEFAULT_VIEW, duration: 1200, essential: true });
     });
   }
 });
