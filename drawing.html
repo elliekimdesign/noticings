@@ -1159,25 +1159,34 @@
     .answer-marker.is-open .answer-note .handle {
       font-weight: 700;
     }
-    /* Spotlight mode + clicked pin: the box expands horizontally to show the
-       answer body (like a small orange unfolded note). */
-    body.spotlight-on .answer-marker.is-open .answer-note {
-      width: auto;
+    /* Spotlight message box — a STANDALONE overlay (not inside any marker),
+       positioned by JS at the open pin's projected point. The pin marker stays
+       a fixed 18×18 square at all times, so it never resizes and never moves;
+       this box just floats on top (z-index above markers) and follows the map.
+       Grows right + down from the pin. */
+    #spot-message {
+      position: absolute;
+      top: 0;
+      left: 0;                /* JS overwrites top/left each frame */
+      transform-origin: top left;
+      width: max-content;
       max-width: 320px;
-      height: auto;
-      min-height: 20px;
+      box-sizing: border-box;
       padding: 10px 14px;
+      background: var(--accent);
+      color: #ffffff;
+      font-family: 'Outfit', 'Helvetica Neue', sans-serif;
       font-size: 12px;
       line-height: 1.4;
-      display: block;
       overflow-wrap: break-word;
       word-break: break-word;
       white-space: normal;
+      z-index: 30;
+      pointer-events: none;
+      display: none;
     }
-    body.spotlight-on .answer-marker.is-open .answer-note > div:not(.q):not(.handle) {
-      display: block;
-    }
-    body.spotlight-on .answer-marker.is-open .answer-note .handle {
+    #spot-message.is-visible { display: block; }
+    #spot-message .spot-handle {
       display: block;
       margin-top: 6px;
       font-size: 10px;
@@ -2040,7 +2049,7 @@
        Neo draws the thin all-outline hand (hollow cuff); the rest are fallbacks. */
     #toolbar .tb-glyph {
       font-family: 'Apple SD Gothic Neo','Apple Symbols','Menlo','Segoe UI Symbol','Noto Sans Symbols 2',monospace;
-      font-size: 24px;
+      font-size: 28px;
       line-height: 1;
     }
     /* Mirror the right-pointing hand so the left pan button points left. */
@@ -2435,7 +2444,8 @@
       cursor: pointer;
       transition: opacity 0.15s ease;
     }
-    #map-sf-logo:hover { opacity: 0.6; }
+    #map-sf-logo:hover { opacity: 1; }
+    #map-sf-logo:hover .glyph { color: var(--accent, #D9531E); }
     #map-sf-logo .glyph {
       display: block;
       width: 27px;
@@ -2593,12 +2603,12 @@
        shown in the standard slide-down answer panel instead. The
        bottom-right "N PINS DROPPED" text is hidden too. */
     /* Spotlight mode — minimal: only the map, its orange pin squares,
-       remains. All chrome (masthead, archive rail, answer panel,
-       footer text, spotlight side card, the bottom-right PINNED badge
-       and the bottom-left target glyph) is hidden — those two only
-       show on the landing view. */
+       remains. Most chrome (masthead, archive rail, answer panel,
+       footer text, spotlight side card, the bottom-right PINNED badge)
+       is hidden — those only show on the landing view. The bottom-left
+       target glyph STAYS visible (re-anchored + orange, see rules above)
+       so the user can toggle back out of spotlight. */
     body.spotlight-on #map-badge { display: none !important; }
-    body.spotlight-on #map-sf-logo { display: none !important; }
     body.spotlight-on #toolbar { display: none !important; }
     body.spotlight-on #spot-card { display: none !important; }
     body.spotlight-on #spot-side-line { display: none !important; }
@@ -3685,6 +3695,13 @@ function updatePinCount() {
 // Track every answer marker element + its question, so we can highlight/dim them as the question rotates
 const answerMarkers = [];
 
+// Standalone spotlight message overlay — lives in #map-pane, positioned by JS at
+// the open pin's projected point. Fully decoupled from the marker element so the
+// 18×18 pin square never resizes and therefore never shifts on screen.
+const spotMessageEl = document.createElement('div');
+spotMessageEl.id = 'spot-message';
+document.getElementById('map-pane').appendChild(spotMessageEl);
+
 // ── Spotlight left/right navigation: step through pins by their on-screen
 //    x-position (left→right) so the ◂ ▸ arrows match the map visually. ──
 let spotCurrent = null;   // the marker currently expanded in spotlight
@@ -3697,7 +3714,8 @@ function spotlightOrdered() {
 }
 function openSpotlightMarker(m) {
   answerMarkers.forEach(x => x.el.classList.remove('is-open'));
-  if (m) { m.el.classList.add('is-open'); spotCurrent = m; }
+  if (m) { m.el.classList.add('is-open'); spotCurrent = m; showSpotMessage(m); }
+  else { hideSpotMessage(); }
 }
 function stepSpotlight(dir) {   // dir: +1 = right pin, -1 = left pin
   const ord = spotlightOrdered();
@@ -3706,6 +3724,31 @@ function stepSpotlight(dir) {   // dir: +1 = right pin, -1 = left pin
   i = (i + dir + ord.length) % ord.length;   // wrap around
   openSpotlightMarker(ord[i]);
 }
+
+// ── Standalone spotlight message box: fill, show, and keep it glued to the
+//    open pin. The pin marker itself never changes, so it never moves. ──
+function showSpotMessage(m) {
+  if (!m) { hideSpotMessage(); return; }
+  const ini = deriveInitials(m.handle);
+  spotMessageEl.innerHTML = `<div>${escapeHtml(m.text)}</div>` +
+    (ini ? `<div class="spot-handle">${escapeHtml(ini)}</div>` : '');
+  spotMessageEl.classList.add('is-visible');
+  positionSpotMessage();
+}
+function hideSpotMessage() {
+  spotMessageEl.classList.remove('is-visible');
+}
+function positionSpotMessage() {
+  if (!spotMessageEl.classList.contains('is-visible') || !spotCurrent) return;
+  const p = map.project(spotCurrent.lngLat);
+  // -9,-9 matches the marker's offset so the box starts flush with the square's
+  // top-left corner and grows right + down.
+  spotMessageEl.style.left = (p.x - 9) + 'px';
+  spotMessageEl.style.top  = (p.y - 9) + 'px';
+}
+// Keep the message box tracking its pin as the map pans/zooms/animates.
+map.on('render', positionSpotMessage);
+map.on('move', positionSpotMessage);
 
 function placeAnswerMarker({ lngLat, question, text, handle, timestamp }) {
   const hood = nearestNeighborhood(lngLat);
@@ -3729,17 +3772,23 @@ function placeAnswerMarker({ lngLat, question, text, handle, timestamp }) {
     answerMarkers.forEach(m => m.el.classList.remove('is-open'));
     if (wasOpen) {
       if (!document.body.classList.contains('spotlight-on')) closeAnswerPanel();
+      else hideSpotMessage();   // re-clicking the open pin closes its message
     } else {
       wrap.classList.add('is-open');
-      // In spotlight, only expand the inline note — no big side panel.
+      // In spotlight, show the standalone message box — no big side panel.
       if (document.body.classList.contains('spotlight-on')) {
         spotCurrent = answerMarkers.find(m => m.el === wrap) || spotCurrent;
+        showSpotMessage(spotCurrent);
       } else {
         openAnswerPanel({ text, lngLat, hood, handle, timestamp });
       }
     }
   });
-  new maplibregl.Marker({ element: wrap, anchor: 'top-left' })
+  // anchor 'top-left' + offset [-9,-9] (half of --pin-size 18px) centers the
+  //18×18 square on the click point. The marker is ALWAYS this fixed size (the
+  // message shows in the separate #spot-message overlay), so MapLibre never
+  // re-translates it — the pin stays exactly at its coordinates, never moving.
+  new maplibregl.Marker({ element: wrap, anchor: 'top-left', offset: [-9, -9] })
     .setLngLat(lngLat)
     .addTo(map);
   answerMarkers.push({ el: wrap, question, lngLat, hood, text, handle, timestamp });
@@ -3821,6 +3870,7 @@ function closeAnswerPanel() {
   document.body.classList.remove('panel-open');
   activePinLngLat = null;
   answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+  hideSpotMessage();
 }
 
 // On bfcache restore (browser back/forward), the page snapshot may still have
@@ -4008,6 +4058,10 @@ function setRevealed(on) {
   // Close any open answer panel when entering spotlight so a stray panel border
   // doesn't linger after exiting eye mode
   if (on && typeof closeAnswerPanel === 'function') closeAnswerPanel();
+  // If the user clicked the map (dropping the outline preview pin) and then
+  // entered spotlight without submitting, closeSheet() clears that leftover
+  // pending pin so it doesn't linger as a stray empty outline square.
+  if (on && (pendingMarker || document.body.classList.contains('sheet-open'))) closeSheet();
   // Entering spotlight: reset to the newest question (index 0) and auto-open
   // a random pin from that question's answers.
   if (on) {
@@ -4023,19 +4077,21 @@ function setRevealed(on) {
   if (on) {
     autoOpenRandomPinForActiveQuestion();
   } else {
-    // Exiting spotlight: collapse any opened pin so the closed view is clean.
+    // Exiting spotlight: collapse any opened pin + hide the message box.
     answerMarkers.forEach(m => m.el.classList.remove('is-open'));
+    spotCurrent = null;
+    hideSpotMessage();
   }
 }
 
 function autoOpenRandomPinForActiveQuestion() {
-  if (!answerMarkers || !answerMarkers.length) return;
+  if (!answerMarkers || !answerMarkers.length) { hideSpotMessage(); return; }
   const q = QUESTIONS[currentQuestionIndex];
   const matches = answerMarkers.filter(m => m.question === q);
-  if (!matches.length) return;
+  if (!matches.length) { hideSpotMessage(); return; }
   const pick = matches[Math.floor(Math.random() * matches.length)];
-  answerMarkers.forEach(m => m.el.classList.remove('is-open'));
-  pick.el.classList.add('is-open');
+  // Routes through openSpotlightMarker → sets is-open + spotCurrent + shows box.
+  openSpotlightMarker(pick);
 }
 eyeToggle.addEventListener('click', () => setRevealed(!revealed));
 // Top-left masthead corner is now a plain <a> link to about.html — no JS handler.
