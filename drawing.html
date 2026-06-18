@@ -149,7 +149,7 @@
       bottom: 0;
       right: 36px;
       width: var(--edge-w, 1.5px);
-      background: var(--edge, #1a1a1a);
+      background: var(--grid, #262626);
       z-index: 1500;
       pointer-events: none;
     }
@@ -233,8 +233,8 @@
       top: 0;
       bottom: 0;
       left: 36px;
-      width: var(--edge-w, 1.7px);
-      background: var(--edge, #1a1a1a);
+      width: var(--edge-w, 1.5px);
+      background: var(--grid, #262626);
       pointer-events: none;
       z-index: 1001;
     }
@@ -365,7 +365,7 @@
                       through the toolbar and footer too. */
       left: 359px;
       width: 1.5px;
-      background: #1a1a1a;
+      background: var(--grid);
       z-index: 1500;
       pointer-events: none;
     }
@@ -825,7 +825,7 @@
       width: 320px;
       max-height: calc(100vh - 32px);
       background: #ffffff;
-      border: 1.5px solid #1a1a1a;
+      border: 1.5px solid var(--grid);
       z-index: 1500;
       box-sizing: border-box;
       flex-direction: column;
@@ -932,7 +932,7 @@
       gap: 14px;
       position: relative;
       background: #ffffff;
-      border: 1px solid #1a1a1a;
+      border: 1px solid var(--grid);
       padding: 18px 20px;
     }
     #sheet.show {
@@ -960,13 +960,12 @@
     }
     #sheet .loc-coords {
       order: 1;
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: var(--mono);
       font-size: 10px;
       font-weight: 400;
       color: rgba(26, 26, 26, 0.70);
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
       text-transform: none;
-      font-feature-settings: "tnum";
       background: transparent;
       padding: 0;
     }
@@ -978,9 +977,9 @@
       order: 2;
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 10px;
-      font-weight: 500;
+      font-weight: 400;
       color: rgba(26, 26, 26, 0.85);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
       background: transparent;
       padding: 0;
@@ -1072,7 +1071,7 @@
     #sheet .handle.is-editing {
       color: #1a1a1a;
       cursor: text;
-      border-bottom: 1px solid #1a1a1a;
+      border-bottom: 1px solid var(--grid);
     }
     #sheet-handle .sheet-name-field {
       background: transparent;
@@ -1129,6 +1128,25 @@
     .answer-marker.dim { opacity: 0; pointer-events: none; }
 
     /* Pin = small filled square with the user's initials inside. Stable layout. */
+    /* Fresh-submit pin drop-in: the orange square falls from just above and
+       bounces 통-통-통 in place. Runs on the marker's OWN element, so the
+       marker stays anchored to its lngLat (no screen-projection drift). */
+    @keyframes pin-drop-in {
+      0%   { transform: translateY(-20px); opacity: 0; animation-timing-function: cubic-bezier(.45,0,.55,1); } /* soft fall */
+      30%  { transform: translateY(0);      opacity: 1; animation-timing-function: cubic-bezier(0,0,.3,1); }   /* land → rise */
+      50%  { transform: translateY(-9px);   animation-timing-function: cubic-bezier(.4,0,1,1); }               /* bounce 1 */
+      66%  { transform: translateY(0);      animation-timing-function: cubic-bezier(0,0,.3,1); }
+      80%  { transform: translateY(-4px);   animation-timing-function: cubic-bezier(.4,0,1,1); }               /* bounce 2 */
+      90%  { transform: translateY(0);      animation-timing-function: cubic-bezier(0,0,.3,1); }
+      96%  { transform: translateY(-1.5px); animation-timing-function: cubic-bezier(.4,0,1,1); }               /* settle */
+      100% { transform: translateY(0); }
+    }
+    .answer-marker.is-dropping .answer-note {
+      animation: pin-drop-in 1.3s both;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .answer-marker.is-dropping .answer-note { animation: none; }
+    }
     .answer-note {
       position: relative;
       background: #0088FF;
@@ -1323,7 +1341,7 @@
       width: 60%; max-width: 860px; height: 100%;
       box-sizing: border-box;
       background: #ffffff;
-      border-right: 1.5px solid #1a1a1a;   /* the dividing vertical line */
+      border-right: 1.5px solid var(--grid);   /* the dividing vertical line */
       color: #1a1a1a;
       padding: 0;                          /* minimal layout manages its own spacing */
       overflow: auto;
@@ -1351,7 +1369,7 @@
 
     /* ── Full GRID layout (Image #14) — thick charcoal rules, 36px module ──
        Top: image | (headline + intro). Spacer row. Step | dark-bar | Guide.
-       Bottom: colophon line. 1.7px #1a1a1a rules; gutters keyed to 36px. */
+       Bottom: colophon line. 1.5px #1a1a1a rules; gutters keyed to 36px. */
     #help-panel .help-grid { display: block; }
 
     /* Top spacer band (36px, full width) */
@@ -1360,14 +1378,14 @@
     /* Top row: image cell + intro cell */
     #help-panel .hg-top {
       display: grid; grid-template-columns: var(--img-col) 1fr;
-      border-bottom: 1.7px solid #1a1a1a;
+      border-bottom: 1.5px solid var(--grid);
     }
     #help-panel .hg-img {
       padding: 0;                          /* image fills the cell, flush top-left */
       display: flex; align-items: flex-start; justify-content: flex-start;
       overflow: hidden;                    /* crop the scaled image to the cell */
       box-sizing: border-box;
-      border-right: 1.7px solid #1a1a1a;   /* image-edge line continues down to the Step grid */
+      border-right: 1.5px solid var(--grid);   /* image-edge line continues down to the Step grid */
     }
     #help-panel .help-figure {
       display: block; width: 100%; height: 317px;   /* right edge = divider */
@@ -1377,7 +1395,7 @@
     }
     #help-panel .hg-intro { padding: 56px 36px 36px 41px; }  /* left gap from image; a little lower */
     #help-panel .hg-intro .help-lede { font-size: 16px; margin: 0 0 28px; text-indent: 0; }
-    #help-panel .hg-intro p { margin: 0 0 22px; font-size: 14px; line-height: 1.6; color: #1a1a1a; }
+    #help-panel .hg-intro p { margin: 0 0 22px; font-size: 14px; line-height: 1.8; color: #1a1a1a; }
     #help-panel .hg-intro p:last-child { margin: 0; }
     #help-panel strong { font-weight: 600; }
 
@@ -1389,12 +1407,12 @@
       grid-template-rows: auto auto auto auto;               /* 헤더 / 01 / 02 / 03 */
       row-gap: 20px;
       padding: 28px 0;                                       /* 행 블록 위아래 여백 */
-      border-bottom: 1.7px solid #1a1a1a;
+      border-bottom: 1.5px solid var(--grid);
     }
     #help-panel .hg-empty {
       grid-row: 1 / -1;                                      /* 전체 높이 */
       margin: -28px 0;                                       /* 부모 위아래 패딩 상쇄 → 선이 셀 끝까지 */
-      border-right: 1.7px solid #1a1a1a;                     /* line continues from image's right edge */
+      border-right: 1.5px solid var(--grid);                     /* line continues from image's right edge */
     }
     #help-panel .hg-step {
       grid-column: 2; grid-row: 1 / -1;
@@ -1418,27 +1436,27 @@
     #help-panel .sg-text { font-size: 14px; line-height: 1.6; color: #1a1a1a; margin: 0; }
 
     /* Bottom colophon row */
-    #help-panel .hg-foot { padding: 36px 36px 36px 281px; }   /* left-aligned with the "Step" label (measured) */
+    #help-panel .hg-foot { padding: 48px 36px 36px 281px; }   /* left-aligned with the "Step" label (measured) */
     #help-panel .help-inquiries { font-size: 14px; color: #1a1a1a; margin: 0; max-width: 520px; text-align: left; }
     #help-panel .help-link { color: var(--accent, #D9531E); font-weight: 600; }
     /* Secondary colophon line — monospace, smaller, faded; reads as supplementary meta */
     #help-panel .help-meta {
-      font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-      font-size: 12px; line-height: 1.6; color: rgba(26,26,26,0.5);
+      font-family: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+      font-size: 14px; line-height: 1.6; color: #1a1a1a;
       margin: 32px 0 0; max-width: 520px; text-align: left;
     }
-    #help-panel .help-meta a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+    #help-panel .help-meta a { color: var(--accent, #D9531E); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
 
     /* Narrow screens: collapse columns; dark bar becomes a rule */
     @media (max-width: 720px) {
       #help-panel { width: 100%; max-width: none; border-right: none; }
       #help-panel .hg-top { grid-template-columns: 1fr; }
-      #help-panel .hg-img { border-right: none; border-bottom: 1.7px solid #1a1a1a; }
+      #help-panel .hg-img { border-right: none; border-bottom: 1.5px solid var(--grid); }
       #help-panel .help-figure { height: 220px; }
       #help-panel .hg-steps { grid-template-columns: 1fr; }
       #help-panel .hg-empty { display: none; }
       #help-panel .hg-bar { display: none; }
-      #help-panel .hg-step { border-bottom: 1.7px solid #1a1a1a; }
+      #help-panel .hg-step { border-bottom: 1.5px solid var(--grid); }
     }
     #footer .footer-end .dark-toggle {
       width: 18px;
@@ -1601,9 +1619,9 @@
     #answer-panel .panel-hood {
       font-family: 'Jost', 'Helvetica Neue', sans-serif;
       font-size: 10px;
-      font-weight: 500;
+      font-weight: 400;
       color: #666;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       line-height: 1;
     }
@@ -1662,13 +1680,13 @@
       field-sizing: content;
       min-width: 5ch;
       max-width: 12ch;
-      text-align: center;
+      text-align: left;
       caret-color: var(--edge);
       /* Match the neighborhood (.panel-hood) text exactly */
       font-family: var(--mono);
       font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
+      font-weight: 400;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--edge);
       /* Affordance: a hairline underline signals this is an editable field. */
@@ -1682,12 +1700,16 @@
       color: var(--edge);
       border-bottom-color: #1a1a1a;
     }
-    /* Show placeholder text only when the field is focused */
+    /* Hide the placeholder once the field is focused (clicked in). */
     #panel-handle .panel-name-field:focus::placeholder {
-      color: rgba(26, 26, 26, 0.35);
+      color: transparent;
     }
     #panel-handle .panel-name-field::placeholder {
-      color: rgba(26, 26, 26, 0.30);
+      color: rgba(26, 26, 26, 0.55);
+      font-family: var(--mono);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
     #panel-handle .panel-name-sep { display: inline-block; width: 8px; }
     /* When the anonymous name is auto-filled, it eases in (soft fade + tiny
@@ -1901,13 +1923,14 @@
 
     :root {
       --edge: #1a1a1a;
-      --edge-w: 1.7px;
+      --grid: #262626;   /* grid/border lines — slightly softer than --edge (text/fills) */
+      --edge-w: 1.5px;
       --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
     }
 
     /* Masthead — bold bottom edge, monospace title hint */
     #masthead { border-bottom: var(--edge-w) solid #555; }
-    #masthead .masthead-vdivider { background: var(--edge); width: var(--edge-w); }
+    #masthead .masthead-vdivider { background: var(--grid); width: var(--edge-w); }
     /* Tagline shares the PINNED wordmark font (Outfit), but sits on a straight
        baseline — no letter hop. */
     #masthead .city-center {
@@ -1921,7 +1944,7 @@
     #masthead .masthead-close:hover { background: var(--edge); color: #fff; }
 
     /* Archive rail — hard right edge via the spine */
-    #archive-spine { background: var(--edge); width: var(--edge-w); }
+    #archive-spine { background: var(--grid); width: var(--edge-w); }
 
     /* Active card label + assignment tag → monospace */
     #archive-list .archive-item.is-current .label .label-word {
@@ -1940,7 +1963,7 @@
     }
     /* Past row separators → hard black */
     #archive-list li:has(.archive-item.is-current) + li .archive-item.is-past {
-      border-top: var(--edge-w) solid var(--edge);
+      border-top: var(--edge-w) solid var(--grid);
     }
     /* Past row numbers + titles — number stays as accent, title monospace */
     #archive-list .archive-item.is-past .label {
@@ -1963,7 +1986,7 @@
 
     /* Pager strip — hard top edge + monospace numerals */
     .archive-pager {
-      border-top: var(--edge-w) solid var(--edge);
+      border-top: var(--edge-w) solid var(--grid);
       font-family: var(--mono);
       color: var(--edge);
     }
@@ -1974,7 +1997,7 @@
     }
 
     /* Footer — bold top edge, monospace metadata, hard separators */
-    #footer { border-top: var(--edge-w) solid var(--edge); }
+    #footer { border-top: var(--edge-w) solid var(--grid); }
     /* Toolbar band — a real white bar sitting directly above the footer,
        same chrome as the masthead/footer. Holds the share link, direction
        keys, etc. Full width; framed top + bottom by the hard rule (its
@@ -1986,8 +2009,9 @@
       height: 36px;
       z-index: 1300;
       background: #ffffff;
-      border-top: var(--edge-w) solid var(--edge);
-      /* No border-bottom — the footer's border-top draws the shared lower
+      /* Top rule is drawn per-cell (see .tb-cell) so the empty placeholder
+         cell can omit it, leaving the line only above the active buttons.
+         No border-bottom — the footer's border-top draws the shared lower
          rule, so the line between toolbar and footer stays single grid weight. */
       display: flex;
       align-items: center;
@@ -2001,15 +2025,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      /* Top rule above each cell (matches the masthead/footer chrome). */
+      border-top: var(--edge-w) solid var(--grid);
     }
     /* The first cell is pinned to the rail width (360px), so its right edge
        lands exactly on the #archive-spine — a button hovered here can't bleed
        past the spine into cell 2. Cells 2–4 share the remaining width. */
     #toolbar .tb-cell:first-child {
       flex: 0 0 360px;
+      /* Empty placeholder cell — drop its top rule so the line only runs
+         above the active pan/RESET buttons. */
+      border-top: none;
     }
     #toolbar .tb-cell + .tb-cell {
-      border-left: var(--edge-w) solid var(--edge);
+      border-left: var(--edge-w) solid var(--grid);
     }
     /* The first divider (between cell 1 and cell 2) sits at the rail edge,
        where the continuous #archive-spine already draws the line — so skip
@@ -2026,50 +2055,18 @@
       display: flex; align-items: center; justify-content: center;
       gap: 7px;
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 12px;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--edge);
       transition: background 0.15s ease, color 0.15s ease;
     }
     #toolbar .tb-btn:hover { background: #1a1a1a; color: #ffffff; }
-    /* COPY LINK gets a light-grey fill so the share action stands out. */
-    #toolbar #copy-link-btn { background: #f5f5f5; }
-    #toolbar #copy-link-btn:hover { background: #1a1a1a; }
-    /* The label keeps the same baseline; a strikethrough is drawn across it
-       when copied. We animate the line-through in via a pseudo-element so it
-       can sweep left→right and so it reads as "done". */
-    #toolbar .tb-btn-label {
-      position: relative;
-      white-space: nowrap;
-    }
-    #toolbar .tb-btn-label::after {
-      content: "";
-      position: absolute;
-      left: 0; top: 50%;
-      width: 0;
-      height: 1px;
-      background: currentColor;
-      transition: width 0.22s ease;
-    }
-    /* The checkmark sits to the right, hidden until copied. */
-    #toolbar .tb-btn-check {
-      opacity: 0;
-      transform: translateX(-4px);
-      transition: opacity 0.18s ease 0.12s, transform 0.18s ease 0.12s;
-    }
-    /* Copied state: strike the label, reveal the check. (No background flip —
-       the strikethrough + check is the feedback.) */
-    #toolbar .tb-btn.is-copied .tb-btn-label::after { width: 100%; }
-    #toolbar .tb-btn.is-copied .tb-btn-check {
-      opacity: 1;
-      transform: translateX(0);
-    }
     /* Hand glyph (☞, U+261E; left mirrored) for the pan buttons. Apple SD Gothic
        Neo draws the thin all-outline hand (hollow cuff); the rest are fallbacks. */
     #toolbar .tb-glyph {
       font-family: 'Apple SD Gothic Neo','Apple Symbols','Menlo','Segoe UI Symbol','Noto Sans Symbols 2',monospace;
-      font-size: 28px;
+      font-size: 32px;
       line-height: 1;
     }
     /* Mirror the right-pointing hand so the left pan button points left. */
@@ -2084,7 +2081,7 @@
     #footer .label .sep,
     #footer .footer-left .sep { color: var(--edge); opacity: 0.55; }
     #footer .footer-end .dark-toggle {
-      border: var(--edge-w) solid var(--edge);
+      border: var(--edge-w) solid var(--grid);
       color: var(--edge);
     }
     #footer .footer-end .dark-toggle:hover {
@@ -2098,23 +2095,23 @@
 
     /* Answer panel — hard rectangle, no shadow */
     #answer-panel {
-      border-bottom: var(--edge-w) solid var(--edge);
+      border-bottom: var(--edge-w) solid var(--grid);
       box-shadow: none;
     }
     #answer-panel .panel-divider,
     #answer-panel .panel-divider-read {
-      background: var(--edge);
+      background: var(--grid);
       height: var(--edge-w);
     }
     #answer-panel .panel-vdivider,
     #answer-panel .panel-vdivider2 {
-      background: var(--edge);
+      background: var(--grid);
       width: var(--edge-w);
     }
     #answer-panel .panel-hood {
       font-family: var(--mono);
       color: var(--edge);
-      letter-spacing: 0.12em;
+      letter-spacing: 0.06em;
     }
     #answer-panel .panel-hood-marker {
       background: var(--edge);
@@ -2132,9 +2129,9 @@
     #answer-panel .panel-handle {
       font-family: var(--mono);
       font-size: 10px;
-      font-weight: 500;
+      font-weight: 400;
       color: var(--edge);
-      letter-spacing: 0.12em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
     #answer-panel .panel-count .count-quill {
@@ -2156,7 +2153,7 @@
 
     /* Answer sheet (floating) — hard 1.5px frame, no shadow */
     #sheet {
-      border: var(--edge-w) solid var(--edge);
+      border: var(--edge-w) solid var(--grid);
       box-shadow: none;
     }
     #sheet .loc-name,
@@ -2167,10 +2164,10 @@
       color: var(--edge);
     }
     #sheet .loc-coords {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
+      font-family: var(--mono);
       color: var(--edge);
     }
-    #sheet .loc-name { letter-spacing: 0.12em; }
+    #sheet .loc-name { letter-spacing: 0.03em; }
     #sheet .submit-arrow {
       font-weight: 700;
       letter-spacing: 0.08em;
@@ -2178,12 +2175,12 @@
       text-decoration: underline;
     }
     #sheet .submit-arrow:hover { opacity: 1; background: var(--edge); color: #fff; text-decoration: none; padding: 2px 6px; margin: -2px -6px; }
-    #sheet .handle.is-editing { border-bottom: var(--edge-w) solid var(--edge); }
+    #sheet .handle.is-editing { border-bottom: var(--edge-w) solid var(--grid); }
 
     /* Map popup — strip the soft drop-shadow, give it a hard rectangular frame */
     .maplibregl-popup-content {
       box-shadow: none !important;
-      border: var(--edge-w) solid var(--edge) !important;
+      border: var(--edge-w) solid var(--grid) !important;
     }
     .pop .label,
     .pop .name,
@@ -2191,18 +2188,18 @@
       font-family: var(--mono);
     }
     .pop .label { color: var(--edge); letter-spacing: 0.22em; }
-    .pop .divider { background: var(--edge); height: var(--edge-w); width: 28px; }
+    .pop .divider { background: var(--grid); height: var(--edge-w); width: 28px; }
 
     /* Hint banner — square, monospace */
     #hint {
       font-family: var(--mono);
       letter-spacing: 0.18em;
-      border: var(--edge-w) solid var(--edge);
+      border: var(--edge-w) solid var(--grid);
     }
 
     /* Eye-mode banner — hard frame */
     #eye-q-banner {
-      border: var(--edge-w) solid var(--edge);
+      border: var(--edge-w) solid var(--grid);
     }
     #eye-q-banner .q-text {
       font-family: var(--mono);
@@ -2222,8 +2219,8 @@
     body.spotlight-on::after { background: rgba(26,26,26,0.55); }
 
     /* Zoom-scale ticks: pure black */
-    .zoom-scale .zoom-line .zoom-tick { background: var(--edge); opacity: 1; }
-    .zoom-scale .zoom-indicator { background: var(--edge); }
+    .zoom-scale .zoom-line .zoom-tick { background: var(--grid); opacity: 1; }
+    .zoom-scale .zoom-indicator { background: var(--grid); }
 
     /* Eye toggle dots → map-line gray (#555) at rest; active stays orange. */
     .eye-toggle .cell.on { background: #555; }
@@ -2304,7 +2301,7 @@
       display: grid !important;
       grid-template-columns: 1fr !important;
       justify-items: center !important;
-      border-top: var(--edge-w) solid var(--edge) !important;
+      border-top: var(--edge-w) solid var(--grid) !important;
       height: 48px !important;
     }
     body.has-multi-page .archive-pager .pager-btn { display: none !important; }
@@ -2413,13 +2410,15 @@
       line-height: 1.3 !important;
       margin: 0 !important;
     }
+    /* Main question, answer placeholder, and typed answer all share one
+       size so the question reads at the same scale as the card text. */
     #archive-list .archive-item.is-current .question {
       font-size: clamp(17px, 1.6vw, 20px) !important;
       line-height: clamp(26px, 2.4vw, 30px) !important;
     }
     #answer-panel .panel-text {
-      font-size: clamp(18px, 1.7vw, 21px) !important;
-      line-height: clamp(28px, 2.5vw, 32px) !important;
+      font-size: clamp(17px, 1.6vw, 20px) !important;
+      line-height: clamp(26px, 2.4vw, 30px) !important;
     }
     #answer-panel .panel-input {
       font-size: clamp(17px, 1.6vw, 20px) !important;
@@ -2439,11 +2438,59 @@
       position: fixed;
       right: 16px;
       bottom: calc(72px + 16px);
-      width: 140px;
-      height: 140px;
+      width: 154px;
+      height: 154px;
       pointer-events: none;
       z-index: 600;
       color: var(--accent, #D9531E);
+    }
+    /* Center wordmark flip-card — only the center flips; ring + bridge stay still.
+       Sits over the SVG center where PINNED used to be. */
+    #map-badge .badge-center {
+      position: absolute;
+      left: 50%; top: 52%;
+      transform: translate(-50%, -50%) rotate(-2deg);   /* keep PINNED's -2° tilt */
+      width: 130px; height: 28px;
+      perspective: 600px;
+      pointer-events: none;
+    }
+    #map-badge .flip-card {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      animation: pinned-flip 9s ease-in-out infinite;
+    }
+    #map-badge .flip-face {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      font-family: 'Archivo', 'Outfit', sans-serif;
+      font-weight: 900; font-size: 20px; letter-spacing: -0.02em;
+      text-transform: uppercase; color: var(--accent, #D9531E);
+      white-space: nowrap; line-height: 1;
+      filter: url(#pinned-crumple);
+    }
+    #map-badge .flip-front { transform: rotateY(0deg); }
+    #map-badge .flip-back  {
+      transform: rotateY(180deg);
+      font-size: 15px;            /* SAN FRANCISCO is longer → a touch smaller */
+      line-height: 1.0;
+      text-align: center;
+      white-space: normal;        /* allow the two-line break */
+      align-items: flex-start;    /* push the two-line text toward the top */
+      padding-top: 0;
+      margin-top: -10px;          /* nudge SAN FRANCISCO up vs PINNED */
+    }
+    /* Flip front→back (~2.5s, slow), rest 2s, flip back→front (~2.5s), rest 2s.
+       9s cycle; equal rotate + rest time each way. */
+    @keyframes pinned-flip {
+      0%   { transform: rotateY(0deg); }
+      28%  { transform: rotateY(180deg); }   /* PINNED → SAN FRANCISCO */
+      50%  { transform: rotateY(180deg); }   /* rest on SAN FRANCISCO */
+      78%  { transform: rotateY(360deg); }   /* back to PINNED */
+      100% { transform: rotateY(360deg); }   /* rest on PINNED */
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #map-badge .flip-card { animation: none; }
     }
     /* Map bottom-left button — toggles flat-map (spotlight) mode.
        Uses a Unicode glyph (◱ U+25F1) as the icon. z-index is pushed very high
@@ -2452,8 +2499,8 @@
       position: fixed;
       left: 360px;
       bottom: calc(72px + 16px);
-      width: 32px;
-      height: 32px;
+      width: 38px;
+      height: 38px;
       margin-left: 16px;
       z-index: 9999;
       pointer-events: auto;
@@ -2470,8 +2517,8 @@
     #map-sf-logo:hover .glyph { color: var(--accent, #D9531E); }
     #map-sf-logo .glyph {
       display: block;
-      width: 27px;
-      height: 27px;
+      width: 32px;
+      height: 32px;
       color: #1a1a1a;
       transform-origin: center;
       transition: color 0.15s ease;
@@ -2507,9 +2554,6 @@
     }
     /* Crumpled-paper / worn-ink effect applied to the center PINNED
        wordmark only — leaves the ring text and bridge mark sharp. */
-    #map-badge .center-text {
-      filter: url(#pinned-crumple);
-    }
     #map-badge .sf-mark { fill: none; stroke: currentColor; }
     #map-badge svg {
       width: 100%;
@@ -2527,15 +2571,6 @@
       stroke: currentColor;
       stroke-width: 0.6;
       paint-order: stroke fill;
-    }
-    #map-badge .center-text {
-      font-family: 'Archivo', 'Outfit', sans-serif;
-      font-weight: 900;
-      font-size: 20px;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      fill: currentColor;
-      text-anchor: middle;
     }
 
     /* Zoom-scale moved from bottom-right → top-right of map (under masthead).
@@ -2568,26 +2603,39 @@
     #footer .label,
     #footer .footer-end {
       font-size: 10px !important;
-      letter-spacing: 0.05em !important;
+      letter-spacing: 0.06em !important;
     }
     /* Middle: coordinates + city in monospace — small data line,
        full charcoal, distinct from the bold uppercase chrome on the
        sides (different shape, same ink weight = harmonized). */
     #footer .label,
-    #footer .label span {
+    #footer .label span,
+    #footer .footer-left,
+    #footer .footer-left span,
+    #footer .footer-end,
+    #footer .footer-end span {
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace !important;
       font-style: normal !important;
       font-size: 10px !important;
-      font-weight: 500 !important;
-      letter-spacing: 0.03em !important;
+      font-weight: 400 !important;
+      letter-spacing: 0.06em !important;
       color: var(--edge, #1a1a1a) !important;
       text-transform: uppercase !important;
     }
-    /* Bookend labels match the neighborhood/nickname weight (medium) */
+    /* Bookend labels (ASSIGNMENT / NO. 01 and PINS DROPPED) — bold (500),
+       heavier than the center coordinate line. Span-inclusive so the inner
+       <span> text actually picks up the weight. */
     #footer .footer-left,
-    #footer .footer-end {
+    #footer .footer-left span,
+    #footer .footer-end,
+    #footer .footer-end span {
       font-weight: 500 !important;
       letter-spacing: 0.06em !important;
+    }
+    /* "No. 01" stays regular weight — only ASSIGNMENT / PINS DROPPED are bold. */
+    #footer .footer-left .footer-left-end,
+    #footer .footer-left .footer-left-end span {
+      font-weight: 400 !important;
     }
 
     /* ─── Archive row hierarchy fix ──────────────────────────────────
@@ -2603,12 +2651,12 @@
     #archive-list .archive-item.is-past .label {
       font-family: 'Jost', 'Helvetica Neue', sans-serif !important;
       font-weight: 500 !important;
-      font-size: 12px !important;
+      font-size: 13px !important;
       color: #D9531E !important;
     }
     #archive-list .archive-item.is-past .question {
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif !important;
-      font-size: 13px !important;
+      font-size: 14px !important;
       color: rgba(26, 26, 26, 0.55) !important;
     }
     /* Archive row spacing — small breathing room between rows */
@@ -2729,7 +2777,7 @@
     <span class="spot-q-label" id="spot-q-label">Assignment 12</span>
   </div>
   <div class="masthead-spot-meta" id="masthead-spot-meta" aria-hidden="true">
-    <span class="spot-q-text" id="spot-q-text">What place do you keep coming back to, and why?</span>
+    <span class="spot-q-text" id="spot-q-text">Drop a pin where you had a good moment.</span>
   </div>
   <button class="masthead-close" id="panel-close" title="Close" aria-label="Close answer panel">
     <svg class="mark-icon etch" width="18" height="18" viewBox="0 0 36 36" aria-hidden="true">
@@ -2769,7 +2817,7 @@
 
 <!-- ─────────── EYE-MODE QUESTION PILL (only shown in eye mode) ─────────── -->
 <div id="eye-q-banner">
-  <div class="q-text" id="eye-q-text">What place do you keep coming back to, and why?</div>
+  <div class="q-text" id="eye-q-text">Drop a pin where you had a good moment.</div>
   <button class="q-next" id="eye-q-next" title="Next question" aria-label="Next question">
     <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
       <path d="M 3.6 5.5 L 8.9 12 L 14.3 5.6" />
@@ -2811,7 +2859,7 @@
     <div class="panel-text" id="panel-text"></div>
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
-      <span class="panel-hood" id="panel-hood-read"><span class="hood-loc">RUSSIAN HILL 37.81 122.43</span></span>
+      <span class="panel-hood" id="panel-hood-read"><span class="hood-loc">RUSSIAN HILL 37.81 122.43</span><span class="hood-handle" id="panel-hood-handle"></span></span>
     </div>
     <div class="panel-divider panel-divider-read"></div>
   </div>
@@ -2849,7 +2897,7 @@
 
 <!-- SVG overlay for the connector line from clicked pin to panel -->
 <svg id="pin-line" xmlns="http://www.w3.org/2000/svg">
-  <line id="pin-line-seg" x1="0" y1="0" x2="0" y2="0" stroke="#1a1a1a" stroke-width="1"/>
+  <line id="pin-line-seg" x1="0" y1="0" x2="0" y2="0" stroke="#262626" stroke-width="1"/>
 </svg>
 
 <!-- ─────────── SF MAP ─────────── -->
@@ -2874,7 +2922,7 @@
        like map elevation lines. Hollow (fill:none), round joins. currentColor →
        soft-black normally, accent-orange in spotlight mode (see #map-sf-logo
        .glyph color rules). -->
-  <svg class="glyph" width="27" height="27" viewBox="0 0 24 24" aria-hidden="true">
+  <svg class="glyph" width="32" height="32" viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.1"/>
     <circle cx="12" cy="12" r="5.4" fill="none" stroke="currentColor" stroke-width="1.1"/>
     <circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.1"/>
@@ -2910,8 +2958,6 @@
     <text class="ring-text">
       <textPath href="#badge-ring-top" startOffset="50%" text-anchor="middle">Interface Dynamics City Archive</textPath>
     </text>
-    <!-- Center wordmark — sits up inside the arc's cradle, tilted 15° -->
-    <text class="center-text" x="75" y="78" transform="rotate(-2 75 78)">PINNED</text>
     <!-- Simplified Golden Gate Bridge silhouette — deck + two towers + cables -->
     <g class="sf-mark" transform="translate(63, 118)">
       <!-- horizontal deck -->
@@ -2931,16 +2977,19 @@
       <path d="M 17,2 Q 21,3 24,8" fill="none" stroke="currentColor" stroke-width="1.5"/>
     </g>
   </svg>
+  <!-- Center wordmark flip-card (HTML overlay — robust 3D backface) -->
+  <div class="badge-center">
+    <div class="flip-card">
+      <div class="flip-face flip-front">PINNED</div>
+      <div class="flip-face flip-back">SAN<br>FRANCISCO</div>
+    </div>
+  </div>
 </div>
 
 <!-- ─────────── TOOLBAR BAND (share link, direction keys, …) ─────────── -->
 <div id="toolbar">
-  <div class="tb-cell">
-    <button id="copy-link-btn" class="tb-btn" type="button" aria-label="Copy link to this site">
-      <span class="tb-btn-label">COPY LINK</span>
-      <span class="tb-btn-check" aria-hidden="true">✓</span>
-    </button>
-  </div>
+  <!-- (link-copy control removed — placeholder cell, to be redesigned) -->
+  <div class="tb-cell"></div>
   <div class="tb-cell">
     <button id="pan-left-btn" class="tb-btn" type="button" aria-label="Pan map left">
       <span class="tb-glyph tb-glyph--flip">☞</span>
@@ -2996,9 +3045,9 @@
                loading="lazy" />
         </div>
         <div class="hg-intro">
-          <p class="help-lede"><strong>PINNED</strong> is a city archive of San Francisco.</p>
-          <p>The project explores how analog experiences can live on through digital media. A question appears, and the answer is left where it happened. Each moment is marked with a single pin and a few lines of text.</p>
-          <p>Over time, the map fills with these records. Through unscripted moments and words left behind by chance, the city reveals itself again.</p>
+          <p class="help-lede"><strong>PINNED</strong> is an archive of San Francisco. It explores how analog experiences can be preserved through digital media.</p>
+          <p>A question is given, and the answer is left at the place where it happened. Each entry is marked with a single pin and a short text.</p>
+          <p>Over time, the map fills with these records. Through unplanned moments<br>and the words left behind, the city can be seen in a different way.</p>
         </div>
       </div>
 
@@ -3022,8 +3071,8 @@
 
       <!-- Bottom colophon row -->
       <div class="hg-foot">
-        <p class="help-inquiries"><strong>PINNED The City Archive</strong> is a project by <strong>Interface Dynamics</strong>.</p>
-        <p class="help-meta">for inquiries, <a href="mailto:seohyeonkimkenny@gmail.com">seohyeonkimkenny@gmail.com</a></p>
+        <p class="help-inquiries" style="font-size: 14px;">PINNED The City Archive is a project by <strong>Interface Dynamics</strong>.</p>
+        <p class="help-meta" style="font-size: 14px;">For inquiries, email <a href="mailto:seohyeonkimkenny@gmail.com">seohyeonkimkenny@gmail.com</a>.</p>
       </div>
     </div>
   </aside>
@@ -3204,7 +3253,7 @@ map.on('style.load', () => {
 // ─────────── ASSIGNMENTS (one question per fortnight) ───────────
 // ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
 const ASSIGNMENTS = [
-  { issueNo: 1, dates: 'May 28 → Jun 11', text: "What place do you keep coming back to, and why?" },
+  { issueNo: 1, dates: 'May 28 → Jun 11', text: "Drop a pin where you had a good moment." },
 ];
 
 // Flat array of question strings, used by the rest of the code (markers, spotlight, etc.)
@@ -3774,7 +3823,7 @@ function stepSpotlight(dir) {   // dir: +1 = right pin, -1 = left pin
   openSpotlightMarker(ord[i]);
 }
 
-function placeAnswerMarker({ lngLat, question, text, handle, timestamp }) {
+function placeAnswerMarker({ lngLat, question, text, handle, timestamp, dropIn }) {
   const hood = nearestNeighborhood(lngLat);
   const wrap = document.createElement('div');
   wrap.className = 'answer-marker';
@@ -3818,6 +3867,12 @@ function placeAnswerMarker({ lngLat, question, text, handle, timestamp }) {
   // 18×18 square on the click point. The marker's box is always 18×18 (the
   // message is an absolute, out-of-flow child), so MapLibre never re-translates
   // it — the pin stays exactly at its coordinates, never moving.
+  // Fresh submit → one-shot drop-in bounce on the marker's own element (the
+  // marker stays anchored to lngLat; only its content visually drops in).
+  if (dropIn) {
+    wrap.classList.add('is-dropping');
+    wrap.addEventListener('animationend', () => wrap.classList.remove('is-dropping'), { once: true });
+  }
   new maplibregl.Marker({ element: wrap, anchor: 'top-left', offset: [-9, -9] })
     .setLngLat(lngLat)
     .addTo(map);
@@ -3846,6 +3901,8 @@ function openAnswerPanel({ text, lngLat, hood, handle, timestamp }) {
     const lng = Math.abs(lngLat[0]).toFixed(2);
     const locEl = hoodEl.querySelector('.hood-loc');
     if (locEl) locEl.textContent = `${(hood || '').toUpperCase()} ${lat}°N ${lng}°W`;
+    const handleEl = hoodEl.querySelector('.hood-handle');
+    if (handleEl) handleEl.textContent = handle ? ` | ${handle.toUpperCase()}` : '';
   }
   answerPanel.classList.remove('is-write');
   const h = getMainQuestionHeight();
@@ -3985,11 +4042,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const question = pendingQuestion || (questionEl && questionEl.textContent) || '';
       saveAnswer({ lngLat, question, text, handle });
-      placeAnswerMarker({ lngLat, question, text, handle, timestamp: Date.now() });
       if (pendingMarker) { pendingMarker.remove(); pendingMarker = null; }
+      const dropLngLat = lngLat;   // keep — closeAnswerPanel() nulls activePinLngLat
       pendingLngLat = null;
       pendingQuestion = null;
       closeAnswerPanel();
+      // Place the real pin at its lngLat (always exact), with a one-shot
+      // drop-in bounce animated on the marker itself (dropIn:true) — no
+      // screen-projection, so it can never drift off the clicked spot.
+      placeAnswerMarker({ lngLat: dropLngLat, question, text, handle, timestamp: Date.now(), dropIn: true });
     });
   }
   const panelPlus = document.getElementById('panel-plus');
@@ -4023,33 +4084,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const lngLat = [c.lng, c.lat];
       const hood = nearestNeighborhood(lngLat);
       openWritePanel({ lngLat, hood });
-    });
-  }
-
-  // Toolbar "COPY LINK" — copies the current page URL. Feedback is the
-  // strikethrough sweep + checkmark (handled in CSS via .is-copied); the
-  // label text stays "COPY LINK".
-  const copyLinkBtn = document.getElementById('copy-link-btn');
-  if (copyLinkBtn) {
-    let copyResetTimer = null;
-    copyLinkBtn.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-      } catch (_) {
-        // Fallback for older / non-secure contexts.
-        const t = document.createElement('textarea');
-        t.value = window.location.href;
-        document.body.appendChild(t);
-        t.select();
-        try { document.execCommand('copy'); } catch (_) {}
-        t.remove();
-      }
-      copyLinkBtn.classList.add('is-copied');
-      if (copyResetTimer) clearTimeout(copyResetTimer);
-      copyResetTimer = setTimeout(() => {
-        copyLinkBtn.classList.remove('is-copied');
-      }, 1600);
     });
   }
 
