@@ -486,7 +486,7 @@
       font-size: clamp(15px, 1.4vw, 18px);
       font-weight: 400;
       line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
       color: #1a1a1a;
       word-break: normal;
       overflow-wrap: break-word;
@@ -1563,7 +1563,7 @@
       font-weight: 400;
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
       color: #1a1a1a;
       max-width: 54em;
       overflow-wrap: break-word;
@@ -1607,7 +1607,7 @@
       font-weight: 400;
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
       color: #1a1a1a;
       padding: 0;
       overflow: hidden;
@@ -2137,7 +2137,7 @@
     #answer-panel .panel-count .count-quill {
       width: 16px;
       height: 16px;
-      color: rgba(26,26,26,0.22);
+      color: inherit;            /* follow the counter color (number + quill change together) */
       vertical-align: middle;
     }
     #answer-panel .panel-drop-label {
@@ -2440,16 +2440,23 @@
       bottom: calc(72px + 16px);
       width: 154px;
       height: 154px;
-      pointer-events: none;
+      pointer-events: auto;
+      cursor: pointer;
+      text-decoration: none;
       z-index: 600;
       color: var(--accent, #D9531E);
+      transition: color 0.2s ease;
     }
+    /* Hover → links to the About page: the whole badge turns black together
+       (ring + bridge follow currentColor; flip faces transition in sync). */
+    #map-badge:hover { color: #333; }
+    #map-badge:hover .flip-face { color: #333; }
     /* Center wordmark flip-card — only the center flips; ring + bridge stay still.
        Sits over the SVG center where PINNED used to be. */
     #map-badge .badge-center {
       position: absolute;
       left: 50%; top: 52%;
-      transform: translate(-50%, -50%) rotate(-2deg);   /* keep PINNED's -2° tilt */
+      transform: translate(-50%, -50%);   /* no tilt — PINNED / SAN FRANCISCO sit straight */
       width: 130px; height: 28px;
       perspective: 600px;
       pointer-events: none;
@@ -2464,21 +2471,22 @@
       display: flex; align-items: center; justify-content: center;
       backface-visibility: hidden; -webkit-backface-visibility: hidden;
       font-family: 'Archivo', 'Outfit', sans-serif;
-      font-weight: 900; font-size: 20px; letter-spacing: -0.02em;
+      font-weight: 900; font-size: 18px; letter-spacing: -0.02em;
       text-transform: uppercase; color: var(--accent, #D9531E);
       white-space: nowrap; line-height: 1;
       filter: url(#pinned-crumple);
+      transition: color 0.2s ease;
     }
     #map-badge .flip-front { transform: rotateY(0deg); }
     #map-badge .flip-back  {
       transform: rotateY(180deg);
-      font-size: 15px;            /* SAN FRANCISCO is longer → a touch smaller */
+      font-size: 13px;            /* SAN FRANCISCO is longer → a touch smaller */
       line-height: 1.0;
       text-align: center;
       white-space: normal;        /* allow the two-line break */
       align-items: flex-start;    /* push the two-line text toward the top */
       padding-top: 0;
-      margin-top: -10px;          /* nudge SAN FRANCISCO up vs PINNED */
+      margin-top: -3px;           /* lower SAN FRANCISCO so its bottom lines up with PINNED */
     }
     /* Flip front→back (~2.5s, slow), rest 2s, flip back→front (~2.5s), rest 2s.
        9s cycle; equal rotate + rest time each way. */
@@ -2835,7 +2843,7 @@
       </div>
     </div>
     <div class="sheet-body">
-      <textarea id="sheet-input" class="answer-field" placeholder="Tell us about this spot" maxlength="100" rows="3"></textarea>
+      <textarea id="sheet-input" class="answer-field" placeholder="Leave a few words here" maxlength="100" rows="3"></textarea>
     </div>
     <div class="sheet-foot">
       <div class="foot-top">
@@ -2866,7 +2874,7 @@
   <!-- WRITE MODE — input form for new answer (grid: input | actions row) -->
   <div class="panel-inner panel-write" id="panel-write">
     <div class="panel-write-input">
-      <textarea id="panel-input" class="panel-input" placeholder="Tell us about this spot" maxlength="170" rows="2"></textarea>
+      <textarea id="panel-input" class="panel-input" placeholder="Leave a few words here" maxlength="250" rows="2"></textarea>
     </div>
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
@@ -2881,7 +2889,7 @@
         <path d="M4.5 19.2 Q 3.6 20 3 20.8"/>
         <circle cx="1.7" cy="22.4" r="1.7" fill="currentColor" stroke="none"/>
       </svg>
-      <span class="count-max">170</span>
+      <span class="count-max">250</span>
     </span>
     <span class="panel-handle" id="panel-handle"><input type="text" id="panel-name" class="panel-name-field" maxlength="20" placeholder="your name?" autocomplete="off" spellcheck="false"/></span>
     <button class="panel-submit" id="panel-submit" title="Drop pin" aria-label="Drop pin">
@@ -2923,14 +2931,14 @@
        soft-black normally, accent-orange in spotlight mode (see #map-sf-logo
        .glyph color rules). -->
   <svg class="glyph" width="32" height="32" viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.1"/>
-    <circle cx="12" cy="12" r="5.4" fill="none" stroke="currentColor" stroke-width="1.1"/>
-    <circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.1"/>
+    <circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="0.9"/>
+    <circle cx="12" cy="12" r="5.4" fill="none" stroke="currentColor" stroke-width="0.9"/>
+    <circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="0.9"/>
   </svg>
 </button>
 
 <!-- ─────────── CIRCULAR-TEXT LOGO (no background, on map, bottom-left) ─────────── -->
-<div id="map-badge" aria-hidden="true">
+<a id="map-badge" href="about-yellowbook.html" aria-label="About — Pinned">
   <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- Symmetric arc — endpoints at ~7:30 and ~4:30 (on the radius-58
@@ -2984,7 +2992,7 @@
       <div class="flip-face flip-back">SAN<br>FRANCISCO</div>
     </div>
   </div>
-</div>
+</a>
 
 <!-- ─────────── TOOLBAR BAND (share link, direction keys, …) ─────────── -->
 <div id="toolbar">
@@ -3064,7 +3072,7 @@
         <div class="hg-guide">
           <p class="sg-head">Guide</p>
           <p class="sg-text">Click the map or the (+) button to drop a pin.</p>
-          <p class="sg-text">Leave a note (170 chars max). You can include your name.</p>
+          <p class="sg-text">Leave a note (250 chars max). You can include your name.</p>
           <p class="sg-text">Explore the map and see what others left behind.</p>
         </div>
       </div>
@@ -3985,7 +3993,7 @@ document.addEventListener('DOMContentLoaded', () => {
     panelInput.addEventListener('input', () => {
       const n = panelInput.value.length;
       if (panelCountCurrent) panelCountCurrent.textContent = String(n);
-      panelCount.style.color = n >= 170 ? '#ED3B36' : (n >= 140 ? 'rgba(26,26,26,0.80)' : 'rgba(26,26,26,0.45)');
+      panelCount.style.color = n >= 220 ? 'rgba(26,26,26,0.65)' : 'rgba(26,26,26,0.45)';
     });
     panelInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeAnswerPanel();
