@@ -2172,6 +2172,27 @@
     #answer-panel:not(.is-write) #panel-hood-read .hood-handle {
       color: var(--grid);
     }
+    /* SHARE pill — black, right-aligned on the hood row, read mode only. */
+    #answer-panel .panel-share { display: none; }
+    #answer-panel:not(.is-write) .panel-share {
+      display: inline-flex;
+      align-items: center;
+      margin-left: auto;   /* hug the right edge; hood stays left */
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: #1a1a1a;
+      border: none;
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 6px;   /* softly rounded rectangle, not a full pill */
+      line-height: 1;
+      transition: background 0.15s ease;
+    }
+    #answer-panel:not(.is-write) .panel-share:hover { background: #000; }
     #answer-panel .panel-hood-marker {
       background: var(--edge);
       width: 9px;
@@ -2937,6 +2958,7 @@
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
       <span class="panel-hood" id="panel-hood-read"><span class="hood-loc">RUSSIAN HILL 37.81 122.43</span><span class="hood-handle" id="panel-hood-handle"></span></span>
+      <button class="panel-share" id="panel-share" type="button" aria-label="Share this pin">SHARE</button>
     </div>
     <div class="panel-divider panel-divider-read"></div>
   </div>
@@ -3324,8 +3346,29 @@ map.on('style.load', () => {
     .catch(_ => {});
 
   // ── Render any saved answers from localStorage ──
-  loadSavedAnswers();
+  loadSavedAnswers().then(() => openPinFromUrl());
 });
+
+// Deep link: ?pin=<id> (or ?lat=&lng=) opens that pin's card on load.
+function openPinFromUrl() {
+  const q = new URLSearchParams(location.search);
+  const pinId = q.get('pin');
+  const lat = parseFloat(q.get('lat'));
+  const lng = parseFloat(q.get('lng'));
+  let target = null;
+  if (pinId != null) {
+    target = PINS.find(p => String(p.id) === String(pinId));
+  } else if (!isNaN(lat) && !isNaN(lng)) {
+    // nearest pin to the given coords (within a small tolerance)
+    target = PINS.find(p => Math.abs(p.lngLat[1] - lat) < 1e-4 && Math.abs(p.lngLat[0] - lng) < 1e-4);
+  }
+  if (!target) return;
+  const open = () => {
+    map.flyTo({ center: target.lngLat, zoom: 15 });
+    openAnswerPanel({ ...target, hood: nearestNeighborhood(target.lngLat) });
+  };
+  if (map.loaded()) open(); else map.on('load', () => setTimeout(open, 300));
+}
 
 // ─────────── ASSIGNMENTS (one question per fortnight) ───────────
 // ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
@@ -3784,7 +3827,7 @@ async function loadSavedAnswers() {
   const { data, error } = await sb.from('pins').select('*').order('created_at', { ascending: true });
   if (error) { console.error('pin load failed', error); return; }
   PINS = (data || []).map(r => ({
-    lngLat: [r.lng, r.lat], question: r.question, text: r.text,
+    id: r.id, lngLat: [r.lng, r.lat], question: r.question, text: r.text,
     handle: r.handle, timestamp: new Date(r.created_at).getTime()
   }));
   PINS.forEach(placeAnswerMarker);
@@ -3914,7 +3957,7 @@ function stepSpotlight(dir) {   // dir: +1 = right pin, -1 = left pin
   openSpotlightMarker(ord[i]);
 }
 
-function placeAnswerMarker({ lngLat, question, text, handle, timestamp, dropIn }) {
+function placeAnswerMarker({ id, lngLat, question, text, handle, timestamp, dropIn }) {
   const hood = nearestNeighborhood(lngLat);
   const wrap = document.createElement('div');
   wrap.className = 'answer-marker';
@@ -3950,7 +3993,7 @@ function placeAnswerMarker({ lngLat, question, text, handle, timestamp, dropIn }
         spotCurrent = answerMarkers.find(m => m.el === wrap) || spotCurrent;
         // CSS (body.spotlight-on .answer-marker.is-open .answer-msg) shows it.
       } else {
-        openAnswerPanel({ text, lngLat, hood, handle, timestamp });
+        openAnswerPanel({ id, text, lngLat, hood, handle, timestamp });
       }
     }
   });
@@ -3967,7 +4010,7 @@ function placeAnswerMarker({ lngLat, question, text, handle, timestamp, dropIn }
   new maplibregl.Marker({ element: wrap, anchor: 'top-left', offset: [-9, -9] })
     .setLngLat(lngLat)
     .addTo(map);
-  answerMarkers.push({ el: wrap, question, lngLat, hood, text, handle, timestamp });
+  answerMarkers.push({ el: wrap, id, question, lngLat, hood, text, handle, timestamp });
   applySpotlight();
 }
 
@@ -3978,14 +4021,40 @@ const panelCloseBtn = document.getElementById('panel-close');
 const pinLineSvg    = document.getElementById('pin-line');
 const pinLineSeg    = document.getElementById('pin-line-seg');
 let activePinLngLat = null;
+let activePinId = null;
+
+// SHARE button — share/copy a deep link to the currently-open pin.
+const panelShare = document.getElementById('panel-share');
+function buildPinShareUrl() {
+  const key = (activePinId != null) ? `pin=${encodeURIComponent(activePinId)}`
+            : (activePinLngLat ? `lat=${activePinLngLat[1]}&lng=${activePinLngLat[0]}` : '');
+  return location.origin + location.pathname + (key ? `?${key}` : '');
+}
+if (panelShare) {
+  panelShare.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const url = buildPinShareUrl();
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'PINNED — The City Archive', url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        const prev = panelShare.textContent;
+        panelShare.textContent = 'LINK COPIED';
+        setTimeout(() => { panelShare.textContent = prev; }, 1500);
+      }
+    } catch (_) { /* user dismissed the share sheet — ignore */ }
+  });
+}
 
 function getMainQuestionHeight() {
   const cur = document.querySelector('#archive-list .archive-item.is-current');
   return cur ? cur.getBoundingClientRect().height : 160;
 }
 
-function openAnswerPanel({ text, lngLat, hood, handle, timestamp }) {
+function openAnswerPanel({ id, text, lngLat, hood, handle, timestamp }) {
   panelText.textContent = text;
+  activePinId = (id != null) ? id : null;
   const hoodEl = document.getElementById('panel-hood-read');
   if (hoodEl && lngLat) {
     const lat = lngLat[1].toFixed(2);
