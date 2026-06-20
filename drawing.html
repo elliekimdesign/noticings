@@ -39,7 +39,7 @@
       position: fixed; top: 0; left: 0; right: 0;
       height: 36px; z-index: 1000;
       background: #ffffff;
-      border-bottom: 1px solid #a3a3a3;
+      border-bottom: var(--edge-w) solid var(--grid);
       display: flex; align-items: center;
       padding: 0;
     }
@@ -199,8 +199,8 @@
       top: 0;
       bottom: 0;
       right: 36px;
-      width: 1px;
-      background: #a3a3a3;
+      width: var(--edge-w);
+      background: var(--grid);
       pointer-events: none;
       z-index: 1001;
     }
@@ -233,7 +233,7 @@
       top: 0;
       bottom: 0;
       left: 36px;
-      width: var(--edge-w, 1.5px);
+      width: var(--edge-w);
       background: var(--grid, #262626);
       pointer-events: none;
       z-index: 1001;
@@ -345,8 +345,8 @@
       position: fixed;
       top: 36px;
       left: 0;
-      bottom: 36px;
-      width: 360px;
+      bottom: var(--footer-h);
+      width: var(--rail-w);
       z-index: 900;
       background: #ffffff;
       padding: 0;
@@ -363,8 +363,8 @@
       top: 36px;
       bottom: 0;   /* full height — the continuous spine at the rail edge runs
                       through the toolbar and footer too. */
-      left: 359px;
-      width: 1.5px;
+      left: calc(var(--rail-w) - 1px);
+      width: var(--edge-w);
       background: var(--grid);
       z-index: 1500;
       pointer-events: none;
@@ -392,8 +392,9 @@
        Yokoo): paper background, monochrome typography, a single red dot ("hi-no-maru"
        reference) as the only color accent. */
     #archive-list .archive-item.is-current {
-      padding: 20px 28px 22px 28px;
+      padding: 24px 28px 22px 16px;
       height: 170px;
+      border-bottom: var(--edge-w) solid var(--grid);
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -484,7 +485,7 @@
     #archive-list .archive-item.is-current .question {
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-size: clamp(15px, 1.4vw, 18px);
-      font-weight: 400;
+      font-weight: 450;   /* a touch heavier than regular */
       line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.02em;
       color: #1a1a1a;
@@ -495,6 +496,15 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+    /* Triangle arrow at the end of the main question — inline SVG so it always
+       renders as the solid black triangle (no font-glyph fallback issues). */
+    #archive-list .archive-item.is-current .question .q-arrow {
+      display: inline-block;
+      width: 0.75em; height: 0.75em;
+      margin-left: 0.4em;
+      vertical-align: baseline;
+      color: #1a1a1a;
+    }
     /* Past cards — outline-only stripe rows. Right-aligned text, thin top hairline
        acts as the band divider. No fill, even when active. */
     #archive-list .archive-item.is-past {
@@ -503,7 +513,7 @@
       gap: 14px;
       min-height: 28px;
       margin: 0;
-      padding: 8px 28px 8px 28px;
+      padding: 8px 16px 8px 16px;
       background: transparent;
       border: none;
       position: relative;
@@ -514,8 +524,32 @@
     #archive-list .archive-item.is-past::before {
       display: none !important;
     }
+    /* "QUESTIONS" header band — bounded by grid lines top + bottom. */
+    #archive-list .archive-header { list-style: none; margin: 0; padding: 0; }
+    #archive-list .archive-header-content {
+      display: flex; align-items: center;
+      height: 28px;
+      box-sizing: border-box;
+      padding: 0 16px;
+      /* Single hairline above (provided by the current card's bottom border) and
+         one below — no doubled line at the top of the band. Base grid weight
+         (1.4px); the first past row's top border is removed so nothing stacks. */
+      border-top: none;
+      border-bottom: var(--edge-w) solid var(--grid);
+    }
+    /* Section heading (informational, not a button) — same sans family as the
+       questions, small + quiet grey, distinct from the mono toolbar buttons. */
+    #archive-list .archive-header-content .header-label {
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grid);   /* same as the grid line color */
+    }
+    /* The header band's bottom border is now the line above row 01. */
     #archive-list li:has(.archive-item.is-current) + li .archive-item.is-past {
-      border-top: 1px solid #a3a3a3;
+      border-top: none;
     }
     #archive-list .archive-item.is-past .label {
       margin-bottom: 0;
@@ -587,7 +621,7 @@
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      border-top: 1px solid #a3a3a3;
+      border-top: var(--edge-w) solid var(--grid);
       font-family: 'Jost', 'Geist', 'Helvetica Neue', sans-serif;
       font-size: 10px;
       color: rgba(26,26,26,0.60);
@@ -840,11 +874,11 @@
       font-weight: 400;
       line-height: 1.15;
       color: #1a1a1a;
-      border-bottom: 1px solid #a3a3a3;
+      border-bottom: var(--edge-w) solid var(--grid);
     }
     .spot-card-story {
       padding: 18px 20px;
-      border-bottom: 1px solid #a3a3a3;
+      border-bottom: var(--edge-w) solid var(--grid);
       flex: 1 1 auto;
       overflow-y: auto;
     }
@@ -858,7 +892,7 @@
     }
     .spot-card-meta {
       padding: 12px 20px;
-      border-bottom: 1px solid #a3a3a3;
+      border-bottom: var(--edge-w) solid var(--grid);
       font-family: 'Geist Mono', monospace;
       font-size: 10px;
       letter-spacing: 0.14em;
@@ -1233,14 +1267,14 @@
 
     body {
       padding-top: 36px;
-      padding-bottom: 72px;   /* toolbar band 36 + footer 36 */
-      padding-left: 360px;
+      padding-bottom: calc(36px + var(--footer-h));   /* toolbar 36 + footer */
+      padding-left: var(--rail-w);
     }
 
     /* ── Map: fills the right column between masthead and footer ── */
     #map-pane {
-      width: calc(100vw - 360px);
-      height: calc(100vh - 108px);   /* masthead 36 + toolbar 36 + footer 36 */
+      width: calc(100vw - var(--rail-w));
+      height: calc(100vh - 72px - var(--footer-h));   /* masthead 36 + toolbar 36 + footer */
       position: relative;
       background: #f4f4f5; /* match map land color so resizes don't flash the page bg */
     }
@@ -1248,14 +1282,14 @@
     /* ── Bottom static label bar — split by the spine line ── */
     #footer {
       position: fixed; bottom: 0; left: 0; right: 0;
-      height: 36px; z-index: 1400;
+      height: var(--footer-h); z-index: 1400;
       background: #ffffff;
-      border-top: 1px solid #a3a3a3;
+      border-top: var(--edge-w) solid var(--grid);
       display: flex; align-items: center;
       padding: 1px 0 0;
     }
     #footer .footer-left {
-      width: 360px;
+      width: var(--rail-w);
       flex-shrink: 0;
       height: 100%;
       display: flex; align-items: center; justify-content: space-between;
@@ -1327,7 +1361,7 @@
        Overlay is click-through except the panel itself, so the exposed map
        stays usable behind it. Plain Inter — this is info, not product UI. */
     #help-overlay {
-      position: fixed; top: 36px; bottom: 36px; left: 0; right: 0;
+      position: fixed; top: 36px; bottom: var(--footer-h); left: 0; right: 0;
       z-index: 2000;
       pointer-events: none;          /* let map clicks pass through on the right */
     }
@@ -1341,7 +1375,7 @@
       width: 60%; max-width: 860px; height: 100%;
       box-sizing: border-box;
       background: #ffffff;
-      border-right: 1.5px solid var(--grid);   /* the dividing vertical line */
+      border-right: var(--edge-w) solid var(--grid);   /* the dividing vertical line */
       color: #1a1a1a;
       padding: 0;                          /* minimal layout manages its own spacing */
       overflow: auto;
@@ -1378,14 +1412,14 @@
     /* Top row: image cell + intro cell */
     #help-panel .hg-top {
       display: grid; grid-template-columns: var(--img-col) 1fr;
-      border-bottom: 1.5px solid var(--grid);
+      border-bottom: var(--edge-w) solid var(--grid);
     }
     #help-panel .hg-img {
       padding: 0;                          /* image fills the cell, flush top-left */
       display: flex; align-items: flex-start; justify-content: flex-start;
       overflow: hidden;                    /* crop the scaled image to the cell */
       box-sizing: border-box;
-      border-right: 1.5px solid var(--grid);   /* image-edge line continues down to the Step grid */
+      border-right: var(--edge-w) solid var(--grid);   /* image-edge line continues down to the Step grid */
     }
     #help-panel .help-figure {
       display: block; width: 100%; height: 317px;   /* right edge = divider */
@@ -1394,8 +1428,8 @@
       background: #f0f0ee;                 /* NO image border; grid rules frame it */
     }
     #help-panel .hg-intro { padding: 56px 36px 36px 41px; }  /* left gap from image; a little lower */
-    #help-panel .hg-intro .help-lede { font-size: 16px; margin: 0 0 28px; text-indent: 0; }
-    #help-panel .hg-intro p { margin: 0 0 22px; font-size: 14px; line-height: 1.8; color: #1a1a1a; }
+    #help-panel .hg-intro .help-lede { font-size: 15px; margin: 0 0 28px; text-indent: 0; }
+    #help-panel .hg-intro p { margin: 0 0 22px; font-size: 13px; line-height: 1.8; color: #1a1a1a; }
     #help-panel .hg-intro p:last-child { margin: 0; }
     #help-panel strong { font-weight: 600; }
 
@@ -1403,16 +1437,16 @@
        Step/Guide 칼럼이 subgrid로 같은 4개 행을 공유 → 01↔문장1 등 줄 맞음. */
     #help-panel .hg-steps {
       display: grid;
-      grid-template-columns: var(--img-col) 72px 36px 1fr;   /* empty | Step | bar | Guide */
+      grid-template-columns: var(--img-col) 72px 28px 1fr;   /* empty | Step | bar | Guide */
       grid-template-rows: auto auto auto auto;               /* 헤더 / 01 / 02 / 03 */
       row-gap: 20px;
       padding: 28px 0;                                       /* 행 블록 위아래 여백 */
-      border-bottom: 1.5px solid var(--grid);
+      border-bottom: var(--edge-w) solid var(--grid);
     }
     #help-panel .hg-empty {
       grid-row: 1 / -1;                                      /* 전체 높이 */
       margin: -28px 0;                                       /* 부모 위아래 패딩 상쇄 → 선이 셀 끝까지 */
-      border-right: 1.5px solid var(--grid);                     /* line continues from image's right edge */
+      border-right: var(--edge-w) solid var(--grid);                     /* line continues from image's right edge */
     }
     #help-panel .hg-step {
       grid-column: 2; grid-row: 1 / -1;
@@ -1431,18 +1465,18 @@
       align-items: center;                                   /* 행 안 세로 가운데, 문장 왼쪽 */
       padding: 0 36px;
     }
-    #help-panel .sg-head { font-size: 14px; font-weight: 600; color: #1a1a1a; margin: 0; }
-    #help-panel .sg-num  { font-size: 14px; font-weight: 400; color: #1a1a1a; margin: 0; }
-    #help-panel .sg-text { font-size: 14px; line-height: 1.6; color: #1a1a1a; margin: 0; }
+    #help-panel .sg-head { font-size: 13px; font-weight: 600; color: #1a1a1a; margin: 0; }
+    #help-panel .sg-num  { font-size: 13px; font-weight: 400; color: #1a1a1a; margin: 0; }
+    #help-panel .sg-text { font-size: 13px; line-height: 1.6; color: #1a1a1a; margin: 0; }
 
     /* Bottom colophon row */
     #help-panel .hg-foot { padding: 48px 36px 36px 281px; }   /* left-aligned with the "Step" label (measured) */
-    #help-panel .help-inquiries { font-size: 14px; color: #1a1a1a; margin: 0; max-width: 520px; text-align: left; }
+    #help-panel .help-inquiries { font-size: 13px; color: #1a1a1a; margin: 0; max-width: 520px; text-align: left; }
     #help-panel .help-link { color: var(--accent, #D9531E); font-weight: 600; }
     /* Secondary colophon line — monospace, smaller, faded; reads as supplementary meta */
     #help-panel .help-meta {
       font-family: 'Inter', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
-      font-size: 14px; line-height: 1.6; color: #1a1a1a;
+      font-size: 13px; line-height: 1.6; color: #1a1a1a;
       margin: 32px 0 0; max-width: 520px; text-align: left;
     }
     #help-panel .help-meta a { color: var(--accent, #D9531E); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
@@ -1451,12 +1485,12 @@
     @media (max-width: 720px) {
       #help-panel { width: 100%; max-width: none; border-right: none; }
       #help-panel .hg-top { grid-template-columns: 1fr; }
-      #help-panel .hg-img { border-right: none; border-bottom: 1.5px solid var(--grid); }
+      #help-panel .hg-img { border-right: none; border-bottom: var(--edge-w) solid var(--grid); }
       #help-panel .help-figure { height: 220px; }
       #help-panel .hg-steps { grid-template-columns: 1fr; }
       #help-panel .hg-empty { display: none; }
       #help-panel .hg-bar { display: none; }
-      #help-panel .hg-step { border-bottom: 1.5px solid var(--grid); }
+      #help-panel .hg-step { border-bottom: var(--edge-w) solid var(--grid); }
     }
     #footer .footer-end .dark-toggle {
       width: 18px;
@@ -1536,23 +1570,25 @@
     #answer-panel {
       position: fixed;
       top: 36px;            /* below masthead */
-      left: 360px;          /* right of archive rail */
+      left: var(--rail-w);          /* right of archive rail */
       right: 0;
       height: 0;            /* runtime-set to match main question card height */
       background: #ffffff;
-      border-bottom: 1px solid #a3a3a3;
+      border-bottom: var(--edge-w) solid var(--grid);
       z-index: 950;
       display: none;
       overflow: hidden;
-      box-sizing: content-box;   /* height = inner area; bottom border sits OUTSIDE
-                                    so the panel's bottom line aligns with the next
-                                    archive row's top border at the spine. */
+      box-sizing: border-box;    /* border INSIDE the runtime height — matches the
+                                    .is-current card (also border-box), so the
+                                    panel's 1.4px bottom line and the card's 1.4px
+                                    bottom border occupy the SAME y-range and stay
+                                    perfectly collinear across the spine. */
     }
     #answer-panel.is-open { display: block; }
     #answer-panel .panel-inner {
       width: 100%;
       height: 100%;
-      padding: 20px 56px 32px 32px;
+      padding: 24px 56px 32px 32px;
       box-sizing: border-box;
       display: flex;
       align-items: flex-start;
@@ -1560,7 +1596,7 @@
     }
     #answer-panel .panel-text {
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
-      font-weight: 400;
+      font-weight: 450;   /* match the main question card */
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.02em;
@@ -1583,9 +1619,10 @@
       width: 100%;
       height: 100%;
       box-sizing: border-box;
-      /* top padding mirrors question card; bottom padding = divider height (50px) + 12 buffer
-         so the textarea above the divider has breathing room and never overlaps it */
-      padding: 20px 32px 62px 32px;
+      /* top padding mirrors question card (24px) so the textarea's first line
+         aligns with the question's first line; bottom padding = divider height
+         (50px) + 12 buffer so the textarea never overlaps the divider */
+      padding: 24px 32px 62px 32px;
       position: relative;
     }
     #answer-panel.is-write .panel-write { display: block; }
@@ -1604,7 +1641,7 @@
       resize: none;
       background: transparent;
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
-      font-weight: 400;
+      font-weight: 450;   /* match the main question card */
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.02em;
@@ -1613,8 +1650,8 @@
       overflow: hidden;
     }
     #answer-panel .panel-input::placeholder {
-      color: rgba(26,26,26,0.35);
-      font-weight: 400;
+      color: rgba(26,26,26,0.12);   /* same light grey as the counter */
+      font-weight: 450;   /* match the main question card */
     }
     #answer-panel .panel-hood {
       font-family: 'Jost', 'Helvetica Neue', sans-serif;
@@ -1625,11 +1662,20 @@
       text-transform: uppercase;
       line-height: 1;
     }
-    /* Read-mode hood line: location + coords only */
+    /* "+"-opened prompt — same font/size as the neighborhood (hood) line, just
+       greyed. Inherits everything from .panel-hood; only the color differs. */
+    #answer-panel .panel-hood.is-prompt {
+      color: rgba(26,26,26,0.55) !important;
+    }
+    /* Read-mode hood line: location + coords, then the author handle spaced the
+       same as the write-mode nickname (so saved cards read identically). */
     #panel-hood-read {
       display: inline-flex;
       align-items: baseline;
       gap: 8px;
+    }
+    #panel-hood-read .hood-handle:not(:empty) {
+      margin-left: 12px;   /* + the 8px flex gap = 20px, matching write mode */
     }
     /* Finishing mark (hedera ❧) after the answer sentence. */
     #answer-panel .panel-mark {
@@ -1674,38 +1720,40 @@
       border: none;
       outline: none;
       padding: 0;
-      /* Size the box to its own text so the underline only spans the name,
-         not the full handle width (it used to reach the arrow button). */
+      /* Sizes to its content — the underline grows only as much as the typed
+         name (or the placeholder when empty), capped so a long name doesn't push
+         the row too wide. */
       width: auto;
       field-sizing: content;
-      min-width: 5ch;
+      min-width: 1ch;
       max-width: 12ch;
       text-align: left;
       caret-color: var(--edge);
       /* Match the neighborhood (.panel-hood) text exactly */
       font-family: var(--mono);
       font-size: 10px;
-      font-weight: 400;
+      font-weight: 500;   /* match the neighborhood (.panel-hood) weight */
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--edge);
-      /* Affordance: a hairline underline signals this is an editable field. */
-      border-bottom: 1px solid rgba(26,26,26,0.55);
+      color: rgba(26,26,26,0.55);   /* same grey as the question list / hood */
+      /* Underline hidden at rest (transparent keeps the 1px so layout doesn't
+         shift); it appears on focus/once filled via the rule below. */
+      border-bottom: 1px solid transparent;
       padding-bottom: 2px;
     }
-    /* Focus, or once a name is filled in, the underline goes solid black to
-       match the (black) text instead of staying a faint grey hairline. */
+    /* Focus, or once a name is filled in, the underline appears in the same
+       grey as the text (no black — the whole row is one grey). */
     #panel-handle .panel-name-field:focus,
     #panel-handle .panel-name-field.is-filled {
-      color: var(--edge);
-      border-bottom-color: #1a1a1a;
+      color: rgba(26,26,26,0.55);
+      border-bottom-color: rgba(26,26,26,0.55);
     }
     /* Hide the placeholder once the field is focused (clicked in). */
     #panel-handle .panel-name-field:focus::placeholder {
       color: transparent;
     }
     #panel-handle .panel-name-field::placeholder {
-      color: rgba(26, 26, 26, 0.55);
+      color: rgba(26,26,26,0.12);   /* same light grey as the textarea placeholder */
       font-family: var(--mono);
       font-weight: 400;
       letter-spacing: 0.06em;
@@ -1722,15 +1770,13 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     #answer-panel .panel-count {
-      font-family: 'Jost', 'Helvetica Neue', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: rgba(26,26,26,0.45);
-      letter-spacing: 0.005em;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
+      font-weight: 450;
+      letter-spacing: 0.02em;
       line-height: 1;
       position: absolute;
-      bottom: 60px;
-      right: 18px;
+      bottom: 20px;   /* bottom aligned with the neighborhood row's bottom */
+      right: 68px;   /* 36px DROP button + 32px padding (matches the 32px left padding from the line) */
       z-index: 2;
       display: inline-flex;
       align-items: baseline;
@@ -1748,7 +1794,7 @@
        (hood row, divider, +) sit relative to the panel like write mode does. */
     #answer-panel:not(.is-write) .panel-read {
       display: block;
-      padding: 20px 56px 62px 32px;
+      padding: 24px 56px 62px 32px;
       position: relative;
     }
     /* Read mode: anchor the neighborhood line so its bottom gap equals the
@@ -1758,7 +1804,7 @@
     #answer-panel:not(.is-write) .panel-read .panel-write-actions {
       bottom: 20px !important;
     }
-    #answer-panel .panel-divider-read { display: block; }
+    #answer-panel .panel-divider-read { display: none; }   /* divider above the hood row removed */
     #answer-panel .panel-plus {
       position: absolute;
       right: 19px;
@@ -1801,7 +1847,7 @@
       z-index: 2;
     }
     #answer-panel.is-write .panel-drop-label {
-      display: block;
+      display: none;   /* button now carries its own "DROP" text full-time */
       opacity: 0;
       transition: opacity 0.15s ease;
     }
@@ -1813,8 +1859,8 @@
       top: 0;
       bottom: 0;
       right: 36px;
-      width: 1px;
-      background: #a3a3a3;
+      width: var(--edge-w);
+      background: var(--grid);
       pointer-events: none;
       z-index: 1;
     }
@@ -1829,14 +1875,14 @@
       bottom: 0;
       width: 36px;
       height: auto;
-      background: #D9531E;
+      background: transparent;   /* empty by default — fills on hover */
       border: none;
       padding: 0;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
+      color: #1a1a1a;            /* black "DROP" text on the empty cell */
       transition: background 0.15s ease, color 0.15s ease;
       z-index: 2;
     }
@@ -1862,38 +1908,40 @@
       background: #1a1a1a;
       color: #ffffff;
     }
-    /* On hover, replace the pen icon with the word DROP inside the same square button */
-    #answer-panel .panel-submit:hover svg { display: none; }
+    /* Default: the button reads "DROP". On hover the word is replaced by the
+       hand-drawn arrow (→) — signalling "you're about to submit". */
+    #answer-panel .panel-submit svg { display: none; }
+    #answer-panel .panel-submit:hover svg { display: block; }
     #answer-panel .panel-submit::after {
       content: 'DROP';
-      display: none;
+      display: inline-block;
       font-family: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       font-size: 9px;
       font-weight: 500;
-      letter-spacing: 0.14em;
-      color: #ffffff;
+      letter-spacing: 0.1em;
+      color: currentColor;   /* follows button color: black default, white on hover */
     }
-    #answer-panel .panel-submit:hover::after { display: inline-block; }
+    #answer-panel .panel-submit:hover::after { display: none; }
     #answer-panel .panel-divider {
       display: none;
       position: absolute;
       left: 0;
       right: 0;
       bottom: 50px;
-      height: 1px;
-      background: #a3a3a3;
+      height: var(--edge-w);
+      background: var(--grid);
       pointer-events: none;
       z-index: 1;
     }
-    #answer-panel.is-write .panel-divider { display: block; }
+    #answer-panel.is-write .panel-divider { display: none; }   /* divider above the hood row removed */
     #answer-panel .panel-vdivider2 {
       display: none;
       position: absolute;
       bottom: 0;
       height: 50px;
       right: 100px;
-      width: 1px;
-      background: #a3a3a3;
+      width: var(--edge-w);
+      background: var(--grid);
       pointer-events: none;
       z-index: 1;
     }
@@ -1923,13 +1971,15 @@
 
     :root {
       --edge: #1a1a1a;
-      --grid: #262626;   /* grid/border lines — slightly softer than --edge (text/fills) */
+      --grid: #000;   /* grid/border lines — pure black */
       --edge-w: 1.5px;
+      --rail-w: 340px;   /* archive-rail width = spine x = footer-left / toolbar cell-1 width */
+      --footer-h: 36px;  /* bottom footer band height (toolbar stays 36px above it) */
       --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
     }
 
     /* Masthead — bold bottom edge, monospace title hint */
-    #masthead { border-bottom: var(--edge-w) solid #555; }
+    #masthead { border-bottom: var(--edge-w) solid var(--grid); }
     #masthead .masthead-vdivider { background: var(--grid); width: var(--edge-w); }
     /* Tagline shares the PINNED wordmark font (Outfit), but sits on a straight
        baseline — no letter hop. */
@@ -1961,9 +2011,10 @@
       letter-spacing: 0.14em;
       color: var(--edge);
     }
-    /* Past row separators → hard black */
+    /* Past row separators — the "QUESTIONS" header band's bottom border is now
+       the line above row 01, so no border on the first past row. */
     #archive-list li:has(.archive-item.is-current) + li .archive-item.is-past {
-      border-top: var(--edge-w) solid var(--grid);
+      border-top: none;
     }
     /* Past row numbers + titles — number stays as accent, title monospace */
     #archive-list .archive-item.is-past .label {
@@ -2005,7 +2056,7 @@
        Landing view only — hidden in spotlight mode. */
     #toolbar {
       position: fixed;
-      bottom: 36px; left: 0; right: 0;
+      bottom: var(--footer-h); left: 0; right: 0;
       height: 36px;
       z-index: 1300;
       background: #ffffff;
@@ -2032,7 +2083,7 @@
        lands exactly on the #archive-spine — a button hovered here can't bleed
        past the spine into cell 2. Cells 2–4 share the remaining width. */
     #toolbar .tb-cell:first-child {
-      flex: 0 0 360px;
+      flex: 0 0 var(--rail-w);
       /* Empty placeholder cell — drop its top rule so the line only runs
          above the active pan/RESET buttons. */
       border-top: none;
@@ -2056,9 +2107,10 @@
       gap: 7px;
       font-family: var(--mono);
       font-size: 12px;
+      font-weight: 500;   /* slightly heavier so RESET reads crisply, esp. on dark hover */
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--edge);
+      color: #444;   /* soft-grey toolbar label — independent of black grid lines */
       transition: background 0.15s ease, color 0.15s ease;
     }
     #toolbar .tb-btn:hover { background: #1a1a1a; color: #ffffff; }
@@ -2110,8 +2162,9 @@
     }
     #answer-panel .panel-hood {
       font-family: var(--mono);
-      color: var(--edge);
+      color: rgba(26,26,26,0.55);   /* same grey as the question list */
       letter-spacing: 0.06em;
+      font-weight: 500;
     }
     #answer-panel .panel-hood-marker {
       background: var(--edge);
@@ -2120,10 +2173,10 @@
       opacity: 1;
     }
     #answer-panel .panel-count {
-      font-family: var(--mono);
-      color: rgba(26,26,26,0.18);
-      font-weight: 400;
-      font-size: 15px;
+      font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
+      color: rgba(26,26,26,0.12);   /* lighter grey */
+      font-weight: 450;
+      font-size: clamp(17.5px, 1.6vw, 20.5px);   /* match the card text */
     }
     /* Handle matches the neighborhood line exactly. */
     #answer-panel .panel-handle {
@@ -2135,8 +2188,8 @@
       text-transform: uppercase;
     }
     #answer-panel .panel-count .count-quill {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       color: inherit;            /* follow the counter color (number + quill change together) */
       vertical-align: middle;
     }
@@ -2325,9 +2378,9 @@
     /* Submit button cell — 36×36 square sitting on the bottom strip,
        right next to the nickname box (matches the masthead × button). */
     #answer-panel .panel-submit {
-      width: 36px !important;
-      height: 36px !important;
-      top: auto !important;
+      width: 36px !important;   /* narrow column */
+      height: auto !important;
+      top: 0 !important;        /* full panel height — tall action button */
       bottom: 0 !important;
     }
 
@@ -2336,13 +2389,14 @@
       bottom: 36px !important;
     }
 
-    /* Vertical line at the submit cell's left edge — only spans the 36px
-       bottom strip, bordering the two square cells (nickname | quill). */
+    /* Vertical line aligned with the masthead X-button's left edge (right:36px),
+       running from the panel top DOWN to just above the 36px submit cell — a
+       continuation of the masthead divider through the open panel. */
     #answer-panel .panel-vdivider {
-      top: auto !important;
-      bottom: 0 !important;
-      height: 36px !important;
-      right: 36px !important;
+      top: 0 !important;
+      bottom: 0 !important;   /* runs full height, down the submit button's left edge */
+      height: auto !important;
+      right: 36px !important;   /* = tall button's left edge */
     }
 
     /* Vertical line at the handle cell's left edge — handle box width = 84px,
@@ -2354,22 +2408,16 @@
 
     /* Re-center the text baselines inside the new 36px strip */
     #answer-panel .panel-write-actions {
-      bottom: 12px !important;
+      bottom: 20px !important;   /* match the read-mode hood row position */
     }
     /* Name handle sits just left of the 36px quill submit box. No divider. */
+    /* Nickname now flows inline in the neighborhood row, just after the hood
+       text — a comfortable gap to its right, grouped as one unit. */
     #answer-panel.is-write .panel-handle {
-      position: absolute !important;
-      /* 36px = submit button width, +12px gap so the name field sits a touch
-         closer to the orange button. */
-      right: 48px !important;
-      top: auto !important;
-      bottom: 0 !important;
-      width: 84px !important;
-      height: 36px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      box-sizing: border-box !important;
+      position: static !important;
+      margin-left: 20px !important;
+      width: auto !important;
+      height: auto !important;
     }
     #answer-panel .panel-plus {
       bottom: 12px !important;
@@ -2413,15 +2461,15 @@
     /* Main question, answer placeholder, and typed answer all share one
        size so the question reads at the same scale as the card text. */
     #archive-list .archive-item.is-current .question {
-      font-size: clamp(17px, 1.6vw, 20px) !important;
+      font-size: clamp(17.5px, 1.6vw, 20.5px) !important;
       line-height: clamp(26px, 2.4vw, 30px) !important;
     }
     #answer-panel .panel-text {
-      font-size: clamp(17px, 1.6vw, 20px) !important;
+      font-size: clamp(17.5px, 1.6vw, 20.5px) !important;
       line-height: clamp(26px, 2.4vw, 30px) !important;
     }
     #answer-panel .panel-input {
-      font-size: clamp(17px, 1.6vw, 20px) !important;
+      font-size: clamp(17.5px, 1.6vw, 20.5px) !important;
       line-height: clamp(26px, 2.4vw, 30px) !important;
     }
     #archive-list .archive-item.is-current .question {
@@ -2437,7 +2485,7 @@
     #map-badge {
       position: fixed;
       right: 16px;
-      bottom: calc(72px + 16px);
+      bottom: calc(36px + var(--footer-h) + 16px);
       width: 154px;
       height: 154px;
       pointer-events: auto;
@@ -2505,8 +2553,8 @@
        so the toggle remains clickable on top of any spotlight chrome. */
     #map-sf-logo {
       position: fixed;
-      left: 360px;
-      bottom: calc(72px + 16px);
+      left: var(--rail-w);
+      bottom: calc(36px + var(--footer-h) + 16px);
       width: 38px;
       height: 38px;
       margin-left: 16px;
@@ -2627,23 +2675,17 @@
       font-size: 10px !important;
       font-weight: 400 !important;
       letter-spacing: 0.06em !important;
-      color: var(--edge, #1a1a1a) !important;
+      color: #444 !important;   /* soft-grey footer text — independent of black grid lines */
       text-transform: uppercase !important;
     }
     /* Bookend labels (ASSIGNMENT / NO. 01 and PINS DROPPED) — bold (500),
        heavier than the center coordinate line. Span-inclusive so the inner
        <span> text actually picks up the weight. */
-    #footer .footer-left,
-    #footer .footer-left span,
+    /* Only PINS DROPPED stays bold; ASSIGNMENT / NO. 01 are regular weight. */
     #footer .footer-end,
     #footer .footer-end span {
       font-weight: 500 !important;
       letter-spacing: 0.06em !important;
-    }
-    /* "No. 01" stays regular weight — only ASSIGNMENT / PINS DROPPED are bold. */
-    #footer .footer-left .footer-left-end,
-    #footer .footer-left .footer-left-end span {
-      font-weight: 400 !important;
     }
 
     /* ─── Archive row hierarchy fix ──────────────────────────────────
@@ -2667,11 +2709,31 @@
       font-size: 14px !important;
       color: rgba(26, 26, 26, 0.55) !important;
     }
-    /* Archive row spacing — small breathing room between rows */
+    /* Archive row spacing — breathing room between rows. Each row carries a
+       grid hairline on top; on hover the whole row (incl. that line) fills black. */
     #archive-list .archive-item.is-past {
-      padding-top: 9px !important;
-      padding-bottom: 9px !important;
+      padding-top: 13px !important;
+      padding-bottom: 13px !important;
       min-height: 30px !important;
+      border-top: var(--edge-w) solid var(--grid) !important;
+    }
+    /* First past row sits right under the current card. The card already draws
+       that line (its border-bottom), so the first row must NOT add its own
+       border-top — otherwise the two stack into one thick line.
+       DOM order is: current card <li>, then past rows — so the first past row
+       is the <li> right AFTER the one holding .is-current. */
+    #archive-list li:has(.archive-item.is-current) + li .archive-item.is-past {
+      border-top: none !important;
+    }
+    /* Hover fills the full row including its top hairline (border turns black so
+       no grey gap shows between the fill and the line above). */
+    #archive-list .archive-item.is-past:hover {
+      border-top-color: var(--edge) !important;
+    }
+    /* …and the line directly BELOW the hovered row (= the next row's top
+       hairline) also turns black, so the black band has no grey edge underneath. */
+    #archive-list li:has(.archive-item.is-past:hover) + li .archive-item.is-past {
+      border-top-color: var(--edge) !important;
     }
     #archive-list .archive-item.is-past:hover .question {
       color: #ffffff !important;
@@ -2879,6 +2941,7 @@
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
       <span class="panel-hood" id="panel-hood">RUSSIAN HILL 37.81 122.43</span>
+      <span class="panel-handle" id="panel-handle"><input type="text" id="panel-name" class="panel-name-field" maxlength="20" placeholder="your name?" autocomplete="off" spellcheck="false"/></span>
     </div>
     <div class="panel-divider"></div>
     <div class="panel-vdivider"></div>
@@ -2891,7 +2954,6 @@
       </svg>
       <span class="count-max">250</span>
     </span>
-    <span class="panel-handle" id="panel-handle"><input type="text" id="panel-name" class="panel-name-field" maxlength="20" placeholder="your name?" autocomplete="off" spellcheck="false"/></span>
     <button class="panel-submit" id="panel-submit" title="Drop pin" aria-label="Drop pin">
       <svg class="submit-arrowmark" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M1 6 Q 11 5.5 21 6.1"/>
@@ -3079,8 +3141,8 @@
 
       <!-- Bottom colophon row -->
       <div class="hg-foot">
-        <p class="help-inquiries" style="font-size: 14px;">PINNED The City Archive is a project by <strong>Interface Dynamics</strong>.</p>
-        <p class="help-meta" style="font-size: 14px;">For inquiries, email <a href="mailto:seohyeonkimkenny@gmail.com">seohyeonkimkenny@gmail.com</a>.</p>
+        <p class="help-inquiries" style="font-size: 13px;">PINNED The City Archive is a project by <strong>Interface Dynamics</strong>.</p>
+        <p class="help-meta" style="font-size: 13px;">For inquiries, email <a href="mailto:seohyeonkimkenny@gmail.com">seohyeonkimkenny@gmail.com</a>.</p>
       </div>
     </div>
   </aside>
@@ -3300,7 +3362,7 @@ function buildArchive() {
     const btn = document.createElement('button');
     btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
     btn.dataset.idx = originalIdx;
-    const questionHtml = isCurrent ? a.text : `<span class="q-scroll">${a.text}</span>`;
+    const questionHtml = isCurrent ? `${a.text}<svg class="q-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5 L21 12 L3 19 L8 12 Z" fill="currentColor"/></svg>` : `<span class="q-scroll">${a.text}</span>`;
     btn.innerHTML = `
       <div class="label"><span class="issue-no">${pad2(a.issueNo)}</span>${isCurrent ? '' : '<span class="label-word">Assignment</span>'}</div>
       <div class="question">${questionHtml}</div>
@@ -3326,6 +3388,9 @@ function buildArchive() {
 
   // 1) Billboard card — the selected question, shown large at the top.
   makeItem(ASSIGNMENTS[currentQuestionIndex], currentQuestionIndex, true);
+
+  // (No section header — the current card's bottom border is the single divider
+  //  between the active question and the list below.)
 
   // 2) Fixed list below — always full 12→01 order, never reordered on click.
   //    The currently selected row stays in place and is highlighted via .active.
@@ -3910,7 +3975,7 @@ function openAnswerPanel({ text, lngLat, hood, handle, timestamp }) {
     const locEl = hoodEl.querySelector('.hood-loc');
     if (locEl) locEl.textContent = `${(hood || '').toUpperCase()} ${lat}°N ${lng}°W`;
     const handleEl = hoodEl.querySelector('.hood-handle');
-    if (handleEl) handleEl.textContent = handle ? ` | ${handle.toUpperCase()}` : '';
+    if (handleEl) handleEl.textContent = handle ? handle.toUpperCase() : '';
   }
   answerPanel.classList.remove('is-write');
   const h = getMainQuestionHeight();
@@ -3927,10 +3992,17 @@ function openWritePanel({ lngLat, hood }) {
   const panelInput  = document.getElementById('panel-input');
   const panelCount  = document.getElementById('panel-count');
   if (panelHood) {
-    const lat = lngLat[1].toFixed(2);
-    const lng = Math.abs(lngLat[0]).toFixed(2);
-    const hoodName = (hood || '').toUpperCase();
-    panelHood.textContent = `${hoodName} ${lat}°N ${lng}°W`;
+    if (!lngLat) {
+      // Opened via "+" with no location yet — grey prompt to pick a spot.
+      panelHood.textContent = 'Pick a spot on the map';
+      panelHood.classList.add('is-prompt');
+    } else {
+      const lat = lngLat[1].toFixed(2);
+      const lng = Math.abs(lngLat[0]).toFixed(2);
+      const hoodName = (hood || '').toUpperCase();
+      panelHood.textContent = `${hoodName} ${lat}°N ${lng}°W`;
+      panelHood.classList.remove('is-prompt');
+    }
   }
   // Prefill the name field only if the user has a saved name; otherwise leave
   // it empty so the "your name?" placeholder shows and invites input. Submitting
@@ -4024,7 +4096,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!text) { if (panelInput) panelInput.focus(); return; }
 
       const lngLat = activePinLngLat;
-      if (!lngLat) { closeAnswerPanel(); return; }
+      if (!lngLat) {
+        // No location yet — hint to pick a spot instead of silently closing.
+        const panelHood = document.getElementById('panel-hood');
+        if (panelHood) {
+          panelHood.textContent = 'Pick a spot on the map first';
+          panelHood.classList.add('is-prompt');
+        }
+        return;
+      }
 
       // Name step: if the field is empty, fill it with the next anonymous name
       // (shown in solid black) and STOP — the user sees who they'll be, then
@@ -4088,10 +4168,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // If the About modal is open, close it first so the write panel doesn't overlap it.
       const helpOverlay = document.getElementById('help-overlay');
       if (helpOverlay && !helpOverlay.hidden) helpOverlay.hidden = true;
-      const c = map.getCenter();
-      const lngLat = [c.lng, c.lat];
-      const hood = nearestNeighborhood(lngLat);
-      openWritePanel({ lngLat, hood });
+      // Open with NO location — user must click the map to pick a spot.
+      openWritePanel({ lngLat: null, hood: null });
     });
   }
 
