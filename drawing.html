@@ -496,12 +496,12 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    /* Triangle arrow at the end of the main question — inline SVG so it always
-       renders as the solid black triangle (no font-glyph fallback issues). */
+    /* Arrow at the end of the main question — unicode ➢ (U+27A2). */
     #archive-list .archive-item.is-current .question .q-arrow {
       display: inline-block;
-      width: 0.75em; height: 0.75em;
       margin-left: 0.4em;
+      font-size: 0.8em;
+      line-height: 1;
       vertical-align: baseline;
       color: #1a1a1a;
     }
@@ -3362,7 +3362,7 @@ function buildArchive() {
     const btn = document.createElement('button');
     btn.className = 'archive-item ' + (isCurrent ? 'is-current' : 'is-past');
     btn.dataset.idx = originalIdx;
-    const questionHtml = isCurrent ? `${a.text}<svg class="q-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5 L21 12 L3 19 L8 12 Z" fill="currentColor"/></svg>` : `<span class="q-scroll">${a.text}</span>`;
+    const questionHtml = isCurrent ? `${a.text}<span class="q-arrow" aria-hidden="true">➢</span>` : `<span class="q-scroll">${a.text}</span>`;
     btn.innerHTML = `
       <div class="label"><span class="issue-no">${pad2(a.issueNo)}</span>${isCurrent ? '' : '<span class="label-word">Assignment</span>'}</div>
       <div class="question">${questionHtml}</div>
