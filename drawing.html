@@ -485,7 +485,7 @@
     #archive-list .archive-item.is-current .question {
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       font-size: clamp(15px, 1.4vw, 18px);
-      font-weight: 450;   /* a touch heavier than regular */
+      font-weight: 400;   /* regular — slightly thinner */
       line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.02em;
       color: #1a1a1a;
@@ -1596,7 +1596,7 @@
     }
     #answer-panel .panel-text {
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
-      font-weight: 450;   /* match the main question card */
+      font-weight: 400;   /* match the main question card */
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.02em;
@@ -1641,7 +1641,7 @@
       resize: none;
       background: transparent;
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
-      font-weight: 450;   /* match the main question card */
+      font-weight: 400;   /* match the main question card */
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
       letter-spacing: 0.02em;
@@ -1651,7 +1651,7 @@
     }
     #answer-panel .panel-input::placeholder {
       color: rgba(26,26,26,0.12);   /* same light grey as the counter */
-      font-weight: 450;   /* match the main question card */
+      font-weight: 400;   /* match the main question card */
     }
     #answer-panel .panel-hood {
       font-family: 'Jost', 'Helvetica Neue', sans-serif;
@@ -1671,7 +1671,7 @@
        same as the write-mode nickname (so saved cards read identically). */
     #panel-hood-read {
       display: inline-flex;
-      align-items: baseline;
+      align-items: center;   /* text centered on the ■ marker square */
       gap: 8px;
     }
     #panel-hood-read .hood-handle:not(:empty) {
@@ -1699,7 +1699,7 @@
       bottom: 19px;
       display: flex;
       gap: 12px;
-      align-items: baseline;
+      align-items: center;   /* text centered on the ■ marker square */
       z-index: 2;
     }
     #answer-panel .panel-handle {
@@ -1732,9 +1732,10 @@
       /* Match the neighborhood (.panel-hood) text exactly */
       font-family: var(--mono);
       font-size: 10px;
-      font-weight: 500;   /* match the neighborhood (.panel-hood) weight */
+      font-weight: 400;   /* match the footer / neighborhood weight */
       letter-spacing: 0.06em;
       text-transform: uppercase;
+      vertical-align: middle;
       color: rgba(26,26,26,0.55);   /* same grey as the question list / hood */
       /* Underline hidden at rest (transparent keeps the 1px so layout doesn't
          shift); it appears on focus/once filled via the rule below. */
@@ -1771,7 +1772,7 @@
     }
     #answer-panel .panel-count {
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
-      font-weight: 450;
+      font-weight: 400;
       letter-spacing: 0.02em;
       line-height: 1;
       position: absolute;
@@ -1802,7 +1803,7 @@
        !important needed to beat the write-mode override (`bottom:12px !important`
        further down) that also matches this selector. Write mode keeps 12px. */
     #answer-panel:not(.is-write) .panel-read .panel-write-actions {
-      bottom: 20px !important;
+      bottom: 20px !important;   /* same as write mode — no artificial offset */
     }
     #answer-panel .panel-divider-read { display: none; }   /* divider above the hood row removed */
     #answer-panel .panel-plus {
@@ -2107,7 +2108,7 @@
       gap: 7px;
       font-family: var(--mono);
       font-size: 12px;
-      font-weight: 500;   /* slightly heavier so RESET reads crisply, esp. on dark hover */
+      font-weight: 400;   /* regular weight */
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--grid);   /* grid black — label + hand icons */
@@ -2164,7 +2165,12 @@
       font-family: var(--mono);
       color: rgba(26,26,26,0.55);   /* same grey as the question list */
       letter-spacing: 0.06em;
-      font-weight: 500;
+      font-weight: 400;   /* match the footer text weight */
+    }
+    /* Read mode (saved card): neighborhood + author handle in solid grid black. */
+    #answer-panel:not(.is-write) #panel-hood-read,
+    #answer-panel:not(.is-write) #panel-hood-read .hood-handle {
+      color: var(--grid);
     }
     #answer-panel .panel-hood-marker {
       background: var(--edge);
@@ -2175,7 +2181,7 @@
     #answer-panel .panel-count {
       font-family: 'Neue Haas Grotesk Display', 'Helvetica Neue', sans-serif;
       color: rgba(26,26,26,0.12);   /* lighter grey */
-      font-weight: 450;
+      font-weight: 400;
       font-size: clamp(17.5px, 1.6vw, 20.5px);   /* match the card text */
     }
     /* Handle matches the neighborhood line exactly. */
@@ -2423,9 +2429,10 @@
       bottom: 12px !important;
     }
 
-    /* Read-mode padding shrinks to match: 36 strip + 12 buffer = 48 */
+    /* Read-mode padding matches write mode (62px) so the absolutely-positioned
+       hood row lands at the exact same height in both modes. */
     #answer-panel:not(.is-write) .panel-read {
-      padding-bottom: 48px !important;
+      padding-bottom: 62px !important;
     }
 
     /* Active card — keep original 170px height + padding, but put
@@ -4025,7 +4032,7 @@ function openWritePanel({ lngLat, hood }) {
   if (panelInput)  panelInput.value = '';
   if (panelCount) {
     const cur = panelCount.querySelector('.count-current');
-    if (cur) cur.textContent = '0';
+    if (cur) { cur.textContent = '0'; cur.style.color = ''; }
     panelCount.style.color = '';
   }
   answerPanel.classList.add('is-write');
@@ -4075,8 +4082,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const panelCountCurrent = panelCount.querySelector('.count-current');
     panelInput.addEventListener('input', () => {
       const n = panelInput.value.length;
-      if (panelCountCurrent) panelCountCurrent.textContent = String(n);
-      panelCount.style.color = n >= 220 ? 'rgba(26,26,26,0.65)' : 'rgba(26,26,26,0.45)';
+      if (panelCountCurrent) {
+        panelCountCurrent.textContent = String(n);
+        // Whole counter stays light; only the live count number darkens past 220.
+        panelCountCurrent.style.color = n >= 220 ? 'rgba(26,26,26,0.65)' : '';
+      }
     });
     panelInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeAnswerPanel();
