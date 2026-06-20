@@ -1753,7 +1753,7 @@
       color: transparent;
     }
     #panel-handle .panel-name-field::placeholder {
-      color: rgba(26,26,26,0.12);   /* same light grey as the textarea placeholder */
+      color: rgba(26,26,26,0.55);   /* same grey as the neighborhood line */
       font-family: var(--mono);
       font-weight: 400;
       letter-spacing: 0.06em;
@@ -2110,7 +2110,7 @@
       font-weight: 500;   /* slightly heavier so RESET reads crisply, esp. on dark hover */
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #444;   /* soft-grey toolbar label — independent of black grid lines */
+      color: var(--grid);   /* grid black — label + hand icons */
       transition: background 0.15s ease, color 0.15s ease;
     }
     #toolbar .tb-btn:hover { background: #1a1a1a; color: #ffffff; }
@@ -2497,8 +2497,8 @@
     }
     /* Hover → links to the About page: the whole badge turns black together
        (ring + bridge follow currentColor; flip faces transition in sync). */
-    #map-badge:hover { color: #333; }
-    #map-badge:hover .flip-face { color: #333; }
+    #map-badge:hover { color: #1a1a1a; }
+    #map-badge:hover .flip-face { color: #1a1a1a; }
     /* Center wordmark flip-card — only the center flips; ring + bridge stay still.
        Sits over the SVG center where PINNED used to be. */
     #map-badge .badge-center {
@@ -2675,7 +2675,7 @@
       font-size: 10px !important;
       font-weight: 400 !important;
       letter-spacing: 0.06em !important;
-      color: #444 !important;   /* soft-grey footer text — independent of black grid lines */
+      color: var(--grid) !important;   /* grid black */
       text-transform: uppercase !important;
     }
     /* Bookend labels (ASSIGNMENT / NO. 01 and PINS DROPPED) — bold (500),
@@ -3369,7 +3369,18 @@ function buildArchive() {
       ${isCurrent ? `<div class="assignment-tag">Assignment ${pad2(a.issueNo)}</div>` : ''}
     `;
     if (originalIdx === currentQuestionIndex) btn.classList.add('active');
-    btn.addEventListener('click', () => selectQuestion(originalIdx));
+    // The active (current) card opens the write panel — same as the masthead "+".
+    // Past rows switch the active question.
+    if (isCurrent) {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const helpOverlay = document.getElementById('help-overlay');
+        if (helpOverlay && !helpOverlay.hidden) helpOverlay.hidden = true;
+        openWritePanel({ lngLat: null, hood: null });
+      });
+    } else {
+      btn.addEventListener('click', () => selectQuestion(originalIdx));
+    }
     // On hover of a list row, measure how far the question text overflows its
     // box and expose it as --q-shift so the CSS slides it left by exactly that
     // much (revealing the clipped tail). Short questions overflow 0 → no shift.
