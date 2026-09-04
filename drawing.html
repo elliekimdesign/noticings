@@ -393,7 +393,10 @@
        reference) as the only color accent. */
     #archive-list .archive-item.is-current {
       padding: 24px 28px 22px 16px;
-      height: 170px;
+      /* Same formula as the write panel's fixed height (3 answer lines +
+         24px top + 62px bottom + 2px border allowance) so the bottom hairline
+         sits in ONE place — panel open, closed, or mid-typing. */
+      height: calc(clamp(24px, 2.2vw, 28px) * 3 + 88px);
       border-bottom: var(--edge-w) solid var(--grid);
       display: flex;
       flex-direction: column;
@@ -1158,6 +1161,9 @@
       opacity: 1;
       pointer-events: auto;
     }
+    /* Pin belongs to a question other than the active one — hidden entirely.
+       Toggled by applyQuestionFilter() when the user switches assignments. */
+    .answer-marker.q-off { display: none; }
     /* Spotlight (eye) mode still hides non-matching pins via .dim */
     .answer-marker.dim { opacity: 0; pointer-events: none; }
 
@@ -1438,7 +1444,7 @@
     #help-panel .hg-steps {
       display: grid;
       grid-template-columns: var(--img-col) 72px 28px 1fr;   /* empty | Step | bar | Guide */
-      grid-template-rows: auto auto auto auto;               /* 헤더 / 01 / 02 / 03 */
+      grid-template-rows: auto auto auto auto auto;          /* 헤더 / 01 / 02 / 03 / 04 */
       row-gap: 20px;
       padding: 28px 0;                                       /* 행 블록 위아래 여백 */
       border-bottom: var(--edge-w) solid var(--grid);
@@ -1599,7 +1605,7 @@
       font-weight: 400;   /* match the main question card */
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.02em;
+      letter-spacing: 0.035em;
       color: #1a1a1a;
       max-width: 54em;
       overflow-wrap: break-word;
@@ -1620,9 +1626,10 @@
       height: 100%;
       box-sizing: border-box;
       /* top padding mirrors question card (24px) so the textarea's first line
-         aligns with the question's first line; bottom padding = divider height
-         (50px) + 12 buffer so the textarea never overlaps the divider */
-      padding: 24px 32px 62px 32px;
+         aligns with the question's first line; right padding matches read mode
+         (56px) so the text doesn't hug the panel edge; bottom padding = divider
+         height (50px) + 12 buffer so the textarea never overlaps the divider */
+      padding: 24px 56px 62px 32px;
       position: relative;
     }
     #answer-panel.is-write .panel-write { display: block; }
@@ -1644,7 +1651,7 @@
       font-weight: 400;   /* match the main question card */
       font-size: clamp(15px, 1.4vw, 18px);
       line-height: clamp(24px, 2.2vw, 28px);
-      letter-spacing: 0.02em;
+      letter-spacing: 0.035em;
       color: #1a1a1a;
       padding: 0;
       overflow: hidden;
@@ -2743,13 +2750,13 @@
       font-size: 14px !important;
       color: rgba(26, 26, 26, 0.55) !important;
     }
-    /* Archive row spacing — breathing room between rows. Each row carries a
-       grid hairline on top; on hover the whole row (incl. that line) fills black. */
+    /* Archive row spacing — breathing room between rows. No hairline between
+       rows: the questions list reads as one open column. */
     #archive-list .archive-item.is-past {
       padding-top: 13px !important;
       padding-bottom: 13px !important;
       min-height: 30px !important;
-      border-top: var(--edge-w) solid var(--grid) !important;
+      border-top: none !important;
     }
     /* First past row sits right under the current card. The card already draws
        that line (its border-bottom), so the first row must NOT add its own
@@ -2881,7 +2888,7 @@
     <span class="spot-q-label" id="spot-q-label">Assignment 12</span>
   </div>
   <div class="masthead-spot-meta" id="masthead-spot-meta" aria-hidden="true">
-    <span class="spot-q-text" id="spot-q-text">Where was your best date — or your worst?</span>
+    <span class="spot-q-text" id="spot-q-text">Where was your best date, or your worst?</span>
   </div>
   <button class="masthead-close" id="panel-close" title="Close" aria-label="Close answer panel">
     <svg class="mark-icon etch" width="18" height="18" viewBox="0 0 36 36" aria-hidden="true">
@@ -2921,7 +2928,7 @@
 
 <!-- ─────────── EYE-MODE QUESTION PILL (only shown in eye mode) ─────────── -->
 <div id="eye-q-banner">
-  <div class="q-text" id="eye-q-text">Where was your best date — or your worst?</div>
+  <div class="q-text" id="eye-q-text">Where was your best date, or your worst?</div>
   <button class="q-next" id="eye-q-next" title="Next question" aria-label="Next question">
     <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
       <path d="M 3.6 5.5 L 8.9 12 L 14.3 5.6" />
@@ -2971,12 +2978,12 @@
   <!-- WRITE MODE — input form for new answer (grid: input | actions row) -->
   <div class="panel-inner panel-write" id="panel-write">
     <div class="panel-write-input">
-      <textarea id="panel-input" class="panel-input" placeholder="Leave a few words here" maxlength="250" rows="2"></textarea>
+      <textarea id="panel-input" class="panel-input" placeholder="Leave a few words here" maxlength="300" rows="2"></textarea>
     </div>
     <div class="panel-write-actions">
       <span class="panel-hood-marker" aria-hidden="true"></span>
       <span class="panel-hood" id="panel-hood">RUSSIAN HILL 37.81 122.43</span>
-      <span class="panel-handle" id="panel-handle"><input type="text" id="panel-name" class="panel-name-field" maxlength="20" placeholder="your name?" autocomplete="off" spellcheck="false"/></span>
+      <span class="panel-handle" id="panel-handle"><input type="text" id="panel-name" class="panel-name-field" maxlength="20" placeholder="your name?" autocomplete="off" spellcheck="false" data-1p-ignore data-lpignore="true"/></span>
     </div>
     <div class="panel-divider"></div>
     <div class="panel-vdivider"></div>
@@ -2987,7 +2994,7 @@
         <path d="M4.5 19.2 Q 3.6 20 3 20.8"/>
         <circle cx="1.7" cy="22.4" r="1.7" fill="currentColor" stroke="none"/>
       </svg>
-      <span class="count-max">250</span>
+      <span class="count-max">300</span>
     </span>
     <button class="panel-submit" id="panel-submit" title="Drop pin" aria-label="Drop pin">
       <svg class="submit-arrowmark" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -3150,9 +3157,9 @@
                loading="lazy" />
         </div>
         <div class="hg-intro">
-          <p class="help-lede"><strong>PINNED</strong> is an archive of San Francisco. It explores how analog experiences can be preserved through digital media.</p>
-          <p>A question is given, and the answer is left at the place where it happened. Each entry is marked with a single pin and a short text.</p>
-          <p>Over time, the map fills with these records. Through unplanned moments<br>and the words left behind, the city can be seen in a different way.</p>
+          <p class="help-lede"><strong>PINNED</strong> is an archive of San Francisco, written by the people who were there.</p>
+          <p>Every so often, a question is posted. Something like: <em>Tell us about a place you love.</em> You answer it by dropping a pin where it happened and leaving a few words.</p>
+          <p>The pins stay. Over time, the map fills with small, unplanned records, and the city starts to look different: less like streets, more like the things that happened on them.</p>
         </div>
       </div>
 
@@ -3164,13 +3171,15 @@
           <p class="sg-num">01</p>
           <p class="sg-num">02</p>
           <p class="sg-num">03</p>
+          <p class="sg-num">04</p>
         </div>
         <div class="hg-bar"></div>
         <div class="hg-guide">
-          <p class="sg-head">Guide</p>
-          <p class="sg-text">Click the map or the (+) button to drop a pin.</p>
-          <p class="sg-text">Leave a note (250 chars max). You can include your name.</p>
-          <p class="sg-text">Explore the map and see what others left behind.</p>
+          <p class="sg-head">How it works</p>
+          <p class="sg-text">Read the current question.</p>
+          <p class="sg-text">Click the map, or press (+), where your answer happened.</p>
+          <p class="sg-text">Leave a note, up to 300 characters. Your name is optional.</p>
+          <p class="sg-text">Wander the map and read what others left.</p>
         </div>
       </div>
 
@@ -3330,6 +3339,34 @@ map.on('style.load', () => {
     paint: { 'line-color': '#bbb', 'line-width': 0.35, 'line-opacity': 0.7 }
   });
 
+  // ── Street names — quiet grey, only when zoomed in close (15+). They fade
+  // in gently so the poster look stays intact at the city-wide view; up close
+  // they read like faint print on paper, helping people find their exact spot. ──
+  try {
+    map.addLayer({
+      id: 'street-names',
+      type: 'symbol',
+      source: 'openmaptiles',
+      'source-layer': 'transportation_name',
+      minzoom: 15,
+      layout: {
+        'symbol-placement': 'line',
+        'text-field': ['coalesce', ['get', 'name:en'], ['get', 'name']],
+        'text-font': ['Noto Sans Regular'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 15, 9.5, 17, 12],
+        'text-letter-spacing': 0.08,
+        'text-transform': 'uppercase',
+        'symbol-spacing': 400,
+      },
+      paint: {
+        'text-color': '#999',
+        'text-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.6, 0.6, 17, 0.75],
+        'text-halo-color': 'rgba(250,250,247,0.9)',
+        'text-halo-width': 1,
+      }
+    });
+  } catch(_) {}
+
   // ── SF spotlight mask: a "donut" polygon that darkens everything outside SF ──
   fetch('assets/sf-boundary.geojson')
     .then(r => r.json())
@@ -3370,6 +3407,10 @@ function openPinFromUrl() {
   }
   if (!target) return;
   const open = () => {
+    // A shared pin may belong to a past question — switch the rail (and the
+    // map filter) to that question so its pin is actually visible.
+    const qIdx = QUESTIONS.indexOf(target.question);
+    if (qIdx >= 0 && qIdx !== currentQuestionIndex) selectQuestion(qIdx);
     map.flyTo({ center: target.lngLat, zoom: 15 });
     openAnswerPanel({ ...target, hood: nearestNeighborhood(target.lngLat) });
   };
@@ -3379,7 +3420,7 @@ function openPinFromUrl() {
 // ─────────── ASSIGNMENTS (one question per fortnight) ───────────
 // ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
 const ASSIGNMENTS = [
-  { issueNo: 2, dates: 'Sep 4 → Sep 18', text: "Where was your best date — or your worst?" },
+  { issueNo: 2, dates: 'Sep 4 → Sep 18', text: "Where was your best date, or your worst?" },
   { issueNo: 1, dates: 'May 28 → Jun 11', text: "Tell us about a place you love" },
 ];
 
@@ -3477,7 +3518,15 @@ function selectQuestion(idx) {
   currentQuestionIndex = idx;
   viewingIndex = idx;
   buildArchive();   // re-render so the clicked question becomes the active card
+  applyQuestionFilter();   // map shows only this question's pins
+  updatePinCount();
   if (typeof applySpotlight === 'function') applySpotlight();
+}
+
+// Show only the active question's pins on the map; every other pin is hidden.
+function applyQuestionFilter() {
+  const q = QUESTIONS[currentQuestionIndex];
+  answerMarkers.forEach(m => m.el.classList.toggle('q-off', m.question !== q));
 }
 
 // ── Eye-mode question pill — shows the active question and advances on click ──
@@ -3844,9 +3893,9 @@ function updatePinCount() {
   const all = PINS;
   const el = document.getElementById('footer-pins');
   if (el) {
-    const inSpotlight = document.body.classList.contains('spotlight-on');
+    // Count only the active question's pins — matches what the map shows.
     let n;
-    if (inSpotlight && typeof QUESTIONS !== 'undefined' && typeof currentQuestionIndex !== 'undefined') {
+    if (typeof QUESTIONS !== 'undefined' && typeof currentQuestionIndex !== 'undefined') {
       const q = QUESTIONS[currentQuestionIndex];
       n = all.filter(e => e.question === q).length;
     } else {
@@ -3942,8 +3991,12 @@ const answerMarkers = [];
 //    x-position (left→right) so the ◂ ▸ arrows match the map visually. ──
 let spotCurrent = null;   // the marker currently expanded in spotlight
 function spotlightOrdered() {
-  if (typeof map === 'undefined' || !map) return answerMarkers.slice();
-  return answerMarkers
+  // Only the active question's pins — hidden pins shouldn't be reachable
+  // with the ◂ ▸ arrows.
+  const q = QUESTIONS[currentQuestionIndex];
+  const visible = answerMarkers.filter(m => m.question === q);
+  if (typeof map === 'undefined' || !map) return visible;
+  return visible
     .map(m => ({ m, x: map.project(m.lngLat).x }))
     .sort((a, b) => a.x - b.x)
     .map(o => o.m);
@@ -3969,6 +4022,9 @@ function placeAnswerMarker({ id, lngLat, question, text, handle, timestamp, drop
   const wrap = document.createElement('div');
   wrap.className = 'answer-marker';
   wrap.dataset.question = question;
+  // Pins from other questions start hidden (applyQuestionFilter keeps this in
+  // sync when the user switches assignments in the rail).
+  if (question !== QUESTIONS[currentQuestionIndex]) wrap.classList.add('q-off');
   const initials = deriveInitials(handle);
   const handleHtml = initials ? `<div class="handle">${escapeHtml(initials)}</div>` : '';
   // .answer-note = the 18×18 pin square (always present, sets the marker's box).
@@ -4059,6 +4115,33 @@ function getMainQuestionHeight() {
   return cur ? cur.getBoundingClientRect().height : 160;
 }
 
+// The panel matches the question card's height, but a long answer (the limit
+// allows ~4 lines) needs more room — grow the panel just enough to fit, never
+// shrink below the card height. Works for both read text and the write textarea.
+function fitPanelHeight() {
+  if (!answerPanel.classList.contains('is-open')) return;
+  // Measure the question card's NATURAL height (clear any stretch we applied
+  // earlier, otherwise the panel could never shrink back).
+  const cur = document.querySelector('#archive-list .archive-item.is-current');
+  if (cur) cur.style.height = '';
+  const base = getMainQuestionHeight();
+  // WRITE MODE: the panel is EXACTLY the question card's measured height —
+  // same number, same bottom line, no movement on open/type/close, ever.
+  // (The card's CSS height is sized to fit a full 3-line, 300-char answer.)
+  let h = base;
+  if (!answerPanel.classList.contains('is-write')) {
+    // READ MODE: a long saved answer may need more room — grow to fit.
+    // 24px top padding + 62px bottom (divider + buffer) + border allowance.
+    const t = document.getElementById('panel-text');
+    if (t) h = Math.max(base, t.scrollHeight + 24 + 62 + 2);
+  }
+  document.documentElement.style.setProperty('--panel-h', h + 'px');
+  answerPanel.style.height = h + 'px';
+  // Stretch the question card to the same height so its bottom hairline stays
+  // collinear with the panel's across the spine.
+  if (cur && h > base) cur.style.height = h + 'px';
+}
+
 function openAnswerPanel({ id, text, lngLat, hood, handle, timestamp }) {
   panelText.textContent = text;
   activePinId = (id != null) ? id : null;
@@ -4078,6 +4161,7 @@ function openAnswerPanel({ id, text, lngLat, hood, handle, timestamp }) {
   answerPanel.classList.add('is-open');
   document.body.classList.add('panel-open');
   activePinLngLat = lngLat;
+  fitPanelHeight();   // long answers get a taller panel
 }
 
 function openWritePanel({ lngLat, hood }) {
@@ -4119,6 +4203,7 @@ function openWritePanel({ lngLat, hood }) {
   answerPanel.classList.add('is-open');
   document.body.classList.add('panel-open');
   activePinLngLat = lngLat;
+  fitPanelHeight();
   // Focus the textarea after panel transition
   setTimeout(() => { if (panelInput) panelInput.focus(); }, 50);
 }
@@ -4127,6 +4212,9 @@ function closeAnswerPanel() {
   answerPanel.classList.remove('is-open');
   answerPanel.classList.remove('is-write');
   document.body.classList.remove('panel-open');
+  // Un-stretch the question card (it may have grown to match a tall answer).
+  const curCard = document.querySelector('#archive-list .archive-item.is-current');
+  if (curCard) curCard.style.height = '';
   activePinLngLat = null;
   answerMarkers.forEach(m => m.el.classList.remove('is-open'));
   spotCurrent = null;
@@ -4160,9 +4248,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const n = panelInput.value.length;
       if (panelCountCurrent) {
         panelCountCurrent.textContent = String(n);
-        // Whole counter stays light; only the live count number darkens past 220.
-        panelCountCurrent.style.color = n >= 220 ? 'rgba(26,26,26,0.65)' : '';
+        // Whole counter stays light; only the live count number darkens near the limit.
+        panelCountCurrent.style.color = n >= 270 ? 'rgba(26,26,26,0.65)' : '';
       }
+      if (typeof fitPanelHeight === 'function') fitPanelHeight();
     });
     panelInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeAnswerPanel();
@@ -4180,7 +4269,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (panelName && !panelName.dataset.asciiWired) {
     panelName.dataset.asciiWired = '1';
     panelName.addEventListener('input', () => {
-      const cleaned = panelName.value.replace(/[^A-Za-z0-9]/g, '');
+      // Allow letters in ANY script (Korean included), digits, and spaces.
+      // ASCII-only stripping broke IME composition — Korean input never
+      // appeared at all. Symbols/emoji are still stripped.
+      const cleaned = panelName.value.replace(/[^\p{L}\p{N} ]/gu, '');
       if (cleaned !== panelName.value) panelName.value = cleaned;
       // Solid-black underline whenever there's a name (typed or auto-filled).
       panelName.classList.toggle('is-filled', panelName.value.length > 0);
