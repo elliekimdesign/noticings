@@ -1741,6 +1741,11 @@
          shift); it appears on focus/once filled via the rule below. */
       border-bottom: 1px solid transparent;
       padding-bottom: 2px;
+      /* The 3px of underline space below the text lifts it 1.5px when the
+         actions row vertically centers this box — nudge back down so the
+         name's baseline sits on the same line as the hood text. */
+      position: relative;
+      top: 1.5px;
     }
     /* Focus, or once a name is filled in, the underline appears in the same
        grey as the text (no black — the whole row is one grey). */
@@ -1776,7 +1781,8 @@
       letter-spacing: 0.02em;
       line-height: 1;
       position: absolute;
-      bottom: 20px;   /* bottom aligned with the neighborhood row's bottom */
+      bottom: 21.5px;   /* +1.5px over the hood row's 20px so the digits'
+                           baseline lands on the same line as the hood text */
       right: 68px;   /* 36px DROP button + 32px padding (matches the 32px left padding from the line) */
       z-index: 2;
       display: inline-flex;
@@ -2875,7 +2881,7 @@
     <span class="spot-q-label" id="spot-q-label">Assignment 12</span>
   </div>
   <div class="masthead-spot-meta" id="masthead-spot-meta" aria-hidden="true">
-    <span class="spot-q-text" id="spot-q-text">Tell us about a place you love</span>
+    <span class="spot-q-text" id="spot-q-text">Where was your best date — or your worst?</span>
   </div>
   <button class="masthead-close" id="panel-close" title="Close" aria-label="Close answer panel">
     <svg class="mark-icon etch" width="18" height="18" viewBox="0 0 36 36" aria-hidden="true">
@@ -2915,7 +2921,7 @@
 
 <!-- ─────────── EYE-MODE QUESTION PILL (only shown in eye mode) ─────────── -->
 <div id="eye-q-banner">
-  <div class="q-text" id="eye-q-text">Tell us about a place you love</div>
+  <div class="q-text" id="eye-q-text">Where was your best date — or your worst?</div>
   <button class="q-next" id="eye-q-next" title="Next question" aria-label="Next question">
     <svg viewBox="0 0 18 18" fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
       <path d="M 3.6 5.5 L 8.9 12 L 14.3 5.6" />
@@ -3373,6 +3379,7 @@ function openPinFromUrl() {
 // ─────────── ASSIGNMENTS (one question per fortnight) ───────────
 // ASSIGNMENTS[0] is the current issue; the rest are past issues, newest first.
 const ASSIGNMENTS = [
+  { issueNo: 2, dates: 'Sep 4 → Sep 18', text: "Where was your best date — or your worst?" },
   { issueNo: 1, dates: 'May 28 → Jun 11', text: "Tell us about a place you love" },
 ];
 
