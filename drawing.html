@@ -4036,11 +4036,20 @@ function openSpotlightMarker(m) {
   else { spotCurrent = null; }
 }
 function stepSpotlight(dir) {   // dir: +1 = right pin, -1 = left pin
-  const ord = spotlightOrdered();
+  // Step through ALL pins (every question) so the arrows always move; when the
+  // next pin belongs to another question, switch the whole view to it first.
+  let ord = answerMarkers.slice();
+  if (typeof map !== 'undefined' && map) {
+    ord = ord.map(m => ({ m, x: map.project(m.lngLat).x }))
+             .sort((a, b) => a.x - b.x).map(o => o.m);
+  }
   if (!ord.length) return;
   let i = spotCurrent ? ord.indexOf(spotCurrent) : -1;
   i = (i + dir + ord.length) % ord.length;   // wrap around
-  openSpotlightMarker(ord[i]);
+  const next = ord[i];
+  const qIdx = QUESTIONS.indexOf(next.question);
+  if (qIdx >= 0 && qIdx !== currentQuestionIndex) selectQuestion(qIdx);
+  openSpotlightMarker(next);
 }
 
 function placeAnswerMarker({ id, lngLat, question, text, handle, timestamp, dropIn }) {
