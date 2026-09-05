@@ -3870,15 +3870,40 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 // In-memory cache of all pins — the rest of the code reads this instead of localStorage.
 let PINS = [];
 
+// Visible failure toast — a silent save failure looks like the pin "vanished",
+// so surface it where the user can actually see (and screenshot) it.
+function showSaveError(detail) {
+  let t = document.getElementById('save-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'save-toast';
+    t.style.cssText = 'position:fixed;bottom:56px;left:50%;transform:translateX(-50%);' +
+      'background:#D1241A;color:#fff;font-family:ui-monospace,monospace;font-size:12px;' +
+      'letter-spacing:0.06em;padding:10px 16px;z-index:5000;max-width:80vw;text-align:center;';
+    document.body.appendChild(t);
+  }
+  t.textContent = 'PIN NOT SAVED — ' + detail;
+  t.style.display = 'block';
+  clearTimeout(t._h);
+  t._h = setTimeout(() => { t.style.display = 'none'; }, 8000);
+}
 async function saveAnswer(entry) {
   const [lng, lat] = entry.lngLat;
   // Optimistic: show it immediately, then persist to the DB.
   PINS.push({ ...entry, timestamp: Date.now() });
   updatePinCount();
-  const { error } = await sb.from('pins').insert({
-    lng, lat, question: entry.question, text: entry.text, handle: entry.handle
-  });
-  if (error) console.error('pin save failed', error);
+  try {
+    const { error } = await sb.from('pins').insert({
+      lng, lat, question: entry.question, text: entry.text, handle: entry.handle
+    });
+    if (error) {
+      console.error('pin save failed', error);
+      showSaveError(error.message || 'server rejected it');
+    }
+  } catch (e) {
+    console.error('pin save failed (network)', e);
+    showSaveError('network error (' + (e && e.message || 'unknown') + ')');
+  }
 }
 async function loadSavedAnswers() {
   const { data, error } = await sb.from('pins').select('*').order('created_at', { ascending: true });
